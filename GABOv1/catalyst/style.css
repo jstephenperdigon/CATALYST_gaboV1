@@ -1,0 +1,38 @@
+/* Style the body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Style the container for account data */
+  #account-data-container {
+    list-style: none;
+    padding: 0;
+    margin: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Style each account data item (li) */
+  #account-data-container li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  /* Add some spacing to the last item */
+  #account-data-container li:last-child {
+    border-bottom: none;
+  }
+  
+  /* Style the "Test" paragraph */
+  p {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px;
+    text-align: center;
+  }
+  
