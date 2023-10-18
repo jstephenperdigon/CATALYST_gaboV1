@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "catalyst",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

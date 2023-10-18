@@ -1,14 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GABOv1</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link the CSS file -->
-</head>
-<body>
-    <p>Test</p>
-    <ul id="account-data-container"></ul>
-    <script type="module" src="index.js"></script>
-</body>
+    <link rel="stylesheet" href="src/mdb.min.css" />
+    <link rel="stylesheet" href="src/bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-darkfixed-top shadow"
+      style="background-color: #02ac44"
+    >
+      <div class="container">
+        <a class="navbar-brand text-light" href="#">GABO</a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <!-- <a class="nav-link" href="#">Home</a> -->
+            </li>
+            <li class="nav-item">
+              <!-- <a class="nav-link" href="#">About</a> -->
+            </li>
+            <!-- Add more items as needed -->
+          </ul>
+
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a type="button" class="btn shadow-none text-light navBarLogin" data-mdb-toggle="modal" data-mdb-target="#signInModal">
+               Sign In
+              </a>
+              
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Navbar -->
+   <!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="signInModal" tabindex="-1" aria-labelledby="signInModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signInModalLabel">Sign In</h5>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- Bootstrap JS and Popper.js -->
+
+    <script type="module" src=""></script>
+    <script type="text/javascript" src="src/mdb.min.js"></script>
+    <script src="src/bootstrap.min.js"></script>
+    <script src="src/popper.min.js"></script>
+  </body>
 </html>
+
