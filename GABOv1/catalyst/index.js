@@ -2,7 +2,7 @@
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -19,35 +19,51 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
+    
+// ++++++++++++++++++++++++++++++++++++++FIREBASE CONFIG ENDS HERE HERE+++++++++++++++++++++++++++++++++++++++
     // CONFIGURATION FOR Database
     const accountCollection = collection(db, "Account");
-// ++++++++++++++++++++++++++++++++++++++FIREBASE CONFIG STARTS HERE+++++++++++++++++++++++++++++++++++++++
 
-    // ++++++++++++++++++++++++++++++++++++++FUNCTIONS STARTS HERE+++++++++++++++++++++++++++++++++++++++
-    // Get the ul element to display the account data
-const accountDataContainer = document.getElementById("account-data-container");
 
-// Function to fetch and display user account data
-async function displayAccountData() {
-  // Query the Firestore collection
+ // ++++++++++++++++++++++++++++++++++++++FUNCTIONS STARTS HERE+++++++++++++++++++++++++++++++++++++++
+// Function to fetch and display all user accounts
+async function displayUserAccounts() {
   const querySnapshot = await getDocs(accountCollection);
+  const userAccounts = [];
 
-  // Clear existing list items
-  accountDataContainer.innerHTML = "";
-
-  // Loop through the documents and display the data
   querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    const listItem = document.createElement("li");
-
-    listItem.textContent = `Username: ${data.username}, Password: ${data.password}`;
-    accountDataContainer.appendChild(listItem);
+      const data = doc.data();
+      userAccounts.push(`Username: ${data.username}, Password: ${data.password}`);
   });
+
+  const userAccountsDiv = document.getElementById("userAccounts");
+  userAccountsDiv.innerHTML = userAccounts.join("<br>");
 }
 
-// Call the function to display account data
-displayAccountData();
+document.getElementById("addUserForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
 
+  // Add the username and password to Firestore
+  addDoc(accountCollection, {
+      username: username,
+      password: password
+  })
+  .then(function (docRef) {
+      console.log("User account added successfully.");
+      document.getElementById("addUserForm").reset();
+
+      // Display all user accounts
+      displayUserAccounts();
+  })
+  .catch(function (error) {
+      console.error("Error adding user account: ", error);
+  });
+});
+
+// Call the function to display user accounts on page load
+displayUserAccounts();
     
 
 
