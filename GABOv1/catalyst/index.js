@@ -1,4 +1,4 @@
-    // CONFIGURATION FOR FIREBASE STARTS HERE
+// ++++++++++++++++++++++++++++++++++++++FIREBASE CONFIG STARTS HERE+++++++++++++++++++++++++++++++++++++++
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics.js";
@@ -21,8 +21,7 @@
     const db = getFirestore(app);
     // CONFIGURATION FOR Database
     const accountCollection = collection(db, "Account");
-    // CONFIGURATION FOR FIREBASE ENDS HERE
-
+// ++++++++++++++++++++++++++++++++++++++FIREBASE CONFIG STARTS HERE+++++++++++++++++++++++++++++++++++++++
 
     // ++++++++++++++++++++++++++++++++++++++FUNCTIONS STARTS HERE+++++++++++++++++++++++++++++++++++++++
     // Get the ul element to display the account data
