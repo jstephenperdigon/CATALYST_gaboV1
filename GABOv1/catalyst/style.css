@@ -40,3 +40,6 @@ body {
     text-align: center;
   }
   
+  .navBarLogin {
+    text-transform: none; /* This will make the text appear in lowercase */
+  }
