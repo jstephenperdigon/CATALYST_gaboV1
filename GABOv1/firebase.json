@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "gaboV1/GABOv1/catalyst",
+    "public": "catalyst",
     "ignore": [
       "firebase.json",
       "**/.*",
