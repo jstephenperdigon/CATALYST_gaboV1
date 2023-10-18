@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GABOv1</title>
-
-            <h1>GABO TEST</h1>
-          </div>
-          <ul id="account-data-container" class="list-group mt-4"></ul>
-        </div>
-      </div>
-      <h1>Add User Account</h1>
-      <form id="addUserForm">
+</head>
+<body>
+    <h1>GABO TEST</h1>
+    <div>
+        <ul id="account-data-container" class="list-group mt-4"></ul>
+    </div>
+    <h1>Add User Account</h1>
+    <form id="addUserForm">
         <label for="username">Username:</label>
         <input type="text" id="username" required /><br />
 
@@ -19,16 +19,16 @@
         <input type="password" id="password" required /><br />
 
         <button type="submit">Add User</button>
-      </form>
+    </form>
 
-      <div id="userAccounts">
-        <h2>User Accounts</h2>
+    <h2>User Accounts</h2>
+
+    <div id="userAccounts">
+        
         <ul id="userList">
-          <!-- User accounts will be displayed here -->
+            <!-- User accounts will be displayed here -->
         </ul>
-      </div>
     </div>
-    <script type="module" src="index.js"></script>
-
-  </body>
+</body>
+<script type="module" src="index.js"></script>
 </html>
