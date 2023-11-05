@@ -12,13 +12,6 @@
   display: none; /* Safari and Chrome */
 }
 
-/* Hide scrollbar for IE, Edge, and Firefox */
-/* Note: This may not work in all versions of Firefox */
-/* You may need to add a vendor prefix for older versions of Firefox */
-scrollbar-width: none;
--webkit-scrollbar-width: none; /* For older versions of Firefox */
-
-
 ::selection {
   background-color: #007bff; /* This is the primary color */
   color: #ffffff; /* This is the text color */
