@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In</title>
+    <link rel="stylesheet" href="../src/mdb.min.css" />
+    <link rel="stylesheet" href="../src/bootstrap.min.css" />
+    <link rel="stylesheet" href="../src/style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <div
+      class="navbar shadow-none d-flex align-items-center fixed-top"
+      style="height: 86px; background-color: #f5f5f5"
+    >
+      <div class="container">
+        <div class="col">
+          <a href="../index.html" class="gabo-secondary">
+            <p class="fw-bold fs-3 mt-2">GABO</p>
+          </a>
+        </div>
+        <div class="col-md-4 gabo-secondary"></div>
+        <a
+          href="signup_signin/sign-up.html"
+          type="button"
+          class="btn_sign-in shadow-none"
+          >SIGN UP</a
+        >
+        <span style="margin: 0 10px"></span>
+        <button type="button" class="btn_sign-up shadow-none">SIGN IN</button>
+      </div>
+    </div>
+    <section class="vh-100">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card  border-0  shadow-none">
+              <div class="card-body p-5 text-center signup-form">
+                <div class="mb-md-5 mt-md-4 pb-5">
+                  <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                  <p class="mb-5">
+                    Please enter your email and password
+                  </p>
+
+                  <div class="form-outline mb-4">
+                    <input
+                      type="email"
+                      id="typeEmailX"
+                      class="form-control "
+                    />
+                    <label class="form-label" for="typeEmailX">Email</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input
+                      type="password"
+                      id="typePasswordX"
+                      class="form-control"
+                    />
+                    <label class="form-label" for="typePasswordX"
+                      >Password</label
+                    >
+                  </div>
+
+                  <p class="small mb-5 pb-lg-2">
+                    <a class="" href="#!">Forgot password?</a>
+                  </p>
+
+                  <button
+                    class="btn btn-primary shadow-none px-5"
+                    type="submit"
+                  >
+                    Login
+                  </button>
+                </div>
+
+                <div>
+                  <p class="mb-0">
+                    Don't have an account?
+                    <a href="sign-up.html" class="">Sign Up Now</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script type="module" src=""></script>
+    <script type="text/javascript" src="../src/mdb.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/popper.min.js"></script>
+  </body>
+</html>

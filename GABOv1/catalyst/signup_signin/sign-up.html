@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GABOv1</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="../src/mdb.min.css" />
     <link rel="stylesheet" href="../src/bootstrap.min.css" />
     <link rel="stylesheet" href="../src/style.css" />
@@ -16,7 +16,7 @@
     <!-- NAVBAR -->
     <div
       class="navbar shadow-none d-flex align-items-center fixed-top"
-      style="background-color: #f5f5f5; height: 86px"
+      style="height: 86px; background-color: #f5f5f5"
     >
       <div class="container">
         <div class="col">
@@ -25,11 +25,11 @@
           </a>
         </div>
         <div class="col-md-4 gabo-secondary"></div>
-        <div class="col text-center">
-          <button type="button" class="btn_sign-in shadow-none">SIGN UP</button>
-          <span style="margin: 0 10px"></span>
-          <button type="button" class="btn_sign-up shadow-none">SIGN IN</button>
-        </div>
+        <a href="sign-up.html" type="button" class="btn_sign-in shadow-none"
+          >SIGN UP</a
+        >
+        <span style="margin: 0 10px"></span>
+        <a href="sign-in.html" type="button" class="btn_sign-up shadow-none">SIGN IN</a>
       </div>
     </div>
     <!-- NAVBAR -->
@@ -37,29 +37,15 @@
     <!-- Section: Signup -->
     <section class="signup-margin">
       <!-- Jumbotron -->
-      <div class="px-4 py-5 px-md-5 mx-auto text-center text-lg-start">
+      <div class="py-5 px-md-5 text-center text-lg-start">
         <div class="container">
-          <div class="row gx-lg-5 align-items-center">
-            <div class="col-lg-6 mb-5 mb-lg-0">
-              <img
-                src="../img/GaboV1_LOGO.png"
-                style="height: auto; width: 150px"
-              />
-              <h1 class="my-5 display-3 fw-bold gabo-dark">
-                Lorem Ipsum <br />
-                <span class="gabo-secondary">lorem ipsum</span>
-              </h1>
-              <p style="color: hsl(217, 10%, 50.8%)">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Eveniet, itaque accusantium odio, soluta, corrupti aliquam
-                quibusdam tempora at cupiditate quis eum maiores libero
-                veritatis? Dicta facilis sint aliquid ipsum atque?
-              </p>
-            </div>
-
-            <div class="col-lg-6 mb-5 mb-lg-0">
+          <div class="row gx-lg-5 align-items-center center-row">
+            <div class="col-xl-6 col-md-auto col-sm-auto mb-5 mb-lg-0">
               <div class="card border-0 shadow-none">
                 <div class="card-body py-5 px-md-5 signup-form">
+                  <div class="text-start mb-5">
+                    <h1 class="ml-1 card-title">SIGN UP</h1>
+                  </div>
                   <form class="">
                     <!-- 2 column grid layout with text inputs for the first and last names -->
                     <div class="row">
@@ -101,22 +87,73 @@
                       >
                     </div>
 
+                    <div class="form-outline mb-3">
+                      <!-- Phone input -->
+                      <div class="form-outline input-group mb-4">
+                        <span
+                          class="input-group-text"
+                          style="background-color: none"
+                          >+63</span
+                        >
+                        <input
+                          type="tel"
+                          id="mobile_number"
+                          class="form-control"
+                          placeholder="Mobile Number"
+                        />
+                      </div>
+                    </div>
+
                     <!-- Password input -->
-                    <div class="form-outline mb-4">
+                    <div class="form-outline mb-4 position-relative">
                       <input
                         type="password"
                         id="form3Example4"
-                        class="form-control"
+                        class="form-control pr-5"
                       />
+                      <!-- Added 'pr-5' class to provide space for the icon -->
                       <label class="form-label" for="form3Example4"
                         >Password</label
                       >
+                      <div
+                        class="position-absolute end-0 top-50 translate-middle-y me-2"
+                      >
+                        <!-- Added Bootstrap utility classes to position the icon -->
+                        <i
+                          class="fas fa-eye-slash toggle-password show-password"
+                          toggle="#form3Example4"
+                          id="show-password"
+                        ></i>
+                      </div>
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-4 position-relative">
+                      <input
+                        type="password"
+                        id="form3Example5"
+                        class="form-control pr-5"
+                      />
+                      <!-- Added 'pr-5' class to provide space for the icon -->
+                      <label class="form-label" for="form3Example5"
+                        >Password Confirmation</label
+                      >
+                      <div
+                        class="position-absolute end-0 top-50 translate-middle-y me-2"
+                      >
+                        <!-- Added Bootstrap utility classes to position the icon -->
+                        <i
+                          class="fas fa-eye-slash toggle-password show-password2"
+                          toggle="#form3Example5"
+                          id="show-password2"
+                        ></i>
+                      </div>
                     </div>
 
                     <!-- Checkbox -->
                     <div class="form-check d-flex justify-content-center mb-4">
                       <input
-                      class="form-check-input me-2"
+                        class="form-check-input me-2"
                         type="checkbox"
                         id="agreeTerms"
                         name="agreeTerms"
@@ -153,33 +190,41 @@
                       >
                         <i class="fab fa-google"></i>
                       </button>
-
-                      <button
-                        type="button"
-                        class="btn btn-link btn-floating mx-1"
-                      >
-                        <i class="fab fa-twitter"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        class="btn btn-link btn-floating mx-1"
-                      >
-                        <i class="fab fa-github"></i>
-                      </button>
+                      <div class="mt-5 text-center">
+                        <p>
+                          Already have an account?
+                          <a href="sign-in.html">Sign in now</a>
+                        </p>
+                      </div>
                     </div>
                   </form>
                 </div>
               </div>
+            </div>
+
+            <div
+              class="col-lg-6 mb-5 mb-lg-0 d-none d-md-none d-xl-block text-center position-relative"
+            >
+              <div class="d-flex justify-content-center align-items-end h-100">
+                <img
+                  src="../img/garbage_recycling_isometric.png"
+                  style="height: auto; width: 700px"
+                />
+              </div>
+              <a
+                href="https://www.freepik.com/free-vector/garbage-removal-round-illustration-with-people-uniform-loading-litter-into-truck_17714184.htm?query=Dust%20bins"
+                >Image by macrovector</a
+              >
+              on Freepik
             </div>
           </div>
         </div>
       </div>
       <!-- Jumbotron -->
     </section>
-    <!-- Section: Design Block -->
+    <footer></footer>
     <!-- IMPORTS -->
-    <script type="module" src=""></script>
+    <script type="text/javascript" src="sign-up.js"></script>
     <script type="text/javascript" src="../src/mdb.min.js"></script>
     <script src="../src/bootstrap.min.js"></script>
     <script src="../src/popper.min.js"></script>
