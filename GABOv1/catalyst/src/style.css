@@ -124,9 +124,6 @@ a:hover {
   margin-top: 80px;
 }
 
-.signup-margin {
-  margin-top: 80px; /* Default margin */
-}
 
 .circle {
   width: 100%; /* Set the width to 100% to cover the entire viewport width */
@@ -156,11 +153,12 @@ a:hover {
 }
 
  /*when the screen width is below 1200px */
- @media (max-width: 1199.98px) {
+ @media (max-width: 1080px) {
   .center-row {
       justify-content: center;
   }
 }
+
 
 @media (max-width: 768px) {
   .signup-margin {
@@ -173,3 +171,24 @@ a:hover {
     margin-top: 50px; /* Further adjusted margin for even smaller screens */
   }
 }
+
+/* Custom styles */
+@media (max-width: 1081px) {
+  .signup-image {
+      width: 100%;
+  }
+  #responsiveImage {
+      width: 100%;
+  }
+}
+
+/* Custom styles */
+@media (max-width: 1080px) {
+  .signup-image {
+      display: none;
+  }
+  #responsiveImage {
+     display: none;
+  }
+}
+
