@@ -120,10 +120,6 @@ a:hover {
   color: #11531e;
   border-radius: 100px;
 }
-.main-section {
-  margin-top: 80px;
-}
-
 
 .circle {
   width: 100%; /* Set the width to 100% to cover the entire viewport width */
@@ -137,9 +133,8 @@ a:hover {
   z-index: -1; /* Place the circle behind the content */
 }
 
-
 /* FEATURE SECTION */
-.feature-section{
+.feature-section {
   margin-top: 50px;
   height: 100%;
   width: 100%;
@@ -152,17 +147,69 @@ a:hover {
   padding: 20px;
 }
 
- /*when the screen width is below 1200px */
- @media (max-width: 1080px) {
-  .center-row {
-      justify-content: center;
+.scroll-down-arrow {
+  display: block;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 24px;
+  color: #000;
+  animation: arrowBounce 2s infinite;
+  transition: opacity 0.3s ease-in-out;
+  cursor: pointer;
+  opacity: 1;
+}
+
+@keyframes arrowBounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(10px);
   }
 }
 
+/* CSS for the animated underline effect */
+.nav-link {
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 8px 20px;
+  margin: 0 10px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link.active::after {
+  content: "";
+  border-bottom: 2px solid #11531e; /* Underline color */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #000; /* Change this color to the desired underline color */
+  transition: all 0.3s ease;
+}
 
 @media (max-width: 768px) {
   .signup-margin {
     margin-top: 50px; /* Adjusted margin for smaller screens */
+  }
+  .home-img {
+    display: none;
+  }
+  .card-size {
+    width: 12rem;
+    height: 2rem;
   }
 }
 
@@ -173,22 +220,33 @@ a:hover {
 }
 
 /* Custom styles */
-@media (max-width: 1081px) {
+@media (max-width: 1023px) {
+  .center-row {
+    justify-content: center;
+  }
   .signup-image {
-      width: 100%;
+    width: 100%;
   }
   #responsiveImage {
-      width: 100%;
+    width: 100%;
   }
-}
-
-/* Custom styles */
-@media (max-width: 1080px) {
   .signup-image {
-      display: none;
+    display: none;
   }
   #responsiveImage {
-     display: none;
+    display: none;
+  }
+  #home-img {
+    width: 100%;
+  }
+  .home-main {
+    justify-content: center;
   }
 }
-
+/* Index Main Image */
+@media (max-width: 991.98px) {
+  .home-img {
+    display: none;
+  }
+  
+}

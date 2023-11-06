@@ -45,6 +45,6 @@ import { db, getDocs, addDoc, collection } from "./connection/firebaseConfig.js"
   // Call the function to display user accounts on page load
   displayUserAccounts();
       
-
-
+ 
+ 
 

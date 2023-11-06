@@ -13,47 +13,91 @@
     />
   </head>
   <body>
+    <a href="#featureSection" class="scroll-down-arrow">
+      <i class="fas fa-chevron-down"></i>
+    </a>
 
-      <!-- NAVBAR -->
-      <div
-      class="navbar shadow-none d-flex align-items-center fixed-top"
+    <!-- NAVBAR -->
+    <nav
+      class="navbar navbar-expand-lg shadow-none "
       style="height: 86px; background-color: #f5f5f5"
     >
       <div class="container">
-        <div class="col">
-          <a href="index.html" class="gabo-secondary">
-            <p class="fw-bold fs-3 mt-2">GABO</p>
-          </a>
-        </div>
-        <div class="col-md-4 gabo-secondary"></div>
-        <a href="signup_signin/sign-up.html" type="button" class="btn_sign-in shadow-none"
-          >SIGN UP</a
+        <a href="#" class="gabo-secondary">
+          <p class="fw-bold fs-3 mt-2">GABO</p>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav" 
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-        <span style="margin: 0 10px"></span>
-        <a href="signup_signin/sign-in.html" type="button" class="btn_sign-up shadow-none">SIGN IN</a>
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse container-fluid" id="navbarNav" style="background-color: #f5f5f5;">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                href="#mainContent"
+                class="nav-link text-center"
+                onclick="highlightLink(this)"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                href="#featureSection"
+                class="nav-link text-center"
+                onclick="highlightLink(this)"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                href="#section3"
+                class="nav-link text-center"
+                onclick="highlightLink(this)"
+                >About Us</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                href="#section4"
+                class="nav-link text-center"
+                onclick="highlightLink(this)"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </nav>
+
     <!-- NAVBAR -->
 
     <!-- <div class="circle"></div> -->
-    
+
     <!-- MAIN CONTENT -->
-    <section class="main-section">
-      <div class="py-5 px-md-5 mx-auto text-center text-lg-start">
+    <section id="mainContent" class="mt-5" style="height: auto">
+      <div
+        class="py-5 px-md-5 mx-auto text-center text-lg-start text-md-center home-main"
+      >
         <div class="container">
           <div class="row gx-lg-5 align-items-center">
-
-
-            <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
               <img
                 src="img/GaboV1_LOGO.png"
                 style="height: auto; width: 150px"
+                class="img-fluid"
               />
               <h1 class="my-5 display-3 fw-bold gabo-dark">
                 Revolutionizing <br />
                 <span class="gabo-secondary">Waste Management</span>
               </h1>
-              <p style="color: hsl(217, 10%, 50.8%)">
+              <p class="text-md" style="color: hsl(217, 10%, 50.8%)">
                 Meet GABO, the smart garbage bin empowered by IoT technology.
                 With GABO, waste management becomes a breeze, as it
                 intelligently optimizes collection schedules and provides
@@ -63,63 +107,112 @@
               </p>
             </div>
 
-            <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="col-lg-6 mb-5 mb-lg-0 home-img">
               <div class="d-flex justify-content-center align-items-end h-100">
                 <img
                   src="img/cloud_isometric2.png"
-                  style="height: auto; width: 600px"
+                  style="height: auto; max-width: 500px; width: 100%"
+                  id="home-img"
+                  class="img-fluid"
                 />
               </div>
-            </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
     <!-- MAIN CONTENT-->
-    <section class="feature-section">
+    <section id="featureSection" class="feature-section">
       <div class="py-5 px-md-5 mx-auto text-center text-lg-start">
         <h1 class="text-center text-light">FEATURES</h1>
         <div class="container mt-5">
-          <div class="row">
-            <div class="col-lg-3">
-              <div class="card shadow-none " style="width: 18rem; height: 19.5rem;">
+          <div
+            class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center"
+          >
+            <div class="col d-flex justify-content-center">
+              <div class="card shadow-none" style="width: 18rem; height: auto">
                 <div class="card-body text-center">
                   <div class="">
                     <h5>REALTIME ALERTS</h5>
                   </div>
-                  <img src="img/notif.png"  style="width: 100px; height: auto; " class="card-img-top" alt="...">
+                  <img
+                    src="img/notif.png"
+                    style="width: 100px; height: auto"
+                    class="card-img-top"
+                    alt="..."
+                  />
                   <p class="card-text mt-3">
-                real-time alerts and notifications system that instantly notify residents and system administrators when garbage bins are full or in need of attention. 
+                    real-time alerts and notifications system that instantly
+                    notify residents and system administrators when garbage bins
+                    are full or in need of attention.
                   </p>
                 </div>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="card shadow-none" style="width: 18rem; height: 19.5rem;">
+            <div class="col d-flex justify-content-center">
+              <div
+                class="card card-size shadow-none"
+                style="width: 18rem; height: auto"
+              >
                 <div class="card-body text-center">
                   <div class="">
                     <h5>REAL-TIME SENSORS</h5>
                   </div>
-                  <img src="img/sensor.png" style="width: 100px; height: auto; " class=" card-img-top" alt="...">
-                  <p class="card-text mt-3">Each Smart Garbage Bin is equipped with sensors that continually monitor the fill level in real-time.
+                  <img
+                    src="img/sensor.png"
+                    style="width: 100px; height: auto"
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <p class="card-text mt-3">
+                    Each Smart Garbage Bin is equipped with sensors that
+                    continually monitor the fill level in real-time.
                   </p>
                 </div>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="card shadow-none" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <div class="col d-flex justify-content-center">
+              <div
+                class="card card-size shadow-none"
+                style="width: 18rem; height: auto"
+              >
+                <div class="card-body text-center">
+                  <div class="">
+                    <h5>REAL-TIME SENSORS</h5>
+                  </div>
+                  <img
+                    src="img/sensor.png"
+                    style="width: 100px; height: auto"
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <p class="card-text mt-3">
+                    Each Smart Garbage Bin is equipped with sensors that
+                    continually monitor the fill level in real-time.
+                  </p>
                 </div>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="card shadow-none" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <div class="col d-flex justify-content-center">
+              <div
+                class="card card-size shadow-none"
+                style="width: 18rem; height: auto"
+              >
+                <div class="card-body text-center">
+                  <div class="">
+                    <h5>REAL-TIME SENSORS</h5>
+                  </div>
+                  <img
+                    src="img/sensor.png"
+                    style="width: 100px; height: auto"
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <p class="card-text mt-3">
+                    Each Smart Garbage Bin is equipped with sensors that
+                    continually monitor the fill level in real-time.
+                  </p>
                 </div>
               </div>
             </div>
@@ -180,6 +273,28 @@
       </div>
     </footer>
     <!-- IMPORTS -->
+    <script>
+      function highlightLink(link) {
+        document.querySelectorAll(".nav-link").forEach((anchor) => {
+          anchor.classList.remove("active");
+        });
+        link.classList.add("active");
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var arrow = document.querySelector(".scroll-down-arrow");
+
+        arrow.addEventListener("click", function () {
+          arrow.style.opacity = "0";
+        });
+
+        window.addEventListener("scroll", function () {
+          if (window.scrollY === 0) {
+            arrow.style.opacity = "1";
+          }
+        });
+      });
+    </script>
     <script type="module" src=""></script>
     <script type="text/javascript" src="src/mdb.min.js"></script>
     <script src="src/bootstrap.min.js"></script>
