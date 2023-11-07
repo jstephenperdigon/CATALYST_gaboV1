@@ -150,7 +150,7 @@ a:hover {
 .scroll-down-arrow {
   display: block;
   position: absolute;
-  bottom: 20px;
+  bottom: 25%;
   left: 50%;
   width: 30px;
   height: 30px;
@@ -248,5 +248,4 @@ a:hover {
   .home-img {
     display: none;
   }
-  
 }
