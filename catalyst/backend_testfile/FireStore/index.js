@@ -1,5 +1,5 @@
 // Import/s here
-import { db, getDocs, addDoc, collection } from "./connection/firebaseConfig.js"; // Import Firestore functions from firebaseConfig.js
+import { db, getDocs, addDoc, collection } from "../../connection/firebaseConfig.js"; // Import Firestore functions from firebaseConfig.js
 
 // CONFIGURATION FOR Database
     const accountCollection = collection(db, "Account");

@@ -2,17 +2,16 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
 import { getDatabase, ref, set, push, get} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyDe0Zqpdy7oyxdKxEAWn1JhGjJvnZHldyc",
-    authDomain: "gabov1-687d4.firebaseapp.com",
-    databaseURL: "https://gabov1-687d4-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "gabov1-687d4",
-    storageBucket: "gabov1-687d4.appspot.com",
-    messagingSenderId: "1093985183180",
-    appId: "1:1093985183180:web:0fc81721634d413c426969",
-    measurementId: "G-H9BRLBF3MQ"
-};
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+    authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+    databaseURL: "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "smartgarbagebin-8c3ec",
+    storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+    messagingSenderId: "1062286948871",
+    appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2"
+  };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
