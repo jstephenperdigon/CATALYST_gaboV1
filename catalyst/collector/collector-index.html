@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0
+        }
+        html,body{
+            display:flex
+        }
+        #google-map{
+            border: 1px solid #ccc;
+            width: 700px;
+            height: 500px;
+            align-self: center;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AIzaSyA2_ezLpzKRXbZuMKaC4fOWYX6C3U2gX6g -->
+    <div id="google-map" style="align-self: center;">
+
+    </div>
+    <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2_ezLpzKRXbZuMKaC4fOWYX6C3U2gX6g&callback=initMap">
+</script>
+    <script src="collector.js"></script>
+</body>
+</html>
