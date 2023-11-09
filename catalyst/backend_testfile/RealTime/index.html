@@ -28,6 +28,9 @@
         <div class="form-section">
             <h2>Personal Information:</h2>
             <form id="personalForm">
+                <label for="id">Unique ID:</label><br>
+                <input type="text" id="id" name="id" readonly><br>
+
                 <label for="firstname">First Name:</label><br>
                 <input type="text" id="firstname" name="firstname"><br>
 
@@ -44,21 +47,18 @@
                 <input type="password" id="password" name="password"><br>
                 
                 <h2>Collection Information:</h2>
-                <form id="collectionForm">
-                    <label for="controlNumber">Control Number:</label><br>
-                    <input type="text" id="controlNumber" name="controlNumber"><br>
-                    
-                    <button id="checkControlNumber">Check Control Number</button><br>
-                    
-                    
-                    <label for="address">Address:</label><br>
-                    <input type="text" id="address" name="address"><br>
-        
-                </form>
+                <label for="controlNumber">Control Number:</label><br>
+                <input type="text" id="controlNumber" name="controlNumber"><br>
+
+                <button type="button" id="checkControlNumber">Check Control Number</button><br>
                 <br>
 
-                <button id="submit">Submit</button>
+                <label for="address">Address:</label><br>
+                <input type="text" id="address" name="address"><br>
             </form>
+            <br>
+
+            <button id="submit">Submit</button>
         </div>
 
         <div id="userDataDisplay"></div>
