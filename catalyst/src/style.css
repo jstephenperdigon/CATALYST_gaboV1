@@ -20,6 +20,10 @@
 :root {
   scroll-behavior: smooth;
 }
+.gabo-bg-secondary {
+  background-color: #11531e;
+  color: #f5f5f5;
+}
 
 .gabo-primary {
   color: #dc5510;
@@ -54,6 +58,11 @@ a:hover {
   margin-right: 0;
 }
 
+.header-divider {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin: 20px 0;
+}
 .navBg {
   background-color: #f5f5f5;
 }

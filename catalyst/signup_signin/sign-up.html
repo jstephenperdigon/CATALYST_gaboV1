@@ -14,26 +14,73 @@
   </head>
   <body>
     <!-- NAVBAR -->
-    <div
-      class="navbar shadow-none d-flex align-items-center fixed-top"
+    <nav
+      class="navbar navbar-expand-lg shadow-none fixed-top"
       style="height: 86px; background-color: #f5f5f5"
     >
       <div class="container">
-        <div class="col">
-          <a href="../index.html" class="gabo-secondary">
-            <p class="fw-bold fs-3 mt-2">GABO</p>
-          </a>
+        <a class="navbar-brand gabo-secondary" href="#">
+          <p class="fw-bold fs-3 mt-2">GABO</p>
+        </a>
+        <button
+          class="btn shadow-none navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse"
+          style="background-color: #f5f5f5"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="../index.html"
+                onclick="highlightLink(this)"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#featureSection"
+                onclick="highlightLink(this)"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#section3"
+                onclick="highlightLink(this)"
+                >About Us</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#section4"
+                onclick="highlightLink(this)"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+          <a
+            href="signup_signin/sign-in.html"
+            class="btn btn-outline-primary mx-3 d-block shadow-none"
+            >Sign In</a
+          >
         </div>
-        <div class="col-md-4 gabo-secondary"></div>
-        <a href="sign-up.html" type="button" class="btn_sign-in shadow-none"
-          >SIGN UP</a
-        >
-        <span style="margin: 0 10px"></span>
-        <a href="sign-in.html" type="button" class="btn_sign-up shadow-none"
-          >SIGN IN</a
-        >
       </div>
-    </div>
+    </nav>
+
     <!-- NAVBAR -->
     <div id="alertContainer" class="fixed-top" style="width: 100%"></div>
 
@@ -43,7 +90,7 @@
       <div class="py-5 px-md-5 text-center text-lg-start">
         <div class="container">
           <div class="row gx-lg-5 align-items-center center-row">
-            <div class="col-lg-6 col-md-auto col-sm-auto mb-5 mb-lg-0 ">
+            <div class="col-lg-6 col-md-auto col-sm-auto mb-5 mb-lg-0">
               <div class="card border-0 shadow-none">
                 <div class="card-body py-5 px-md-5 signup-form">
                   <div class="text-center text-md-star mb-5">
@@ -198,7 +245,7 @@
                       />
                       <label class="form-check-label" for="agreeTerms">
                         I have read and agree to the
-                        <a href="/terms-and-conditions" target="_blank"
+                        <a href="../terms-conditions.html" target="_blank"
                           >Terms and Conditions</a
                         >
                       </label>
@@ -236,12 +283,9 @@
                   src="../img/garbage_recycling_isometric.png"
                   class="img-fluid"
                   id="responsiveImage"
-
                 />
-              
-            </div>
               </div>
-              
+            </div>
           </div>
         </div>
       </div>
