@@ -16,38 +16,40 @@ import { getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/10.5.0/
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-    // Function to handle login
 function handleLogin(email, password) {
-    // Replace the following lines with your actual authentication logic
-    // For demonstration, we fetch data from the 'users' node in the database
-    const userRef = ref(db, 'users/' + email);
-  
-    get(userRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const userData = snapshot.val();
-        if (userData.password === password) {
+  const usersRef = ref(db, 'Accounts/Users');
+  get(usersRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const users = snapshot.val();
+      const userKeys = Object.keys(users);
+
+      for (const userKey of userKeys) {
+        const userData = users[userKey];
+        if (userData.email === email && userData.password === password) {
           alert("Login successful!");
-        } else {
-          alert("Invalid email or password. Please try again.");
+          return;
         }
-      } else {
-        alert("User not found. Please sign up.");
       }
-    }).catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-  }
-  
-  // Login Function
-  document.addEventListener("DOMContentLoaded", function () {
-    const emailInput = document.getElementById("typeEmailX");
-    const passwordInput = document.getElementById("typePasswordX");
-    const signInButton = document.querySelector(".btn-primary");
-  
-    signInButton.addEventListener("click", function () {
-      const email = emailInput.value;
-      const password = passwordInput.value;
-  
-      handleLogin(email, password);
-    });
+
+      alert("Invalid email or password. Please try again.");
+    } else {
+      alert("User not found. Please sign up.");
+    }
+  }).catch((error) => {
+    console.error("Error fetching data:", error);
   });
+}
+
+// Login Function
+document.addEventListener("DOMContentLoaded", function () {
+  const emailInput = document.getElementById("typeEmailX");
+  const passwordInput = document.getElementById("typePasswordX");
+  const signInButton = document.querySelector(".btn-primary");
+
+  signInButton.addEventListener("click", function () {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    handleLogin(email, password);
+  });
+});
