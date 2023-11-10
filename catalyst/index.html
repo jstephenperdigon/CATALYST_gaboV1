@@ -19,15 +19,15 @@
 
     <!-- NAVBAR -->
     <nav
-      class="navbar navbar-expand-lg shadow-none fixed-top"
-      style="height: 86px; background-color: #f5f5f5"
+      class="navbar navbar-expand-lg shadow-none sticky-top"
+      style="height: 85px; background-color: #f5f5f5"
     >
       <div class="container">
         <a class="navbar-brand gabo-secondary" href="#">
           <p class="fw-bold fs-3 mt-2">GABO</p>
         </a>
         <button
-          class="btn shadow-none navbar-toggler"
+          class="btn shadow-none navbar-toggler gabo-secondary"
           type="button"
           data-mdb-toggle="collapse"
           data-mdb-target="#navbarNav"
@@ -76,7 +76,11 @@
               >
             </li>
           </ul>
-          <a href="signup_signin/sign-in.html"class="btn btn-outline-primary mx-3 d-block shadow-none">Sign In</a>
+          <a
+            href="signup_signin/sign-in.html"
+            class="btn btn-outline-primary mx-3 d-block shadow-none"
+            >Sign In</a
+          >
         </div>
       </div>
     </nav>
@@ -130,12 +134,12 @@
     <!-- MAIN CONTENT-->
     <section id="featureSection" class="feature-section">
       <div class="py-5 px-md-5 mx-auto text-center text-lg-start">
-        <h1 class="text-center text-light">FEATURES</h1>
+        <h1 class="text-center text-light">MONITOR YOUR GARBAGE BIN WITH APP</h1>
         <div class="container mt-5">
-          <div
-            class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center"
-          >
-            <div class="col d-flex justify-content-center">
+          <div class="row">
+            <div
+              class="col-lg-4 d-flex justify-content-center align-items-center"
+            >
               <div class="card shadow-none" style="width: 18rem; height: auto">
                 <div class="card-body text-center">
                   <div class="">
@@ -148,58 +152,23 @@
                     alt="..."
                   />
                   <p class="card-text mt-3">
-                    real-time alerts and notifications system that instantly
+                    Real-time alerts and notifications system that instantly
                     notify residents and system administrators when garbage bins
                     are full or in need of attention.
                   </p>
                 </div>
               </div>
             </div>
-            <div class="col d-flex justify-content-center">
-              <div
-                class="card card-size shadow-none"
-                style="width: 18rem; height: auto"
-              >
-                <div class="card-body text-center">
-                  <div class="">
-                    <h5>REAL-TIME SENSORS</h5>
-                  </div>
-                  <img
-                    src="img/sensor.png"
-                    style="width: 100px; height: auto"
-                    class="card-img-top"
-                    alt="..."
-                  />
-                  <p class="card-text mt-3">
-                    Each Smart Garbage Bin is equipped with sensors that
-                    continually monitor the fill level in real-time.
-                  </p>
-                </div>
-              </div>
+            <div class="col-lg-4 d-flex justify-content-center">
+              <img
+                src="img/garbage_bin.png"
+                style="max-width: 100%; height: auto"
+                alt="Smart Garbage Bin with IoT"
+              />
             </div>
-            <div class="col d-flex justify-content-center">
-              <div
-                class="card card-size shadow-none"
-                style="width: 18rem; height: auto"
-              >
-                <div class="card-body text-center">
-                  <div class="">
-                    <h5>REAL-TIME SENSORS</h5>
-                  </div>
-                  <img
-                    src="img/sensor.png"
-                    style="width: 100px; height: auto"
-                    class="card-img-top"
-                    alt="..."
-                  />
-                  <p class="card-text mt-3">
-                    Each Smart Garbage Bin is equipped with sensors that
-                    continually monitor the fill level in real-time.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col d-flex justify-content-center">
+            <div
+              class="col-lg-4 d-flex justify-content-center align-items-center"
+            >
               <div
                 class="card card-size shadow-none"
                 style="width: 18rem; height: auto"
@@ -225,6 +194,7 @@
         </div>
       </div>
     </section>
+
     <footer class="container py-5">
       <div class="row">
         <div class="col-12 col-md">

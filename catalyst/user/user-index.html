@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>User</title>
     <link rel="stylesheet" href="../src/mdb.min.css" />
     <link rel="stylesheet" href="../src/bootstrap.min.css" />
     <link rel="stylesheet" href="../src/style.css" />
@@ -15,18 +15,18 @@
   <body>
     <!-- NAVBAR -->
     <nav
-      class="navbar navbar-expand-lg shadow-none"
+      class="navbar navbar-expand-lg shadow-none sticky-top"
       style="height: 86px; background-color: #f5f5f5"
     >
       <div class="container">
-        <a class="navbar-brand gabo-secondary" href="#">
-          <p class="fw-bold fs-3 mt-2">GABO</p>
+        <a class="navbar-brand gabo-secondary" href="../index.html">
+          <p class="fw-bold fs-3 mt-2">GABO MONITORING</p>
         </a>
         <button
           class="btn shadow-none navbar-toggler"
           type="button"
-          data-mdb-toggle="collapse"
-          data-mdb-target="#navbarNav"
+          data-toggle="collapse"
+          data-target="#navbarNav"
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
@@ -36,10 +36,9 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li>
-                <i class="fas fa-user"></i>
-            </li>
-
+            <div class="d-flex align-items-center">
+              <i class="fas fa-user"></i>
+            </div>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -47,12 +46,12 @@
                 id="navbarDropdown"
                 role="button"
                 data-mdb-toggle="dropdown"
+                aria-haspopup="true"
                 aria-expanded="false"
+                >username</a
               >
-                username
-              </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Account Settings</a></li>
+                <li><a class="dropdown-item" href="account-settings.html">Account Settings</a></li>
                 <li><a class="dropdown-item" href="#">Log Out</a></li>
                 <li><a class="dropdown-item" href="#">Help Center</a></li>
               </ul>
@@ -65,7 +64,7 @@
 
     <section class="home-index mt-5">
       <div class="container mt-5" style="margin-top: 100px">
-        <div class="card">
+        <div class="card shadow-none">
           <div class="card-header">ADD DEVICE</div>
         </div>
       </div>
