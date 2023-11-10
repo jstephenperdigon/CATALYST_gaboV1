@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="../src/mdb.min.css" />
     <link rel="stylesheet" href="../src/bootstrap.min.css" />
     <link rel="stylesheet" href="../src/style.css" />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="../src/all.min.css" />
   </head>
   <body>
     <!-- NAVBAR -->
@@ -132,9 +129,46 @@
         </div>
       </div>
     </section>
+    <script>
+      function showAlert(type, message) {
+        const alertContent = `
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">${
+                  type === "success" ? "Success" : "Warning"
+                }</h5>
+                <button type="button" class="close" data-mdb-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ${message}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-${
+                  type === "success" ? "success" : "warning"
+                }"  data-mdb-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+
+        // Append the new modal to the body
+        $("body").append(alertContent);
+
+        // Show the modal
+        $("#alertModal").modal("show");
+
+        $('#alert').modal('close');
+      }
+    </script>
     <script type="module" src="sign-in.js"></script>
+    <script type="text/javascript" src="../src/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/popper.min.js"></script>
     <script type="text/javascript" src="../src/mdb.min.js"></script>
-    <script src="../src/bootstrap.min.js"></script>
-    <script src="../src/popper.min.js"></script>
+    <script type="text/javascript" src="../src/bootstrap.min.js"></script>
   </body>
 </html>

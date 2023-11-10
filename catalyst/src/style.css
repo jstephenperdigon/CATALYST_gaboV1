@@ -16,6 +16,7 @@
   background-color: #007bff; /* This is the primary color */
   color: #ffffff; /* This is the text color */
 }
+
 /* Smooth scroll behavior */
 :root {
   scroll-behavior: smooth;
