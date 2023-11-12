@@ -5,6 +5,38 @@ import {
   get,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
+//Alert Content
+function showAlert(type, message) {
+  const alertContent = `
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">${
+                  type === "success" ? "Success" : "Warning"
+                }</h5>
+            </div>
+            <div class="modal-body">
+                ${message}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn shadow-none btn-${
+                  type === "success" ? "success" : "warning"
+                }"  data-mdb-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+
+  // Append the new modal to the body
+  $("body").append(alertContent);
+
+  // Show the modal
+  $("#alertModal").modal("show");
+
+  $("#alert").modal("close");
+}
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
@@ -46,7 +78,6 @@ function handleLogin(email, password) {
       console.error("Error fetching data:", error);
     });
 }
-
 
 // Login Function
 document.addEventListener("DOMContentLoaded", function () {
