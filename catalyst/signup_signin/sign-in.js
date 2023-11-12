@@ -1,9 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  get,
-} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 //Alert Content
 function showAlert(type, message) {
@@ -41,8 +37,7 @@ function showAlert(type, message) {
 const firebaseConfig = {
   apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
   authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
-  databaseURL:
-    "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+  databaseURL:"https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "smartgarbagebin-8c3ec",
   storageBucket: "smartgarbagebin-8c3ec.appspot.com",
   messagingSenderId: "1062286948871",
@@ -65,6 +60,15 @@ function handleLogin(email, password) {
           const userData = users[userKey];
           if (userData.email === email && userData.password === password) {
             showAlert("success", "Login successful!");
+          
+            // Access the user's unique ID
+            const userId = userKey;
+          
+            // Store the user ID in a session or a cookie
+            sessionStorage.setItem("userId", userId);
+          
+            // Redirect to user/user-index.html
+            window.location.href = "../user/user-index.html";
             return;
           }
         }
