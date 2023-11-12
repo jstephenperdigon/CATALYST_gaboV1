@@ -6,7 +6,7 @@ function initMap() {
 
     const mapOptions = {
         center: centerMap,
-        zoom: 20,
+        zoom: 10,
         disableDefaultUI: true,
         styles: 
         [

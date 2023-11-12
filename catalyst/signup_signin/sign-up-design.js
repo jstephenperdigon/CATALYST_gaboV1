@@ -281,10 +281,8 @@ DOM.passwInput.addEventListener('input', () => {
 
 
 // Alert Message
-
 function showAlert(message, alertType) {
   const alertContainer = document.getElementById('alertContainer');
-
   const alertElement = document.createElement('div');
   alertElement.classList.add('alert', 'alert-dismissible', 'fade', 'show', `alert-${alertType}`);
   alertElement.setAttribute('role', 'alert');

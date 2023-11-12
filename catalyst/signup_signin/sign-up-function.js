@@ -26,7 +26,6 @@ document.getElementById("submit").addEventListener('click', function (e) {
     const email = document.getElementById('email').value;
     const mobileNumber = document.getElementById('mobile_number').value;
     const password = document.getElementById('password-input').value;
-  
     const usersRef = ref(db, 'Accounts/Users');
   
     // Check if the email or mobile number already exists

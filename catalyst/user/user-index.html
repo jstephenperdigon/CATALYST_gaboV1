@@ -25,8 +25,8 @@
         <button
           class="btn shadow-none navbar-toggler"
           type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarNav"
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
@@ -51,8 +51,12 @@
                 >username</a
               >
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="account-settings.html">Account Settings</a></li>
-                <li><a class="dropdown-item" href="#">Log Out</a></li>
+                <li>
+                  <a class="dropdown-item" href="account-settings.html"
+                    >Account Settings</a
+                  >
+                </li>
+                <li><a class="dropdown-item" id="logOutBtn" href="#">Log Out</a></li>
                 <li><a class="dropdown-item" href="#">Help Center</a></li>
               </ul>
             </li>
@@ -62,13 +66,110 @@
     </nav>
     <!-- NAVBAR -->
 
-    <section class="home-index mt-5">
-      <div class="container mt-5" style="margin-top: 100px">
-        <div class="card shadow-none">
-          <div class="card-header">ADD DEVICE</div>
+    <!-- Content Section -->
+    <section class="mt-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <!-- Your content for the second column goes here -->
+            <div class="card shadow-none border-0">
+              <div
+                class="card-header gabo-bg-secondary fs-4 d-flex justify-content-between align-items-center"
+              >
+                Device
+                <button
+                  class="btn btn-warning shadow-none align-items-end"
+                  data-mdb-toggle="modal"
+                  data-mdb-target="#addDeviceModal"
+                >
+                  Add Device
+                </button>
+              </div>
+              <!-- Card Content -->
+              <div class="card-body">
+                <!-- <div class="card shadow-none border-0" style="width: 18rem">
+                  <div class="card-body">
+                    <h5 class="card-title">No Devices Available</h5>
+                    <p class="card-text">
+                      
+                    </p>
+                  </div>
+                </div>
+              -->
+                <div
+                  class="fs-3 font-monospace text-center text-muted fw-light"
+                >
+                  No device/s available.
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
+    <!-- Add Device Modal -->
+    <div
+      class="modal fade"
+      id="addDeviceModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="addDeviceModalLabel"
+      aria-hidden="true"
+      data-mdb-backdrop="static"
+      data-mdb-keyboard="false"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addDeviceModalLabel">Add Device</h5>
+          </div>
+          <div class="modal-body">
+            <!-- Input fields for garbage control number, address line 1, and address line 2 -->
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                class="form-control"
+                id="garbageControlNumber"
+                required
+              />
+              <label class="form-label" for="garbageControlNumber"
+                >Garbage Control Number</label
+              >
+            </div>
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                class="form-control"
+                id="addressLine1"
+                placeholder=""
+              />
+              <label class="form-label" for="addressLine1"
+                >Address Line 1</label
+              >
+            </div>
+            <div class="form-outline">
+              <input type="text" class="form-control" id="addressLine2" />
+              <label class="form-label" for="addressLine2"
+                >Address Line 2</label
+              >
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-mdb-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" type="submit" class="btn btn-primary">
+              Save changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- IMPORTS -->
     <script type="module" src="sign-up-function.js"></script>

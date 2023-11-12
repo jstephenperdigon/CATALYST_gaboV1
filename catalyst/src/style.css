@@ -59,6 +59,15 @@ a:hover {
   text-decoration: none;
 }
 
+
+/* Add Device Button Placement */
+
+.fixed-button {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+}
+
 .hidden {
   display: none;
 }
