@@ -67,7 +67,10 @@ if (verifyBtn) {
         userData.addressLine1 = addressLine1Input.value;
         userData.addressLine2 = addressLine2Input.value;
 
-        alert("GCN and Password are valid. Address textboxes are enabled. User data updated.");
+        // Display the updated content in the card
+        updateCardContent();
+
+        alert("GCN and Password are valid.");
       } else {
         alert("Invalid GCN or Password. Please check your input.");
       }
@@ -75,6 +78,18 @@ if (verifyBtn) {
       console.error("Error fetching GCN data:", error);
     }
   });
+}
+
+// Function to update the content in the card
+function updateCardContent() {
+  const cardContent = document.querySelector(".card-body");
+  if (cardContent) {
+    cardContent.innerHTML = `
+      <div class="fs-3 font-monospace text-center text-muted fw-light">
+        ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No device/s available.'}
+      </div>
+    `;
+  }
 }
 
 // Add a click event listener to the "Save changes" button
@@ -106,7 +121,17 @@ if (saveChangesBtn) {
         addressLine2: userData.addressLine2,
       });
 
+      
       alert("User data updated successfully.");
+
+      // Check if the modal is open (assuming your modal ID is "addDeviceModal")
+      const modalElement = document.getElementById("addDeviceModal");
+      if (modalElement) {
+        // Close the modal using MDB method
+        mdb.Modal.getInstance(modalElement).hide();
+      }     
+
+              
     } catch (error) {
       console.error("Error updating user data:", error);
     }
@@ -134,7 +159,8 @@ if (userId) {
         // Set the first name as the username
         userNameDropdown.textContent = user.firstName;
 
-        // If user data is not found, log an error and provide a default username
+        // Display the GCN in the card content if available
+        updateCardContent();
       } else {
         console.error("User data not found.");
         userNameDropdown.textContent = "Default Username";

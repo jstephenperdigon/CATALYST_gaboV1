@@ -87,19 +87,9 @@
               </div>
               <!-- Card Content -->
               <div class="card-body">
-                <!-- <div class="card shadow-none border-0" style="width: 18rem">
-                  <div class="card-body">
-                    <h5 class="card-title">No Devices Available</h5>
-                    <p class="card-text">
-                      
-                    </p>
-                  </div>
-                </div>
-              -->
-                <div
-                  class="fs-3 font-monospace text-center text-muted fw-light"
-                >
-                  No device/s available.
+                <div class="fs-3 font-monospace text-center text-muted fw-light">
+                  <!-- Display GCN if available, otherwise show "No device/s available" -->
+                  ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No device/s available.'}
                 </div>
               </div>
             </div>
