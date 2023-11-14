@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="../src/mdb.min.css" />
     <link rel="stylesheet" href="../src/bootstrap.min.css" />
     <link rel="stylesheet" href="../src/style.css" />
-    <link rel="stylesheet" href="../src/all.min.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <!-- NAVBAR -->
@@ -37,11 +40,7 @@
         >
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a
-                class="nav-link text-center"
-                href="../index.html"
-                >Home</a
-              >
+              <a class="nav-link text-center" href="../index.html">Home</a>
             </li>
             <li class="nav-item">
               <a
@@ -68,11 +67,6 @@
               >
             </li>
           </ul>
-          <a
-            href="signup_signin/sign-in.html"
-            class="btn btn-outline-primary mx-3 d-block shadow-none"
-            >Sign In</a
-          >
         </div>
       </div>
     </nav>
@@ -95,13 +89,37 @@
 
                   <div class="form-outline mb-4">
                     <input
+                      class="form-control"
                       type="password"
                       id="typePasswordX"
-                      class="form-control"
+                      required
                     />
-                    <label class="form-label" for="typePasswordX"
+                    <label class="form-label" for="password-input"
                       >Password</label
                     >
+                    <div
+                      class="position-absolute end-0 top-50 translate-middle-y me-2"
+                    >
+                      <i
+                        class="fas fa-eye-slash toggle-password show-password"
+                        toggle="#typePasswordX"
+                        id="show-password"
+                      ></i>
+                    </div>
+                  </div>
+
+                  <!-- Checkbox -->
+                  <div class="form-check d-flex justify-content-center mb-4">
+                    <input
+                      class="form-check-input me-2"
+                      type="checkbox"
+                      id="rememberMe"
+                      name="rememberMe"
+                      required
+                    />
+                    <label class="form-check-label" for="rememberMe">
+                      Remember Me
+                    </label>
                   </div>
 
                   <p class="small mb-5 pb-lg-2">
@@ -129,6 +147,7 @@
         </div>
       </div>
     </section>
+    <script type="module" src="sign-in-design.js"></script>
     <script type="module" src="sign-in.js"></script>
     <script type="text/javascript" src="../src/jquery.min.js"></script>
     <script type="text/javascript" src="../src/popper.min.js"></script>

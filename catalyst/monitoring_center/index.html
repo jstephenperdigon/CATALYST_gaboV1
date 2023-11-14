@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Monitoring</title>
-    <meta name="viewport" content="initial-scale=1.0" />
-    <meta charset="utf-8" />
     <link rel="stylesheet" href="../src/mdb.min.css" />
     <link rel="stylesheet" href="../src/bootstrap.min.css" />
     <link rel="stylesheet" href="styling/style.css" />
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
-      rel="stylesheet"
-    />
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+    rel="stylesheet"
+  />
     <style>
       /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
+         * element that contains the map. */
       /* Set a specific height for the map */
       #map {
-        height: 600px;
+        height: 950px;
       }
       /* Optional: Makes the sample page fill the window. */
       html,
@@ -25,12 +25,19 @@
         margin: 0;
         padding: 0;
       }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 260px;
+        background: #292929;
+        z-index: 100;
+      }
     </style>
   </head>
-  <body class="">
-
-    
-    <!-- NAVBAR -->
+  <body>
+    <!--
     <nav
       class="navbar navbar-expand-lg shadow-none"
       style="height: 86px; background-color: #f5f5f5"
@@ -77,58 +84,107 @@
         </div>
       </div>
     </nav>
+-->
+    <div
+      class="container-fluid sidebar"
+      style="
+        height: 100vh;
+        width: 250px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding-top: 20px;
+        color: #fff;
+      "
+    >
+      <div class="nav flex-column nav-tabs" id="v-tabs-tab" role="tablist">
+        <ul class="nav flex-column nav-pills">
+          <!-- Tab navs -->
+          <li class="nav-item">
+            <h1>GABO</h1>
+          </li>
+          <li class="nav-item ">
+            <a
+              class="nav-link border-0 active"
+              id="v-tabs-home-tab"
+              data-mdb-toggle="tab"
+              href="#v-tabs-home"
+              role="tab"
+              aria-controls="v-tabs-home"
+              aria-selected="true"
+            >
+              MAP
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link border-0"
+              id="v-tabs-profile-tab"
+              data-mdb-toggle="tab"
+              href="#v-tabs-profile"
+              role="tab"
+              aria-controls="v-tabs-profile"
+              aria-selected="false"
+            >
+              Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link border-0"
+              id="v-tabs-messages-tab"
+              data-mdb-toggle="tab"
+              href="#v-tabs-messages"
+              role="tab"
+              aria-controls="v-tabs-messages"
+              aria-selected="false"
+            >
+              
+            </a>
+          </li>
+          
+        </ul>
 
-    
-    <!-- NAVBAR -->
-    <div class="container-fluid mt-5">
-      <div class="row">
-        <!-- SIDE NAVIGATION -->
-        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
-          <div class="position-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link active" href="#" data-target="map">
-                  Monitoring
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#reports" data-target="reports"> Reports </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#summary" data-target="summary"> Summary </a>
-              </li>
-            </ul>
+        <hr>
+        <div class="profile-details">
+            <div class="profile-content">
+              <img src="../img/GaboV1_LOGO.png" alt="profileImg">
+            </div>
+            <div class="name-job">
+              <div class="profile_name">Administrator</div>
+              <div class="job">CEMD - OIC</div>
+            </div>
+            <i class="fa fa-sign-out fa-2x" ></i>
           </div>
-        </nav>
-        <!-- SIDE NAVIGATION -->
-
-        <!-- MAP CONTENT -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div id="map" class="active-content">Map Content</div>
-          <div id="reports" class="hidden">Reports Content</div>
-          <div id="summary" class="hidden">Summary Dashboard Content</div>
-        </main>
-        <!-- MAP CONTENT -->
       </div>
     </div>
+
+    <!-- NAV BAR -->
+
+          <!-- Tab content -->
+          <div class="tab-content" id="v-tabs-tabContent">
+            <div
+              class="tab-pane fade active show text-center container-fluid"
+              id="v-tabs-home"
+              role="tabpanel"
+              aria-labelledby="v-tabs-home-tab"
+            >
+                <div id="map" class="mw-100"></div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="v-tabs-profile"
+              role="tabpanel"
+              aria-labelledby="v-tabs-profile-tab"
+            ></div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="v-tabs-messages"
+            role="tabpanel"
+            aria-labelledby="v-tabs-messages-tab"
+          ></div>
     <script>
-      $(document).ready(function () {
-        // Handle click events on navigation links
-        $(".nav-link").click(function (e) {
-          e.preventDefault();
-          var targetId = $(this).data("target");
-
-          // Hide all content divs
-          $("#map, #reports, #summary")
-            .removeClass("active-content")
-            .addClass("hidden");
-
-          // Show the selected content
-          $("#" + targetId)
-            .removeClass("hidden")
-            .addClass("active-content");
-        });
-      });
       var map;
       function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
@@ -507,21 +563,16 @@
         });
       }
     </script>
-    <script>
-      $(document).ready(function () {
-        $(".nav-link").click(function (e) {
-          e.preventDefault();
-          $(".hidden").hide();
-          var target = $(this).attr("href");
-          $(target).removeClass("hidden").show();
-        });
-      });
-    </script>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2_ezLpzKRXbZuMKaC4fOWYX6C3U2gX6g&callback=initMap"
       async
       defer
     ></script>
+    <script type="module" src="../connection/firebaseConfig.js"></script>
+    <script type="text/javascript" src="../src/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/mdb.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/popper.min.js"></script>
     <script type="module" src="../connection/firebaseConfig.js"></script>
     <script type="text/javascript" src="../src/mdb.min.js"></script>
     <script src="../src/bootstrap.min.js"></script>
