@@ -70,6 +70,15 @@ if (verifyBtn) {
         // Display the updated content in the card
         updateCardContent();
 
+        // Disable the control number textbox, password textbox, and verify button
+        document.getElementById("garbageControlNumber").disabled = true;
+        document.getElementById("gcPassword").disabled = true;
+        verifyBtn.disabled = true;
+
+        // Enable the "Save changes" and "Cancel" buttons
+        saveChangesBtn.disabled = false;
+        cancelBtn.disabled = false;
+
         alert("GCN and Password are valid.");
       } else {
         alert("Invalid GCN or Password. Please check your input.");
@@ -95,6 +104,9 @@ function updateCardContent() {
 // Add a click event listener to the "Save changes" button
 const saveChangesBtn = document.getElementById("save");
 if (saveChangesBtn) {
+  // Disable the "Save changes" button initially
+  saveChangesBtn.disabled = true;
+
   saveChangesBtn.addEventListener("click", async () => {
     // Update user data with the latest address information
     userData.addressLine1 = addressLine1Input.value;
@@ -106,7 +118,7 @@ if (saveChangesBtn) {
       await update(userUpdateRef, {
         addressLine1: userData.addressLine1,
         addressLine2: userData.addressLine2,
-        gcn: userData.gcn,  
+        gcn: userData.gcn,
       });
 
       // Update user data in GarbageBinControlNumber/corresponding GCN/Users
@@ -121,7 +133,6 @@ if (saveChangesBtn) {
         addressLine2: userData.addressLine2,
       });
 
-      
       alert("User data updated successfully.");
 
       // Check if the modal is open (assuming your modal ID is "addDeviceModal")
@@ -129,12 +140,30 @@ if (saveChangesBtn) {
       if (modalElement) {
         // Close the modal using MDB method
         mdb.Modal.getInstance(modalElement).hide();
-      }     
-
-              
+      }
     } catch (error) {
       console.error("Error updating user data:", error);
     }
+  });
+}
+
+// Add a click event listener to the "Cancel" button
+const cancelBtn = document.getElementById("cancel");
+if (cancelBtn) {
+  // Disable the "Cancel" button initially
+  cancelBtn.disabled = true;
+
+  cancelBtn.addEventListener("click", () => {
+    // Disable the "Cancel" button, address textboxes, and the "Save changes" button
+    cancelBtn.disabled = true;
+    addressLine1Input.disabled = true;
+    addressLine2Input.disabled = true;
+    saveChangesBtn.disabled = true;
+
+    // Enable the control number textbox, password textbox, and the verify button
+    document.getElementById("garbageControlNumber").disabled = false;
+    document.getElementById("gcPassword").disabled = false;
+    verifyBtn.disabled = false;
   });
 }
 
