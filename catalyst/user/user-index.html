@@ -56,7 +56,9 @@
                     >Account Settings</a
                   >
                 </li>
-                <li><a class="dropdown-item" id="logOutBtn" href="#">Log Out</a></li>
+                <li>
+                  <a class="dropdown-item" id="logOutBtn" href="#">Log Out</a>
+                </li>
                 <li><a class="dropdown-item" href="#">Help Center</a></li>
               </ul>
             </li>
@@ -87,9 +89,38 @@
               </div>
               <!-- Card Content -->
               <div class="card-body">
-                <div class="fs-3 font-monospace text-center text-muted fw-light">
+                <div
+                  class="fs-3 font-monospace text-center text-muted fw-light"
+                >
                   <!-- Display GCN if available, otherwise show "No device/s available" -->
-                  ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No device/s available.'}
+                  ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No
+                  device/s available.'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Report Section -->
+    <section class="mt-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <!-- Your content for the second column goes here -->
+            <div class="card shadow-none border-0">
+              <div
+                class="card-header bg-warning fs-4 d-flex justify-content-between align-items-center"
+              >
+                Report
+              </div>
+              <!-- Card Content -->
+              <div class="card-body">
+                <div
+                  class="fs-3 font-monospace text-center text-muted fw-light"
+                >
+                  test
                 </div>
               </div>
             </div>
@@ -128,26 +159,65 @@
               >
             </div>
             <div class="form-outline mb-4">
-              <input 
-              type="text" 
-              class="form-control" 
-              id="gcPassword" required />
-              <label class="form-label" for="gcPassword"
-              >Password</label>
+              <input
+                type="text"
+                class="form-control"
+                id="gcPassword"
+                required
+              />
+              <label class="form-label" for="gcPassword">Password</label>
             </div>
             <div class="d-flex justify-content-end mb-4">
-              <button 
-              type="button" 
-              class="btn btn-secondary" 
-              id="cancel"
-              >Cancel</button>
-              <div class="ms-2"></div> <!-- Added spacing -->
-              <button 
-              type="button" 
-              class="btn btn-primary" 
-              id="verifyGCNAndPassword"
-              >Verify</button>
+              <button type="button" class="btn btn-secondary" id="cancel">
+                Cancel
+              </button>
+              <div class="ms-2"></div>
+              <!-- Added spacing -->
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="verifyGCNAndPassword"
+              >
+                Verify
+              </button>
             </div>
+            <hr />
+
+            <!-- First Dropdown Button -->
+            <div class="d-grid gap-2">
+              <!-- District Dropdown -->
+              <div class="form-group">
+                <label for="districtDropdown">District</label>
+                <select class="form-select" id="districtDropdown">
+                  <option selected disabled>Select District</option>
+                  <option value="District1">District 1</option>
+                  <option value="District2">District 2</option>
+                  <option value="District3">District 3</option>
+                </select>
+                <div id="districtDropdownButtonLabel">
+                  District: Select District
+                </div>
+              </div>
+
+              <!-- Barangay Dropdown -->
+              <div class="form-group">
+                <label for="barangayDropdown">Barangay</label>
+                <select class="form-select" id="barangayDropdown">
+                  <option selected disabled>Select Barangay</option>
+                  <option value="Brgy186">Brgy. 186</option>
+                  <option value="Brgy187">Brgy. 187</option>
+                  <option value="Brgy188">Brgy. 188</option>
+                </select>
+                <div id="barangayDropdownButtonLabel">
+                  Barangay: Select Barangay
+                </div>
+              </div>
+            </div>
+
+            <!-- Second Dropdown Button -->
+
+            <div class="btn-group"></div>
+
             <div class="form-outline mb-4">
               <input
                 type="text"
@@ -174,7 +244,12 @@
             >
               Close
             </button>
-            <button type="button" type="submit" class="btn btn-primary" id="save">
+            <button
+              type="button"
+              type="submit"
+              class="btn btn-primary"
+              id="save"
+            >
               Save changes
             </button>
           </div>
@@ -183,10 +258,12 @@
     </div>
 
     <!-- IMPORTS -->
+    <script src="../src/jquery.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/mdb.min.js"></script>
+    <script src="../src/popper.min.js"></script>
     <script type="module" src="user-index.js"></script>
     <script type="text/javascript" src="sign-up-design.js"></script>
-    <script type="text/javascript" src="../src/mdb.min.js"></script>
-    <script type="text/javascript" src="../src/bootstrap.min.js"></script>
-    <script type="script/javascript" src="../src/popper.min.js"></script>
+    <script type="text/javascript" src="user-index-design.js"></script>
   </body>
 </html>

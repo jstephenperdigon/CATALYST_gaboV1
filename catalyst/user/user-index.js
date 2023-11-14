@@ -112,6 +112,10 @@ if (saveChangesBtn) {
     userData.addressLine1 = addressLine1Input.value;
     userData.addressLine2 = addressLine2Input.value;
 
+    // Add the selected district and barangay to user data
+    userData.district = document.getElementById("districtDropdown").value;
+    userData.barangay = document.getElementById("barangayDropdown").value;
+
     try {
       // Update user data in Accounts/Users
       const userUpdateRef = ref(db, `Accounts/Users/${userId}`);
@@ -119,6 +123,8 @@ if (saveChangesBtn) {
         addressLine1: userData.addressLine1,
         addressLine2: userData.addressLine2,
         gcn: userData.gcn,
+        district: userData.district, // Add district to user data
+        barangay: userData.barangay, // Add barangay to user data
       });
 
       // Update user data in GarbageBinControlNumber/corresponding GCN/Users
@@ -131,6 +137,8 @@ if (saveChangesBtn) {
         password: userData.password,
         addressLine1: userData.addressLine1,
         addressLine2: userData.addressLine2,
+        district: userData.district,
+        barangay: userData.barangay,
       });
 
       alert("User data updated successfully.");
