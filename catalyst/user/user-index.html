@@ -7,128 +7,42 @@
     <link rel="stylesheet" href="../src/mdb.min.css" />
     <link rel="stylesheet" href="../src/bootstrap.min.css" />
     <link rel="stylesheet" href="../src/style.css" />
+    <link rel="stylesheet" href="user.css" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
       rel="stylesheet"
     />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <style></style>
   </head>
   <body>
-    <!-- NAVBAR -->
-    <nav
-      class="navbar navbar-expand-lg shadow-none sticky-top"
-      style="height: 86px; background-color: #f5f5f5"
-    >
+    <!-- Navbar -->
+    <nav class="navbar shadow-none navbar-dark">
       <div class="container">
-        <a class="navbar-brand gabo-secondary" href="../index.html">
-          <p class="fw-bold fs-3 mt-2">GABO</p>
-        </a>
-        <button
-          class="btn shadow-none navbar-toggler"
-          type="button"
-          data-mdb-toggle="collapse"
-          data-mdb-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <!-- Left Icons -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#about"
+              ><i class="fa fa-question-circle"></i
+            ></a>
+          </li>
+        </ul>
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold fs-3 gabo-secondary" href="#">GABO</a>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <div class="d-flex align-items-center">
-              <i class="fas fa-user"></i>
-            </div>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-mdb-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                >username</a
-              >
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <a class="dropdown-item" href="account-settings.html"
-                    >Account Settings</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" id="logOutBtn" href="#">Log Out</a>
-                </li>
-                <li><a class="dropdown-item" href="#">Help Center</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+        <!-- Right Icons -->
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-bell"></i></a>
+          </li>
+        </ul>
       </div>
     </nav>
+
     <!-- NAVBAR -->
-
-    <!-- Content Section -->
-    <section class="mt-5">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-12">
-            <!-- Your content for the second column goes here -->
-            <div class="card shadow-none border-0">
-              <div
-                class="card-header gabo-bg-secondary fs-4 d-flex justify-content-between align-items-center"
-              >
-                Device
-                <button
-                  class="btn btn-warning shadow-none align-items-end"
-                  data-mdb-toggle="modal"
-                  data-mdb-target="#addDeviceModal"
-                >
-                  Connect Device
-                </button>
-              </div>
-              <!-- Card Content -->
-              <div class="card-body">
-                <div
-                  class="fs-3 font-monospace text-center text-muted fw-light"
-                >
-                  <!-- Display GCN if available, otherwise show "No device/s available" -->
-                  ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No
-                  device/s available.'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- User Report Section -->
-    <section class="mt-5">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-12">
-            <!-- Your content for the second column goes here -->
-            <div class="card shadow-none border-0">
-              <div
-                class="card-header bg-warning fs-4 d-flex justify-content-between align-items-center"
-              >
-                Report
-              </div>
-              <!-- Card Content -->
-              <div class="card-body">
-                <div
-                  class="fs-3 font-monospace text-center text-muted fw-light"
-                >
-                  test
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Add Device Modal -->
     <div
       class="modal fade"
@@ -256,7 +170,278 @@
         </div>
       </div>
     </div>
+    <!-- Your content sections -->
+    <div class="content device-container" id="garbageBin">
+      <!-- Content Section -->
+      <section class="">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <!-- Your content for the second column goes here -->
+              <div class="card shadow-none border-0">
+                <div
+                  class="card-header gabo-bg-secondary fs-4 d-flex justify-content-between align-items-center"
+                >
+                  Device
+                  <button
+                    class="btn btn-warning shadow-none align-items-end btn-sm"
+                    data-mdb-toggle="modal"
+                    data-mdb-target="#addDeviceModal"
+                  >
+                    Connect Device
+                  </button>
+                </div>
+                <!-- Card Content -->
+                <div class="card-body">
+                  <!-- <div
+                    class="fs-3 font-monospace text-center text-muted fw-light text-center"
+                  > Display GCN if available, otherwise show "No device/s available" 
+                    ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No
+                    device/s available.'} -->
+                </div>
+                <div class="container mt-5">
+                  <div class="row">
+                    <!-- Bin 1 -->
+                    <div
+                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+                    >
+                      <div class="garbage-bin">
+                        <div class="lid"></div>
+                        <div class="body"></div>
+                        <div
+                          class="fill-level"
+                          style="height: 70%"
+                          id="fillLevel"
+                          data-percentage="70"
+                        ></div>
+                      </div>
+                    </div>
 
+                    <!-- Bin 2 -->
+                    <div
+                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+                    >
+                      <div class="garbage-bin">
+                        <div class="lid"></div>
+                        <div class="body"></div>
+                        <div
+                          class="fill-level"
+                          style="height: 50%"
+                          id="fillLevel"
+                          data-percentage="70"
+                        ></div>
+                      </div>
+                    </div>
+
+                    <!-- Bin 3 -->
+                    <div
+                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+                    >
+                      <div class="garbage-bin">
+                        <div class="lid"></div>
+                        <div class="body"></div>
+                        <div
+                          class="fill-level"
+                          style="height: 30%"
+                          id="fillLevel"
+                          data-percentage="30"
+                        ></div>
+                      </div>
+                    </div>
+
+                    <!-- Bin 4 -->
+                    <div
+                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+                    >
+                      <div class="garbage-bin">
+                        <div class="lid"></div>
+                        <div class="body"></div>
+                        <div
+                          class="fill-level"
+                          style="height: 40%"
+                          id="fillLevel"
+                          data-percentage="70"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--Content Section -->
+    </div>
+    <div class="content device-container" id="home">
+      <!-- Content Section -->
+      <div class="container">
+        <p class="h1 gabo-secondary">Hi, User!</p>
+      </div>
+      <div class="container mt-5">
+        <div class="card shadow-none card-index">
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <p class="h5"><strong>Welcome to GABO!</strong></p>
+                <p class="card-text text-muted">Sample Text</p>
+              </div>
+              <div class="col"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card mt-5"style="width: 50%;" >
+          <div class="card-body shadow-none btn btn-primary">
+            <!-- Your card content goes here -->
+    
+            <!-- Dots on the side -->
+            <div class="dots-container">
+              <div class="dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card shadow-none mt-5 " style="width: 50%;">
+          <div class="card-body" >
+            <p class="h5"><strong>Welcome to GABO!</strong></p>
+            <p class="card-text text-muted">Sample Text</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Section -->
+    </div>
+    <div class="content" id="profile">
+      <!-- Profile Content -->
+      <h2>Profile Content</h2>
+    </div>
+    <div class="content" id="report">
+      <!-- User Report Section -->
+      <section class="mt-5">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <!-- Your content for the second column goes here -->
+              <div class="card shadow-none border-0">
+                <div
+                  class="card-header bg-warning fs-4 d-flex justify-content-between align-items-center"
+                >
+                  Report
+                </div>
+                <!-- Card Content -->
+                <div class="card-body">
+                  <div
+                    class="fs-3 font-monospace text-center text-muted fw-light"
+                  >
+                    test
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="container-fluid bottom-bar fixed-bottom">
+      <nav class="row">
+        <div class="col">
+          <ion-icon
+            name="home"
+            href="#home"
+            id="home-btn"
+            class="icon active"
+            onclick="change(this)"
+          ></ion-icon>
+        </div>
+        <div class="col">
+          <ion-icon
+            name="alert-circle"
+            class="icon"
+            href="#report"
+            id="report-btn"
+            onclick="change(this)"
+          ></ion-icon>
+        </div>
+        <div class="col">
+          <ion-icon
+            name="trash"
+            href="#garbageBin"
+            id="garbage-btn"
+            class="icon"
+            onclick="change(this)"
+          ></ion-icon>
+        </div>
+        <div class="col">
+          <ion-icon
+            name="person"
+            class="icon"
+            onclick="change(this)"
+          ></ion-icon>
+        </div>
+        <div class="col">
+          <ion-icon name="list" class="icon" onclick="change(this)"></ion-icon>
+        </div>
+      </nav>
+    </div>
+
+    <script>
+      function change(item) {
+        const buttons = document.querySelectorAll("ion-icon");
+        buttons.forEach(function (obj) {
+          obj.classList.remove("active");
+        });
+        item.classList.add("active");
+      }
+
+      // Toggle sidebar on button click
+      document
+        .getElementById("sidebar-toggle")
+        .addEventListener("click", function () {
+          document.getElementById("sidebar").classList.toggle("active");
+        });
+
+      // Close sidebar when close button is clicked
+      document
+        .getElementById("close-btn")
+        .addEventListener("click", function () {
+          document.getElementById("sidebar").classList.remove("active");
+        });
+
+      // Close sidebar when a link inside it is clicked
+      document.querySelectorAll("#sidebar ul li a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          document.getElementById("sidebar").classList.remove("active");
+        });
+      });
+
+      // Get all fill level elements
+      var fillLevels = document.querySelectorAll(".fill-level");
+
+      // Loop through each fill level element
+      fillLevels.forEach(function (fillLevel) {
+        // Get the percentage from the data-percentage attribute
+        var percentage = parseInt(fillLevel.getAttribute("data-percentage"));
+
+        // Calculate the height based on the percentage
+        var fillHeight = (percentage / 100) * 130; // Assuming the max height is 130px
+
+        // Set the height of the fill level element
+        fillLevel.style.height = fillHeight + "px";
+
+        // Change the color based on the percentage
+        if (percentage >= 70) {
+          fillLevel.style.backgroundColor = "#ff0000"; // Red color for 70% and above
+        } else if (percentage >= 30) {
+          fillLevel.style.backgroundColor = "#ffc107"; // Yellow color for 30-69%
+        } else {
+          fillLevel.style.backgroundColor = "#4caf50"; // Green color for less than 30%
+        }
+      });
+    </script>
     <!-- IMPORTS -->
     <script src="../src/jquery.min.js"></script>
     <script src="../src/bootstrap.min.js"></script>
