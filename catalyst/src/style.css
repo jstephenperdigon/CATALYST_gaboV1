@@ -160,12 +160,13 @@ a:hover {
   z-index: -1; /* Place the circle behind the content */
 }
 
-/* FEATURE SECTION */
+/* 
 .feature-section {
   height: 100%;
   width: 100%;
   background-color: #11531e;
 }
+FEATURE SECTION */
 
 .content {
   z-index: 1;
