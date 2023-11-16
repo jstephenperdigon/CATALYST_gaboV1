@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmailJS OTP Example</title>
+</head>
+<body>
+    <h1>EmailJS OTP Example</h1>
+
+    <form id="myForm">
+        <label for="toEmail">To Email:</label>
+        <input type="email" id="toEmail" required>
+
+        <button type="button" onclick="sendOTP()">Request OTP</button>
+
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" required>
+
+        <button type="button" onclick="verifyOTP()">Verify OTP</button>
+    </form>
+
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your User ID
+        emailjs.init('Nxv5I1lvYdXMBVb0n');
+
+        let generatedOTP;
+
+        function sendOTP() {
+            const toEmail = document.getElementById('toEmail').value;
+
+            // Generate a random 6-digit OTP
+            generatedOTP = Math.floor(100000 + Math.random() * 900000);
+
+            const templateParams = {
+                to_email: toEmail,
+                otp: generatedOTP,
+            };
+
+            emailjs.send('service_em5bqqg', 'template_tx71udv', templateParams)
+                .then((response) => {
+                    console.log('OTP sent successfully:', response);
+                    alert('OTP sent successfully!');
+                })
+                .catch((error) => {
+                    console.error('Error sending OTP:', error);
+                    alert('Error sending OTP. Please try again.');
+                });
+        }
+
+        function verifyOTP() {
+            const enteredOTP = document.getElementById('otp').value;
+
+            if (enteredOTP === generatedOTP.toString()) {
+                console.log('OTP verified successfully!');
+                alert('OTP verified successfully!');
+            } else {
+                console.error('Invalid OTP. Please try again.');
+                alert('Invalid OTP. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
