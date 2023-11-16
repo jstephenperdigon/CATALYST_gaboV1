@@ -59,6 +59,54 @@ a:hover {
   text-decoration: none;
 }
 
+/* Garbage Bin Icon */
+
+.garbage-bin {
+  width: 100px;
+  height: 150px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.lid {
+  width: 80px;
+  height: 20px;
+  background-color: #4caf50;
+  border-radius: 5px 5px 0 0;
+  position: absolute;
+  top: 0;
+  left: 10px;
+}
+
+.body {
+  width: 100px;
+  height: 130px;
+  background-color: #4caf50;
+  border-radius: 10px;
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+
+.trash-can {
+  width: 20px;
+  height: 30px;
+  background-color: #333;
+  position: absolute;
+  top: 95px;
+  left: 40px;
+  border-radius: 2px;
+}
+
+.fill-level {
+  width: 100%;
+  background-color: #ffc107;
+  border-radius: 0 0 10px 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: height 0.5s ease;
+}
 
 /* Add Device Button Placement */
 
@@ -238,11 +286,52 @@ FEATURE SECTION */
     width: 12rem;
     height: 2rem;
   }
+
+  #sidebar {
+    width: 50%;
+    right: -100%; /* Initially hide the sidebar for small screens */
+  }
+
+  #sidebar.active {
+    right: 0;
+  }
 }
 
 @media (max-width: 576px) {
   .signup-margin {
     margin-top: 50px; /* Further adjusted margin for even smaller screens */
+  }
+  .garbage-bin {
+    width: 90px; /* Adjust the width as needed */
+    height: 130px; /* Adjust the height as needed */
+    margin-bottom: 5px; /* Adjust the margin as needed */
+  }
+
+  .lid {
+    width: 70px; /* Adjust the width as needed */
+    height: 15px; /* Adjust the height as needed */
+    top: 0;
+    left: 10px;
+  }
+
+  .body {
+    width: 90px; /* Adjust the width as needed */
+    height: 100px; /* Adjust the height as needed */
+    top: 15px;
+  }
+
+  .trash-can {
+    width: 15px; /* Adjust the width as needed */
+    height: 25px; /* Adjust the height as needed */
+    top: 60px;
+    left: 20px;
+  }
+
+  .fill-level {
+    border-radius: 0 0 5px 5px; /* Adjust the border-radius as needed */
+  }
+  .device-container {
+    margin-top: 0px;
   }
 }
 
