@@ -98,9 +98,29 @@ a:hover {
   border-radius: 2px;
 }
 
-.fill-level {
+.fill-level1 {
+  width: 100%;
+  background-color: #4caf50;
+  border-radius: 0 0 10px 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: height 0.5s ease;
+}
+
+.fill-level2 {
   width: 100%;
   background-color: #ffc107;
+  border-radius: 0 0 10px 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: height 0.5s ease;
+}
+
+.fill-level3 {
+  width: 100%;
+  background-color: red;
   border-radius: 0 0 10px 10px;
   position: absolute;
   bottom: 0;

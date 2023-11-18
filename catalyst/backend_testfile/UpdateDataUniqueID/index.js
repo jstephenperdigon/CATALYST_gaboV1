@@ -18,8 +18,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // Function to load user data into the display area
-function loadUserData() {
-    const userId = document.getElementById("userSelector").value;
+function loadUserData(userId) {
     const userRef = ref(db, `/Accounts/Users/${userId}`);
     
     get(userRef).then((snapshot) => {
@@ -60,30 +59,37 @@ function updateUserData() {
     set(userRef, updatedData).then(() => {
         console.log("User data updated successfully!");
         // Reload displayed data after update
-        loadUserData();
+        loadUserData(userId);
     }).catch((error) => {
         console.error("Error updating user data:", error);
     });
 }
 
-// Function to populate the user selector
-function populateUserSelector() {
-    const userSelector = document.getElementById("userSelector");
+// Function to populate the user list
+function populateUserList() {
+    const userList = document.getElementById("userList");
     const usersRef = ref(db, "/Accounts/Users");
 
     get(usersRef).then((snapshot) => {
         snapshot.forEach((userSnapshot) => {
             const userId = userSnapshot.key;
-            const option = document.createElement("option");
-            option.value = userId;
-            option.text = userId;
-            userSelector.add(option);
+            const userButton = document.createElement("button");
+            userButton.innerText = userId;
+            userButton.addEventListener("click", () => {
+                loadUserData(userId);
+            });
+            userList.appendChild(userButton);
         });
 
         // Load the first user's data by default
-        loadUserData();
+        const firstUser = snapshot.docs[0];
+        if (firstUser) {
+            const firstUserId = firstUser.key;
+            loadUserData(firstUserId);
+        }
     });
 }
 
-// Call the function to populate the user selector
-populateUserSelector();
+
+// Call the function to populate the user list
+populateUserList();

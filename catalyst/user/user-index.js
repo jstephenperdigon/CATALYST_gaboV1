@@ -1,20 +1,20 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getDatabase, ref, get, update, set } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+  import { getDatabase, ref, get, update, set } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
-  authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
-  databaseURL: "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "smartgarbagebin-8c3ec",
-  storageBucket: "smartgarbagebin-8c3ec.appspot.com",
-  messagingSenderId: "1062286948871",
-  appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
-};
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+    authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+    databaseURL: "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "smartgarbagebin-8c3ec",
+    storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+    messagingSenderId: "1062286948871",
+    appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
+  };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
 // Function to retrieve user ID from session
 function getUserIdFromSession() {
@@ -226,3 +226,62 @@ const logOutBtn = document.getElementById("logOutBtn");
 if (logOutBtn) {
   logOutBtn.addEventListener("click", logout);
 }
+
+
+// Function to display fill levels for GB1 to GB4
+function displayFillLevels() {
+  // Reference to the GarbageBinControlNumber in the database
+  const gcnRef = ref(db, 'GarbageBinControlNumber/GCN001/FillLevel');
+
+  // Get the data from the database
+  get(gcnRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const fillLevels = snapshot.val();
+
+      // Update the fill levels and colors for each bin
+      updateFillLevel('GB1', fillLevels.GB1);
+      updateFillLevel('GB2', fillLevels.GB2);
+      updateFillLevel('GB3', fillLevels.GB3);
+      updateFillLevel('GB4', fillLevels.GB4);
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    console.error("Error getting data:", error);
+  });
+}
+
+// Function to update the fill level for a specific bin
+function updateFillLevel(binId, fillLevel) {
+  const binElement = document.getElementById(binId);
+  const fillLevelElement = binElement.closest('.fill-level');
+
+  // Update the fill level style and data-percentage attribute
+  fillLevelElement.style.height = fillLevel + '%';
+  fillLevelElement.setAttribute('data-percentage', fillLevel);
+
+  // Update the text content inside the container
+  const containerElement = fillLevelElement.querySelector('.container');
+  containerElement.textContent = `${fillLevel}`;
+
+  // Update the fill level color based on conditions
+  updateFillLevelColor(fillLevelElement, fillLevel);
+}
+
+// Function to update fill level color based on conditions
+function updateFillLevelColor(fillLevelElement, fillLevel) {
+  if (fillLevel < 30) {
+    fillLevelElement.classList.remove('fill-level2', 'fill-level3');
+    fillLevelElement.classList.add('fill-level1');
+  } else if (fillLevel >= 30 && fillLevel < 70) {
+    fillLevelElement.classList.remove('fill-level1', 'fill-level3');
+    fillLevelElement.classList.add('fill-level2');
+  } else {
+    fillLevelElement.classList.remove('fill-level1', 'fill-level2');
+    fillLevelElement.classList.add('fill-level3');
+  }
+}
+
+// Call the displayFillLevels function to initiate the update
+displayFillLevels();
+

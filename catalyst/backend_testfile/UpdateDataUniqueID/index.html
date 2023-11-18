@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Editor</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        #userDataDisplay {
+            width: 40%;
+        }
+
+        #userDataEditor {
+            width: 40%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- User Data Display -->
+<div id="userDataDisplay">
+    <h2>User Data</h2>
+    <div id="userList">
+        <!-- User buttons will be dynamically added here -->
+    </div>
+    <br><br>
+    <label for="displayFirstName">First Name:</label>
+    <div id="displayFirstName"></div>
+    <br>
+    <label for="displayLastName">Last Name:</label>
+    <div id="displayLastName"></div>
+    <br>
+    <label for="displayEmail">Email:</label>
+    <div id="displayEmail"></div>
+    <br>
+    <label for="displayAddressLine1">Address Line 1:</label>
+    <div id="displayAddressLine1"></div>
+    <br>
+    <label for="displayAddressLine2">Address Line 2:</label>
+    <div id="displayAddressLine2"></div>
+    <br>
+    <label for="displayBarangay">Barangay:</label>
+    <div id="displayBarangay"></div>
+    <br>
+    <label for="displayDistrict">District:</label>
+    <div id="displayDistrict"></div>
+    <br>
+    <label for="displayGCN">GCN:</label>
+    <div id="displayGCN"></div>
+    <br>
+    <label for="displayMobileNumber">Mobile Number:</label>
+    <div id="displayMobileNumber"></div>
+    <br>
+    <button onclick="loadUserData(document.getElementById('userSelector').value)">Select</button>
+</div>
+
+<!-- User Data Editor -->
+<div id="userDataEditor">
+    <h2>Edit User Data</h2>
+    <label for="editFirstName">First Name:</label>
+    <input type="text" id="editFirstName">
+    <br>    
+    <label for="editLastName">Last Name:</label>
+    <input type="text" id="editLastName">
+    <br>
+    <label for="editEmail">Email:</label>
+    <input type="email" id="editEmail">
+    <br>
+    <label for="editAddressLine1">Address Line 1:</label>
+    <input type="text" id="editAddressLine1">
+    <br>
+    <label for="editAddressLine2">Address Line 2:</label>
+    <input type="text" id="editAddressLine2">
+    <br>
+    <label for="editBarangay">Barangay:</label>
+    <input type="text" id="editBarangay">
+    <br>
+    <label for="editDistrict">District:</label>
+    <input type="text" id="editDistrict">
+    <br>
+    <label for="editGCN">GCN:</label>
+    <input type="text" id="editGCN">
+    <br>
+    <label for="editMobileNumber">Mobile Number:</label>
+    <input type="text" id="editMobileNumber">
+    <br><br>
+    <button onclick="updateUserData()">Update Data</button>
+</div>
+
+<script type="module" src="index.js"></script>
+
+</body>
+</html>

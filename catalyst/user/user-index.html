@@ -172,97 +172,98 @@
     </div>
     <!-- Your content sections -->
     <div class="content device-container" id="garbageBin">
-      <!-- Content Section -->
-      <section class="">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-12">
-              <!-- Your content for the second column goes here -->
-              <div class="card shadow-none border-0">
-                <div
-                  class="card-header gabo-bg-secondary fs-4 d-flex justify-content-between align-items-center"
-                >
-                  Device
-                  <button
-                    class="btn btn-warning shadow-none align-items-end btn-sm"
-                    data-mdb-toggle="modal"
-                    data-mdb-target="#addDeviceModal"
+<!-- Content Section -->
+<section class="">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- Your content for the second column goes here -->
+        <div class="card shadow-none border-0">
+          <div
+            class="card-header gabo-bg-secondary fs-4 d-flex justify-content-between align-items-center"
+          >
+            Device
+            <button
+              class="btn btn-warning shadow-none align-items-end btn-sm"
+              data-mdb-toggle="modal"
+              data-mdb-target="#addDeviceModal"
+            >
+              Connect Device
+            </button>
+          </div>
+          <!-- Card Content -->
+          <div class="card-body">
+            <!-- <div
+                class="fs-3 font-monospace text-center text-muted fw-light text-center"
+              > Display GCN if available, otherwise show "No device/s available" 
+                ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No
+                device/s available.'} -->
+          </div>
+          <div class="container mt-5">
+            <div class="row">
+              <!-- Bin 1 -->
+              <div
+                class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+              >
+                <div class="garbage-bin">
+                  <div class="lid"></div>
+                  <div class="body"></div>
+                  <div
+                    class="fill-level"
                   >
-                    Connect Device
-                  </button>
+                    <div class="container">
+                      <p id="GB1"></p>
+                    </div>
+                  </div>
                 </div>
-                <!-- Card Content -->
-                <div class="card-body">
-                  <!-- <div
-                    class="fs-3 font-monospace text-center text-muted fw-light text-center"
-                  > Display GCN if available, otherwise show "No device/s available" 
-                    ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No
-                    device/s available.'} -->
+              </div>
+
+              <!-- Bin 2 -->
+              <div
+                class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+              >
+                <div class="garbage-bin">
+                  <div class="lid"></div>
+                  <div class="body"></div>
+                  <div
+                    class="fill-level"
+                  >
+                    <div class="container">
+                      <p id="GB2"></p>
+                    </div>
+                  </div>
                 </div>
-                <div class="container mt-5">
-                  <div class="row">
-                    <!-- Bin 1 -->
-                    <div
-                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                    >
-                      <div class="garbage-bin">
-                        <div class="lid"></div>
-                        <div class="body"></div>
-                        <div
-                          class="fill-level"
-                          style="height: 70%"
-                          id="fillLevel"
-                          data-percentage="70"
-                        ></div>
-                      </div>
-                    </div>
+              </div>
 
-                    <!-- Bin 2 -->
-                    <div
-                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                    >
-                      <div class="garbage-bin">
-                        <div class="lid"></div>
-                        <div class="body"></div>
-                        <div
-                          class="fill-level"
-                          style="height: 50%"
-                          id="fillLevel"
-                          data-percentage="70"
-                        ></div>
-                      </div>
+              <!-- Bin 3 -->
+              <div
+                class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+              >
+                <div class="garbage-bin">
+                  <div class="lid"></div>
+                  <div class="body"></div>
+                  <div
+                    class="fill-level"
+                  >
+                    <div class="container">
+                      <p id="GB3"></p>
                     </div>
+                  </div>
+                </div>
+              </div>
 
-                    <!-- Bin 3 -->
-                    <div
-                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                    >
-                      <div class="garbage-bin">
-                        <div class="lid"></div>
-                        <div class="body"></div>
-                        <div
-                          class="fill-level"
-                          style="height: 30%"
-                          id="fillLevel"
-                          data-percentage="30"
-                        ></div>
-                      </div>
-                    </div>
-
-                    <!-- Bin 4 -->
-                    <div
-                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                    >
-                      <div class="garbage-bin">
-                        <div class="lid"></div>
-                        <div class="body"></div>
-                        <div
-                          class="fill-level"
-                          style="height: 40%"
-                          id="fillLevel"
-                          data-percentage="70"
-                        ></div>
-                      </div>
+              <!-- Bin 4 -->
+              <div
+                class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+              >
+                <div class="garbage-bin">
+                  <div class="lid"></div>
+                  <div class="body"></div>
+                  <div
+                    class="fill-level"
+                  >
+                    <div class="container">
+                      <p id="GB4"></p>
                     </div>
                   </div>
                 </div>
@@ -270,8 +271,12 @@
             </div>
           </div>
         </div>
-      </section>
-      <!--Content Section -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Content Section -->
+
     </div>
     <div class="content device-container" id="home">
       <!-- Content Section -->
@@ -290,10 +295,10 @@
             </div>
           </div>
         </div>
-        <div class="card mt-5"style="width: 50%;" >
+        <div class="card mt-5" style="width: 50%">
           <div class="card-body shadow-none btn btn-primary">
             <!-- Your card content goes here -->
-    
+
             <!-- Dots on the side -->
             <div class="dots-container">
               <div class="dots">
@@ -304,8 +309,8 @@
             </div>
           </div>
         </div>
-        <div class="card shadow-none mt-5 " style="width: 50%;">
-          <div class="card-body" >
+        <div class="card shadow-none mt-5" style="width: 50%">
+          <div class="card-body">
             <p class="h5"><strong>Welcome to GABO!</strong></p>
             <p class="card-text text-muted">Sample Text</p>
           </div>
@@ -418,29 +423,7 @@
         });
       });
 
-      // Get all fill level elements
-      var fillLevels = document.querySelectorAll(".fill-level");
 
-      // Loop through each fill level element
-      fillLevels.forEach(function (fillLevel) {
-        // Get the percentage from the data-percentage attribute
-        var percentage = parseInt(fillLevel.getAttribute("data-percentage"));
-
-        // Calculate the height based on the percentage
-        var fillHeight = (percentage / 100) * 130; // Assuming the max height is 130px
-
-        // Set the height of the fill level element
-        fillLevel.style.height = fillHeight + "px";
-
-        // Change the color based on the percentage
-        if (percentage >= 70) {
-          fillLevel.style.backgroundColor = "#ff0000"; // Red color for 70% and above
-        } else if (percentage >= 30) {
-          fillLevel.style.backgroundColor = "#ffc107"; // Yellow color for 30-69%
-        } else {
-          fillLevel.style.backgroundColor = "#4caf50"; // Green color for less than 30%
-        }
-      });
     </script>
     <!-- IMPORTS -->
     <script src="../src/jquery.min.js"></script>
