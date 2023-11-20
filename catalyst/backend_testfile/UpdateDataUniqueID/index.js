@@ -1,95 +1,153 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
-  authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
-  databaseURL: "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "smartgarbagebin-8c3ec",
-  storageBucket: "smartgarbagebin-8c3ec.appspot.com",
-  messagingSenderId: "1062286948871",
-  appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
+    apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+    authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+    databaseURL: "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "smartgarbagebin-8c3ec",
+    storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+    messagingSenderId: "1062286948871",
+    appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Function to load user data into the display area
-function loadUserData(userId) {
-    const userRef = ref(db, `/Accounts/Users/${userId}`);
-    
-    get(userRef).then((snapshot) => {
-        const userData = snapshot.val();
-        if (userData) {
-            document.getElementById("displayFirstName").innerText = userData.firstName || "";
-            document.getElementById("displayLastName").innerText = userData.lastName || "";
-            document.getElementById("displayEmail").innerText = userData.email || "";
-            document.getElementById("displayAddressLine1").innerText = userData.addressLine1 || "";
-            document.getElementById("displayAddressLine2").innerText = userData.addressLine2 || "";
-            document.getElementById("displayBarangay").innerText = userData.barangay || "";
-            document.getElementById("displayDistrict").innerText = userData.district || "";
-            document.getElementById("displayGCN").innerText = userData.gcn || "";
-            document.getElementById("displayMobileNumber").innerText = userData.mobileNumber || "";
-            // Add other fields accordingly
-        }
-    });
+// Function to display all users
+function displayAllUsers() {
+    const usersRef = ref(db, "Accounts/Users");
+
+    get(usersRef)
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+
+                // Display the users (customize based on your needs)
+                const userDataDisplay = document.getElementById("userDataDisplay");
+                userDataDisplay.innerHTML = "<h2>All Users:</h2>";
+
+                Object.keys(users).forEach((userId) => {
+                    const user = users[userId];
+                    userDataDisplay.innerHTML += `
+                        <div>
+                            <strong>ID:</strong> ${userId}<br>
+                            <strong>Name:</strong> ${user.firstName} ${user.lastName}<br>
+                            <strong>Email:</strong> ${user.email}<br>
+                            <strong>Mobile Number:</strong> ${user.mobileNumber}<br>
+                            <strong>Password:</strong> ${user.password}<br>
+                            <strong>Address Line 1:</strong> ${user.addressLine1}<br>
+                            <strong>Address Line 2:</strong> ${user.addressLine2}<br>
+                            <strong>Barangay:</strong> ${user.barangay}<br>
+                            <strong>District:</strong> ${user.district}<br>
+                            <button class="selectUser" data-user-id='${userId}' data-gcn='${user.gcn}'>Select User</button>
+                            <!-- Add more user data fields as needed -->
+                        </div>
+                        <br>
+                    `;
+                });
+
+                // Add event listeners to the "Select User" buttons
+                document.querySelectorAll(".selectUser").forEach((button) => {
+                    button.addEventListener('click', function () {
+                        const userId = button.dataset.userId;
+                        const gcn = button.dataset.gcn;
+
+                        // Set the GCN value in the hidden input
+                        document.getElementById("controlNumber").value = gcn;
+
+                        // Populate other user information
+                        populatePersonalInformation(userId);
+                    });
+                });
+            } else {
+                alert("No users found");
+            }
+        })
+        .catch((error) => {
+            console.error("Error displaying users: " + error);
+        });
 }
 
-// Function to update user data
-function updateUserData() {
-    const userId = document.getElementById("userSelector").value;
-    const userRef = ref(db, `/Accounts/Users/${userId}`);
+// Function to populate personal information based on selected user
+function populatePersonalInformation(userId) {
+    const userRef = ref(db, `Accounts/Users/${userId}`);
 
-    const updatedData = {
-        firstName: document.getElementById("editFirstName").value,
-        lastName: document.getElementById("editLastName").value,
-        email: document.getElementById("editEmail").value,
-        addressLine1: document.getElementById("editAddressLine1").value,
-        addressLine2: document.getElementById("editAddressLine2").value,
-        barangay: document.getElementById("editBarangay").value,
-        district: document.getElementById("editDistrict").value,
-        gcn: document.getElementById("editGCN").value,
-        mobileNumber: document.getElementById("editMobileNumber").value,
-        // Add other fields accordingly
-    };
+    get(userRef)
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
 
-    set(userRef, updatedData).then(() => {
-        console.log("User data updated successfully!");
-        // Reload displayed data after update
-        loadUserData(userId);
-    }).catch((error) => {
-        console.error("Error updating user data:", error);
-    });
+                // Populate the textboxes with selected user data
+                document.getElementById("id").value = userId;
+                document.getElementById("firstname").value = userData.firstName;
+                document.getElementById("lastname").value = userData.lastName;
+                document.getElementById("email").value = userData.email;
+                document.getElementById("mobilenumber").value = userData.mobileNumber;
+                document.getElementById("password").value = userData.password;
+                document.getElementById("addressLine1").value = userData.addressLine1;
+                document.getElementById("addressLine2").value = userData.addressLine2;
+                document.getElementById("barangay").value = userData.barangay;
+                document.getElementById("district").value = userData.district;
+                // Add more fields as needed
+            } else {
+                alert("User not found");
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching user data: " + error);
+        });
 }
 
-// Function to populate the user list
-function populateUserList() {
-    const userList = document.getElementById("userList");
-    const usersRef = ref(db, "/Accounts/Users");
+// Function to update user data in both Accounts/Users and GarbageBinControlNumber
+function updateUserData(userId, newData) {
+    const userRef = ref(db, `Accounts/Users/${userId}`);
+    const garbageBinRef = ref(db, `GarbageBinControlNumber/${newData.controlNumber}/Users/${userId}`);
 
-    get(usersRef).then((snapshot) => {
-        snapshot.forEach((userSnapshot) => {
-            const userId = userSnapshot.key;
-            const userButton = document.createElement("button");
-            userButton.innerText = userId;
-            userButton.addEventListener("click", () => {
-                loadUserData(userId);
-            });
-            userList.appendChild(userButton);
+    // Update data in Accounts/Users
+    update(userRef, newData)
+        .then(() => {
+            console.log("User data updated in Accounts/Users");
+        })
+        .catch((error) => {
+            console.error("Error updating user data in Accounts/Users: " + error);
         });
 
-        // Load the first user's data by default
-        const firstUser = snapshot.docs[0];
-        if (firstUser) {
-            const firstUserId = firstUser.key;
-            loadUserData(firstUserId);
-        }
-    });
+    // Update data in GarbageBinControlNumber
+    update(garbageBinRef, newData)
+        .then(() => {
+            console.log("User data updated in GarbageBinControlNumber");
+        })
+        .catch((error) => {
+            console.error("Error updating user data in GarbageBinControlNumber: " + error);
+        });
 }
 
+// Event listener for the "Update" button
+document.getElementById("update").addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent the form from submitting
 
-// Call the function to populate the user list
-populateUserList();
+    const userId = document.getElementById("id").value;
+    const newData = {
+        // Add all the fields you want to update here
+        firstName: document.getElementById("firstname").value,
+        lastName: document.getElementById("lastname").value,
+        email: document.getElementById("email").value,
+        mobileNumber: document.getElementById("mobilenumber").value,
+        password: document.getElementById("password").value,
+        addressLine1: document.getElementById("addressLine1").value,
+        addressLine2: document.getElementById("addressLine2").value,
+        barangay: document.getElementById("barangay").value,
+        district: document.getElementById("district").value,
+        controlNumber: document.getElementById("controlNumber").value,
+    };
+
+    // Call the function to update user data
+    updateUserData(userId, newData);
+});
+
+// Call the displayAllUsers function when the page loads
+document.addEventListener('DOMContentLoaded', displayAllUsers);
