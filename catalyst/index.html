@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="src/bootstrap.min.css" />
     <link rel="stylesheet" href="src/style.css" />
     <link rel="stylesheet" href="src/shapes.css" />
+    <link rel="stylesheet" href="src/aos.css" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
       rel="stylesheet"
     />
     <style>
       .feature-section {
-        position:relative;
+        position: relative;
         margin-top: 50px;
         margin-bottom: 50px;
       }
@@ -29,7 +30,7 @@
 
       .overlay-image-container {
         z-index: 1; /* Ensure that the image appears on top of the background */
-       transform: translateY(-20%);
+        transform: translateY(-20%);
       }
 
       .overlay-image {
@@ -39,9 +40,9 @@
     </style>
   </head>
   <body>
-    <!-- <a href="#featureSection" class="scroll-down-arrow">
+ <a href="#featureSection" class="scroll-down-arrow">
       <i class="fas fa-chevron-down"></i> 
-    </a> -->
+    </a> 
 
     <!-- NAVBAR -->
     <nav
@@ -116,9 +117,9 @@
     <!-- <div class="circle"></div> -->
 
     <!-- MAIN CONTENT -->
-    <section id="mainContent" style="padding-top: 50px; height: auto">
+    <section id="mainContent"  style="padding-top: 50px;"  data-aos="fade-up">
       <div
-        class="py-5 px-md-5 mx-auto text-center text-lg-start text-md-center home-main"
+        class="py-5 px-md-5 mx-auto text-center text-lg-start text-md-center"
       >
         <div class="container">
           <div class="row gx-lg-5 align-items-center">
@@ -127,6 +128,7 @@
                 src="img/GaboV1_LOGO.png"
                 style="height: auto; width: 150px"
                 class="img-fluid"
+                
               />
               <h1 class="my-5 display-3 fw-bold gabo-dark">
                 Revolutionizing <br />
@@ -148,6 +150,7 @@
                   src="img/cloud_isometric2.png"
                   style="height: auto; max-width: 500px; width: 100%"
                   id="home-img"
+                 
                   class="img-fluid"
                 />
               </div>
@@ -156,50 +159,53 @@
         </div>
       </div>
     </section>
-
-    <section class="feature-section mt-5">
+    <section>
+      <div class="container-fluid mt-5" data-aos="zoom-in">
+        <img src="img/steps.png" class="img-fluid"/>
+      </div>
+    </section>
+    
+    <section class="feature-section mt-5" id="featureSection" >
       <div class="feature-background">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-4">
-            <h1 class="feature-text text-light fs-3 ms-5 mt-5">
-              Monitor your garbage bin<br />
-              with an app
-            </h1>
-          </div>
-          <div class="col-md-4 overlay-image-container">
-            <img
-              src="img/garbage_bin.png"
-              class="overlay-image"
-              alt="Smart Garbage Bin with IoT"
-            />
-          </div>
-          <div class="col-md-4 mt-5">
-            <div class="card" style="width: 18rem">
-              <div class="card-body card-content">
-                <div class="circle-card">
-                  <div class="outer-circle">
-                    <div class="inner-circle">
-                      <i class="fas fa-signal fa-1x sensor-icon"></i>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-4">
+              <h1 class="feature-text text-light fs-3 ms-5 mt-5" data-aos="fade-right">
+                Monitor your garbage bin<br />
+                with an app
+              </h1>
+            </div>
+            <div class="col-md-4 overlay-image-container">
+              <!-- <img
+                src="img/garbage_bin.png"
+                class="overlay-image"
+                alt="Smart Garbage Bin with IoT"
+              /> -->
+            </div>
+            <div class="col-md-4 mt-5" data-aos="fade-left" >
+              <div class="card" style="width: 18rem">
+                <div class="card-body card-content">
+                  <div class="circle-card">
+                    <div class="outer-circle">
+                      <div class="inner-circle">
+                        <i class="fas fa-signal fa-1x sensor-icon"></i>
+                      </div>
                     </div>
                   </div>
+                  <h5 class="card-title text-center mt-4">Realtime Sensor</h5>
+                  <p class="card-text text-center">
+                    Some quick example text to build on the card title and make
+                    up the bulk of the card's content.
+                  </p>
                 </div>
-                <h5 class="card-title text-center mt-4">Realtime Sensor</h5>
-                <p class="card-text text-center">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
               </div>
             </div>
           </div>
         </div>
-        
       </div>
-    </div>
     </section>
 
-
-    <footer class="container py-5" style="margin-top:1000px;">
+    <footer class="container py-5" style="margin-top: 1000px">
       <div class="row">
         <div class="col-12 col-md">
           <img
@@ -301,6 +307,8 @@
     </footer>
     <!-- IMPORTS -->
     <script>
+    
+
       function highlightLink(link) {
         document.querySelectorAll(".nav-link").forEach((anchor) => {
           anchor.classList.remove("active");
@@ -327,5 +335,9 @@
     <script type="text/javascript" src="src/mdb.min.js"></script>
     <script src="src/bootstrap.min.js"></script>
     <script src="src/popper.min.js"></script>
+    <script src="src/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
   </body>
 </html>
