@@ -228,27 +228,40 @@ if (logOutBtn) {
 }
 
 
-// Function to display fill levels for GB1 to GB4
+// Function to display fill levels for GB1 to GB4 based on the user's control number
 function displayFillLevels() {
-  // Reference to the GarbageBinControlNumber in the database
-  const gcnRef = ref(db, 'GarbageBinControlNumber/GCN001/FillLevel');
+  // Retrieve user data
+  fetchUserData(userId)
+    .then((user) => {
+      if (user && user.gcn) {
+        // Use the user's control number to construct the path
+        const gcnRef = ref(db, `GarbageBinControlNumber/${user.gcn}/FillLevel`);
 
-  // Get the data from the database
-  get(gcnRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      const fillLevels = snapshot.val();
+        // Get the data from the database
+        get(gcnRef)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              const fillLevels = snapshot.val();
 
-      // Update the fill levels and colors for each bin
-      updateFillLevel('GB1', fillLevels.GB1);
-      updateFillLevel('GB2', fillLevels.GB2);
-      updateFillLevel('GB3', fillLevels.GB3);
-      updateFillLevel('GB4', fillLevels.GB4);
-    } else {
-      console.log("No data available");
-    }
-  }).catch((error) => {
-    console.error("Error getting data:", error);
-  });
+              // Update the fill levels and colors for each bin
+              updateFillLevel('GB1', fillLevels.GB1);
+              updateFillLevel('GB2', fillLevels.GB2);
+              updateFillLevel('GB3', fillLevels.GB3);
+              updateFillLevel('GB4', fillLevels.GB4);
+            } else {
+              console.log("No data available");
+            }
+          })
+          .catch((error) => {
+            console.error("Error getting data:", error);
+          });
+      } else {
+        console.error("User data or control number not available.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching user data:", error);
+    });
 }
 
 // Function to update the fill level for a specific bin
