@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="../src/bootstrap.min.css" />
     <link rel="stylesheet" href="styling/style.css" />
     <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
-    rel="stylesheet"
-  />
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
       /* Always set the map height explicitly to define the size of the div
          * element that contains the map. */
@@ -103,7 +103,7 @@
           <li class="nav-item">
             <h1>GABO</h1>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item">
             <a
               class="nav-link border-0 active"
               id="v-tabs-home-tab"
@@ -121,7 +121,7 @@
               class="nav-link border-0"
               id="v-tabs-profile-tab"
               data-mdb-toggle="tab"
-              href="#v-tabs-profile"
+              href="#reportTab"
               role="tab"
               aria-controls="v-tabs-profile"
               aria-selected="false"
@@ -139,51 +139,53 @@
               aria-controls="v-tabs-messages"
               aria-selected="false"
             >
-              
             </a>
           </li>
-          
         </ul>
 
-        <hr>
+        <hr />
         <div class="profile-details">
-            <div class="profile-content">
-              <img src="../img/GaboV1_LOGO.png" alt="profileImg">
-            </div>
-            <div class="name-job">
-              <div class="profile_name">Administrator</div>
-              <div class="job">CEMD - OIC</div>
-            </div>
-            <i class="fa fa-sign-out fa-2x" ></i>
+          <div class="profile-content">
+            <img src="../img/GaboV1_LOGO.png" alt="profileImg" />
           </div>
+          <div class="name-job">
+            <div class="profile_name">Administrator</div>
+            <div class="job">CEMD - OIC</div>
+          </div>
+          <i class="fa fa-sign-out fa-2x"></i>
+        </div>
       </div>
     </div>
 
     <!-- NAV BAR -->
 
-          <!-- Tab content -->
-          <div class="tab-content" id="v-tabs-tabContent">
-            <div
-              class="tab-pane fade active show text-center container-fluid"
-              id="v-tabs-home"
-              role="tabpanel"
-              aria-labelledby="v-tabs-home-tab"
-            >
-                <div id="map" class="mw-100"></div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="v-tabs-profile"
-              role="tabpanel"
-              aria-labelledby="v-tabs-profile-tab"
-            ></div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="v-tabs-messages"
-            role="tabpanel"
-            aria-labelledby="v-tabs-messages-tab"
-          ></div>
+    <!-- Tab content -->
+    <div class="tab-content" id="v-tabs-tabContent">
+      <div
+        class="tab-pane fade active show text-center container-fluid"
+        id="v-tabs-home"
+        role="tabpanel"
+        aria-labelledby="v-tabs-home-tab"
+      >
+        <div id="map" class="mw-100"></div>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="reportTab"
+        role="tabpanel"
+        aria-labelledby="v-tabs-profile-tab"
+      >
+        <div class="container">
+          <h1> THIS IS REPORT TABS</h1>
+        </div>
+      </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="v-tabs-messages"
+      role="tabpanel"
+      aria-labelledby="v-tabs-messages-tab"
+    ></div>
     <script>
       var map;
       function initMap() {

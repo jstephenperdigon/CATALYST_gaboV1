@@ -193,69 +193,71 @@
                 </div>
                 <!-- Card Content -->
                 <div class="card-body">
-                  <!-- <div
-                class="fs-3 font-monospace text-center text-muted fw-light text-center"
-              > Display GCN if available, otherwise show "No device/s available" 
-                ${userData && userData.gcn ? `GCN: ${userData.gcn}` : 'No
-                device/s available.'} -->
-                </div>
-                <div class="container mt-5">
-                  <div class="row">
-                    <!-- Bin 1 -->
-                    <div
-                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                    >
-                      <div class="garbage-bin">
-                        <div class="lid"></div>
-                        <div class="body"></div>
-                        <div class="fill-level">
-                          <div class="container">
-                            <p id="GB1"></p>
+                  <div
+                    class="fs-3 font-monospace text-center text-muted fw-light text-center"
+                  >
+                    Display GCN if available, otherwise show "No device/s
+                    available" ${userData && userData.gcn ? `GCN:
+                    ${userData.gcn}` : 'No device/s available.'}
+                  </div>
+                  <div class="container mt-5">
+                    <div class="row">
+                      <!-- Bin 1 -->
+                      <div
+                        class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+                      >
+                        <div class="garbage-bin">
+                          <div class="lid"></div>
+                          <div class="body"></div>
+                          <div class="fill-level">
+                            <div class="container">
+                              <p id="GB1"></p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <!-- Bin 2 -->
-                    <div
-                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                    >
-                      <div class="garbage-bin">
-                        <div class="lid"></div>
-                        <div class="body"></div>
-                        <div class="fill-level">
-                          <div class="container">
-                            <p id="GB2"></p>
+                      <!-- Bin 2 -->
+                      <div
+                        class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+                      >
+                        <div class="garbage-bin">
+                          <div class="lid"></div>
+                          <div class="body"></div>
+                          <div class="fill-level">
+                            <div class="container">
+                              <p id="GB2"></p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <!-- Bin 3 -->
-                    <div
-                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                    >
-                      <div class="garbage-bin">
-                        <div class="lid"></div>
-                        <div class="body"></div>
-                        <div class="fill-level">
-                          <div class="container">
-                            <p id="GB3"></p>
+                      <!-- Bin 3 -->
+                      <div
+                        class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+                      >
+                        <div class="garbage-bin">
+                          <div class="lid"></div>
+                          <div class="body"></div>
+                          <div class="fill-level">
+                            <div class="container">
+                              <p id="GB3"></p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <!-- Bin 4 -->
-                    <div
-                      class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                    >
-                      <div class="garbage-bin">
-                        <div class="lid"></div>
-                        <div class="body"></div>
-                        <div class="fill-level">
-                          <div class="container">
-                            <p id="GB4"></p>
+                      <!-- Bin 4 -->
+                      <div
+                        class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
+                      >
+                        <div class="garbage-bin">
+                          <div class="lid"></div>
+                          <div class="body"></div>
+                          <div class="fill-level">
+                            <div class="container">
+                              <p id="GB4"></p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -354,38 +356,94 @@
     </div>
     <div class="content" id="report">
       <!-- User Report Section -->
-      <section class="mt-5">
+      <section>
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-12">
               <!-- Your content for the second column goes here -->
-              <div class="card shadow-none border-0">
-                <div
-                  class="card-header bg-warning fs-4 d-flex justify-content-between align-items-center"
-                >
-                  Report
+              <h1>Report</h1>
+              <div class="container"></div>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col">
+              You can report if you're bin is not collected.
+            </div>
+            <div class="col">COL 2</div>
+            <div class="col">COL 3</div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-12">
+              <form>
+                <div class="md-form">
+                  <label for="issueType">Select the problem:</label>
+                  <select
+                    id="issueType"
+                    class="form-control"
+                    onchange="toggleOtherIssueFields()"
+                  required>
+                    <option value="" disabled selected>Please select an issue</option>
+                    <option value="overflow">Overflowing garbage</option>
+                    <option value="not_collected">Garbage not collected</option>
+                    <option value="damaged_bin">Damaged garbage bin</option>
+                    <option value="missing_bin">Missing garbage bin</option>
+                    <option value="other">Other issue</option>
+                  </select>
                 </div>
-                <!-- Card Content -->
-                <div class="card-body">
-                  <div
-                    class="fs-3 font-monospace text-center text-muted fw-light"
-                  >
-                    test
+
+                <div id="otherIssueFields" style="display: none">
+                  <div class="md-form">
+                    <label for="otherIssueDescription"
+                      >Describe the issue:</label
+                    >
+                    <textarea
+                      id="otherIssueDescription"
+                      class="form-control"
+                    ></textarea>
                   </div>
                 </div>
-              </div>
+
+                <div class="text-center">
+                  <button
+                    type="button"
+                    class="btn btn-primary shadow-none mt-5"
+                    onclick="submitForm()"
+                  >
+                    Submit Report
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </section>
     </div>
+
+    <div
+      class="modal fade"
+      id="reportModal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+      data-mdb-keyboard="false"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addDeviceModalLabel">Create Report</h5>
+          </div>
+          <div class="modal-body"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="content" id="account">
       <!-- User Account Section -->
       <section class="mt-5">
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-12">
-              <h1> THIS IS ACCOUNT SETTINGS</h1>
+              <h1>BATTERY LEVEL, DEVICE STATUS , HELP CENTER</h1>
             </div>
           </div>
         </div>
@@ -399,7 +457,7 @@
             name="home"
             href="#home"
             id="home-btn"
-            class="icon active"
+            class="icon active-btn"
             onclick="change(this)"
           ></ion-icon>
         </div>
@@ -455,14 +513,14 @@
       document
         .getElementById("sidebar-toggle")
         .addEventListener("click", function () {
-          document.getElementById("sidebar").classList.toggle("active");
+          document.getElementById("sidebar").classList.toggle("active-btn");
         });
 
       // Close sidebar when close button is clicked
       document
         .getElementById("close-btn")
         .addEventListener("click", function () {
-          document.getElementById("sidebar").classList.remove("active");
+          document.getElementById("sidebar").classList.remove("active-btn");
         });
 
       // Close sidebar when a link inside it is clicked
@@ -477,6 +535,7 @@
     <script src="../src/bootstrap.min.js"></script>
     <script src="../src/mdb.min.js"></script>
     <script src="../src/popper.min.js"></script>
+    <script src="../src/sweetalert.js"></script>
     <script type="module" src="user-index.js"></script>
     <script type="text/javascript" src="sign-up-design.js"></script>
     <script type="text/javascript" src="user-index-design.js"></script>

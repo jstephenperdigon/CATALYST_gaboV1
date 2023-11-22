@@ -52,11 +52,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Deselect all navigation items
       navItems.forEach((navItem) => {
-        navItem.classList.remove("active");
+        navItem.classList.remove("active-btn");
       });
 
       // Select the clicked navigation item
-      this.classList.add("active");
+      this.classList.add("active-btn");
     });
   });
 });
+
+// Function for input fields if other is selected
+function toggleOtherIssueFields() {
+  var issueType = document.getElementById("issueType").value;
+  var otherIssueFields = document.getElementById("otherIssueFields");
+
+  if (issueType === "other") {
+    otherIssueFields.style.display = "block";
+  } else {
+    otherIssueFields.style.display = "none";
+  }
+}
+
+// Validation function when submitting the form
+function submitForm() {
+  var selectedIssue = document.getElementById("issueType").value;
+  var otherIssueDescription = document.getElementById(
+    "otherIssueDescription"
+  ).value;
+
+  var swalConfig = {
+    icon: "warning",
+    title: "Oops...",
+    width: "80%", // Adjust the width as needed
+  };
+
+  if (selectedIssue === "") {
+    swalConfig.text = "Please select an issue before submitting.";
+  } else if (selectedIssue === "other" && !otherIssueDescription.trim()) {
+    swalConfig.text = "Please describe the 'Other' issue before submitting.";
+  } else {
+    swalConfig.icon = "success";
+    swalConfig.title = "Success!";
+    swalConfig.text = "Thank you for reporting the issue.";
+    // You can add additional logic here to handle the form submission
+  }
+
+  Swal.fire(swalConfig);
+}
