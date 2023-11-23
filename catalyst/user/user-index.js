@@ -1,5 +1,5 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-  import { getDatabase, ref, get, update, set } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+  import { getDatabase, ref, get, update, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -237,24 +237,22 @@ function displayFillLevels() {
         // Use the user's control number to construct the path
         const gcnRef = ref(db, `GarbageBinControlNumber/${user.gcn}/FillLevel`);
 
-        // Get the data from the database
-        get(gcnRef)
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              const fillLevels = snapshot.val();
+        // Listen for changes in the database
+        onValue(gcnRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const fillLevels = snapshot.val();
 
-              // Update the fill levels and colors for each bin
-              updateFillLevel('GB1', fillLevels.GB1);
-              updateFillLevel('GB2', fillLevels.GB2);
-              updateFillLevel('GB3', fillLevels.GB3);
-              updateFillLevel('GB4', fillLevels.GB4);
-            } else {
-              console.log("No data available");
-            }
-          })
-          .catch((error) => {
-            console.error("Error getting data:", error);
-          });
+            // Update the fill levels and colors for each bin
+            updateFillLevel('GB1', fillLevels.GB1);
+            updateFillLevel('GB2', fillLevels.GB2);
+            updateFillLevel('GB3', fillLevels.GB3);
+            updateFillLevel('GB4', fillLevels.GB4);
+          } else {
+            console.log("No data available");
+          }
+        }, (error) => {
+          console.error("Error listening for data changes:", error);
+        });
       } else {
         console.error("User data or control number not available.");
       }
@@ -264,21 +262,28 @@ function displayFillLevels() {
     });
 }
 
-// Function to update the fill level for a specific bin
+
+// Function to update fill level for a specific bin
 function updateFillLevel(binId, fillLevel) {
   const binElement = document.getElementById(binId);
-  const fillLevelElement = binElement.closest('.fill-level');
 
-  // Update the fill level style and data-percentage attribute
-  fillLevelElement.style.height = fillLevel + '%';
-  fillLevelElement.setAttribute('data-percentage', fillLevel);
+  // Check if the element with the specified ID exists
+  if (binElement) {
+    const fillLevelElement = binElement.closest('.fill-level');
 
-  // Update the text content inside the container
-  const containerElement = fillLevelElement.querySelector('.container');
-  containerElement.textContent = `${fillLevel}`;
+    // Update the fill level style and data-percentage attribute
+    fillLevelElement.style.height = fillLevel + '%';
+    fillLevelElement.setAttribute('data-percentage', fillLevel);
 
-  // Update the fill level color based on conditions
-  updateFillLevelColor(fillLevelElement, fillLevel);
+    // Update the text content inside the container
+    const containerElement = fillLevelElement.querySelector('.container');
+    containerElement.textContent = `${fillLevel}`;
+
+    // Update the fill level color based on conditions
+    updateFillLevelColor(fillLevelElement, fillLevel);
+  } else {
+    console.error(`Element with ID ${binId} not found.`);
+  }
 }
 
 // Function to update fill level color based on conditions
@@ -294,6 +299,89 @@ function updateFillLevelColor(fillLevelElement, fillLevel) {
     fillLevelElement.classList.add('fill-level3');
   }
 }
+
+// Function to fetch GCN from the database based on user ID
+async function getGcnFromDatabase(userId) {
+  try {
+    // Replace the following line with your actual logic to fetch the GCN based on the user ID
+    const userRef = ref(db, `Accounts/Users/${userId}`);
+    const userSnapshot = await get(userRef);
+    const user = userSnapshot.val();
+    
+    // Assuming you have a property named "gcn" in the user data
+    if (user && user.gcn) {
+      return user.gcn;
+    } else {
+      console.error('GCN not found for the user.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching GCN:', error);
+    return null;
+  }
+}
+
+// Function to submit the form
+function submitForm() {
+  // Fetch user ID from session
+  const userId = getUserIdFromSession();
+
+  // Check if user ID exists
+  if (userId) {
+    // Fetch GCN from the database using userID
+    getGcnFromDatabase(userId)
+      .then((gcn) => {
+        // Check if GCN exists
+        if (gcn) {
+          // Fetch form data
+          const issueType = document.getElementById('issueType').value;
+          const otherIssueDescription = document.getElementById('otherIssueDescription').value;
+
+          // Create a timestamp for the report
+          const timestamp = new Date();
+          const formattedDate = timestamp.toISOString().split('T')[0].replace(/-/g, '');
+          const formattedTime = timestamp.toISOString().split('T')[1].split('.')[0].replace(/:/g, '');
+
+          // Generate a unique ticket number based on the provided format
+          const ticketNumber = `${gcn}-${formattedDate}-${formattedTime}`;
+
+          // Prepare the report data
+          const reportData = {
+            Date: timestamp.toISOString(),
+            Time: timestamp.toISOString(),
+            gcn: gcn,
+            userID: userId,
+            Problem: issueType === 'other' ? otherIssueDescription : issueType,
+            TicketNumber: ticketNumber, // Add TicketNumber to report data
+          };
+
+          // Reference to the 'Reports' database
+          const reportsRef = ref(db, 'Reports');
+
+          // Add the report data to the database
+          set(push(reportsRef), reportData)
+            .then(() => {
+              console.log('Report submitted successfully.');
+            })
+            .catch((error) => {
+              console.error('Error submitting report:', error);
+            });
+        } else {
+          console.log('GCN not found for the user.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching GCN:', error);
+      });
+  } else {
+    console.log('User ID not found in the session.');
+  }
+}
+
+// Attach click event listener to the button
+document.getElementById('submitReport').addEventListener('click', submitForm);
+
+
 
 // Call the displayFillLevels function to initiate the update
 displayFillLevels();
