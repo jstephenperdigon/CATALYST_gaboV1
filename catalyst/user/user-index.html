@@ -506,26 +506,6 @@
         item.classList.add("active");
       }
 
-      // Toggle sidebar on button click
-      document
-        .getElementById("sidebar-toggle")
-        .addEventListener("click", function () {
-          document.getElementById("sidebar").classList.toggle("active-btn");
-        });
-
-      // Close sidebar when close button is clicked
-      document
-        .getElementById("close-btn")
-        .addEventListener("click", function () {
-          document.getElementById("sidebar").classList.remove("active-btn");
-        });
-
-      // Close sidebar when a link inside it is clicked
-      document.querySelectorAll("#sidebar ul li a").forEach(function (link) {
-        link.addEventListener("click", function () {
-          document.getElementById("sidebar").classList.remove("active");
-        });
-      });
     </script>
     <!-- IMPORTS -->
     <script src="../src/jquery.min.js"></script>
