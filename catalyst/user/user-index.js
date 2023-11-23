@@ -1,5 +1,5 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-  import { getDatabase, ref, get, update, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+  import { getDatabase, ref, get, update, set, onValue, child } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -300,25 +300,45 @@ function updateFillLevelColor(fillLevelElement, fillLevel) {
   }
 }
 
-// Function to fetch GCN from the database based on user ID
-async function getGcnFromDatabase(userId) {
+// Function to fetch user information including GCN from the database based on user ID
+async function getUserInfoFromDatabase(userId) {
   try {
-    // Replace the following line with your actual logic to fetch the GCN based on the user ID
+    // Replace the following line with your actual logic to fetch user information based on the user ID
     const userRef = ref(db, `Accounts/Users/${userId}`);
     const userSnapshot = await get(userRef);
     const user = userSnapshot.val();
-    
-    // Assuming you have a property named "gcn" in the user data
-    if (user && user.gcn) {
-      return user.gcn;
+
+    // Assuming you have properties like gcn, firstName, lastName, email, mobileNumber, district, barangay, addressLine1, addressLine2 in the user data
+    if (user && user.gcn && user.firstName && user.lastName && user.email && user.mobileNumber && user.district && user.barangay && user.addressLine1 && user.addressLine2) {
+      return {
+        gcn: user.gcn,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        mobileNumber: user.mobileNumber,
+        district: user.district,
+        barangay: user.barangay,
+        addressLine1: user.addressLine1,
+        addressLine2: user.addressLine2,
+      };
     } else {
-      console.error('GCN not found for the user.');
+      console.error('User information not found for the user.');
       return null;
     }
   } catch (error) {
-    console.error('Error fetching GCN:', error);
+    console.error('Error fetching user information:', error);
     return null;
   }
+}
+
+// Function to generate a random four-alphanumeric string
+function generateRandomAlphanumeric() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let randomString = '';
+  for (let i = 0; i < 4; i++) {
+    randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return randomString;
 }
 
 // Function to submit the form
@@ -328,38 +348,57 @@ function submitForm() {
 
   // Check if user ID exists
   if (userId) {
-    // Fetch GCN from the database using userID
-    getGcnFromDatabase(userId)
-      .then((gcn) => {
-        // Check if GCN exists
-        if (gcn) {
+    // Fetch user information including GCN from the database using userID
+    getUserInfoFromDatabase(userId)
+      .then((userInfo) => {
+        // Check if user information exists
+        if (userInfo) {
           // Fetch form data
           const issueType = document.getElementById('issueType').value;
           const otherIssueDescription = document.getElementById('otherIssueDescription').value;
 
+          // Check if the value of the issueType is "none"
+          if (issueType === "") {
+            console.log('Please select a valid problem type.');
+            return; // Do not proceed further
+          }
+
           // Create a timestamp for the report
           const timestamp = new Date();
-          const formattedDate = timestamp.toISOString().split('T')[0].replace(/-/g, '');
-          const formattedTime = timestamp.toISOString().split('T')[1].split('.')[0].replace(/:/g, '');
 
-          // Generate a unique ticket number based on the provided format
-          const ticketNumber = `${gcn}-${formattedDate}-${formattedTime}`;
+          // Format the date as MM-DD-YYYY
+          const formattedDate = (timestamp.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                                (timestamp.getDate()).toString().padStart(2, '0') + '-' +
+                                timestamp.getFullYear();
 
-          // Prepare the report data
+          // Format the time as HH:MM:SS AM/PM (12-hour format)
+          const formattedTime12 = timestamp.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+
+          // Generate a unique ticket number without hyphens and with a random four-alphanumeric string
+          const ticketNumber = `${userInfo.gcn}${formattedDate.replace(/-/g, '')}${generateRandomAlphanumeric()}`;
+
+          // Prepare the report data including user information
           const reportData = {
-            Date: timestamp.toISOString(),
-            Time: timestamp.toISOString(),
-            gcn: gcn,
-            userID: userId,
+            Date: formattedDate,
             Problem: issueType === 'other' ? otherIssueDescription : issueType,
-            TicketNumber: ticketNumber, // Add TicketNumber to report data
+            gcn: userInfo.gcn,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            email: userInfo.email,
+            mobileNumber: userInfo.mobileNumber,
+            district: userInfo.district,
+            barangay: userInfo.barangay,
+            addressLine1: userInfo.addressLine1,
+            addressLine2: userInfo.addressLine2,
+            timeFormat12: formattedTime12,
+            userID: userId,
           };
 
           // Reference to the 'Reports' database
           const reportsRef = ref(db, 'Reports');
 
-          // Add the report data to the database
-          set(push(reportsRef), reportData)
+          // Use set instead of push to set a specific key (ticket number) for the record
+          set(child(reportsRef, ticketNumber), reportData)
             .then(() => {
               console.log('Report submitted successfully.');
             })
@@ -367,11 +406,11 @@ function submitForm() {
               console.error('Error submitting report:', error);
             });
         } else {
-          console.log('GCN not found for the user.');
+          console.log('User information not found for the user.');
         }
       })
       .catch((error) => {
-        console.error('Error fetching GCN:', error);
+        console.error('Error fetching user information:', error);
       });
   } else {
     console.log('User ID not found in the session.');
@@ -380,6 +419,8 @@ function submitForm() {
 
 // Attach click event listener to the button
 document.getElementById('submitReport').addEventListener('click', submitForm);
+
+
 
 
 
