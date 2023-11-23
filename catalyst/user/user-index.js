@@ -341,7 +341,6 @@ function generateRandomAlphanumeric() {
   return randomString;
 }
 
-// Function to submit the form
 function submitForm() {
   // Fetch user ID from session
   const userId = getUserIdFromSession();
@@ -354,13 +353,29 @@ function submitForm() {
         // Check if user information exists
         if (userInfo) {
           // Fetch form data
-          const issueType = document.getElementById('issueType').value;
-          const otherIssueDescription = document.getElementById('otherIssueDescription').value;
+          const issueTypeElement = document.getElementById('issueType');
+          const issueType = issueTypeElement.value;
+          const otherIssueDescriptionElement = document.getElementById('otherIssueDescription');
+          const otherIssueDescription = otherIssueDescriptionElement.value;
+          const reportDescriptionElement = document.getElementById('reportDescriptionFields');
+          const reportDescription = reportDescriptionElement.value;
 
-          // Check if the value of the issueType is "none"
+          // Check if the selected issueType is the default placeholder value
           if (issueType === "") {
             console.log('Please select a valid problem type.');
             return; // Do not proceed further
+          }
+
+          // Check if the issueType is 'other' and otherIssueDescription is empty
+          if (issueType === 'other' && otherIssueDescription.trim() === "") {
+            console.log('Please provide a description for the "other" problem type.');
+            return; // Do not proceed further
+          }
+
+          // Check if the issueType is not 'other' and reportDescription is not provided
+          if (issueType !== 'other' && reportDescription.trim() === "") {
+            console.log('Warning: No description provided for the selected problem type.');
+            // Allow to proceed even if reportDescription is empty
           }
 
           // Create a timestamp for the report
@@ -380,7 +395,8 @@ function submitForm() {
           // Prepare the report data including user information
           const reportData = {
             Date: formattedDate,
-            Problem: issueType === 'other' ? otherIssueDescription : issueType,
+            Problem: issueType,
+            Description: issueType === 'other' ? otherIssueDescription : reportDescription,
             gcn: userInfo.gcn,
             firstName: userInfo.firstName,
             lastName: userInfo.lastName,
@@ -419,9 +435,6 @@ function submitForm() {
 
 // Attach click event listener to the button
 document.getElementById('submitReport').addEventListener('click', submitForm);
-
-
-
 
 
 // Call the displayFillLevels function to initiate the update
