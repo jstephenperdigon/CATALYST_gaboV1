@@ -295,6 +295,27 @@ FEATURE SECTION */
   transition: all 0.3s ease;
 }
 
+.feature-section {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.feature-background {
+  width: 100%;
+  height: 800px;
+  background-color: #11531e;
+  z-index: -1;
+}
+
+@media (max-width: 375px){
+  .feature-background {
+    width: 100%;
+    height: 800px;
+    background-color: #11531e;
+    z-index: -1;
+  }
+}
+
 @media (max-width: 768px) {
   .signup-margin {
     margin-top: 50px; /* Adjusted margin for smaller screens */

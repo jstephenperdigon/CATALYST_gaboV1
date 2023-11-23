@@ -25,6 +25,12 @@
   color: white;
 }
 
+@media (max-width:768px) {
+  .card-index{
+    height: 10px;
+  }
+  
+}
 /* Responsive styles for small screens */
 @media (max-width: 320px) {
   .bottom-bar {
@@ -79,6 +85,7 @@
 }
 /* Responsive styles for bigger screens */
 @media (min-width: 425px) {
+
   .bottom-bar {
     margin-top: 0;
     background-color: #eee;

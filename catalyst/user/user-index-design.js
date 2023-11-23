@@ -65,13 +65,25 @@ document.addEventListener("DOMContentLoaded", function () {
 function toggleOtherIssueFields() {
   var issueType = document.getElementById("issueType").value;
   var otherIssueFields = document.getElementById("otherIssueFields");
+  var reportDescription = document.getElementById("reportDescription");
 
   if (issueType === "other") {
     otherIssueFields.style.display = "block";
+    reportDescription.style.display = "none"; // Hide reportDescription when otherIssueFields is displayed
   } else {
     otherIssueFields.style.display = "none";
+    reportDescription.style.display = issueType !== "" ? "block" : "none"; // Show/hide reportDescription based on the selected issueType
   }
 }
+
+// Get the select element and reportDescription input field
+const issueTypeSelect = document.getElementById("issueType");
+
+// Event listener to handle changes in the selected option
+issueTypeSelect.addEventListener("change", function () {
+  // Set the display of reportDescription based on whether any option is selected
+  toggleOtherIssueFields();
+});
 
 // Validation function when submitting the form
 function submitForm() {
