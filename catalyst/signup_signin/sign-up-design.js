@@ -28,27 +28,40 @@ document.querySelector('.show-password').addEventListener('click', function() {
   });
   
 
-  // Form Validator / Required Input Fields
-  var forms = document.querySelectorAll('.needs-validation');
-  Array.prototype.slice.call(forms).forEach(function(form) {
-    form.addEventListener('submit', function(event) {
-      if (form.checkValidity() === false) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      form.classList.add('was-validated');
+// Move the custom password validation to the input event listener for passwordConfirmation
+document.getElementById('passwordConfirmation').addEventListener('input', function() {
+  var password = document.getElementById('password-input').value;
+  var passwordConfirmation = this.value;
 
-      // Custom password validation
-      var password = document.getElementById('password1').value;
+  if (password !== passwordConfirmation) {
+      this.setCustomValidity("Passwords must match");
+  } else {
+      this.setCustomValidity('');
+  }
+});
+
+// Form Validator / Required Input Fields
+var forms = document.querySelectorAll('.needs-validation');
+Array.prototype.slice.call(forms).forEach(function(form) {
+  form.addEventListener('submit', function(event) {
+      // Move the custom password validation here
+      var password = document.getElementById('password-input').value;
       var passwordConfirmation = document.getElementById('passwordConfirmation').value;
 
       if (password !== passwordConfirmation) {
-        document.getElementById('passwordConfirmation').setCustomValidity("Passwords must match");
+          document.getElementById('passwordConfirmation').setCustomValidity("Passwords must match");
       } else {
-        document.getElementById('passwordConfirmation').setCustomValidity('');
+          document.getElementById('passwordConfirmation').setCustomValidity('');
       }
-    }, false);
-  });
+
+      if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+  }, false);
+});
+
     
   
   // Password Strength Meter Hider
