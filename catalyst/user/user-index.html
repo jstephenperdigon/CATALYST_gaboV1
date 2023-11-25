@@ -36,7 +36,7 @@
         <!-- Right Icons -->
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="fas fa-bell"></i></a>
+            <a class="nav-link" href="#" data-toggle="popover" data-mdb-placement="bottom"><i class="fas fa-bell"></i></a>
           </li>
         </ul>
       </div>
@@ -191,68 +191,64 @@
                     Connect Device
                   </button>
                 </div>
-                <!-- Card Content -->
                 <div class="card-body">
                   <div class="container mt-5">
-                    <div class="row">
-                      <!-- Bin 1 -->
-                      <div
-                        class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                      >
-                        <div class="garbage-bin">
-                          <div class="lid"></div>
-                          <div class="body"></div>
-                          <div id ="GB1" class="fill-level">
-                            <div class="container">
-                            </div>
+                      <div class="row" id="binsRow">
+                          <!-- Bin 1 -->
+                          <div class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center" id="GB1Container">
+                              <div class="garbage-bin">
+                                  <div class="lid"></div>
+                                  <div class="body"></div>
+                                  <div id="GB1" class="fill-level">
+                                      <div class="container">
+                                      </div>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <!-- Bin 2 -->
-                      <div
-                        class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                      >
-                        <div class="garbage-bin">
-                          <div class="lid"></div>
-                          <div class="body"></div>
-                          <div id="GB2" class="fill-level">
-                            <div class="container">
-                            </div>
+          
+                          <!-- Bin 2 -->
+                          <div class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center" id="GB2Container">
+                              <div class="garbage-bin">
+                                  <div class="lid"></div>
+                                  <div class="body"></div>
+                                  <div id="GB2" class="fill-level">
+                                      <div class="container">
+                                      </div>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <!-- Bin 3 -->
-                      <div
-                        class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                      >
-                        <div class="garbage-bin">
-                          <div class="lid"></div>
-                          <div class="body"></div>
-                          <div id="GB3" class="fill-level">
-                            <div class="container">
-                            </div>
+          
+                          <!-- Bin 3 -->
+                          <div class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center" id="GB3Container">
+                              <div class="garbage-bin">
+                                  <div class="lid"></div>
+                                  <div class="body"></div>
+                                  <div id="GB3" class="fill-level">
+                                      <div class="container">
+                                      </div>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <!-- Bin 4 -->
-                      <div
-                        class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center"
-                      >
-                        <div class="garbage-bin">
-                          <div class="lid"></div>
-                          <div class="body"></div>
-                          <div id="GB4" class="fill-level">
-                            <div class="container">
-                            </div>
+          
+                          <!-- Bin 4 -->
+                          <div class="col col-sm-6 col-md-6 col-lg-3 mb-4 d-flex align-items-center justify-content-center" id="GB4Container">
+                              <div class="garbage-bin">
+                                  <div class="lid"></div>
+                                  <div class="body"></div>
+                                  <div id="GB4" class="fill-level">
+                                      <div class="container">
+                                      </div>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
                       </div>
-                    </div>
+                      <div class="row" id="noDeviceRow" style="display: none;">
+                          <div class="col text-center">
+                              <p>No Device Available</p>
+                          </div>
+                      </div>
                   </div>
-                </div>
+              </div>
               </div>
             </div>
           </div>
