@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoring</title>
+    <link rel="stylesheet" href="../src/mdb.min.css" />
+    <link rel="stylesheet" href="../src/bootstrap.min.css" />
+    <link rel="stylesheet" href="styling/style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+      /* Set a specific height for the map */
+      #map {
+        height: 950px;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 260px;
+        background: #292929;
+        z-index: 100;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+    <nav
+      class="navbar navbar-expand-lg shadow-none"
+      style="height: 86px; background-color: #f5f5f5"
+    >
+      <div class="container">
+        <a class="navbar-brand gabo-secondary" href="../index.html">
+          <p class="fw-bold fs-3 mt-2">GABO MONITORING</p>
+        </a>
+        <button
+          class="btn shadow-none navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-user"></i>
+            </div>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >username</a
+              >
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Account Settings</a></li>
+                <li><a class="dropdown-item" href="#">Log Out</a></li>
+                <li><a class="dropdown-item" href="#">Help Center</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+-->
+    <div
+      class="container-fluid sidebar"
+      style="
+        height: 100vh;
+        width: 250px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding-top: 20px;
+        color: #fff;
+      "
+    >
+      <div class="nav flex-column nav-tabs" id="v-tabs-tab" role="tablist">
+        <ul class="nav flex-column nav-pills">
+          <!-- Tab navs -->
+          <li class="nav-item">
+            <h1>GABO</h1>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link border-0 active"
+              id="v-tabs-home-tab"
+              data-mdb-toggle="tab"
+              href="#v-tabs-home"
+              role="tab"
+              aria-controls="v-tabs-home"
+              aria-selected="true"
+            >
+              MAP
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link border-0"
+              id="v-tabs-profile-tab"
+              data-mdb-toggle="tab"
+              href="#reportTab"
+              role="tab"
+              aria-controls="v-tabs-profile"
+              aria-selected="false"
+            >
+              Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link border-0"
+              id="v-tabs-messages-tab"
+              data-mdb-toggle="tab"
+              href="#v-tabs-messages"
+              role="tab"
+              aria-controls="v-tabs-messages"
+              aria-selected="false"
+            >
+            </a>
+          </li>
+        </ul>
+
+        <hr />
+        <div class="profile-details">
+          <div class="profile-content">
+            <img src="../img/GaboV1_LOGO.png" alt="profileImg" />
+          </div>
+          <div class="name-job">
+            <div class="profile_name">Administrator</div>
+            <div class="job">CEMD - OIC</div>
+          </div>
+          <button>
+            <i class="fa fa-sign-out fa-2x"></i>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- NAV BAR -->
+
+    <!-- Tab content -->
+    <div class="tab-content" id="v-tabs-tabContent">
+      <div
+        class="tab-pane fade active show text-center container-fluid"
+        id="v-tabs-home"
+        role="tabpanel"
+        aria-labelledby="v-tabs-home-tab"
+      >
+        <div id="map" class="mw-100"></div>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="reportTab"
+        role="tabpanel"
+        aria-labelledby="v-tabs-profile-tab"
+      >
+        <div class="container">
+          <h1> THIS IS REPORT TABS</h1>
+        </div>
+      </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="v-tabs-messages"
+      role="tabpanel"
+      aria-labelledby="v-tabs-messages-tab"
+    ></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 14.742705915146058, lng: 121.0772761750439 },
+          zoom: 16,
+          disableDefaultUI: true,
+          styles: [
+            {
+              featureType: "all",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+            {
+              featureType: "administrative",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#444444",
+                },
+              ],
+            },
+            {
+              featureType: "administrative.province",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "administrative.locality",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "administrative.neighborhood",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "administrative.land_parcel",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "administrative.land_parcel",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "landscape",
+              elementType: "all",
+              stylers: [
+                {
+                  color: "#f2f2f2",
+                },
+              ],
+            },
+            {
+              featureType: "landscape.man_made",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+              ],
+            },
+            {
+              featureType: "poi",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+                {
+                  color: "#cee9de",
+                },
+                {
+                  saturation: "2",
+                },
+                {
+                  weight: "0.80",
+                },
+              ],
+            },
+            {
+              featureType: "poi.attraction",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "poi.park",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+            {
+              featureType: "road",
+              elementType: "all",
+              stylers: [
+                {
+                  saturation: -100,
+                },
+                {
+                  lightness: 45,
+                },
+              ],
+            },
+            {
+              featureType: "road.highway",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+              ],
+            },
+            {
+              featureType: "road.highway",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+                {
+                  color: "#f5d6d6",
+                },
+              ],
+            },
+            {
+              featureType: "road.highway",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "road.highway",
+              elementType: "labels.icon",
+              stylers: [
+                {
+                  hue: "#ff0000",
+                },
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+            {
+              featureType: "road.highway.controlled_access",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+              ],
+            },
+            {
+              featureType: "road.highway.controlled_access",
+              elementType: "labels.icon",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+                {
+                  hue: "#0064ff",
+                },
+                {
+                  gamma: "1.44",
+                },
+                {
+                  lightness: "-3",
+                },
+                {
+                  weight: "1.69",
+                },
+              ],
+            },
+            {
+              featureType: "road.arterial",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+            {
+              featureType: "road.arterial",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "road.arterial",
+              elementType: "labels.icon",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "road.local",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+            {
+              featureType: "road.local",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+                {
+                  weight: "0.31",
+                },
+                {
+                  gamma: "1.43",
+                },
+                {
+                  lightness: "-5",
+                },
+                {
+                  saturation: "-22",
+                },
+              ],
+            },
+            {
+              featureType: "transit",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "transit.line",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+                {
+                  hue: "#ff0000",
+                },
+              ],
+            },
+            {
+              featureType: "transit.station.airport",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+                {
+                  hue: "#ff0045",
+                },
+              ],
+            },
+            {
+              featureType: "transit.station.bus",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+                {
+                  hue: "#00d1ff",
+                },
+              ],
+            },
+            {
+              featureType: "transit.station.bus",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+              ],
+            },
+            {
+              featureType: "transit.station.rail",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+                {
+                  hue: "#00cbff",
+                },
+              ],
+            },
+            {
+              featureType: "transit.station.rail",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+              ],
+            },
+            {
+              featureType: "water",
+              elementType: "all",
+              stylers: [
+                {
+                  color: "#46bcec",
+                },
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+            {
+              featureType: "water",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  weight: "1.61",
+                },
+                {
+                  color: "#cde2e5",
+                },
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+          ],
+        });
+
+        // Create a marker and place it on the map
+        var marker = new google.maps.Marker({
+          position: { lat: 14.742705915146058, lng: 121.0772761750439 },
+          map: map,
+          title: "YASMINKS IN YOUR AREA",
+        });
+      }
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2_ezLpzKRXbZuMKaC4fOWYX6C3U2gX6g&callback=initMap"
+      async
+      defer
+    ></script>
+    <script type="module" src="../connection/firebaseConfig.js"></script>
+    <script type="text/javascript" src="../src/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/mdb.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/popper.min.js"></script>
+    <script type="module" src="../connection/firebaseConfig.js"></script>
+    <script type="text/javascript" src="../src/mdb.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/popper.min.js"></script>
+  </body>
+</html>

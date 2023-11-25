@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GABOv1</title>
+</head>
+<body>
+    <h1>GABO TEST1</h1>
+    <div>
+        <ul id="account-data-container" class="list-group mt-4"></ul>
+    </div>
+
+    <h1>Add/Edit User Account</h1>
+    <form id="addEditUserForm">
+        <input type="hidden" id="editUserId" /> <!-- Hidden input to store user ID for editing -->
+        <label for="username">Username:</label>
+        <input type="text" id="username" required /><br />
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required /><br /> 
+        <button id="addUserButton">Add User</button>
+        <button type="submit">Save</button>
+    </form>
+
+    <!-- Delete User Account  -->
+    <form id="deleteUserForm">
+        <input type="hidden" id="deleteUserId" />       
+    </form>
+
+    <h2>User Accounts</h2>
+    <div id="userAccounts">
+        <ul id="userList">
+            <!-- User accounts will be displayed here -->
+        </ul>
+    </div>
+</body>
+<script type="module" src="index.js"></script>
+</html>

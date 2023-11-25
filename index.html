@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GABOv1</title>
+    <link rel="icon" href="img/GaboV1_LOGO.png" type="image/x-icon" />
+    <link rel="stylesheet" href="src/mdb.min.css" />
+    <link rel="stylesheet" href="src/bootstrap.min.css" />
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="src/shapes.css" />
+    <link rel="stylesheet" href="src/aos.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .feature-section {
+        margin-top: 50px;
+        margin-bottom: 50px;
+      }
+
+      .feature-background {
+        width: 100%;
+        height: 800px;
+        background-color: #11531e;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <!--  <a href="#featureSection" class="scroll-down-arrow">
+      <i class="fas fa-chevron-down"></i> 
+    </a>  -->
+
+    <!-- NAVBAR -->
+    <nav
+      class="navbar navbar-expand-lg shadow-none sticky-top"
+      style="height: 85px; background-color: #f5f5f5"
+    >
+      <div class="container">
+        <a class="navbar-brand gabo-secondary" href="#">
+          <p class="fw-bold fs-3 mt-2">GABO</p>
+        </a>
+        <button
+          class="btn shadow-none navbar-toggler gabo-secondary"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse"
+          style="background-color: #f5f5f5"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#mainContent"
+                onclick="highlightLink(this)"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#featureSection"
+                onclick="highlightLink(this)"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#aboutUs"
+                onclick="highlightLink(this)"
+                >About Us</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#contactUs"
+                onclick="highlightLink(this)"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+          <a
+            href="signup_signin/sign-in.html"
+            class="btn btn-outline-primary mx-3 d-block shadow-none"
+            >Sign In</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- NAVBAR -->
+
+    <!-- <div class="circle"></div> -->
+
+    <!-- MAIN CONTENT -->
+    <section id="mainContent" style="padding-top: 50px" data-aos="fade-up">
+      <div
+        class="py-5 px-md-5 mx-auto text-center text-lg-start text-md-center"
+      >
+        <div class="container">
+          <div class="row gx-lg-5 align-items-center">
+            <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
+              <img
+                src="img/GaboV1_LOGO.png"
+                style="height: auto; width: 150px"
+                class="img-fluid"
+              />
+              <h1 class="my-5 display-3 fw-bold gabo-dark">
+                Revolutionizing <br />
+                <span class="gabo-secondary">Waste Management</span>
+              </h1>
+              <p class="text-md" style="color: hsl(217, 10%, 50.8%)">
+                Meet GABO, the smart garbage bin empowered by IoT technology.
+                With GABO, waste management becomes a breeze, as it
+                intelligently optimizes collection schedules and provides
+                real-time status updates. Take a step towards a sustainable
+                future with GABO, your trusted partner in smart, eco-friendly
+                living.
+              </p>
+            </div>
+
+            <div class="col-lg-6 mb-5 mb-lg-0 home-img">
+              <div class="d-flex justify-content-center align-items-end h-100">
+                <img
+                  src="img/cloud_isometric2.png"
+                  style="height: auto; max-width: 500px; width: 100%"
+                  id="home-img"
+                  class="img-fluid"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+   
+    <section>
+      <div class="container-fluid mt-5" data-aos="zoom-in">
+        <img src="img/steps.png" class="img-fluid" />
+      </div>
+    </section>
+    <section class="feature-section mt-5" id="featureSection">
+      <div class="p-3 gabo-bg-primary text-white">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <h1
+                class="feature-text text-light fs-3 ms-5 mt-5"
+                data-aos="fade-right"
+              >
+                Monitor your garbage bin<br />
+                with an app
+              </h1>
+            </div>
+            <div class="col mt-5">
+              <div class="card" style="width: 18rem" data-aos="fade-left">
+                <div class="card-body card-content">
+                  <div class="circle-card">
+                    <div class="outer-circle">
+                      <div class="inner-circle">
+                        <i class="fas fa-signal fa-1x sensor-icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <h5 class="card-title text-center mt-4">Realtime Sensor</h5>
+                  <p class="card-text text-center">
+                    Some quick example text to build on the card title and make
+                    up the bulk of the card's content.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col mt-5" data-aos="fade-left">
+              <div class="card" style="width: 18rem">
+                <div class="card-body card-content">
+                  <div class="circle-card">
+                    <div class="outer-circle">
+                      <div class="inner-circle">
+                        <i class="fas fa-signal fa-1x sensor-icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <h5 class="card-title text-center mt-4">Realtime Sensor</h5>
+                  <p class="card-text text-center">
+                    Some quick example text to build on the card title and make
+                    up the bulk of the card's content.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col"></div>
+            <div class="col">
+              <div class="col mt-5" data-aos="fade-left">
+                <div class="card" style="width: 18rem">
+                  <div class="card-body card-content">
+                    <div class="circle-card">
+                      <div class="outer-circle">
+                        <div class="inner-circle">
+                          <i class="fas fa-signal fa-1x sensor-icon"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <h5 class="card-title text-center mt-4">Realtime Sensor</h5>
+                    <p class="card-text text-center">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="col mt-5" data-aos="fade-left">
+                <div class="card" style="width: 18rem">
+                  <div class="card-body card-content">
+                    <div class="circle-card">
+                      <div class="outer-circle">
+                        <div class="inner-circle">
+                          <i class="fas fa-signal fa-1x sensor-icon"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <h5 class="card-title text-center mt-4">Realtime Sensor</h5>
+                    <p class="card-text text-center">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="" data-aos="fade-right" id="aboutUs">
+      <div class="container mt-5">
+        <div class="text-center fs-1 fw-bold">ABOUT US</div>
+        <div class="text-center mt-2">
+          <p class="section-subtitle text-center text-justify">
+            Welcome to GABO – your gateway to a smarter, cleaner future. At
+            GABO, we are passionate about revolutionizing waste management
+            through cutting-edge technology.
+          </p>
+          <p class="text-justify">
+            Our innovative system combines the power of Internet of Things (IoT)
+            with the humble garbage bin, creating a seamless and intelligent
+            waste disposal experience. GABO smart garbage bins are equipped with
+            real-time sensors that monitor and manage waste levels, ensuring
+            efficiency and sustainability in waste collection processes.
+          </p>
+          <p class="text-justify">
+            We believe in making a positive impact on the environment, and our
+            smart garbage bins are designed to contribute to a greener and
+            cleaner planet. With GABO, you can take a step towards a more
+            sustainable future by optimizing waste management practices and
+            reducing environmental impact.
+          </p>
+        </div>
+        <div class="text-center mt-5">
+          <div class="btn btn-primary shadow-none">Learn More</div>
+        </div>
+      </div>
+    </section>
+
+    <section data-aos="zoom-in-up" id="contactUs">
+      <div class="container-fluid mt-5 mb-4 p-3 gabo-bg-secondary text-white">
+        <div class="fs-1 text-center fw-bold">QUESTIONS?</div>
+        <div class="fs-5 text-center fw-bold">
+          Wether you're curious about our project, we're here to answer any
+          questions.
+        </div>
+        <div class="text-center mt-5 mb-4">
+          <a class="btn btn-primary btn-lg shadow-none" href="contact-us.html"
+            >LET'S TALK MORE!</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <footer class="container py-5 mt-5">
+      <div class="row">
+        <div class="col-12 col-md">
+          <img
+            src="img/GaboV1_LOGO.png"
+            width="24"
+            height="auto"
+            viewBox="0 0 24 24"
+            class="d-block mb-2"
+          />
+          <small class="d-block mb-3 text-muted">© 2023-2024</small>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Site Credits</h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a
+                class="text-muted"
+                href="https://getbootstrap.com"
+                target="_blank"
+                >Bootstrap</a
+              >
+            </li>
+            <li>
+              <a
+                class="text-muted"
+                href="https://www.freepik.com/"
+                target="_blank"
+                >Freepik</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>University and Government Links</h5>
+          <ul class="list-unstyled text-small">
+            <!-- University of Caloocan City link -->
+            <li>
+              <a
+                class="text-muted"
+                href="https://www.universityofcaloocancity.edu.ph/"
+                target="_blank"
+                >University of Caloocan City</a
+              >
+            </li>
+            <!-- Republic of the Philippines link -->
+            <li>
+              <a class="text-muted" href="https://www.gov.ph/" target="_blank"
+                >Republic of the Philippines</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Team</a></li>
+            <li><a class="text-muted" href="#">Location</a></li>
+            <li><a class="text-muted" href="#">Privacy</a></li>
+            <li>
+              <a class="text-muted" href="termsandconditions.html">Terms</a>
+            </li>
+            <li><a class="text-muted" href="#">Faqs</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5><!-- Features --></h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <div class="input-group md-form form-sm form-2 pl-0">
+                <input
+                  class="form-control my-0 py-1 amber-border"
+                  type="text"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <div class="input-group-append">
+                  <span
+                    class="input-group-text amber lighten-3"
+                    id="basic-text1"
+                  >
+                    <i class="fas fa-search text-grey" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-muted text-center">
+        <small
+          >Powered by
+          <a href="https://getbootstrap.com" class="text-muted"
+            >Bootstrap</a
+          ></small
+        >
+      </div>
+    </footer>
+    <!-- IMPORTS -->
+    <script>
+      // Function to highlight the active link
+      function highlightActiveLink() {
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        sections.forEach((section, index) => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+
+          if (
+            window.scrollY >= sectionTop - sectionHeight / 2 &&
+            window.scrollY < sectionTop + sectionHeight / 2
+          ) {
+            // Add 'active' class to the corresponding nav link
+            navLinks.forEach((link) => {
+              link.classList.remove("active");
+            });
+            navLinks[index].classList.add("active");
+          }
+        });
+      }
+
+      // Event listener for scroll
+      window.addEventListener("scroll", highlightActiveLink);
+
+      // Initial highlighting on page load
+      document.addEventListener("DOMContentLoaded", highlightActiveLink);
+    </script>
+    <script type="module" src="./connection/firebaseConfig.js"></script>
+    <script src="src/jquery.min.js"></script>
+    <script type="text/javascript" src="src/mdb.min.js"></script>
+    <script src="src/bootstrap.min.js"></script>
+    <script src="src/popper.min.js"></script>
+    <script src="src/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+  </body>
+</html>

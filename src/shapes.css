@@ -1,0 +1,30 @@
+.circle-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.outer-circle {
+  width: 100px;
+  height: 100px;
+  background-color: transparent;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #11531E;
+}
+
+.inner-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #11531E;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sensor-icon {
+  color: white;
+}

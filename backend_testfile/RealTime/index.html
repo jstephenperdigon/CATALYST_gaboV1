@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Information Form</title>
+    <style>
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+        }
+        .form-section {
+            flex: 1;
+            padding: 20px;
+        }
+        #userDataDisplay {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-section">
+            <h2>Personal Information:</h2>
+            <form id="personalForm">
+                <label for="id">Unique ID:</label><br>
+                <input type="text" id="id" name="id" readonly><br>
+
+                <label for="firstname">First Name:</label><br>
+                <input type="text" id="firstname" name="firstname"><br>
+
+                <label for="lastname">Last Name:</label><br>
+                <input type="text" id="lastname" name="lastname"><br>
+
+                <label for="email">Email:</label><br>
+                <input type="text" id="email" name="email"><br>
+
+                <label for="mobilenumber">Mobile Number:</label><br>
+                <input type="text" id="mobilenumber" name="mobilenumber"><br>
+
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password"><br>
+                
+                <h2>Collection Information:</h2>
+                <label for="controlNumber">Control Number:</label><br>
+                <input type="text" id="controlNumber" name="controlNumber"><br>
+
+                <button type="button" id="checkControlNumber">Check Control Number</button><br>
+                <br>
+
+                <label for="address">Address:</label><br>
+                <input type="text" id="address" name="address"><br>
+            </form>
+            <br>
+
+            <button id="submit">Submit</button>
+        </div>
+
+        <div id="userDataDisplay"></div>
+    </div>
+
+    <script type="module" src="index.js"></script>
+
+</body>
+</html>

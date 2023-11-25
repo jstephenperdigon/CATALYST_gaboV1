@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <title>GABOv1</title>
+    <link rel="stylesheet" href="src/mdb.min.css" />
+    <link rel="stylesheet" href="src/bootstrap.min.css" />
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="src/shapes.css" />
+    <link rel="stylesheet" href="src/aos.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg shadow-none sticky-top"
+      style="height: 85px; background-color: #f5f5f5"
+    >
+      <div class="container">
+        <a class="navbar-brand gabo-secondary" href="index.html">
+          <p class="fw-bold fs-3 mt-2">GABO</p>
+        </a>
+        <button
+          class="btn shadow-none navbar-toggler gabo-secondary"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse"
+          style="background-color: #f5f5f5"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#mainContent"
+                onclick="highlightLink(this)"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#featureSection"
+                onclick="highlightLink(this)"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#section3"
+                onclick="highlightLink(this)"
+                >About Us</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#section4"
+                onclick="highlightLink(this)"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+          <a
+            href="signup_signin/sign-in.html"
+            class="btn btn-outline-primary mx-3 d-block shadow-none"
+            >Sign In</a
+          >
+        </div>
+      </div>
+    </nav>
+    <section>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="text-center">
+            <i class="fas fa-envelope-open fa-5x gabo-secondary"></i>
+          </div>
+          <div class="col mt-5">
+            <div class="text-center fs-1 fw-bold">
+              LET'S GET IN TOUCH!<br />
+            </div>
+            <div class="text-center fs-3 mt-5">
+              Ready to Make a Difference with GABO?
+            </div>
+            <div class="text-center mt-5">
+              If you're eager to learn how GABO's smart garbage bins can help
+              you create a greener, cleaner, and smarter approach to waste
+              management, complete the form below. Our team is excited to
+              connect with you and provide the information you need.
+            </div>
+          </div>
+        </div>
+        <!-- Contact Form -->
+        <div class="row mt-5">
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                placeholder="Your Name"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="Your Email"
+              />
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="subject" class="form-label">Subject</label>
+              <input
+                type="text"
+                class="form-control"
+                id="subject"
+                name="subject"
+                placeholder="Subject"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Message</label>
+              <textarea
+                class="form-control"
+                id="message"
+                name="message"
+                rows="4"
+                placeholder="Your Message"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-success shadow-none mt-2">
+              Submit
+            </button>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="text-start fs-6">
+            By checking the box below, you grant GABO permission to store and
+            process your personal information for the purpose of delivering the
+            requested content and sharing information about our services. Rest
+            assured, we won't spam your inbox, and you can easily unsubscribe at
+            any time.
+          </div>
+             <!-- Checkbox -->
+             <div class="mt-5 mb-4">
+                <input
+                  class="form-check-input me-2"
+                  type="checkbox"
+                  name="rememberMe"
+                  required
+                />
+                <label class="form-check-label" for="rememberMe">
+                    I agree to receive communications from GABO.
+                </label>
+              </div>
+
+        </div>
+        <!-- End Contact Form -->
+      </div>
+    </section>
+    <footer class="container py-5 mt-5">
+      <div class="row">
+        <div class="col-12 col-md">
+          <img
+            src="img/GaboV1_LOGO.png"
+            width="24"
+            height="auto"
+            viewBox="0 0 24 24"
+            class="d-block mb-2"
+          />
+          <small class="d-block mb-3 text-muted">© 2023-2024</small>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Site Credits</h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a
+                class="text-muted"
+                href="https://getbootstrap.com"
+                target="_blank"
+                >Bootstrap</a
+              >
+            </li>
+            <li>
+              <a
+                class="text-muted"
+                href="https://www.freepik.com/"
+                target="_blank"
+                >Freepik</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>University and Government Links</h5>
+          <ul class="list-unstyled text-small">
+            <!-- University of Caloocan City link -->
+            <li>
+              <a
+                class="text-muted"
+                href="https://www.universityofcaloocancity.edu.ph/"
+                target="_blank"
+                >University of Caloocan City</a
+              >
+            </li>
+            <!-- Republic of the Philippines link -->
+            <li>
+              <a class="text-muted" href="https://www.gov.ph/" target="_blank"
+                >Republic of the Philippines</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Team</a></li>
+            <li><a class="text-muted" href="#">Location</a></li>
+            <li><a class="text-muted" href="#">Privacy</a></li>
+            <li><a class="text-muted" href="#">Terms</a></li>
+            <li><a class="text-muted" href="#">Faqs</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5><!-- Features --></h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <div class="input-group md-form form-sm form-2 pl-0">
+                <input
+                  class="form-control my-0 py-1 amber-border"
+                  type="text"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <div class="input-group-append">
+                  <span
+                    class="input-group-text amber lighten-3"
+                    id="basic-text1"
+                  >
+                    <i class="fas fa-search text-grey" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-muted text-center">
+        <small
+          >Powered by
+          <a href="https://getbootstrap.com" class="text-muted"
+            >Bootstrap</a
+          ></small
+        >
+      </div>
+    </footer>
+    <script src="src/jquery.min.js"></script>
+    <script type="text/javascript" src="src/mdb.min.js"></script>
+    <script src="src/bootstrap.min.js"></script>
+    <script src="src/popper.min.js"></script>
+    <script src="src/aos.js"></script>
+  </body>
+</html>
