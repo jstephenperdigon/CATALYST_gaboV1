@@ -15,9 +15,6 @@
     <!-- Search Bar -->
     <label for="search">Search:</label>
     <input type="text" id="search" oninput="filterUsers()" placeholder="Search">
-    
-    <!-- Search Button -->
-    <button onclick="filterUsers()">Search</button>
 
     <!-- Filter Dropdown -->
     <label for="filter">Filter by:</label>
@@ -27,6 +24,9 @@
         <option value="District">District</option>
         <option value="GCN">GCN</option>
     </select>
+
+    <!-- Search Button -->
+    <button onclick="filterUsers()">Search</button>
 
     <!-- Display User Data -->
     <div id="userDataDisplay"></div>
