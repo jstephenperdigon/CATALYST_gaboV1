@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+
+</head>
+
+<body>
+
+    <h1>User Management</h1>
+
+    <!-- Search Bar -->
+    <label for="search">Search:</label>
+    <input type="text" id="search" oninput="filterUsers()" placeholder="Search">
+    
+    <!-- Search Button -->
+    <button onclick="filterUsers()">Search</button>
+
+    <!-- Filter Dropdown -->
+    <label for="filter">Filter by:</label>
+    <select id="filter" onchange="filterUsers()">
+        <option value="Name">Name</option>
+        <option value="Barangay">Barangay</option>
+        <option value="District">District</option>
+        <option value="GCN">GCN</option>
+    </select>
+
+    <!-- Display User Data -->
+    <div id="userDataDisplay"></div>
+
+    <script type="module" src="DisplayUsers.js"></script>
+</body>
+
+</html>
