@@ -91,56 +91,60 @@ verifyBtn.addEventListener("click", async () => {
 // Add a click event listener to the "Save changes" button
 const saveChangesBtn = document.getElementById("save");
 if (saveChangesBtn) {
-// Disable the "Save changes" button initially
-saveChangesBtn.disabled = true;
+  // Disable the "Save changes" button initially
+  saveChangesBtn.disabled = true;
 
-saveChangesBtn.addEventListener("click", async () => {
-  // Update user data with the latest address information
-  userData.addressLine1 = addressLine1Input.value;
-  userData.addressLine2 = addressLine2Input.value;
+  saveChangesBtn.addEventListener("click", async () => {
+    // Update user data with the latest address information
+    userData.addressLine1 = addressLine1Input.value;
+    userData.addressLine2 = addressLine2Input.value;
 
-  // Add the selected district and barangay to user data
-  userData.district = document.getElementById("districtDropdown").value;
-  userData.barangay = document.getElementById("barangayDropdown").value;
+    // Add the selected district and barangay to user data
+    userData.district = document.getElementById("districtDropdown").value;
+    userData.barangay = document.getElementById("barangayDropdown").value;
 
-  try {
-    // Update user data in Accounts/Users
-    const userUpdateRef = ref(db, `Accounts/Users/${userId}`);
-    await update(userUpdateRef, {
-      addressLine1: userData.addressLine1,
-      addressLine2: userData.addressLine2,
-      gcn: userData.gcn,
-      district: userData.district, // Add district to user data
-      barangay: userData.barangay, // Add barangay to user data
-    });
+    try {
+      // Update user data in Accounts/Users
+      const userUpdateRef = ref(db, `Accounts/Users/${userId}`);
+      await update(userUpdateRef, {
+        addressLine1: userData.addressLine1,
+        addressLine2: userData.addressLine2,
+        gcn: userData.gcn,
+        district: userData.district, // Add district to user data
+        barangay: userData.barangay, // Add barangay to user data
+      });
 
-    // Update user data in GarbageBinControlNumber/corresponding GCN/Users
-    const gcnUpdateRef = ref(db, `GarbageBinControlNumber/${userData.gcn}/Users/${userId}`);
-    await update(gcnUpdateRef, {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      mobileNumber: userData.mobileNumber,
-      password: userData.password,
-      addressLine1: userData.addressLine1,
-      addressLine2: userData.addressLine2,
-      district: userData.district,
-      barangay: userData.barangay,
-    });
+      // Update user data in GarbageBinControlNumber/corresponding GCN/Users
+      const gcnUpdateRef = ref(db, `GarbageBinControlNumber/${userData.gcn}/Users/${userId}`);
+      await update(gcnUpdateRef, {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        mobileNumber: userData.mobileNumber,
+        password: userData.password,
+        addressLine1: userData.addressLine1,
+        addressLine2: userData.addressLine2,
+        district: userData.district,
+        barangay: userData.barangay,
+      });
 
-    alert("User data updated successfully.");
+      alert("User data updated successfully.");
 
-    // Check if the modal is open (assuming your modal ID is "addDeviceModal")
-    const modalElement = document.getElementById("addDeviceModal");
-    if (modalElement) {
-      // Close the modal using MDB method
-      mdb.Modal.getInstance(modalElement).hide();
+      // Check and display bins immediately after updating the user's address
+      await checkAndDisplayBins();
+
+      // Check if the modal is open (assuming your modal ID is "addDeviceModal")
+      const modalElement = document.getElementById("addDeviceModal");
+      if (modalElement) {
+        // Close the modal using MDB method
+        mdb.Modal.getInstance(modalElement).hide();
+      }
+    } catch (error) {
+      console.error("Error updating user data:", error);
     }
-  } catch (error) {
-    console.error("Error updating user data:", error);
-  }
-});
+  });
 }
+
 
 // Add a click event listener to the "Cancel" button
 const cancelBtn = document.getElementById("cancel");
@@ -423,22 +427,26 @@ document.getElementById('submitReport').addEventListener('click', submitForm);
 
 
 // Check if the user has a GCN and update the UI accordingly
-fetchUserData(userId)
-    .then((user) => {
-        if (user && user.gcn) {
-            // User has a GCN, display bins
-            document.getElementById("binsRow").style.display = "flex";
-            document.getElementById("noDeviceRow").style.display = "none";
-        } else {
-            // User does not have a GCN, display "No Device Available"
-            document.getElementById("binsRow").style.display = "none";
-            document.getElementById("noDeviceRow").style.display = "flex";
-        }
+async function checkAndDisplayBins() {
+  try {
+    const user = await fetchUserData(userId);
 
-    })
-    .catch((error) => {
-        console.error("Error fetching user data:", error);
-    });
+    if (user && user.gcn) {
+      // User has a GCN, display bins
+      document.getElementById("binsRow").style.display = "flex";
+      document.getElementById("noDeviceRow").style.display = "none";
 
-            // Call the displayFillLevels function to initiate the update
-            displayFillLevels();    
+      // Wait for the UI to update before calling displayFillLevels
+      await displayFillLevels();
+    } else {
+      // User does not have a GCN, display "No Device Available"
+      document.getElementById("binsRow").style.display = "none";
+      document.getElementById("noDeviceRow").style.display = "flex";
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+}
+
+// Invoke the function to check and display bins
+checkAndDisplayBins();

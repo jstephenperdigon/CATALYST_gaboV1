@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getDatabase, ref, set, push, get} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import { getDatabase, ref, set, push, get } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,7 +22,7 @@ document.getElementById("submit").addEventListener('click', function (e) {
 
     // Trigger front-end validations from design.js
     const forms = document.querySelectorAll('.needs-validation');
-    Array.prototype.slice.call(forms).forEach(function(form) {
+    Array.prototype.slice.call(forms).forEach(function (form) {
         form.classList.add('was-validated');
     });
 
@@ -38,11 +38,18 @@ document.getElementById("submit").addEventListener('click', function (e) {
     const email = document.getElementById('email').value;
     const mobileNumber = document.getElementById('mobile_number').value;
     const password = document.getElementById('password-input').value;
+    const confirmPassword = document.getElementById('passwordConfirmation').value;  // New line to get password confirmation value
     const agreeTermsCheckbox = document.getElementById('agreeTerms');
 
     // Check if required fields are not empty and checkbox is checked
     if (firstName.trim() === '' || lastName.trim() === '' || email.trim() === '' || mobileNumber.trim() === '' || password.trim() === '' || !agreeTermsCheckbox.checked) {
         console.log("Please fill in all required fields and agree to the terms.");
+        return;
+    }
+
+    // Check if password and password confirmation match
+    if (password !== confirmPassword) {
+        alert("Password and password confirmation do not match.");
         return;
     }
 
