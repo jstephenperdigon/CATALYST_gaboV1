@@ -179,16 +179,22 @@
             <div class="col-12">
               <!-- Your content for the second column goes here -->
               <div class="card shadow-none border-0">
-                <div
-                  class="card-header gabo-bg-secondary fs-4 d-flex justify-content-between align-items-center"
-                >
+                <div class="card-header gabo-bg-secondary fs-4 d-flex justify-content-between align-items-center">
                   Device
                   <button
+                    id="connectDeviceBtn"
                     class="btn btn-warning shadow-none align-items-end btn-sm"
                     data-mdb-toggle="modal"
                     data-mdb-target="#addDeviceModal"
                   >
                     Connect Device
+                  </button>
+                  <button
+                    id="removeDeviceBtn"
+                    class="btn btn-danger shadow-none align-items-end btn-sm"
+                    style="display: none;"
+                  >
+                    Remove Device
                   </button>
                 </div>
                 <div class="card-body">

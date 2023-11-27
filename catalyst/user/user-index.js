@@ -426,6 +426,101 @@ if (userId) {
 document.getElementById('submitReport').addEventListener('click', submitForm);
 
 
+// Function to update the visibility of Connect and Remove Device buttons
+function updateDeviceButtons(hasGCN) {
+  const connectDeviceBtn = document.getElementById("connectDeviceBtn");
+  const removeDeviceBtn = document.getElementById("removeDeviceBtn");
+
+  if (hasGCN) {
+    // If the user has a GCN, show the "Remove Device" button and hide the "Connect Device" button
+    connectDeviceBtn.style.display = "none";
+    removeDeviceBtn.style.display = "inline-block";
+  } else {
+    // If the user doesn't have a GCN, show the "Connect Device" button and hide the "Remove Device" button
+    connectDeviceBtn.style.display = "inline-block";
+    removeDeviceBtn.style.display = "none";
+  }
+}
+
+// Function to reset the Add Device modal
+function resetAddDeviceModal() {
+  // Clear input fields
+  document.getElementById("garbageControlNumber").value = "";
+  document.getElementById("gcPassword").value = "";
+  document.getElementById("districtDropdown").value = "Select District";
+  document.getElementById("barangayDropdown").value = "Select Barangay";
+  document.getElementById("addressLine1").value = "";
+  document.getElementById("addressLine2").value = "";
+
+  // Reset dropdown button labels
+  document.getElementById("districtDropdownButtonLabel").innerText = "District: Select District";
+  document.getElementById("barangayDropdownButtonLabel").innerText = "Barangay: Select Barangay";
+
+  // Disable address textboxes
+  addressLine1Input.disabled = true;
+  addressLine2Input.disabled = true;
+
+  // Enable the control number textbox, password textbox, and the verify button
+  document.getElementById("garbageControlNumber").disabled = false;
+  document.getElementById("gcPassword").disabled = false;
+  verifyBtn.disabled = false;
+  
+  // Disable the "Save changes" button
+  saveChangesBtn.disabled = true;
+}
+
+// Function to remove a device with validation prompt
+async function removeDevice(userId, gcn) {
+  try {
+    // Display a confirmation prompt before proceeding
+    const confirmation = window.confirm("Are you sure you want to remove the device?");
+    
+    // If the user confirms, proceed with device removal
+    if (confirmation) {
+      // Reference to the 'Accounts/Users' database
+      const userRef = ref(db, `Accounts/Users/${userId}`);
+
+      // Reference to the 'GarbageBinControlNumber' database
+      const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}/Users/${userId}`);
+
+      // Remove specific fields from user data
+      const updatedUserData = {
+        addressLine1: null,
+        addressLine2: null,
+        barangay: null,
+        district: null,
+        gcn: null,
+      };
+
+      // Update user data in 'Accounts/Users'
+      await update(userRef, updatedUserData);
+
+      // Remove the user from 'GarbageBinControlNumber'
+      await set(gcnRef, null);
+
+      // After successful removal, update the UI
+      updateDeviceButtons(false);
+
+      // Immediately update the UI by calling checkAndDisplayBins
+      await checkAndDisplayBins();
+
+      // Reset the Add Device modal
+      resetAddDeviceModal();
+
+      // You may also want to update any other parts of the UI or perform additional tasks
+
+      console.log("Device removed successfully");
+      
+    } else {
+      // If the user cancels, do nothing or provide feedback if needed
+      console.log("Device removal canceled");
+    }
+  } catch (error) {
+    console.error("Error removing device:", error);
+    // Handle errors appropriately, e.g., show an error message to the user
+  }
+}
+
 // Check if the user has a GCN and update the UI accordingly
 async function checkAndDisplayBins() {
   try {
@@ -436,17 +531,37 @@ async function checkAndDisplayBins() {
       document.getElementById("binsRow").style.display = "flex";
       document.getElementById("noDeviceRow").style.display = "none";
 
+      // Update the visibility of Connect and Remove Device buttons
+      updateDeviceButtons(true);
+
       // Wait for the UI to update before calling displayFillLevels
       await displayFillLevels();
     } else {
       // User does not have a GCN, display "No Device Available"
       document.getElementById("binsRow").style.display = "none";
       document.getElementById("noDeviceRow").style.display = "flex";
+
+      // Update the visibility of Connect and Remove Device buttons
+      updateDeviceButtons(false);
     }
   } catch (error) {
     console.error("Error fetching user data:", error);
   }
 }
+
+// Example: Add a click event listener for the "Remove Device" button
+const removeDeviceBtn = document.getElementById("removeDeviceBtn");
+
+removeDeviceBtn.addEventListener("click", async () => {
+  try {
+    const user = await fetchUserData(userId);
+    if (user && user.gcn) {
+      await removeDevice(userId, user.gcn, user);
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+});
 
 // Invoke the function to check and display bins
 checkAndDisplayBins();
