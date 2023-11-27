@@ -240,3 +240,29 @@ h1, h2, h3 {
   background-color: #f5f5f5;
   color: #11531e;
 }
+
+/* Cards Background Colors*/
+.user-indexBg {
+  background: linear-gradient(
+    45deg,
+    #11531e 0%,
+    #1b7431 20%,
+    #37a046 40%,
+    #5ab669 60%,
+    #82d88c 80%,
+    #aaf0af 100%
+  );
+  color: #fff;
+}
+.categories-bg1{
+  background: linear-gradient(
+    45deg,
+    #ff8c00 0%,
+    #ff9e2c 20%,
+    #ffb745 40%,
+    #ffca61 60%,
+    #ffde7d 80%,
+    #ffe899 100%
+  );
+  color: #fff;
+}

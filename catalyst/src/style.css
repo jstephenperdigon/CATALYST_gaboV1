@@ -62,6 +62,8 @@ a:hover {
   text-decoration: none;
 }
 
+
+
 .vertical-hr {
   border: none;
   border-left: 1px solid #ccc; /* Adjust color as needed */
@@ -318,7 +320,7 @@ FEATURE SECTION */
   z-index: -1;
 }
 
-@media (max-width: 375px){
+@media (max-width: 375px) {
   .feature-background {
     width: 100%;
     height: 800px;
