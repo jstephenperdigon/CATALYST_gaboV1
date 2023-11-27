@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "gabopreview",
+    "site":"gabopreview",
     "public": "catalyst",
     "ignore": [
       "firebase.json",

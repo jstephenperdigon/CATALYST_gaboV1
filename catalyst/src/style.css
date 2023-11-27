@@ -75,13 +75,14 @@ a:hover {
   width: 100px;
   height: 150px;
   position: relative;
+
   margin-bottom: 10px;
 }
 
 .lid {
   width: 80px;
   height: 20px;
-  background-color: #4caf50;
+  border: 2px solid gray;
   border-radius: 5px 5px 0 0;
   position: absolute;
   top: 0;
@@ -91,7 +92,7 @@ a:hover {
 .body {
   width: 100px;
   height: 130px;
-  background-color: #4caf50;
+  border: 2px solid gray;
   border-radius: 10px;
   position: absolute;
   top: 20px;
@@ -414,5 +415,12 @@ FEATURE SECTION */
 @media (max-width: 991.98px) {
   .home-img {
     display: none;
+  }
+}
+
+/* Sweet Alert */
+@media (max-width: 600px) {
+  .swal2-mobile {
+    width: 80% !important;
   }
 }

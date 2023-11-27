@@ -1,3 +1,29 @@
+/* Montserrat Font Face */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../src/fonts/Montserrat-Regular.ttf') format('truetype'); /* Adjust the path to your font file */
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../src/fonts/Montserrat-Bold.ttf') format('truetype'); /* Adjust the path to your font file */
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
+/* Apply Montserrat in CSS */
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400; /* Regular */
+}
+
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; /* Bold */
+}
+
 .bottom-bar {
   background-color: #eee;
   margin-left: auto;
@@ -6,6 +32,22 @@
   max-width: 30em;
   border-radius: 20px 20px 0 0;
   box-shadow: 0px -5px 10px rgb(207, 207, 207);
+}
+
+.card-intro {
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+
+.with-icon {
+  position: relative;
+}
+
+.search-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
 }
 
 .icon {
@@ -25,11 +67,10 @@
   color: white;
 }
 
-@media (max-width:768px) {
-  .card-index{
+@media (max-width: 768px) {
+  .card-index {
     height: 10px;
   }
-  
 }
 /* Responsive styles for small screens */
 @media (max-width: 320px) {
@@ -85,7 +126,6 @@
 }
 /* Responsive styles for bigger screens */
 @media (min-width: 425px) {
-
   .bottom-bar {
     margin-top: 0;
     background-color: #eee;
