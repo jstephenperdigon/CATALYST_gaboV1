@@ -42,8 +42,6 @@ async function fetchUserData(userId) {
 const userId = getUserIdFromSession();
 let userData = null; // Variable to store user data
 
-// Get the dropdown element
-const userNameDropdown = document.querySelector(".nav-link.dropdown-toggle");
 
 // Disable the address textboxes initially
 const addressLine1Input = document.getElementById("addressLine1");
@@ -209,11 +207,15 @@ if (userId) {
           addressLine2: user.addressLine2, // Add address line 2 to user data
         };
 
-        // Set the first name as the username
-        userNameDropdown.textContent = user.firstName;
+        // Set the first name in the HTML span element
+        document.getElementById("userFirstName").textContent = user.firstName;
+
+        // Set the first name in the HTML element with id "userNameHeader"
+        document.getElementById("userNameHeader").textContent = user.firstName;
       } else {
         console.error("User data not found.");
-        userNameDropdown.textContent = "Default Username";
+        document.getElementById("userFirstName").textContent = "Default Username";
+        document.getElementById("userNameHeader").textContent = "Default Username";
       }
     })
     .catch((error) => {
