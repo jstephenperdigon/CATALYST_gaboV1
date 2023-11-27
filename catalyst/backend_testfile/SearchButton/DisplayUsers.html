@@ -4,29 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management</title>
+    <title>GABO</title>
 
 </head>
 
 <body>
+    <!-- Example HTML structure for search, filter, and user display -->
+<input type="text" id="search" placeholder="Search...">
+<select id="filter">
+    <option value="name">Name</option>
+    <option value="barangay">Barangay</option>
+    <option value="district">District</option>
+    <option value="gcn">GCN</option>
+</select>
 
-    <h1>User Management</h1>
-
-    <!-- Search Bar -->
-    <label for="search">Search:</label>
-    <input type="text" id="search" oninput="filterUsers()" placeholder="Search">
-
-    <!-- Filter Dropdown -->
-    <label for="filter">Filter by:</label>
-    <select id="filter" onchange="filterUsers()">
-        <option value="Name">Name</option>
-        <option value="Barangay">Barangay</option>
-        <option value="District">District</option>
-        <option value="GCN">GCN</option>
-    </select>
-
-    <!-- Search Button -->
-    <button onclick="filterUsers()">Search</button>
+<div id="userDataDisplay"></div>
 
     <!-- Display User Data -->
     <div id="userDataDisplay"></div>

@@ -28,16 +28,16 @@ function displayAllUsers() {
 
                 // Display the users (customize based on your needs)
                 const userDataDisplay = document.getElementById("userDataDisplay");
-                userDataDisplay.innerHTML = "<h2>All Users:</h2>";
+                userDataDisplay.innerHTML = "<h2>Users<h2>";
 
                 Object.keys(users).forEach((userId) => {
                     const user = users[userId];
                     userDataDisplay.innerHTML += `
                         <div>
-                            <strong>Name:</strong> ${user.firstName} ${user.lastName}<br>
-                            <strong>Barangay:</strong> ${user.barangay}<br>
-                            <strong>District:</strong> ${user.district}<br>
-                            <strong>GCN:</strong> ${user.gcn}<br>
+                            <strong>Name:</strong> ${user.firstName} ${user.lastName}
+                            <strong>Barangay:</strong> ${user.barangay}
+                            <strong>District:</strong> ${user.district}
+                            <strong>GCN:</strong> ${user.gcn}
                             <br>
                         </div>
                     `;
@@ -66,50 +66,31 @@ function displayAllUsers() {
 }
 
 // Function to filter users based on search input and filter dropdown
-function filterUsers() {
+function applyFilter() {
     const searchInput = document.getElementById("search").value.toLowerCase();
     const filterSelect = document.getElementById("filter");
     const filterOption = filterSelect.options[filterSelect.selectedIndex].value.toLowerCase();
 
-    const usersRef = ref(db, "Accounts/Users");
-
-    get(usersRef)
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                const users = snapshot.val();
-                const filteredUsers = Object.keys(users).filter((userId) => {
-                    const user = users[userId];
-                    const fieldValue = user[filterOption].toLowerCase();
-                    return fieldValue.includes(searchInput);
-                });
-
-                const userDataDisplay = document.getElementById("userDataDisplay");
-                userDataDisplay.innerHTML = "<h2>Filtered Users:</h2>";
-
-                filteredUsers.forEach((userId) => {
-                    const user = users[userId];
-                    userDataDisplay.innerHTML += `
-                        <div>
-                            <strong>ID:</strong> ${userId}<br>
-                            <strong>Name:</strong> ${user.firstName} ${user.lastName}<br>
-                            <strong>Email:</strong> ${user.email}<br>
-                            <strong>Mobile Number:</strong> ${user.mobileNumber}<br>
-                            <strong>Password:</strong> ${user.password}<br>
-                            <strong>Address Line 1:</strong> ${user.addressLine1}<br>
-                            <strong>Address Line 2:</strong> ${user.addressLine2}<br>
-                            <strong>Barangay:</strong> ${user.barangay}<br>
-                            <strong>District:</strong> ${user.district}<br>
-                        </div>
-                        <br>
-                    `;
-                });
-            } else {
-                alert("No users found");
-            }
-        })
-        .catch((error) => {
-            console.error("Error filtering users: " + error);
-        });
+    switch (filterOption) {
+        case "name":
+            filterUsersByName();
+            break;
+        case "barangay":
+            filterUsersByBarangay();
+            break;
+        case "district":
+            filterUsersByDistrict();
+            break;
+        case "gcn":
+            filterUsersByGCN();
+            break;
+        default:
+            alert("Invalid filter option");
+            break;
+    }
 }
+// Example usage: Call the applyFilter function when the filter is changed
+document.getElementById("filter").addEventListener('change', applyFilter);
+
 // Call the displayAllUsers function when the page loads
 document.addEventListener('DOMContentLoaded', displayAllUsers);
