@@ -172,17 +172,17 @@ if (saveChangesBtn) {
 }
 
 // Add a click event listener to the "Cancel" button
-const cancelBtn = document.getElementById("cancel");
+const cancelBtn = document.getElementById("next");
 if (cancelBtn) {
   // Disable the "Cancel" button initially
   cancelBtn.disabled = true;
 
   cancelBtn.addEventListener("click", () => {
     // Disable the "Cancel" button, address textboxes, and the "Save changes" button
-    cancelBtn.disabled = true;
-    addressLine1Input.disabled = true;
-    addressLine2Input.disabled = true;
-    saveChangesBtn.disabled = true;
+    //cancelBtn.disabled = true;
+    //addressLine1Input.disabled = true;
+    //addressLine2Input.disabled = true;
+    //saveChangesBtn.disabled = true;
 
     // Enable the control number textbox, password textbox, and the verify button
     document.getElementById("garbageControlNumber").disabled = false;

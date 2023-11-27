@@ -165,6 +165,7 @@
               type="button"
               class="btn btn-secondary"
               data-mdb-dismiss="modal"
+              id="cancel"
             >
               Cancel
             </button>
@@ -555,16 +556,6 @@
           document.getElementById("save").style.display =
             currentStep === steps.length - 1 ? "block" : "none";
         }
-
-        document
-          .getElementById("verifyGCNAndPassword")
-          .addEventListener("click", function () {
-            // Add your logic for verification here
-            // If verification is successful, move to the next step
-            currentStep++;
-            showStep(currentStep);
-          });
-
         document.getElementById("prev").addEventListener("click", function () {
           // Move to the previous step
           currentStep--;
