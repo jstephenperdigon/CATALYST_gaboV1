@@ -1,11 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Privacy Policy</title>
-</head>
-<body>
-    
-</body>
+    <link rel="icon" href="img/GaboV1_LOGO.png" type="image/x-icon" />
+    <link rel="stylesheet" href="src/mdb.min.css" />
+    <link rel="stylesheet" href="src/bootstrap.min.css" />
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="src/shapes.css" />
+    <link rel="stylesheet" href="src/aos.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .privacyHeader {
+        position: relative;
+        background-color: #1f6f2c; /* Set your desired background color */
+        color: #fff; /* Set your desired text color */
+        /* clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 100%); */
+        padding: 50px 0; /* Adjust the padding as needed */
+      }
+      .privacyBody {
+        padding: 50px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav
+      class="navbar navbar-expand-lg shadow-none sticky-top"
+      style="height: 85px; background-color: #f5f5f5"
+    >
+      <div class="container">
+        <a class="navbar-brand gabo-secondary" href="#">
+          <p class="fw-bold fs-3 mt-2">GABO</p>
+        </a>
+        <button
+          class="btn shadow-none navbar-toggler gabo-secondary"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse"
+          style="background-color: #f5f5f5"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#mainContent"
+                onclick="highlightLink(this)"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#featureSection"
+                onclick="highlightLink(this)"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#aboutUs"
+                onclick="highlightLink(this)"
+                >About Us</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#contactUs"
+                onclick="highlightLink(this)"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+          <a
+            href="signup_signin/sign-in.html"
+            class="btn btn-outline-primary mx-3 d-block shadow-none"
+            >Sign In</a
+          >
+        </div>
+      </div>
+    </nav>
+    <section class="privacyHeader" id="privacyheader">
+      <div class="container">
+        <div class="col-12 text-center">
+          <div class="fs-1 fw-bold">PRIVACY POLICY</div>
+          <div class="fs-6">
+            At GABO, we prioritize the privacy and security of our users. This
+            Privacy Policy outlines how we collect, use, and protect your
+            personal information. We are committed to being transparent about
+            our practices, ensuring you have confidence in how your data is
+            handled. Please take a moment to review our policy to understand how
+            we safeguard your privacy while providing you with the best possible
+            experience. Your trust is paramount, and we are dedicated to earning
+            it every day.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="privacyBody">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 text-start py-4 mt-5">
+            <!-- Added 'col-md-4' for medium-sized screens -->
+            <div class="fs-2 fw-bold">WHAT INFORMATION DO WE COLLECT?</div>
+          </div>
+          <div class="col-md-8 text-start py-4 mt-5">
+            <!-- Added 'col-md-8' for medium-sized screens -->
+            <div class="fs-3 text-uppercase">
+              Personal information you disclose to us.
+            </div>
+
+            <div class="fs-6">
+              <strong>In Short:</strong> We collect personal information that
+              you provide to us.<br />
+              We collect personal information that you voluntarily provide to us
+              when you register on the Services, express an interest in
+              obtaining information about us and Services, when you participate
+              in activities on the Services, or otherwise when you contact
+              us.<br />
+              <strong>Sensitive Information.</strong> <br />
+              We do not process sensitive information. All personal information
+              that you provide to us must be true, complete, and accurate, and
+              you must notify us of any changes to such personal information.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+        <div class="container">
+            
+        </div>
+    </section>
+    <script type="module" src="./connection/firebaseConfig.js"></script>
+    <script src="src/jquery.min.js"></script>
+    <script type="text/javascript" src="src/mdb.min.js"></script>
+    <script src="src/bootstrap.min.js"></script>
+    <script src="src/popper.min.js"></script>
+    <script src="src/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+  </body>
 </html>
