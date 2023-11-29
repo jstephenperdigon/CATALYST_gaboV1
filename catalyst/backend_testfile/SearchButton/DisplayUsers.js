@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,6 +17,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+let users; // Declare users at a higher scope
+
 // Function to display all users
 function displayAllUsers() {
     const usersRef = ref(db, "Accounts/Users");
@@ -24,37 +26,23 @@ function displayAllUsers() {
     get(usersRef)
         .then((snapshot) => {
             if (snapshot.exists()) {
-                const users = snapshot.val();
+                users = snapshot.val(); // Assign value to the higher-scoped variable
 
                 // Display the users (customize based on your needs)
                 const userDataDisplay = document.getElementById("userDataDisplay");
-                userDataDisplay.innerHTML = "<h2>Users<h2>";
+                userDataDisplay.innerHTML = "<h2>Users</h2>";
 
                 Object.keys(users).forEach((userId) => {
                     const user = users[userId];
                     userDataDisplay.innerHTML += `
                         <div>
-                            <strong>Name:</strong> ${user.firstName} ${user.lastName}
-                            <strong>Barangay:</strong> ${user.barangay}
-                            <strong>District:</strong> ${user.district}
-                            <strong>GCN:</strong> ${user.gcn}
+                            <strong>Name:</strong> ${user.firstName} ${user.lastName}<br>
+                            <strong>Barangay:</strong> ${user.barangay}<br>
+                            <strong>District:</strong> ${user.district}<br>
+                            <strong>GCN:</strong> ${user.gcn}<br>
                             <br>
                         </div>
                     `;
-                });
-
-                // Add event listeners to the "Select User" buttons
-                document.querySelectorAll(".selectUser").forEach((button) => {
-                    button.addEventListener('click', function () {
-                        const userId = button.dataset.userId;
-                        const gcn = button.dataset.gcn;
-
-                        // Set the GCN value in the hidden input
-                        document.getElementById("controlNumber").value = gcn;
-
-                        // Populate other user information
-                        populatePersonalInformation(userId);
-                    });
                 });
             } else {
                 alert("No users found");
@@ -65,32 +53,54 @@ function displayAllUsers() {
         });
 }
 
-// Function to filter users based on search input and filter dropdown
-function applyFilter() {
-    const searchInput = document.getElementById("search").value.toLowerCase();
+function searchData() {
+    const searchBar = document.getElementById("searchBar");
     const filterSelect = document.getElementById("filter");
-    const filterOption = filterSelect.options[filterSelect.selectedIndex].value.toLowerCase();
+    const filterValue = filterSelect.value.toLowerCase();
+    const searchText = searchBar.value.toLowerCase();
 
-    switch (filterOption) {
-        case "name":
-            filterUsersByName();
-            break;
-        case "barangay":
-            filterUsersByBarangay();
-            break;
-        case "district":
-            filterUsersByDistrict();
-            break;
-        case "gcn":
-            filterUsersByGCN();
-            break;
-        default:
-            alert("Invalid filter option");
-            break;
+    // Filter users based on the selected filter and search text
+    const filteredUsers = Object.keys(users).filter((userId) => {
+        const user = users[userId];
+        const fieldValue = user[filterValue];
+
+        // Check if the property exists and if its value includes the search text
+        return fieldValue !== undefined && fieldValue.toLowerCase().includes(searchText);
+    });
+
+    // Display the filtered users
+    const userDataDisplay = document.getElementById("userDataDisplay");
+    userDataDisplay.innerHTML = "<h2>Search Results</h2>";
+
+    filteredUsers.forEach((userId) => {
+        const user = users[userId];
+        userDataDisplay.innerHTML += `
+            <div>
+                <strong>Name:</strong> ${user.firstName} ${user.lastName}<br>
+                <strong>Barangay:</strong> ${user.barangay}<br>
+                <strong>District:</strong> ${user.district}<br>
+                <strong>GCN:</strong> ${user.gcn}<br>
+                <br>
+            </div>
+        `;
+    });
+
+    if (filteredUsers.length === 0) {
+        userDataDisplay.innerHTML += "<p>No matching records found.</p>";
     }
 }
-// Example usage: Call the applyFilter function when the filter is changed
-document.getElementById("filter").addEventListener('change', applyFilter);
+
+// Add event listener to the Search button
+const searchBtn = document.getElementById("searchBtn");
+searchBtn.addEventListener("click", searchData);
+
+// Add event listener for Enter key on the search input field
+const searchBar = document.getElementById("searchBar");
+searchBar.addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+        searchData();
+    }
+});
 
 // Call the displayAllUsers function when the page loads
 document.addEventListener('DOMContentLoaded', displayAllUsers);
