@@ -49,22 +49,30 @@ window.searchReports = function() {
     });
 };
 
-// Function to sort search results based on selected option
+/// Function to sort search results based on selected option, including time sorting
 window.sortSearchResults = function() {
     const sortKey = document.getElementById('sortDropdown').value;
     const visibleReportsArray = document.querySelectorAll('#reportsTable tbody tr:not([style*="none"])');
 
     const sortedReports = Array.from(visibleReportsArray).sort((a, b) => {
-        const aValue = a.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
-        const bValue = b.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
+        if (sortKey === 'timeFormat12' || sortKey === 'oldestTime') {
+            const aValue = new Date('1970/01/01 ' + a.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent);
+            const bValue = new Date('1970/01/01 ' + b.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent);
 
-        return aValue.localeCompare(bValue);
+            return sortKey === 'timeFormat12' ? bValue - aValue : aValue - bValue;
+        } else {
+            const aValue = a.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
+            const bValue = b.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
+
+            return aValue.localeCompare(bValue);
+        }
     });
 
     const tbody = document.querySelector('#reportsTable tbody');
     tbody.innerHTML = '';
     sortedReports.forEach(report => tbody.appendChild(report));
 };
+
 
 // Function to get the index of the selected column
 function getIndex(key) {
