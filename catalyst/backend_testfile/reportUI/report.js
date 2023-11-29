@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -39,7 +39,7 @@ function generateReportHTML(report) {
 }
 
 // Function to search reports based on input value
-window.searchReports = function() {
+window.searchReports = function () {
     const searchInput = document.getElementById('searchInput').value.toLowerCase();
     const reportsArray = document.querySelectorAll('#reportsTable tbody tr');
 
@@ -49,17 +49,31 @@ window.searchReports = function() {
     });
 };
 
-/// Function to sort search results based on selected option, including time sorting
-window.sortSearchResults = function() {
+// Function to sort search results based on selected option, including time sorting
+window.sortSearchResults = function () {
     const sortKey = document.getElementById('sortDropdown').value;
     const visibleReportsArray = document.querySelectorAll('#reportsTable tbody tr:not([style*="none"])');
 
     const sortedReports = Array.from(visibleReportsArray).sort((a, b) => {
-        if (sortKey === 'timeFormat12' || sortKey === 'oldestTime') {
-            const aValue = new Date('1970/01/01 ' + a.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent);
-            const bValue = new Date('1970/01/01 ' + b.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent);
+        if (sortKey === 'timeFormat12' || sortKey === 'oldestTime' || sortKey === 'latestTime') {
+            const aValueElement = a.querySelector(`td:nth-child(${getIndex('timeFormat12')})`);
+            const bValueElement = b.querySelector(`td:nth-child(${getIndex('timeFormat12')})`);
 
-            return sortKey === 'timeFormat12' ? bValue - aValue : aValue - bValue;
+            // Additional checks to ensure the elements and their textContent are accessible
+            const aValue = aValueElement ? new Date('1970/01/01 ' + aValueElement.textContent) : null;
+            const bValue = bValueElement ? new Date('1970/01/01 ' + bValueElement.textContent) : null;
+
+            if (aValue && bValue) {
+                if (sortKey === 'timeFormat12') {
+                    return bValue - aValue;
+                } else if (sortKey === 'oldestTime') {
+                    return aValue - bValue;
+                } else if (sortKey === 'latestTime') {
+                    return bValue - aValue;
+                }
+            } else {
+                return 0; // Handle the case where the date values are not accessible
+            }
         } else {
             const aValue = a.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
             const bValue = b.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
@@ -72,7 +86,6 @@ window.sortSearchResults = function() {
     tbody.innerHTML = '';
     sortedReports.forEach(report => tbody.appendChild(report));
 };
-
 
 // Function to get the index of the selected column
 function getIndex(key) {
@@ -116,6 +129,19 @@ async function displayReportsTable() {
                 </table>
             `;
             reportsTable.innerHTML = tableHTML;
+
+            // Set up an onValue listener for real-time updates
+            onValue(reportsRef, (snapshot) => {
+                const updatedReportsData = snapshot.val();
+
+                if (updatedReportsData) {
+                    const updatedReportsArray = Object.entries(updatedReportsData).map(([ticketNumber, report]) => ({ ticketNumber, ...report }));
+                    const updatedTableHTML = updatedReportsArray.map(generateReportHTML).join('');
+                    reportsTable.querySelector('tbody').innerHTML = updatedTableHTML;
+                } else {
+                    reportsTable.innerHTML = 'No reports available.';
+                }
+            });
         } else {
             reportsTable.innerHTML = 'No reports available.';
         }
@@ -125,6 +151,6 @@ async function displayReportsTable() {
 }
 
 // Display the reports table when the page loads
-window.onload = function() {
+window.onload = function () {
     displayReportsTable();
 };
