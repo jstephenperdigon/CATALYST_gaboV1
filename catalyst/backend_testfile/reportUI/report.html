@@ -30,7 +30,8 @@
     <button onclick="searchReports()">Search</button>
 
     <label for="sortDropdown">Sort By: </label>
-    <select id="sortDropdown" onchange="sortReports()">
+    <select id="sortDropdown">
+        <option value="ticketNumber">Ticket #</option>
         <option value="gcn">GCN</option>
         <option value="Date">Date</option>
         <option value="timeFormat12">Time</option>
@@ -44,6 +45,7 @@
         <option value="email">Email</option>
         <option value="mobileNumber">Mobile Number(+63)</option>
     </select>
+    <button onclick="sortSearchResults()">Sort</button>
 </div>
 
 <div id="reportsTable"></div>
@@ -72,6 +74,7 @@
     function generateReportHTML(report) {
         return `
             <tr>
+                <td>${report.ticketNumber}</td>
                 <td>${report.gcn}</td>
                 <td>${report.Date}</td>
                 <td>${report.timeFormat12}</td>
@@ -99,12 +102,12 @@
         });
     };
 
-    // Function to sort reports based on selected option
-    window.sortReports = function() {
+    // Function to sort search results based on selected option
+    window.sortSearchResults = function() {
         const sortKey = document.getElementById('sortDropdown').value;
-        const reportsArray = document.querySelectorAll('#reportsTable tbody tr');
+        const visibleReportsArray = document.querySelectorAll('#reportsTable tbody tr:not([style*="none"])');
 
-        const sortedReports = Array.from(reportsArray).sort((a, b) => {
+        const sortedReports = Array.from(visibleReportsArray).sort((a, b) => {
             const aValue = a.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
             const bValue = b.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
 
@@ -118,7 +121,7 @@
 
     // Function to get the index of the selected column
     function getIndex(key) {
-        const headers = ['GCN', 'Date', 'timeFormat12', 'Problem', 'Description', 'addressLine1', 'addressLine2', 'barangay', 'district', 'Name', 'email', 'mobileNumber'];
+        const headers = ['ticketNumber', 'gcn', 'Date', 'timeFormat12', 'Problem', 'Description', 'addressLine1', 'addressLine2', 'barangay', 'district', 'Name', 'email', 'mobileNumber'];
         return headers.indexOf(key) + 1;
     }
 
@@ -132,11 +135,12 @@
             const reportsData = reportsSnapshot.val();
 
             if (reportsData) {
-                const reportsArray = Object.values(reportsData);
+                const reportsArray = Object.entries(reportsData).map(([ticketNumber, report]) => ({ ticketNumber, ...report }));
                 const tableHTML = `
                     <table border="1">
                         <thead>
                             <tr>
+                                <th>Ticket #</th>
                                 <th>GCN</th>
                                 <th>Date</th>
                                 <th>Time</th>
