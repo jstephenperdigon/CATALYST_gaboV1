@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports Table</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        #searchContainer {
+            margin-bottom: 20px;
+        }
+
+        #reportsTable {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="searchContainer">
+        <label for="searchInput">Search: </label>
+        <input type="text" id="searchInput" />
+        <button onclick="searchReports()">Search</button>
+    
+        <label for="sortDropdown">Sort By: </label>
+        <select id="sortDropdown">
+            <option value="ticketNumber">Ticket #</option>
+            <option value="gcn">GCN</option>
+            <option value="Date">Date</option>
+            <option value="timeFormat12">Time (Latest)</option>
+            <option value="oldestTime">Time (Oldest)</option>
+            <option value="Problem">Problem</option>
+            <option value="Description">Description</option>
+            <option value="addressLine1">Address Line 1</option>
+            <option value="addressLine2">Address Line 2</option>
+            <option value="barangay">Barangay</option>
+            <option value="district">District</option>
+            <option value="Name">Name</option>
+            <option value="email">Email</option>
+            <option value="mobileNumber">Mobile Number(+63)</option>
+        </select>
+        <button onclick="sortSearchResults()">Sort</button>
+    </div>
+
+<div id="reportsTable"></div>
+
+<script type="module" src="report.js"> </script>
+
+</body>
+</html>

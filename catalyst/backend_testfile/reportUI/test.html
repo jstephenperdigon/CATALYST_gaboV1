@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time List</title>
+    <style>
+        /* Add some basic styling for better presentation */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Time List</h2>
+
+    <label for="sort">Sort by:</label>
+    <select id="sort">
+        <option value="latest">Time (Latest)</option>
+        <option value="oldest">Time (Oldest)</option>
+    </select>
+
+    <button onclick="sortList()">Sort</button>
+
+    <ul id="timeList">
+        <li>9:00 AM</li>
+        <li>12:00 PM</li>
+        <li>9:00 PM</li>
+        <li>12:00 AM</li>
+    </ul>
+
+    <script>
+        function sortList() {
+            var selectElement = document.getElementById("sort");
+            var selectedValue = selectElement.value;
+            var timeList = document.getElementById("timeList");
+            var items = timeList.getElementsByTagName("li");
+            var itemsArray = Array.from(items);
+
+            if (selectedValue === "latest") {
+                itemsArray.sort(function(a, b) {
+                    return new Date('1970/01/01 ' + b.innerText) - new Date('1970/01/01 ' + a.innerText);
+                });
+            } else if (selectedValue === "oldest") {
+                itemsArray.sort(function(a, b) {
+                    return new Date('1970/01/01 ' + a.innerText) - new Date('1970/01/01 ' + b.innerText);
+                });
+            }
+
+            // Clear existing list
+            timeList.innerHTML = "";
+
+            // Append sorted items to the list
+            itemsArray.forEach(function(item) {
+                timeList.appendChild(item);
+            });
+        }
+    </script>
+
+</body>
+</html>

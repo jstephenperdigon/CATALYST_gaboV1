@@ -236,6 +236,9 @@ function logout() {
   window.location.href = "../signup_signin/sign-in.html";
 }
 
+// Attach click event listener to the signOut button
+document.getElementById("signOut").addEventListener("click", logout);
+
 // Add a click event listener to the "Log Out" button
 const logOutBtn = document.getElementById("logOutBtn");
 if (logOutBtn) {
@@ -467,6 +470,15 @@ function submitForm() {
           set(child(reportsRef, ticketNumber), reportData)
             .then(() => {
               console.log("Report submitted successfully.");
+
+              // Clear the values of textboxes after submitting the report
+                issueTypeElement.value = "";
+                otherIssueDescriptionElement.value = "";
+                reportDescriptionElement.value = "";
+              // Hide the description text areas
+                document.getElementById("otherIssueFields").style.display = "none";
+                document.getElementById("reportDescription").style.display = "none";
+ 
             })
             .catch((error) => {
               console.error("Error submitting report:", error);
