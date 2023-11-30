@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP</title>
+    <link href="../src/bootstrap.min.css" rel="stylesheet" />
+    <link href="../src/mdb.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../src/style.css" />
+    <style>
+      .inputs input {
+        width: 100%; /* Set input width to 100% */
+        max-width: 40px; /* Set maximum width */
+        height: 40px;
+      }
+      .form-control:focus {
+        box-shadow: none;
+        border: 2px solid #11531e;
+      }
+      .invalid-input {
+        border: 1px solid red !important; /* !important is used to override any existing styles */
+      }
+      .otp-container{
+        padding-top: 90px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav
+      class="navbar navbar-expand-lg shadow-none fixed-top"
+      style="height: 86px; background-color: #f5f5f5"
+    >
+      <div class="container">
+        <a class="navbar-brand gabo-secondary" href="../index.html">
+          <p class="fw-bold fs-3 mt-2">GABO</p>
+        </a>
+      </div>
+    </nav>
+
+    <!-- NAVBAR -->
+
+    <div
+      class="container mt-5 d-flex justify-content-center align-items-center otp-container"
+    >
+      <div class="col-md-6">
+        <div class="card shadow-none p-2 text-center" style="background-color: #f5f5f5">
+          <h6>
+            Please enter the one-time password <br />to verify your account
+          </h6>
+          <div>
+            <span>A code has been sent to</span> <small>user email</small>
+          </div>
+          <div
+            id="otp"
+            class="inputs d-flex flex-row justify-content-center mt-2"
+          >
+            <div class="input-group">
+              <input
+                class="m-2 text-center form-control rounded"
+                type="text"
+                id="first"
+                maxlength="1"
+              required/>
+            </div>
+            <div class="input-group">
+              <input
+                class="m-2 text-center form-control rounded"
+                type="text"
+                id="second"
+                maxlength="1"
+              required/>
+            </div>
+            <div class="input-group">
+              <input
+                class="m-2 text-center form-control rounded"
+                type="text"
+                id="third"
+                maxlength="1"
+              required/>
+            </div>
+            <div class="input-group">
+              <input
+                class="m-2 text-center form-control rounded"
+                type="text"
+                id="fourth"
+                maxlength="1"
+              required/>
+            </div>
+            <div class="input-group">
+              <input
+                class="m-2 text-center form-control rounded"
+                type="text"
+                id="fifth"
+                maxlength="1"
+              required/>
+            </div>
+            <div class="input-group">
+              <input
+                class="m-2 text-center form-control rounded"
+                type="text"
+                id="sixth"
+                maxlength="1"
+              required/>
+            </div>
+          </div>
+          <div class="mt-4">
+            <button
+              class="btn btn-primary px-4 shadow-none"
+              onclick="validateOTP()"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+        <div class="card shadow-none mt-5" style="background-color: #f5f5f5">
+          <div class="content d-flex justify-content-center align-items-center">
+            <span>Didn't get the code</span>
+            <a href="#" class="text-decoration-none ms-3">Resend(1/3)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../src/jquery.min.js"></script>
+    <script src="../src/popper.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/mdb.min.js"></script>
+    <script>
+      function validateOTP() {
+        // Get references to each input field
+        var inputs = [
+          document.getElementById("first"),
+          document.getElementById("second"),
+          document.getElementById("third"),
+          document.getElementById("fourth"),
+          document.getElementById("fifth"),
+          document.getElementById("sixth"),
+        ];
+
+        var otp = "";
+
+        // Concatenate the input values
+        otp += inputs[0].value;
+        otp += inputs[1].value;
+        otp += inputs[2].value;
+        otp += inputs[3].value;
+        otp += inputs[4].value;
+        otp += inputs[5].value;
+
+        // Remove the 'invalid-input' class from all input fields
+        inputs.forEach(function (input) {
+          input.classList.remove("invalid-input");
+        });
+
+        // Replace the condition with your actual validation logic
+        if (otp === "123456") {
+          alert("OTP is valid!");
+          // You can submit the form or perform any other action here
+        } else {
+          alert("Invalid OTP. Please try again.");
+
+          // Add the 'invalid-input' class to invalid or empty input fields
+          for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value === "" || otp !== "123456") {
+              inputs[i].classList.add("invalid-input");
+            }
+          }
+
+          // You can clear the input fields or take any other corrective action here
+        }
+      }
+      document.addEventListener("DOMContentLoaded", function (event) {
+        function OTPInput() {
+          const inputs = document.querySelectorAll("#otp > *[id]");
+          for (let i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener("keydown", function (event) {
+              if (event.key === "Backspace") {
+                inputs[i].value = "";
+                if (i !== 0) inputs[i - 1].focus();
+              } else {
+                if (i === inputs.length - 1 && inputs[i].value !== "") {
+                  return true;
+                } else if (event.keyCode > 47 && event.keyCode < 58) {
+                  inputs[i].value = event.key;
+                  if (i !== inputs.length - 1) inputs[i + 1].focus();
+                  event.preventDefault();
+                } else if (event.keyCode > 64 && event.keyCode < 91) {
+                  inputs[i].value = String.fromCharCode(event.keyCode);
+                  if (i !== inputs.length - 1) inputs[i + 1].focus();
+                  event.preventDefault();
+                }
+              }
+            });
+          }
+        }
+        OTPInput();
+      });
+    </script>
+  </body>
+</html>
