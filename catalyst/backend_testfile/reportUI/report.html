@@ -20,10 +20,21 @@
             text-align: center;
             margin-top: 20px;
         }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
-
     <div id="searchContainer">
         <label for="searchInput">Search: </label>
         <input type="text" id="searchInput" />
@@ -47,9 +58,33 @@
         </select>
     </div>
 
-    <div id="reportsTable"></div>
+    <button onclick="resetList()">Reset List</button>
+
+    <div id="reportsTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>GCN</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Problem</th>
+                    <th>Description</th>
+                    <th>Address Line 1</th>
+                    <th>Address Line 2</th>
+                    <th>Barangay</th>
+                    <th>District</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile Number(+63)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Add rows dynamically using JavaScript -->
+            </tbody>
+        </table>
+    </div>
 
     <script type="module" src="report.js"> </script>
-
 </body>
 </html>

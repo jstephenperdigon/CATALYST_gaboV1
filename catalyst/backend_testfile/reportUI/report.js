@@ -113,6 +113,19 @@ function updateTable() {
     });
 }
 
+
+// Function to reset the list
+window.resetList = function() {
+    // Clear the search input
+    document.getElementById('searchInput').value = '';
+
+    // Reset the sort dropdown to the default option
+    document.getElementById('sortDropdown').selectedIndex = 0;
+
+    // Retrieve the initial data and update the table
+    updateTable();
+};
+
 // Display the initial reports table when the page loads
 window.onload = function() {
     updateTable();
