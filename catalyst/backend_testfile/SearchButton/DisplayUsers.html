@@ -1,30 +1,83 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GABO</title>
+    <title>Reports Table</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        #searchContainer {
+            margin-bottom: 20px;
+        }
+
+        #reportsTable {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
 </head>
-
 <body>
-    <!-- Example HTML structure for search, filter, and user display -->
-    <input id="searchBar" type="text" placeholder="Search a record">
-    <select id="filter">
-        <option value="name">Name</option>
-        <option value="barangay">Barangay</option>
-        <option value="district">District</option>
-        <option value="gcn">GCN</option>
-    </select>
-
-    <!-- Add a Search Button -->
-    <button id="searchBtn" type="button">Search</button>
-
-    <!-- Display User Data -->
-    <div id="userDataDisplay"></div>
-
-    <!-- Make sure the script containing the searchUsers function is loaded first -->
-    <script type="module" src="DisplayUsers.js"></script>
+    <div id="searchContainer">
+        <label for="searchInput">Search: </label>
+        <input type="text" id="searchInput" />
+        <button onclick="searchReports()">Search</button>
     
+        <label for="sortDropdown">Sort By: </label>
+        <select id="sortDropdown">
+            <option value="ticketNumber">Ticket #</option>
+            <option value="Name">Name</option>
+            <option value="email">Email</option>
+            <option value="mobileNumber">Mobile Number(+63)</option>
+            <option value="barangay">Barangay</option>
+            <option value="district">District</option>
+            <option value="gcn">GCN</option>
+            <option value="addressLine1">Address Line 1</option>
+            <option value="addressLine2">Address Line 2</option>
+        </select>
+    </div>
+
+    <button onclick="resetList()">Reset List</button>
+
+    <div id="reportsTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile Number(+63)</th>
+                    <th>Barangay</th>
+                    <th>District</th>
+                    <th>GCN</th>
+                    <th>Address Line 1</th>
+                    <th>Address Line 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Add rows dynamically using JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    
+    <script type="module" src="DisplayUsersTest1.js"> </script>
 </body>
 </html>

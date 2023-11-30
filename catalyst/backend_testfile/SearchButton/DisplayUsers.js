@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,90 +17,109 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let users; // Declare users at a higher scope
-
-// Function to display all users
-function displayAllUsers() {
-    const usersRef = ref(db, "Accounts/Users");
-
-    get(usersRef)
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                users = snapshot.val(); // Assign value to the higher-scoped variable
-
-                // Display the users (customize based on your needs)
-                const userDataDisplay = document.getElementById("userDataDisplay");
-                userDataDisplay.innerHTML = "<h2>Users</h2>";
-
-                Object.keys(users).forEach((userId) => {
-                    const user = users[userId];
-                    userDataDisplay.innerHTML += `
-                        <div>
-                            <strong>Name:</strong> ${user.firstName} ${user.lastName}<br>
-                            <strong>Barangay:</strong> ${user.barangay}<br>
-                            <strong>District:</strong> ${user.district}<br>
-                            <strong>GCN:</strong> ${user.gcn}<br>
-                            <br>
-                        </div>
-                    `;
-                });
-            } else {
-                alert("No users found");
-            }
-        })
-        .catch((error) => {
-            console.error("Error displaying users: " + error);
-        });
+// Function to generate the HTML for a single report
+function generateReportHTML(report) {
+    return `
+        <tr>
+            <td>${report.ticketNumber}</td>
+            <td>${report.firstName} ${report.lastName}</td>
+            <td>${report.email}</td>
+            <td>${report.mobileNumber}</td>
+            <td>${report.barangay}</td>
+            <td>${report.district}</td>
+            <td>${report.gcn}</td>
+            <td>${report.addressLine1}</td>
+            <td>${report.addressLine2}</td>
+        </tr>
+    `;
 }
 
-function searchData() {
-    const searchBar = document.getElementById("searchBar");
-    const filterSelect = document.getElementById("filter");
-    const filterValue = filterSelect.value.toLowerCase();
-    const searchText = searchBar.value.toLowerCase();
-
-    // Filter users based on the selected filter and search text
-    const filteredUsers = Object.keys(users).filter((userId) => {
-        const user = users[userId];
-        const fieldValue = user[filterValue];
-
-        // Check if the property exists and if its value includes the search text
-        return fieldValue !== undefined && fieldValue.toLowerCase().includes(searchText);
+// Function to filter reports based on search input and selected sorting column
+function filterReports(searchInput, sortKey) {
+    const reportsArray = document.querySelectorAll('#reportsTable tbody tr');
+    reportsArray.forEach(report => {
+        const columnValue = report.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent.toLowerCase();
+        const displayStyle = columnValue.includes(searchInput) ? '' : 'none';
+        report.style.display = displayStyle;
     });
-
-    // Display the filtered users
-    const userDataDisplay = document.getElementById("userDataDisplay");
-    userDataDisplay.innerHTML = "<h2>Search Results</h2>";
-
-    filteredUsers.forEach((userId) => {
-        const user = users[userId];
-        userDataDisplay.innerHTML += `
-            <div>
-                <strong>Name:</strong> ${user.firstName} ${user.lastName}<br>
-                <strong>Barangay:</strong> ${user.barangay}<br>
-                <strong>District:</strong> ${user.district}<br>
-                <strong>GCN:</strong> ${user.gcn}<br>
-                <br>
-            </div>
-        `;
-    });
-
-    if (filteredUsers.length === 0) {
-        userDataDisplay.innerHTML += "<p>No matching records found.</p>";
-    }
 }
 
-// Add event listener to the Search button
-const searchBtn = document.getElementById("searchBtn");
-searchBtn.addEventListener("click", searchData);
+// Modify the searchReports function to use the filterReports function
+window.searchReports = function() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const sortKey = document.getElementById('sortDropdown').value;
 
-// Add event listener for Enter key on the search input field
-const searchBar = document.getElementById("searchBar");
-searchBar.addEventListener("keyup", function (event) {
-    if (event.key === "Enter") {
-        searchData();
-    }
-});
+    filterReports(searchInput, sortKey);
+};
 
-// Call the displayAllUsers function when the page loads
-document.addEventListener('DOMContentLoaded', displayAllUsers);
+// Function to get the index of the selected column
+function getIndex(key) {
+    const headers = ['ticketNumber', 'Name', 'email', 'mobileNumber', 'barangay', 'district' , 'gcn', 'addressLine1', 'addressLine2'];
+    return headers.indexOf(key) + 1;
+}
+
+// Function to display the reports table
+function displayReportsTable(reportsArray) {
+    // Sort reports by date and time initially
+    reportsArray.sort((a, b) => {
+        const dateA = new Date(`${a.Date} ${a.timeFormat12}`);
+        const dateB = new Date(`${b.Date} ${b.timeFormat12}`);
+        return dateA - dateB;
+    });
+
+    const reportsTable = document.getElementById('reportsTable');
+    const tableHTML = `
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile Number(+63)</th>
+                    <th>Barangay</th>
+                    <th>District</th>
+                    <th>GCN</th>
+                    <th>Address Line 1</th>
+                    <th>Address Line 2</th>
+                    
+ 
+                </tr>
+            </thead>
+            <tbody>
+                ${reportsArray.map(generateReportHTML).join('')}
+            </tbody>
+        </table>
+    `;
+    reportsTable.innerHTML = tableHTML;
+}
+
+// Function to update the table when data changes
+function updateTable() {
+    const reportsRef = ref(db, 'Accounts/Users');
+    onValue(reportsRef, (snapshot) => {
+        const reportsData = snapshot.val();
+        if (reportsData) {
+            const reportsArray = Object.entries(reportsData).map(([ticketNumber, report]) => ({ ticketNumber, ...report }));
+            displayReportsTable(reportsArray);
+        } else {
+            displayReportsTable([]);
+        }
+    });
+}
+
+// Function to reset the list
+window.resetList = function() {
+    // Clear the search input
+    document.getElementById('searchInput').value = '';
+
+    // Reset the sort dropdown to the default option
+    document.getElementById('sortDropdown').selectedIndex = 0;
+
+    // Retrieve the initial data and update the table
+    updateTable();
+};
+
+// Display the initial reports table when the page loads
+window.onload = function() {
+    updateTable();
+};
