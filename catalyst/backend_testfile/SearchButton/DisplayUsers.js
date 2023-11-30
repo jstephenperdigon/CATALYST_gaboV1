@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,80 +17,109 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Function to display all users
-function displayAllUsers() {
-    const usersRef = ref(db, "Accounts/Users");
-
-    get(usersRef)
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                const users = snapshot.val();
-
-                // Display the users (customize based on your needs)
-                const userDataDisplay = document.getElementById("userDataDisplay");
-                userDataDisplay.innerHTML = "<h2>Users<h2>";
-
-                Object.keys(users).forEach((userId) => {
-                    const user = users[userId];
-                    userDataDisplay.innerHTML += `
-                        <div>
-                            <strong>Name:</strong> ${user.firstName} ${user.lastName}
-                            <strong>Barangay:</strong> ${user.barangay}
-                            <strong>District:</strong> ${user.district}
-                            <strong>GCN:</strong> ${user.gcn}
-                            <br>
-                        </div>
-                    `;
-                });
-
-                // Add event listeners to the "Select User" buttons
-                document.querySelectorAll(".selectUser").forEach((button) => {
-                    button.addEventListener('click', function () {
-                        const userId = button.dataset.userId;
-                        const gcn = button.dataset.gcn;
-
-                        // Set the GCN value in the hidden input
-                        document.getElementById("controlNumber").value = gcn;
-
-                        // Populate other user information
-                        populatePersonalInformation(userId);
-                    });
-                });
-            } else {
-                alert("No users found");
-            }
-        })
-        .catch((error) => {
-            console.error("Error displaying users: " + error);
-        });
+// Function to generate the HTML for a single report
+function generateReportHTML(report) {
+    return `
+        <tr>
+            <td>${report.ticketNumber}</td>
+            <td>${report.firstName} ${report.lastName}</td>
+            <td>${report.email}</td>
+            <td>${report.mobileNumber}</td>
+            <td>${report.barangay}</td>
+            <td>${report.district}</td>
+            <td>${report.gcn}</td>
+            <td>${report.addressLine1}</td>
+            <td>${report.addressLine2}</td>
+        </tr>
+    `;
 }
 
-// Function to filter users based on search input and filter dropdown
-function applyFilter() {
-    const searchInput = document.getElementById("search").value.toLowerCase();
-    const filterSelect = document.getElementById("filter");
-    const filterOption = filterSelect.options[filterSelect.selectedIndex].value.toLowerCase();
-
-    switch (filterOption) {
-        case "name":
-            filterUsersByName();
-            break;
-        case "barangay":
-            filterUsersByBarangay();
-            break;
-        case "district":
-            filterUsersByDistrict();
-            break;
-        case "gcn":
-            filterUsersByGCN();
-            break;
-        default:
-            alert("Invalid filter option");
-            break;
-    }
+// Function to filter reports based on search input and selected sorting column
+function filterReports(searchInput, sortKey) {
+    const reportsArray = document.querySelectorAll('#reportsTable tbody tr');
+    reportsArray.forEach(report => {
+        const columnValue = report.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent.toLowerCase();
+        const displayStyle = columnValue.includes(searchInput) ? '' : 'none';
+        report.style.display = displayStyle;
+    });
 }
-// Example usage: Call the applyFilter function when the filter is changed
-document.getElementById("filter").addEventListener('change', applyFilter);
 
-// Call the displayAllUsers function when the page loads
-document.addEventListener('DOMContentLoaded', displayAllUsers);
+// Modify the searchReports function to use the filterReports function
+window.searchReports = function() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const sortKey = document.getElementById('sortDropdown').value;
+
+    filterReports(searchInput, sortKey);
+};
+
+// Function to get the index of the selected column
+function getIndex(key) {
+    const headers = ['ticketNumber', 'Name', 'email', 'mobileNumber', 'barangay', 'district' , 'gcn', 'addressLine1', 'addressLine2'];
+    return headers.indexOf(key) + 1;
+}
+
+// Function to display the reports table
+function displayReportsTable(reportsArray) {
+    // Sort reports by date and time initially
+    reportsArray.sort((a, b) => {
+        const dateA = new Date(`${a.Date} ${a.timeFormat12}`);
+        const dateB = new Date(`${b.Date} ${b.timeFormat12}`);
+        return dateA - dateB;
+    });
+
+    const reportsTable = document.getElementById('reportsTable');
+    const tableHTML = `
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile Number(+63)</th>
+                    <th>Barangay</th>
+                    <th>District</th>
+                    <th>GCN</th>
+                    <th>Address Line 1</th>
+                    <th>Address Line 2</th>
+                    
+ 
+                </tr>
+            </thead>
+            <tbody>
+                ${reportsArray.map(generateReportHTML).join('')}
+            </tbody>
+        </table>
+    `;
+    reportsTable.innerHTML = tableHTML;
+}
+
+// Function to update the table when data changes
+function updateTable() {
+    const reportsRef = ref(db, 'Accounts/Users');
+    onValue(reportsRef, (snapshot) => {
+        const reportsData = snapshot.val();
+        if (reportsData) {
+            const reportsArray = Object.entries(reportsData).map(([ticketNumber, report]) => ({ ticketNumber, ...report }));
+            displayReportsTable(reportsArray);
+        } else {
+            displayReportsTable([]);
+        }
+    });
+}
+
+// Function to reset the list
+window.resetList = function() {
+    // Clear the search input
+    document.getElementById('searchInput').value = '';
+
+    // Reset the sort dropdown to the default option
+    document.getElementById('sortDropdown').selectedIndex = 0;
+
+    // Retrieve the initial data and update the table
+    updateTable();
+};
+
+// Display the initial reports table when the page loads
+window.onload = function() {
+    updateTable();
+};
