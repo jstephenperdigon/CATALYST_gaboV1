@@ -38,53 +38,22 @@ function generateReportHTML(report) {
     `;
 }
 
-// Function to search reports based on input value
-window.searchReports = function () {
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+// Function to filter reports based on search input and selected sorting column
+function filterReports(searchInput, sortKey) {
     const reportsArray = document.querySelectorAll('#reportsTable tbody tr');
-
     reportsArray.forEach(report => {
-        const reportText = report.textContent.toLowerCase();
-        report.style.display = reportText.includes(searchInput) ? '' : 'none';
+        const columnValue = report.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent.toLowerCase();
+        const displayStyle = columnValue.includes(searchInput) ? '' : 'none';
+        report.style.display = displayStyle;
     });
-};
+}
 
-// Function to sort search results based on selected option, including time sorting
-window.sortSearchResults = function () {
+// Modify the searchReports function to use the filterReports function
+window.searchReports = function() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
     const sortKey = document.getElementById('sortDropdown').value;
-    const visibleReportsArray = document.querySelectorAll('#reportsTable tbody tr:not([style*="none"])');
 
-    const sortedReports = Array.from(visibleReportsArray).sort((a, b) => {
-        if (sortKey === 'timeFormat12' || sortKey === 'oldestTime' || sortKey === 'latestTime') {
-            const aValueElement = a.querySelector(`td:nth-child(${getIndex('timeFormat12')})`);
-            const bValueElement = b.querySelector(`td:nth-child(${getIndex('timeFormat12')})`);
-
-            // Additional checks to ensure the elements and their textContent are accessible
-            const aValue = aValueElement ? new Date('1970/01/01 ' + aValueElement.textContent) : null;
-            const bValue = bValueElement ? new Date('1970/01/01 ' + bValueElement.textContent) : null;
-
-            if (aValue && bValue) {
-                if (sortKey === 'timeFormat12') {
-                    return bValue - aValue;
-                } else if (sortKey === 'oldestTime') {
-                    return aValue - bValue;
-                } else if (sortKey === 'latestTime') {
-                    return bValue - aValue;
-                }
-            } else {
-                return 0; // Handle the case where the date values are not accessible
-            }
-        } else {
-            const aValue = a.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
-            const bValue = b.querySelector(`td:nth-child(${getIndex(sortKey)})`).textContent;
-
-            return aValue.localeCompare(bValue);
-        }
-    });
-
-    const tbody = document.querySelector('#reportsTable tbody');
-    tbody.innerHTML = '';
-    sortedReports.forEach(report => tbody.appendChild(report));
+    filterReports(searchInput, sortKey);
 };
 
 // Function to get the index of the selected column
@@ -94,63 +63,57 @@ function getIndex(key) {
 }
 
 // Function to display the reports table
-async function displayReportsTable() {
+function displayReportsTable(reportsArray) {
+    // Sort reports by date and time initially
+    reportsArray.sort((a, b) => {
+        const dateA = new Date(`${a.Date} ${a.timeFormat12}`);
+        const dateB = new Date(`${b.Date} ${b.timeFormat12}`);
+        return dateA - dateB;
+    });
+
     const reportsTable = document.getElementById('reportsTable');
-    const reportsRef = ref(db, 'Reports');
-
-    try {
-        const reportsSnapshot = await get(reportsRef);
-        const reportsData = reportsSnapshot.val();
-
-        if (reportsData) {
-            const reportsArray = Object.entries(reportsData).map(([ticketNumber, report]) => ({ ticketNumber, ...report }));
-            const tableHTML = `
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Ticket #</th>
-                            <th>GCN</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Problem</th>
-                            <th>Description</th>
-                            <th>Address Line 1</th>
-                            <th>Address Line 2</th>
-                            <th>Barangay</th>
-                            <th>District</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Mobile Number(+63)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${reportsArray.map(generateReportHTML).join('')}
-                    </tbody>
-                </table>
-            `;
-            reportsTable.innerHTML = tableHTML;
-
-            // Set up an onValue listener for real-time updates
-            onValue(reportsRef, (snapshot) => {
-                const updatedReportsData = snapshot.val();
-
-                if (updatedReportsData) {
-                    const updatedReportsArray = Object.entries(updatedReportsData).map(([ticketNumber, report]) => ({ ticketNumber, ...report }));
-                    const updatedTableHTML = updatedReportsArray.map(generateReportHTML).join('');
-                    reportsTable.querySelector('tbody').innerHTML = updatedTableHTML;
-                } else {
-                    reportsTable.innerHTML = 'No reports available.';
-                }
-            });
-        } else {
-            reportsTable.innerHTML = 'No reports available.';
-        }
-    } catch (error) {
-        console.error('Error fetching reports:', error);
-    }
+    const tableHTML = `
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>GCN</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Problem</th>
+                    <th>Description</th>
+                    <th>Address Line 1</th>
+                    <th>Address Line 2</th>
+                    <th>Barangay</th>
+                    <th>District</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile Number(+63)</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${reportsArray.map(generateReportHTML).join('')}
+            </tbody>
+        </table>
+    `;
+    reportsTable.innerHTML = tableHTML;
 }
 
-// Display the reports table when the page loads
-window.onload = function () {
-    displayReportsTable();
+// Function to update the table when data changes
+function updateTable() {
+    const reportsRef = ref(db, 'Reports');
+    onValue(reportsRef, (snapshot) => {
+        const reportsData = snapshot.val();
+        if (reportsData) {
+            const reportsArray = Object.entries(reportsData).map(([ticketNumber, report]) => ({ ticketNumber, ...report }));
+            displayReportsTable(reportsArray);
+        } else {
+            displayReportsTable([]);
+        }
+    });
+}
+
+// Display the initial reports table when the page loads
+window.onload = function() {
+    updateTable();
 };
