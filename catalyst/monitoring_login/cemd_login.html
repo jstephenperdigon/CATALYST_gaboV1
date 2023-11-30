@@ -43,12 +43,66 @@
                   src="../img/GaboV1_LOGO.png"
                   alt="GABO Logo"
                   class="logo img-fluid"
-                  style="height: 1.25rem; width: auto"
+                  style="height: 3rem; width: auto"
                 />
               </div>
 
-              <!-- Add your sign-in form or content here -->
-              <div class="card-body"></div>
+              <!-- Login Form -->
+              <div class="card-body text-center">
+                <form class="needs-validation" novalidate>
+                  <div class="form-outline mb-4">
+                    <input type="email" id="typeEmailX" class="form-control" />
+                    <label class="form-label" for="typeEmailX">Email</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input
+                      class="form-control"
+                      type="password"
+                      id="typePasswordX"
+                      required
+                    />
+                    <label class="form-label" for="password-input"
+                      >Password</label
+                    >
+                    <div
+                      class="position-absolute end-0 top-50 translate-middle-y me-2"
+                    >
+                      <i
+                        class="fas fa-eye-slash toggle-password show-password"
+                        toggle="#typePasswordX"
+                        id="show-password"
+                      ></i>
+                    </div>
+                  </div>
+
+                  <!-- Checkbox -->
+                  <div class="form-check d-flex justify-content-center mb-4">
+                    <input
+                      class="form-check-input me-2"
+                      type="checkbox"
+                      id="rememberMe"
+                      name="rememberMe"
+                      required
+                    />
+                    <label class="form-check-label" for="rememberMe">
+                      Remember Me
+                    </label>
+                  </div>
+
+                  <p class="small mb-5 pb-lg-2">
+                    <a class="" href="#!">Forgot password?</a>
+                  </p>
+
+                  <button
+                    class="btn btn-primary shadow-none px-5"
+                    type="submit"
+                    id="loginButton"
+                  >
+                    Sign In
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -58,5 +112,48 @@
     <script type="text/javascript" src="../src/popper.min.js"></script>
     <script type="text/javascript" src="../src/mdb.min.js"></script>
     <script type="text/javascript" src="../src/bootstrap.min.js"></script>
+    <script>
+      // Enable Bootstrap form validation
+      (function () {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll(".needs-validation");
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+
+      document
+        .querySelector(".show-password")
+        .addEventListener("click", function () {
+          const passwordInput = document.querySelector(
+            this.getAttribute("toggle")
+          );
+
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            this.classList.remove("fa-eye-slash");
+            this.classList.add("fa-eye");
+          } else {
+            passwordInput.type = "password";
+            this.classList.remove("fa-eye");
+            this.classList.add("fa-eye-slash");
+          }
+        });
+    </script>
   </body>
 </html>
