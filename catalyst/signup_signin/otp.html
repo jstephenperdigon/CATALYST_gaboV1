@@ -10,14 +10,12 @@
 <body>
     <div>
         <h2>OTP Verification</h2>
-        <p>Enter the OTP sent to your email address:</p>
-        <!-- You can add an input field for OTP entry here -->
-        <!-- For simplicity, I'll just use a placeholder for OTP -->
         <input type="text" placeholder="Enter OTP">
         <button onclick="verifyOTP()">Verify OTP</button>
     </div>
 
     <script>
+        
         // Retrieve email from localStorage
         const email = localStorage.getItem('signupEmail');
 
@@ -28,6 +26,8 @@
             // For simplicity, I'll just log a success message
             console.log('OTP Verified Successfully');
         }
+        src="sign-up-function.js"
     </script>
+    
 </body>
 </html>
