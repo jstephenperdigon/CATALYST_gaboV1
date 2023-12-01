@@ -301,8 +301,71 @@ function updateFillLevel(binId, fillLevel) {
 
     // Update the fill level color based on conditions
     updateFillLevelColor(fillLevelElement, fillLevel);
+
+    // Check if the fill level has reached 80 and display a notification
+    if (fillLevel >= 80) {
+      displayNotification(`${binId} Fill Level Alert`, `${binId} fill level has reached 80%.`);
+    }
   } else {
     console.error(`Element with ID ${binId} not found.`);
+  }
+}
+
+// Function to display a notification in the content div
+function displayNotification(title, message) {
+  const notificationContent = document.querySelector(".card-body.text-center");
+
+  // Update the notification content
+  notificationContent.innerHTML = `<strong>${title}</strong>: ${message}`;
+
+  // Fetch user ID from session
+  const userId = getUserIdFromSession();
+
+  // Check if user ID and GCN exist
+  if (userId && userData && userData.gcn) {
+    // Reference to the 'GarbageBinControlNumber' database for the corresponding GCN
+    const gcnReportsRef = ref(db, `GarbageBinControlNumber/${userData.gcn}/reports`);
+
+    // Create a timestamp for the notification
+    const timestamp = new Date();
+
+    // Format the date as MM-DD-YYYY
+    const formattedDate =
+      (timestamp.getMonth() + 1).toString().padStart(2, "0") +
+      "-" +
+      timestamp.getDate().toString().padStart(2, "0") +
+      "-" +
+      timestamp.getFullYear();
+
+    // Format the time as HH:MM:SS AM/PM (12-hour format)
+    const formattedTime12 = timestamp.toLocaleString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+
+    // Create a unique notification ID based on timestamp and a random four-alphanumeric string
+    const notificationId = `${formattedDate.replace(/-/g, "")}${generateRandomAlphanumeric()}`;
+
+    // Prepare the notification data
+    const notificationData = {
+      title: title,
+      message: message,
+      timestamp: formattedDate + " " + formattedTime12,
+      userId: userId,
+    };
+
+    // Set the notification data in the 'GarbageBinControlNumber' database
+    set(child(gcnReportsRef, notificationId), notificationData)
+      .then(() => {
+        console.log("Notification saved successfully in GCN reports.");
+      })
+      .catch((error) => {
+        console.error("Error saving notification in GCN reports:", error);
+      });
+  } else {
+    console.error("User ID or GCN not available.");
   }
 }
 
@@ -634,6 +697,8 @@ removeDeviceBtn.addEventListener("click", async () => {
     console.error("Error fetching user data:", error);
   }
 });
+
+
 
 // Invoke the function to check and display bins
 checkAndDisplayBins();

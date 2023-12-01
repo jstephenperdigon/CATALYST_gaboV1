@@ -525,7 +525,7 @@
           </div>
           <div class="row mt-5">
             <div class="col">
-              <div class="card shadow-none border-0" >
+              <div class="card shadow-none border-0">
                 <div class="card-body text-center">
                   <p>Report Content History</p>
                 </div>
@@ -567,6 +567,72 @@
       </section>
     </div>
 
+    <div class="content" id="notifications" style="margin-top: -50px">
+      <div class="row justify-content-center mt-5">
+        <div class="fs-4 fw-bold text-center">Notifications</div>
+        <hr class="hr hr-blurry" />
+        <div class="col-12 col-lg-6 col-md-6">
+          <div
+            class="card p-2 border bg-danger bg-opacity-50 border-danger shadow-none mb-2"
+          >
+            <div class="row g-0 align-items-center">
+              <div class="col-auto col-sm-2">
+                <i class="fas fa-check-circle text-success fa-2x"></i>
+              </div>
+              <div class="col col-sm-10">
+                <div class="card-body p-1 text-white">
+                  <h5 class="card-title">Success Notification</h5>
+                  <p class="card-text">
+                    This is a success notification message.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card p-2 border bg-danger bg-opacity-50 border-danger shadow-none mb-2"
+          >
+            <div class="row g-0 align-items-center">
+              <div class="col-auto col-sm-2">
+                <i class="fas fa-check-circle text-success fa-2x"></i>
+              </div>
+              <div class="col col-sm-10">
+                <div class="card-body p-1 text-white">
+                  <h5 class="card-title">Success Notification</h5>
+                  <p class="card-text">
+                    This is a success notification message.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card p-2 border bg-success bg-opacity-50 shadow-none mb-2"
+          >
+            <div class="row g-0 align-items-center d-flex text-center">
+              <div class="col-auto col-md-2">
+                <!-- Adjusted margin for medium-sized screens and larger -->
+                <i class="fas fa-check-circle text-white fa-2x"></i>
+              </div>
+              <div class="col col-md-10">
+                <div
+                  class="card-body p-1 text-white justify-content-center h-100"
+                >
+                  <!-- Added d-flex and flex-column classes -->
+                  <h5 class="card-title">Success Notification</h5>
+                  <p class="card-text">
+                    This is a success notification message.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container-fluid bottom-bar fixed-bottom">
       <nav class="row">
         <div class="col">
@@ -580,9 +646,9 @@
         </div>
         <div class="col">
           <ion-icon
-            name="alert-circle"
+            name="notifications"
             class="icon"
-            href="#report"
+            href="#notifications"
             id="report-btn"
             onclick="change(this)"
           ></ion-icon>
