@@ -17,6 +17,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// emailjs config
+emailjs.init('TN6jayxVlZMzQ3Ljt');
+
+// Function to send OTP via email
+function sendOTP(toEmail, firstName, otp) {
+    const templateParams = {
+        to_email: toEmail,
+        first_name: firstName,
+        otp: otp,
+    };
+
+    return emailjs.send('service_qpkq4ee', 'template_l3cy9we', templateParams)
+        .then(() => {
+            // Return both OTP and email for further processing
+            return { otp: otp, email: toEmail };
+        });
+}
+
 document.getElementById("submit").addEventListener('click', function (e) {
     e.preventDefault();
 
@@ -38,7 +56,7 @@ document.getElementById("submit").addEventListener('click', function (e) {
     const email = document.getElementById('email').value;
     const mobileNumber = document.getElementById('mobile_number').value;
     const password = document.getElementById('password-input').value;
-    const confirmPassword = document.getElementById('passwordConfirmation').value;  // New line to get password confirmation value
+    const confirmPassword = document.getElementById('passwordConfirmation').value;
     const agreeTermsCheckbox = document.getElementById('agreeTerms');
 
     // Check if required fields are not empty and checkbox is checked
@@ -83,16 +101,36 @@ document.getElementById("submit").addEventListener('click', function (e) {
                     password: password
                 };
 
-                // Get a new unique key for the user
-                const newUserRef = push(ref(db, 'Accounts/Users')); // Firebase will generate a unique key
+                // Generate a random 6-digit OTP
+                const generatedOTP = Math.floor(100000 + Math.random() * 900000);
 
-                // Set the user data under the unique key
-                set(newUserRef, userData)
+                // Set the OTP and timestamp in the database
+                const otpData = {
+                    otp: generatedOTP,
+                    timestamp: Date.now() + 1 * 60 * 1000, // 1 minute in milliseconds
+                };
+
+                // Create a new user node with the OTP data
+                const newUserRef = push(ref(db, 'Accounts/Users'));
+                set(newUserRef, { ...userData, ...otpData })
                     .then(() => {
                         // Data added successfully
                         alert("Register Successful");
-                        // Reload the page to prevent duplicate entries
-                        window.location.reload();
+
+                        // Store email and generatedOTP in localStorage
+                        localStorage.setItem('signupEmail', email);
+                        localStorage.setItem('generatedOTP', generatedOTP);
+
+                        // Send the OTP after the delay
+                        setTimeout(() => {
+                            sendOTP(email, firstName, generatedOTP)
+                                .then((response) => {
+                                    console.log('OTP sent successfully:', response);
+                                })
+                                .catch((error) => {
+                                    console.error('Error sending OTP:', error);
+                                });
+                        }, 1 * 60 * 1000); // 1 minute delay
                     })
                     .catch((error) => {
                         // Handle any errors

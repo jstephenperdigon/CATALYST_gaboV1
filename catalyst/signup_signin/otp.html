@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <!-- Add any additional styles or scripts if needed -->
+</head>
+<body>
+    <div>
+        <h2>OTP Verification</h2>
+        <p>Enter the OTP sent to your email address:</p>
+        <!-- You can add an input field for OTP entry here -->
+        <!-- For simplicity, I'll just use a placeholder for OTP -->
+        <input type="text" placeholder="Enter OTP">
+        <button onclick="verifyOTP()">Verify OTP</button>
+    </div>
+
+    <script>
+        // Retrieve email from localStorage
+        const email = localStorage.getItem('signupEmail');
+
+
+        // Function to handle OTP verification
+        function verifyOTP() {
+            // You can implement OTP verification logic here
+            // For simplicity, I'll just log a success message
+            console.log('OTP Verified Successfully');
+        }
+    </script>
+</body>
+</html>
