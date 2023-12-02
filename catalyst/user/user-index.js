@@ -229,11 +229,29 @@ if (userId) {
 
 // Logout function
 function logout() {
-  // Clear the user ID from the session
-  sessionStorage.removeItem("userId");
+  // Retrieve the user ID from the session
+  const userId = sessionStorage.getItem("userId");
 
-  // Redirect to the sign-in page
-  window.location.href = "../signup_signin/sign-in.html";
+  if (userId) {
+    // Clear the user ID from the session
+    sessionStorage.removeItem("userId");
+
+    // Get a reference to the user status field in the database
+    const userStatusRef = ref(db, `Accounts/Users/${userId}/status`);
+
+    // Set the user status to null (remove the "LoggedIn" status)
+    set(userStatusRef, null)
+      .then(() => {
+        // Redirect to the sign-in page after successfully removing the status
+        window.location.href = "../signup_signin/sign-in.html";
+      })
+      .catch((error) => {
+        console.error("Error removing user status:", error);
+      });
+  } else {
+    // If there is no user ID in the session, just redirect to the sign-in page
+    window.location.href = "../signup_signin/sign-in.html";
+  }
 }
 
 // Attach click event listener to the signOut button
@@ -302,7 +320,7 @@ function listenForStatusChanges(gcn) {
         if (initialized) {
           // Check if the status is "off" and it was different from the previous status
           if (status === "off") {
-            displayNotification("Garbage Bin Status Alert", "The device is offline.");
+            generateNotification("Garbage Bin Status Alert", "The device is offline.");
           }
         }
 
@@ -318,8 +336,8 @@ function listenForStatusChanges(gcn) {
   );
 }
 
-// Function to display a notification in the content div
-function displayNotification(title, message) {
+
+function generateNotification(title, message) {
   // Fetch user ID from session
   const userId = getUserIdFromSession();
 
@@ -738,20 +756,22 @@ function displayReportsInNotification(reports) {
 
   if (notificationContent) {
     // Clear previous content
-    notificationContent.innerHTML = "<h5>Latest Reports:</h5>";
+    notificationContent.innerHTML = "<h5>Latest Report:</h5>";
 
     // Check if there are reports
     if (reports) {
-      Object.values(reports).forEach((report) => {
-        // Display each report
-        const reportElement = document.createElement("div");
-        reportElement.innerHTML = `
-          <p>Date: ${report.timestamp}</p>
-          <p>Title: ${report.title}</p>
-          <hr>
-        `;
-        notificationContent.appendChild(reportElement);
-      });
+      // Sort reports based on timestamp in descending order
+      const sortedReports = Object.values(reports).sort((a, b) => b.timestamp - a.timestamp);
+
+      // Display the most recent report
+      const latestReport = sortedReports[0];
+      const reportElement = document.createElement("div");
+      reportElement.innerHTML = `
+        <p>Date: ${latestReport.timestamp}</p>
+        <p>Title: ${latestReport.title}</p>
+        <hr>
+      `;
+      notificationContent.appendChild(reportElement);
     } else {
       // No reports available
       const noReportsElement = document.createElement("p");
