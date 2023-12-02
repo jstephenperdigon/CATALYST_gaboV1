@@ -253,6 +253,7 @@ function displayFillLevels() {
       if (user && user.gcn) {
         // Use the user's control number to construct the path
         const gcnRef = ref(db, `GarbageBinControlNumber/${user.gcn}/FillLevel`);
+        
 
         // Listen for changes in the database
         onValue(
@@ -266,6 +267,7 @@ function displayFillLevels() {
               updateFillLevel("GB2", fillLevels.GB2);
               updateFillLevel("GB3", fillLevels.GB3);
               updateFillLevel("GB4", fillLevels.GB4);
+
             } else {
               console.log("No data available");
             }
@@ -274,6 +276,8 @@ function displayFillLevels() {
             console.error("Error listening for data changes:", error);
           }
         );
+
+        listenForStatusChanges(user.gcn);
       } else {
         console.error("User data or control number not available.");
       }
@@ -283,41 +287,39 @@ function displayFillLevels() {
     });
 }
 
-// Function to update fill level for a specific bin
-function updateFillLevel(binId, fillLevel) {
-  const binElement = document.getElementById(binId);
+// Function to listen for changes in the status and display notification
+function listenForStatusChanges(gcn) {
+  const statusRef = ref(db, `GarbageBinControlNumber/${gcn}/Status`);
+  let initialized = false; // Flag to track whether the listener is initialized
 
-  // Check if the element with the specified ID exists
-  if (binElement) {
-    const fillLevelElement = binElement.closest(".fill-level");
+  onValue(
+    statusRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const status = snapshot.val();
 
-    // Update the fill level style and data-percentage attribute
-    fillLevelElement.style.height = fillLevel + "%";
-    fillLevelElement.setAttribute("data-percentage", fillLevel);
+        // Check if the listener is initialized
+        if (initialized) {
+          // Check if the status is "off" and it was different from the previous status
+          if (status === "off") {
+            displayNotification("Garbage Bin Status Alert", "The device is offline.");
+          }
+        }
 
-    // Update the text content inside the container
-    const containerElement = fillLevelElement.querySelector(".container");
-    containerElement.textContent = `${fillLevel}`;
-
-    // Update the fill level color based on conditions
-    updateFillLevelColor(fillLevelElement, fillLevel);
-
-    // Check if the fill level has reached 80 and display a notification
-    if (fillLevel >= 80) {
-      displayNotification(`${binId} Fill Level Alert`, `${binId} fill level has reached 80%.`);
+        // Update the initialization status
+        initialized = true;
+      } else {
+        console.log("No status data available");
+      }
+    },
+    (error) => {
+      console.error("Error listening for status changes:", error);
     }
-  } else {
-    console.error(`Element with ID ${binId} not found.`);
-  }
+  );
 }
 
 // Function to display a notification in the content div
 function displayNotification(title, message) {
-  const notificationContent = document.querySelector(".card-body.text-center");
-
-  // Update the notification content
-  notificationContent.innerHTML = `<strong>${title}</strong>: ${message}`;
-
   // Fetch user ID from session
   const userId = getUserIdFromSession();
 
@@ -368,6 +370,32 @@ function displayNotification(title, message) {
     console.error("User ID or GCN not available.");
   }
 }
+
+
+
+// Function to update fill level for a specific bin
+function updateFillLevel(binId, fillLevel) {
+  const binElement = document.getElementById(binId);
+
+  // Check if the element with the specified ID exists
+  if (binElement) {
+    const fillLevelElement = binElement.closest(".fill-level");
+
+    // Update the fill level style and data-percentage attribute
+    fillLevelElement.style.height = fillLevel + "%";
+    fillLevelElement.setAttribute("data-percentage", fillLevel);
+
+    // Update the text content inside the container
+    const containerElement = fillLevelElement.querySelector(".container");
+    containerElement.textContent = `${fillLevel}`;
+
+    // Update the fill level color based on conditions
+    updateFillLevelColor(fillLevelElement, fillLevel);
+  } else {
+    console.error(`Element with ID ${binId} not found.`);
+  }
+}
+
 
 // Function to update fill level color based on conditions
 function updateFillLevelColor(fillLevelElement, fillLevel) {
@@ -671,6 +699,9 @@ async function checkAndDisplayBins() {
 
       // Wait for the UI to update before calling displayFillLevels
       await displayFillLevels();
+
+      // Display latest reports
+      await displayLatestReports(user.gcn);
     } else {
       // User does not have a GCN, display "No Device Available"
       document.getElementById("binsRow").style.display = "none";
@@ -681,6 +712,52 @@ async function checkAndDisplayBins() {
     }
   } catch (error) {
     console.error("Error fetching user data:", error);
+  }
+}
+
+// Update the function to include real-time updates for reports
+async function displayLatestReports(gcn) {
+  try {
+    // Reference to the 'GarbageBinControlNumber' database for the specified GCN
+    const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}/reports`);
+
+    // Subscribe to real-time updates
+    onValue(gcnRef, (snapshot) => {
+      const reports = snapshot.val();
+      // Display the reports in the notification content
+      displayReportsInNotification(reports);
+    });
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+  }
+}
+
+// Function to display reports in the notification content
+function displayReportsInNotification(reports) {
+  const notificationContent = document.querySelector(".card-body.text-center");
+
+  if (notificationContent) {
+    // Clear previous content
+    notificationContent.innerHTML = "<h5>Latest Reports:</h5>";
+
+    // Check if there are reports
+    if (reports) {
+      Object.values(reports).forEach((report) => {
+        // Display each report
+        const reportElement = document.createElement("div");
+        reportElement.innerHTML = `
+          <p>Date: ${report.timestamp}</p>
+          <p>Title: ${report.title}</p>
+          <hr>
+        `;
+        notificationContent.appendChild(reportElement);
+      });
+    } else {
+      // No reports available
+      const noReportsElement = document.createElement("p");
+      noReportsElement.textContent = "No recent reports.";
+      notificationContent.appendChild(noReportsElement);
+    }
   }
 }
 
