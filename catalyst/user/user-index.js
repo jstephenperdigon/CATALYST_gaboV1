@@ -364,7 +364,14 @@ function displayFillLevels() {
 // Function to listen for changes in the fill level and display notification
 function listenForFillLevelChangesGB1(gcn) {
   const fillLevelRef = ref(db, `GarbageBinControlNumber/${gcn}/FillLevel/GB1FillLevel`);
-  let initialized = false; // Flag to track whether the listener is initialized
+  let initialized80to89 = false; // Flag to track whether the listener is initialized for 80-89 fill level range
+  let reportGenerated80to89 = false; // Flag to track whether a report has been generated for 80-89 fill level range
+
+  let initialized90to99 = false; // Flag to track whether the listener is initialized for 90-99 fill level range
+  let reportGenerated90to99 = false; // Flag to track whether a report has been generated for 90-99 fill level range
+
+  let initialized100andAbove = false; // Flag to track whether the listener is initialized for fill levels 100 and above
+  let reportGenerated100andAbove = false; // Flag to track whether a report has been generated for fill levels 100 and above
 
   onValue(
     fillLevelRef,
@@ -372,17 +379,46 @@ function listenForFillLevelChangesGB1(gcn) {
       if (snapshot.exists()) {
         const fillLevels = snapshot.val();
 
-        // Check if the listener is initialized
-        if (initialized) {
-          // Check if the fill level is 80 or above and it was different from the previous fill level
-          if (fillLevels.GB1 >= 80) {
+        // Check if the listener is initialized for 80-89 fill level range
+        if (initialized80to89) {
+          // Check if the fill level is 80-89 and a report hasn't been generated for this range
+          if (fillLevels.GB1 >= 80 && fillLevels.GB1 <= 89 && !reportGenerated80to89) {
             generateNotification("Fill Level Alert", `The fill level of GB1 is ${fillLevels.GB1}%.`);
+            reportGenerated80to89 = true; // Set the flag to indicate that a report has been generated for 80-89 range
+          } else if ((fillLevels.GB1 < 80 || fillLevels.GB1 > 89) && fillLevels.GB1 < 100) {
+            // Reset the flag if the fill level goes below 80, above 89, and is less than 100
+            reportGenerated80to89 = false;
           }
-
         }
 
-        // Update the initialization status
-        initialized = true;
+        // Check if the listener is initialized for 90-99 fill level range
+        if (initialized90to99) {
+          // Check if the fill level is 90-99 and a report hasn't been generated for this range
+          if (fillLevels.GB1 >= 90 && fillLevels.GB1 <= 99 && !reportGenerated90to99) {
+            generateNotification("Fill Level Alert", `The fill level of GB1 is ${fillLevels.GB1}%.`);
+            reportGenerated90to99 = true; // Set the flag to indicate that a report has been generated for 90-99 range
+          } else if ((fillLevels.GB1 < 90 || fillLevels.GB1 > 99) && fillLevels.GB1 < 100) {
+            // Reset the flag if the fill level goes below 90, above 99, and is less than 100
+            reportGenerated90to99 = false;
+          }
+        }
+
+        // Check if the listener is initialized for fill levels 100 and above
+        if (initialized100andAbove) {
+          // Check if the fill level is 100 or above and a report hasn't been generated for this range
+          if (fillLevels.GB1 >= 100 && !reportGenerated100andAbove) {
+            generateNotification("Fill Level Alert", `The fill level of GB1 is ${fillLevels.GB1}%. Please pull out the garbage bag!`);
+            reportGenerated100andAbove = true; // Set the flag to indicate that a report has been generated for fill levels 100 and above
+          } else if (fillLevels.GB1 < 100) {
+            // Reset the flag if the fill level goes below 100
+            reportGenerated100andAbove = false;
+          }
+        }
+
+        // Update the initialization status for all fill level ranges
+        initialized80to89 = true;
+        initialized90to99 = true;
+        initialized100andAbove = true;
       } else {
         console.log("No fill level data available");
       }
@@ -393,10 +429,18 @@ function listenForFillLevelChangesGB1(gcn) {
   );
 }
 
+
 // Function to listen for changes in the fill level and display notification
 function listenForFillLevelChangesGB2(gcn) {
   const fillLevelRef = ref(db, `GarbageBinControlNumber/${gcn}/FillLevel/GB2FillLevel`);
-  let initialized = false; // Flag to track whether the listener is initialized
+  let initialized80to89 = false; // Flag to track whether the listener is initialized for 80-89 fill level range
+  let reportGenerated80to89 = false; // Flag to track whether a report has been generated for 80-89 fill level range
+
+  let initialized90to99 = false; // Flag to track whether the listener is initialized for 90-99 fill level range
+  let reportGenerated90to99 = false; // Flag to track whether a report has been generated for 90-99 fill level range
+
+  let initialized100andAbove = false; // Flag to track whether the listener is initialized for fill levels 100 and above
+  let reportGenerated100andAbove = false; // Flag to track whether a report has been generated for fill levels 100 and above
 
   onValue(
     fillLevelRef,
@@ -404,16 +448,46 @@ function listenForFillLevelChangesGB2(gcn) {
       if (snapshot.exists()) {
         const fillLevels = snapshot.val();
 
-        // Check if the listener is initialized
-        if (initialized) {
-          // Check if the fill level is 80 or above and it was different from the previous fill level
-          if (fillLevels.GB2 >= 80) {
+        // Check if the listener is initialized for 80-89 fill level range
+        if (initialized80to89) {
+          // Check if the fill level is 80-89 and a report hasn't been generated for this range
+          if (fillLevels.GB2 >= 80 && fillLevels.GB2 <= 89 && !reportGenerated80to89) {
             generateNotification("Fill Level Alert", `The fill level of GB2 is ${fillLevels.GB2}%.`);
+            reportGenerated80to89 = true; // Set the flag to indicate that a report has been generated for 80-89 range
+          } else if ((fillLevels.GB2 < 80 || fillLevels.GB2 > 89) && fillLevels.GB2 < 100) {
+            // Reset the flag if the fill level goes below 80, above 89, and is less than 100
+            reportGenerated80to89 = false;
           }
         }
 
-        // Update the initialization status
-        initialized = true;
+        // Check if the listener is initialized for 90-99 fill level range
+        if (initialized90to99) {
+          // Check if the fill level is 90-99 and a report hasn't been generated for this range
+          if (fillLevels.GB2 >= 90 && fillLevels.GB2 <= 99 && !reportGenerated90to99) {
+            generateNotification("Fill Level Alert", `The fill level of GB2 is ${fillLevels.GB2}%.`);
+            reportGenerated90to99 = true; // Set the flag to indicate that a report has been generated for 90-99 range
+          } else if ((fillLevels.GB2 < 90 || fillLevels.GB2 > 99) && fillLevels.GB2 < 100) {
+            // Reset the flag if the fill level goes below 90, above 99, and is less than 100
+            reportGenerated90to99 = false;
+          }
+        }
+
+        // Check if the listener is initialized for fill levels 100 and above
+        if (initialized100andAbove) {
+          // Check if the fill level is 100 or above and a report hasn't been generated for this range
+          if (fillLevels.GB2 >= 100 && !reportGenerated100andAbove) {
+            generateNotification("Fill Level Alert", `The fill level of GB2 is ${fillLevels.GB2}%. Please pull out the garbage bag!`);
+            reportGenerated100andAbove = true; // Set the flag to indicate that a report has been generated for fill levels 100 and above
+          } else if (fillLevels.GB2 < 100) {
+            // Reset the flag if the fill level goes below 100
+            reportGenerated100andAbove = false;
+          }
+        }
+
+        // Update the initialization status for all fill level ranges
+        initialized80to89 = true;
+        initialized90to99 = true;
+        initialized100andAbove = true;
       } else {
         console.log("No fill level data available");
       }
@@ -427,7 +501,14 @@ function listenForFillLevelChangesGB2(gcn) {
 // Function to listen for changes in the fill level and display notification
 function listenForFillLevelChangesGB3(gcn) {
   const fillLevelRef = ref(db, `GarbageBinControlNumber/${gcn}/FillLevel/GB3FillLevel`);
-  let initialized = false; // Flag to track whether the listener is initialized
+  let initialized80to89 = false; // Flag to track whether the listener is initialized for 80-89 fill level range
+  let reportGenerated80to89 = false; // Flag to track whether a report has been generated for 80-89 fill level range
+
+  let initialized90to99 = false; // Flag to track whether the listener is initialized for 90-99 fill level range
+  let reportGenerated90to99 = false; // Flag to track whether a report has been generated for 90-99 fill level range
+
+  let initialized100andAbove = false; // Flag to track whether the listener is initialized for fill levels 100 and above
+  let reportGenerated100andAbove = false; // Flag to track whether a report has been generated for fill levels 100 and above
 
   onValue(
     fillLevelRef,
@@ -435,16 +516,46 @@ function listenForFillLevelChangesGB3(gcn) {
       if (snapshot.exists()) {
         const fillLevels = snapshot.val();
 
-        // Check if the listener is initialized
-        if (initialized) {
-          // Check if the fill level is 80 or above and it was different from the previous fill level
-          if (fillLevels.GB3 >= 80) {
+        // Check if the listener is initialized for 80-89 fill level range
+        if (initialized80to89) {
+          // Check if the fill level is 80-89 and a report hasn't been generated for this range
+          if (fillLevels.GB3 >= 80 && fillLevels.GB3 <= 89 && !reportGenerated80to89) {
             generateNotification("Fill Level Alert", `The fill level of GB3 is ${fillLevels.GB3}%.`);
+            reportGenerated80to89 = true; // Set the flag to indicate that a report has been generated for 80-89 range
+          } else if ((fillLevels.GB3 < 80 || fillLevels.GB3 > 89) && fillLevels.GB3 < 100) {
+            // Reset the flag if the fill level goes below 80, above 89, and is less than 100
+            reportGenerated80to89 = false;
           }
         }
 
-        // Update the initialization status
-        initialized = true;
+        // Check if the listener is initialized for 90-99 fill level range
+        if (initialized90to99) {
+          // Check if the fill level is 90-99 and a report hasn't been generated for this range
+          if (fillLevels.GB3 >= 90 && fillLevels.GB3 <= 99 && !reportGenerated90to99) {
+            generateNotification("Fill Level Alert", `The fill level of GB3 is ${fillLevels.GB3}%.`);
+            reportGenerated90to99 = true; // Set the flag to indicate that a report has been generated for 90-99 range
+          } else if ((fillLevels.GB3 < 90 || fillLevels.GB3 > 99) && fillLevels.GB3 < 100) {
+            // Reset the flag if the fill level goes below 90, above 99, and is less than 100
+            reportGenerated90to99 = false;
+          }
+        }
+
+        // Check if the listener is initialized for fill levels 100 and above
+        if (initialized100andAbove) {
+          // Check if the fill level is 100 or above and a report hasn't been generated for this range
+          if (fillLevels.GB3 >= 100 && !reportGenerated100andAbove) {
+            generateNotification("Fill Level Alert", `The fill level of GB3 is ${fillLevels.GB3}%. Please pull out the garbage bag!`);
+            reportGenerated100andAbove = true; // Set the flag to indicate that a report has been generated for fill levels 100 and above
+          } else if (fillLevels.GB3 < 100) {
+            // Reset the flag if the fill level goes below 100
+            reportGenerated100andAbove = false;
+          }
+        }
+
+        // Update the initialization status for all fill level ranges
+        initialized80to89 = true;
+        initialized90to99 = true;
+        initialized100andAbove = true;
       } else {
         console.log("No fill level data available");
       }
@@ -458,7 +569,14 @@ function listenForFillLevelChangesGB3(gcn) {
 // Function to listen for changes in the fill level and display notification
 function listenForFillLevelChangesGB4(gcn) {
   const fillLevelRef = ref(db, `GarbageBinControlNumber/${gcn}/FillLevel/GB4FillLevel`);
-  let initialized = false; // Flag to track whether the listener is initialized
+  let initialized80to89 = false; // Flag to track whether the listener is initialized for 80-89 fill level range
+  let reportGenerated80to89 = false; // Flag to track whether a report has been generated for 80-89 fill level range
+
+  let initialized90to99 = false; // Flag to track whether the listener is initialized for 90-99 fill level range
+  let reportGenerated90to99 = false; // Flag to track whether a report has been generated for 90-99 fill level range
+
+  let initialized100andAbove = false; // Flag to track whether the listener is initialized for fill levels 100 and above
+  let reportGenerated100andAbove = false; // Flag to track whether a report has been generated for fill levels 100 and above
 
   onValue(
     fillLevelRef,
@@ -466,16 +584,46 @@ function listenForFillLevelChangesGB4(gcn) {
       if (snapshot.exists()) {
         const fillLevels = snapshot.val();
 
-        // Check if the listener is initialized
-        if (initialized) {
-          // Check if the fill level is 80 or above and it was different from the previous fill level
-          if (fillLevels.GB4 >= 80) {
+        // Check if the listener is initialized for 80-89 fill level range
+        if (initialized80to89) {
+          // Check if the fill level is 80-89 and a report hasn't been generated for this range
+          if (fillLevels.GB4 >= 80 && fillLevels.GB4 <= 89 && !reportGenerated80to89) {
             generateNotification("Fill Level Alert", `The fill level of GB4 is ${fillLevels.GB4}%.`);
+            reportGenerated80to89 = true; // Set the flag to indicate that a report has been generated for 80-89 range
+          } else if ((fillLevels.GB4 < 80 || fillLevels.GB4 > 89) && fillLevels.GB4 < 100) {
+            // Reset the flag if the fill level goes below 80, above 89, and is less than 100
+            reportGenerated80to89 = false;
           }
         }
 
-        // Update the initialization status
-        initialized = true;
+        // Check if the listener is initialized for 90-99 fill level range
+        if (initialized90to99) {
+          // Check if the fill level is 90-99 and a report hasn't been generated for this range
+          if (fillLevels.GB4 >= 90 && fillLevels.GB4 <= 99 && !reportGenerated90to99) {
+            generateNotification("Fill Level Alert", `The fill level of GB4 is ${fillLevels.GB4}%.`);
+            reportGenerated90to99 = true; // Set the flag to indicate that a report has been generated for 90-99 range
+          } else if ((fillLevels.GB4 < 90 || fillLevels.GB4 > 99) && fillLevels.GB4 < 100) {
+            // Reset the flag if the fill level goes below 90, above 99, and is less than 100
+            reportGenerated90to99 = false;
+          }
+        }
+
+        // Check if the listener is initialized for fill levels 100 and above
+        if (initialized100andAbove) {
+          // Check if the fill level is 100 or above and a report hasn't been generated for this range
+          if (fillLevels.GB4 >= 100 && !reportGenerated100andAbove) {
+            generateNotification("Fill Level Alert", `The fill level of GB4 is ${fillLevels.GB4}%. Please pull out the garbage bag!`);
+            reportGenerated100andAbove = true; // Set the flag to indicate that a report has been generated for fill levels 100 and above
+          } else if (fillLevels.GB4 < 100) {
+            // Reset the flag if the fill level goes below 100
+            reportGenerated100andAbove = false;
+          }
+        }
+
+        // Update the initialization status for all fill level ranges
+        initialized80to89 = true;
+        initialized90to99 = true;
+        initialized100andAbove = true;
       } else {
         console.log("No fill level data available");
       }
@@ -485,7 +633,6 @@ function listenForFillLevelChangesGB4(gcn) {
     }
   );
 }
-
 // Function to listen for changes in the status and display notification
 function listenForStatusChanges(gcn) {
   const statusRef = ref(db, `GarbageBinControlNumber/${gcn}/Status`);
@@ -944,28 +1091,28 @@ function displayAllReportsInNotification(reports) {
 
   // Check if there are reports
   if (reports) {
-    // Loop through each report and create HTML elements
-    for (const reportKey in reports) {
-      if (Object.hasOwnProperty.call(reports, reportKey)) {
-        const report = reports[reportKey];
+    // Sort reports by timestamp in descending order
+    const sortedReports = Object.values(reports).sort((a, b) => {
+      return new Date(b.timestamp) - new Date(a.timestamp);
+    });
 
-        // Create a div for each report
-        const reportDiv = document.createElement("div");
-        reportDiv.className = "report";
+    // Loop through each sorted report and create HTML elements
+    for (const report of sortedReports) {
+      // Create a div for each report
+      const reportDiv = document.createElement("div");
+      reportDiv.className = "report";
 
-        // Create HTML content for the report with a static design
-        reportDiv.innerHTML = `
-          <div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 10px; background-color: #f8f8f8; margin-bottom: 20px;">
-            <p style="font-weight: bold; font-size: 18px; margin-bottom: 10px;">${report.title}</p>
-            <p style="font-size: 16px; margin-bottom: 10px;">${report.message}</p>
-            <p style="font-size: 14px; color: #888;">${report.timestamp}</p>
-          </div>
-        `;
+      // Create HTML content for the report with a static design
+      reportDiv.innerHTML = `
+        <div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 10px; background-color: #f8f8f8; margin-bottom: 20px;">
+          <p style="font-weight: bold; font-size: 18px; margin-bottom: 10px;">${report.title}</p>
+          <p style="font-size: 16px; margin-bottom: 10px;">${report.message}</p>
+          <p style="font-size: 14px; color: #888;">${report.timestamp}</p>
+        </div>
+      `;
 
-
-        // Append the report div to the notification content
-        notificationContent.appendChild(reportDiv);
-      }
+      // Append the report div to the notification content
+      notificationContent.appendChild(reportDiv);
     }
   } else {
     // If there are no reports, display a message
