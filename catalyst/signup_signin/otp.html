@@ -13,21 +13,6 @@
         <input type="text" placeholder="Enter OTP">
         <button onclick="verifyOTP()">Verify OTP</button>
     </div>
-
-    <script>
-        
-        // Retrieve email from localStorage
-        const email = localStorage.getItem('signupEmail');
-
-
-        // Function to handle OTP verification
-        function verifyOTP() {
-            // You can implement OTP verification logic here
-            // For simplicity, I'll just log a success message
-            console.log('OTP Verified Successfully');
-        }
-        src="sign-up-function.js"
-    </script>
-    
+    <script type="module" src="otp.js"></script>
 </body>
 </html>
