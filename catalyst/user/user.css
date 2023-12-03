@@ -67,6 +67,13 @@ h1, h2, h3 {
   color: white;
 }
 
+.notification-card{
+	border: none;
+	border-radius: 20px;
+	background-color: #3083ff;
+  color: #ffff  ;
+}
+
 @media (max-width: 768px) {
   .card-index {
     height: 10px;

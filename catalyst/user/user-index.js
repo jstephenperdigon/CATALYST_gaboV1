@@ -503,6 +503,9 @@ function listenForStatusChanges(gcn) {
           if (status === "off") {
             generateNotification("Garbage Bin Status Alert", "The device is offline.");
           }
+          if (status === "on") {
+            generateNotification("Garbage Bin Status Alert", "The device is online.");
+          }
         }
 
         // Update the initialization status
@@ -993,17 +996,20 @@ function displayLatestReportsInNotification(reports) {
         !notificationContent.lastReport ||
         notificationContent.lastReport.timestamp < latestReport.timestamp
       ) {
+        // Clear previous content
+        notificationContent.innerHTML = "";
+
         // Create and append the new report element
         const reportElement = document.createElement("div");
-        reportElement.className = "card shadow-none mb-3";
+        reportElement.className = "notification-card shadow-none p-1";
         
         reportElement.innerHTML = `
-          <div class="card-header">
-            ${latestReport.title}
-          </div>
           <div class="card-body">
-            <p class="card-text">${latestReport.message}</p>
-            <p class="card-text"><small class="text-muted">${new Date(latestReport.timestamp).toLocaleString()}</small></p>
+          <i class="fa fa-trash mr-3" aria-hidden="true"></i>
+          <div class="media-body">
+          <h6 class="mt-2 mb-0">${latestReport.message}</h6>
+          <small class="text">${new Date(latestReport.timestamp).toLocaleString()}</small>
+        </div>
           </div>
         `;
       
@@ -1013,13 +1019,18 @@ function displayLatestReportsInNotification(reports) {
         notificationContent.lastReport = latestReport;
       }
     } else {
-      // No reports available
-      notificationContent.innerHTML = "<h5>Notifications:</h5><p>No recent notification.</p>";
+
+      // Create and append the "No recent notification" message
+      const noNotificationElement = document.createElement("p");
+      noNotificationElement.textContent = "No recent notification.";
+      notificationContent.appendChild(noNotificationElement);
+
       // Reset the lastReport property since there are no reports
       notificationContent.lastReport = null;
     }
   }
 }
+
 
 
 
