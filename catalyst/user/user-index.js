@@ -92,8 +92,6 @@ if (verifyBtn) {
             popup: "swal2-mobile",
           },
         });
-
-        
       } else {
         // Use SweetAlert for error message
         Swal.fire({
@@ -926,19 +924,77 @@ async function displayLatestReports(gcn) {
     onValue(gcnRef, (snapshot) => {
       const reports = snapshot.val();
       // Display the reports in the notification content
-      displayReportsInNotification(reports);
+    displayLatestReportsInNotification(reports);
+    displayAllReportsInNotification(reports);
     });
   } catch (error) {
     console.error("Error fetching reports:", error);
   }
 }
 
-function displayReportsInNotification(reports) {
-  const notificationContent = document.querySelector(".card-body.notification");
+// Function to display reports in the notification content
+function displayAllReportsInNotification(reports) {
+  const notificationContent = document.getElementById("notificationContent");
+
+  // Clear previous content
+  notificationContent.innerHTML = "";
+
+  // Check if there are reports
+  if (reports) {
+    // Loop through each report and create HTML elements
+    for (const reportKey in reports) {
+      if (Object.hasOwnProperty.call(reports, reportKey)) {
+        const report = reports[reportKey];
+
+        // Create a div for each report
+        const reportDiv = document.createElement("div");
+        reportDiv.className = "report";
+
+        // Create HTML content for the report with a static design
+        reportDiv.innerHTML = `
+          <div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 10px; background-color: #f8f8f8; margin-bottom: 20px;">
+            <p style="font-weight: bold; font-size: 18px; margin-bottom: 10px;">${report.title}</p>
+            <p style="font-size: 16px; margin-bottom: 10px;">${report.message}</p>
+            <p style="font-size: 14px; color: #888;">${report.timestamp}</p>
+          </div>
+        `;
+
+
+        // Append the report div to the notification content
+        notificationContent.appendChild(reportDiv);
+      }
+    }
+  } else {
+    // If there are no reports, display a message
+    notificationContent.innerHTML = "<p>No reports available</p>";
+  }
+}
+
+
+function displayLatestReportsInNotification(reports) {
+  const notificationContent = document.querySelector(".card-body.text-center");
 
   if (notificationContent) {
-    // Clear previous content
-    notificationContent.innerHTML = "<h5>Latest Reports:</h5>";
+    // Check if there are reports
+    if (reports && Object.keys(reports).length > 0) {
+      // Convert timestamps to numbers for proper sorting
+      const reportsArray = Object.values(reports).map(report => {
+        return { ...report, timestamp: new Date(report.timestamp).getTime() };
+      });
+
+      // Sort reports based on timestamp in descending order
+      const sortedReports = reportsArray.sort((a, b) => b.timestamp - a.timestamp);
+
+      // Display the most recent report
+      const latestReport = sortedReports[0];
+
+      // Check if the latest report is different from the currently displayed one
+      if (
+        !notificationContent.lastReport ||
+        notificationContent.lastReport.timestamp < latestReport.timestamp
+      ) {
+        // Clear previous content
+        notificationContent.innerHTML = "<h5>Notifications:</h5>";
 
         // Create and append the new report element
         const reportElement = document.createElement("div");
@@ -955,9 +1011,9 @@ function displayReportsInNotification(reports) {
       }
     } else {
       // No reports available
-      const noReportsElement = document.createElement("p");
-      noReportsElement.textContent = "No recent reports.";
-      notificationContent.appendChild(noReportsElement);
+      notificationContent.innerHTML = "<h5>Notifications:</h5><p>No recent reports.</p>";
+      // Reset the lastReport property since there are no reports
+      notificationContent.lastReport = null;
     }
   }
 }
