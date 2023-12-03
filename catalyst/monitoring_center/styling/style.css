@@ -1,4 +1,25 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
+/* Montserrat Font Face */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../src/fonts/Montserrat-Regular.ttf') format('truetype'); /* Adjust the path to your font file */
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../src/fonts/Montserrat-Bold.ttf') format('truetype'); /* Adjust the path to your font file */
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
+
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; /* Bold */
+}
+
+
 :root {
   --header-height: 3rem;
   --nav-width: 68px;
@@ -15,9 +36,9 @@
   box-sizing: border-box;
 }
 body {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400; /* Regular */
   position: relative;
-  font-family: var(--body-font);
-  font-size: var(--normal-font-size);
   transition: 0.5s;
   background-color: #ffff;
 }
@@ -29,6 +50,7 @@ a {
 .nav_link.active {
   color: var(--white-color);
 }
+
 
 .nav_link:hover::before,
 .nav_link.active::before {
@@ -69,8 +91,43 @@ a {
   height: 100vh;
   background-color: var(--first-color);
   padding: 0.5rem 1rem 0 0;
-  transition: 0.5s;
+  /* ... your existing styles ... */
+  transition: width 0.75s;
   z-index: var(--z-fixed);
+}
+
+.l-navbar:hover {
+  width: 225px; /* Adjust the width as needed */
+}
+
+.body-pd .content {
+  transition: margin-left 0.75s;
+}
+
+.l-navbar:hover ~ .content {
+  margin-left: 225px; /* Adjust the margin-left to match the width of the sidebar */
+}
+
+@media screen and (max-width: 768px) {
+  .l-navbar:hover,
+  .l-navbar:hover ~ .content {
+    width: var(--nav-width);
+    margin-left: 0;
+  }
+}
+
+
+.bg-gradient-1{
+  background: linear-gradient(
+    45deg,
+    #ff8c00 0%,
+    #ff9e2c 20%,
+    #ffb745 40%,
+    #ffca61 60%,
+    #ffde7d 80%,
+    #ffe899 100%
+  );
+  color: #fff;
 }
 
 .nav {
@@ -80,6 +137,8 @@ a {
   justify-content: space-between;
   overflow: hidden;
 }
+
+
 .nav_logo,
 .nav_link {
   display: grid;
