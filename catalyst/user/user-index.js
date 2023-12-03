@@ -263,38 +263,93 @@ if (logOutBtn) {
   logOutBtn.addEventListener("click", logout);
 }
 
+
+
 // Function to display fill levels for GB1 to GB4 based on the user's control number
 function displayFillLevels() {
   // Retrieve user data
   fetchUserData(userId)
     .then((user) => {
       if (user && user.gcn) {
-        // Use the user's control number to construct the path
-        const gcnRef = ref(db, `GarbageBinControlNumber/${user.gcn}/FillLevel`);
-        
-
-        // Listen for changes in the database
+        const gb1Ref = ref(db, `GarbageBinControlNumber/${user.gcn}/FillLevel/GB1FillLevel`);
+        const gb2Ref = ref(db, `GarbageBinControlNumber/${user.gcn}/FillLevel/GB2FillLevel`);
+        const gb3Ref = ref(db, `GarbageBinControlNumber/${user.gcn}/FillLevel/GB3FillLevel`);
+        const gb4Ref = ref(db, `GarbageBinControlNumber/${user.gcn}/FillLevel/GB4FillLevel`);
         onValue(
-          gcnRef,
+          gb1Ref,
           (snapshot) => {
             if (snapshot.exists()) {
-              const fillLevels = snapshot.val();
+              const fillLevelsGB1 = snapshot.val();
 
-              // Update the fill levels and colors for each bin
-              updateFillLevel("GB1", fillLevels.GB1);
-              updateFillLevel("GB2", fillLevels.GB2);
-              updateFillLevel("GB3", fillLevels.GB3);
-              updateFillLevel("GB4", fillLevels.GB4);
-
+              // Update the fill level and color for GB1
+              updateFillLevel("GB1", fillLevelsGB1.GB1);
             } else {
-              console.log("No data available");
+              console.log("No data available for GB1");
             }
           },
           (error) => {
-            console.error("Error listening for data changes:", error);
+            console.error("Error listening for data changes for GB1:", error);
           }
         );
 
+        // Listen for changes in the database for GB2
+        onValue(
+          gb2Ref,
+          (snapshot) => {
+            if (snapshot.exists()) {
+              const fillLevelsGB2 = snapshot.val();
+
+              // Update the fill level and color for GB2
+              updateFillLevel("GB2", fillLevelsGB2.GB2);
+            } else {
+              console.log("No data available for GB2");
+            }
+          },
+          (error) => {
+            console.error("Error listening for data changes for GB2:", error);
+          }
+        );
+
+        // Listen for changes in the database for GB3
+        onValue(
+          gb3Ref,
+          (snapshot) => {
+            if (snapshot.exists()) {
+              const fillLevelsGB3 = snapshot.val();
+
+              // Update the fill level and color for GB3
+              updateFillLevel("GB3", fillLevelsGB3.GB3);
+            } else {
+              console.log("No data available for GB3");
+            }
+          },
+          (error) => {
+            console.error("Error listening for data changes for GB3:", error);
+          }
+        );
+
+        // Listen for changes in the database for GB4
+        onValue(
+          gb4Ref,
+          (snapshot) => {
+            if (snapshot.exists()) {
+              const fillLevelsGB4 = snapshot.val();
+
+              // Update the fill level and color for GB4
+              updateFillLevel("GB4", fillLevelsGB4.GB4);
+            } else {
+              console.log("No data available for GB4");
+            }
+          },
+          (error) => {
+            console.error("Error listening for data changes for GB4:", error);
+          }
+        );
+
+        listenForFillLevelChangesGB1(user.gcn);
+        listenForFillLevelChangesGB2(user.gcn);
+        listenForFillLevelChangesGB3(user.gcn);
+        listenForFillLevelChangesGB4(user.gcn);
         listenForStatusChanges(user.gcn);
       } else {
         console.error("User data or control number not available.");
@@ -303,6 +358,132 @@ function displayFillLevels() {
     .catch((error) => {
       console.error("Error fetching user data:", error);
     });
+}
+
+
+// Function to listen for changes in the fill level and display notification
+function listenForFillLevelChangesGB1(gcn) {
+  const fillLevelRef = ref(db, `GarbageBinControlNumber/${gcn}/FillLevel/GB1FillLevel`);
+  let initialized = false; // Flag to track whether the listener is initialized
+
+  onValue(
+    fillLevelRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const fillLevels = snapshot.val();
+
+        // Check if the listener is initialized
+        if (initialized) {
+          // Check if the fill level is 80 or above and it was different from the previous fill level
+          if (fillLevels.GB1 >= 80) {
+            generateNotification("Garbage Bin Fill Level Alert", `The fill level of GB1 is ${fillLevels.GB1}%.`);
+          }
+
+        }
+
+        // Update the initialization status
+        initialized = true;
+      } else {
+        console.log("No fill level data available");
+      }
+    },
+    (error) => {
+      console.error("Error listening for fill level changes:", error);
+    }
+  );
+}
+
+// Function to listen for changes in the fill level and display notification
+function listenForFillLevelChangesGB2(gcn) {
+  const fillLevelRef = ref(db, `GarbageBinControlNumber/${gcn}/FillLevel/GB2FillLevel`);
+  let initialized = false; // Flag to track whether the listener is initialized
+
+  onValue(
+    fillLevelRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const fillLevels = snapshot.val();
+
+        // Check if the listener is initialized
+        if (initialized) {
+          // Check if the fill level is 80 or above and it was different from the previous fill level
+          if (fillLevels.GB2 >= 80) {
+            generateNotification("Garbage Bin Fill Level Alert", `The fill level of GB2 is ${fillLevels.GB2}%.`);
+          }
+        }
+
+        // Update the initialization status
+        initialized = true;
+      } else {
+        console.log("No fill level data available");
+      }
+    },
+    (error) => {
+      console.error("Error listening for fill level changes:", error);
+    }
+  );
+}
+
+// Function to listen for changes in the fill level and display notification
+function listenForFillLevelChangesGB3(gcn) {
+  const fillLevelRef = ref(db, `GarbageBinControlNumber/${gcn}/FillLevel/GB3FillLevel`);
+  let initialized = false; // Flag to track whether the listener is initialized
+
+  onValue(
+    fillLevelRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const fillLevels = snapshot.val();
+
+        // Check if the listener is initialized
+        if (initialized) {
+          // Check if the fill level is 80 or above and it was different from the previous fill level
+          if (fillLevels.GB3 >= 80) {
+            generateNotification("Garbage Bin Fill Level Alert", `The fill level of GB3 is ${fillLevels.GB3}%.`);
+          }
+        }
+
+        // Update the initialization status
+        initialized = true;
+      } else {
+        console.log("No fill level data available");
+      }
+    },
+    (error) => {
+      console.error("Error listening for fill level changes:", error);
+    }
+  );
+}
+
+// Function to listen for changes in the fill level and display notification
+function listenForFillLevelChangesGB4(gcn) {
+  const fillLevelRef = ref(db, `GarbageBinControlNumber/${gcn}/FillLevel/GB4FillLevel`);
+  let initialized = false; // Flag to track whether the listener is initialized
+
+  onValue(
+    fillLevelRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const fillLevels = snapshot.val();
+
+        // Check if the listener is initialized
+        if (initialized) {
+          // Check if the fill level is 80 or above and it was different from the previous fill level
+          if (fillLevels.GB4 >= 80) {
+            generateNotification("Garbage Bin Fill Level Alert", `The fill level of GB4 is ${fillLevels.GB4}%.`);
+          }
+        }
+
+        // Update the initialization status
+        initialized = true;
+      } else {
+        console.log("No fill level data available");
+      }
+    },
+    (error) => {
+      console.error("Error listening for fill level changes:", error);
+    }
+  );
 }
 
 // Function to listen for changes in the status and display notification
@@ -750,36 +931,54 @@ async function displayLatestReports(gcn) {
   }
 }
 
-// Function to display reports in the notification content
 function displayReportsInNotification(reports) {
   const notificationContent = document.querySelector(".card-body.text-center");
 
   if (notificationContent) {
-    // Clear previous content
-    notificationContent.innerHTML = "<h5>Latest Report:</h5>";
-
     // Check if there are reports
-    if (reports) {
+    if (reports && Object.keys(reports).length > 0) {
+      // Convert timestamps to numbers for proper sorting
+      const reportsArray = Object.values(reports).map(report => {
+        return { ...report, timestamp: new Date(report.timestamp).getTime() };
+      });
+
       // Sort reports based on timestamp in descending order
-      const sortedReports = Object.values(reports).sort((a, b) => b.timestamp - a.timestamp);
+      const sortedReports = reportsArray.sort((a, b) => b.timestamp - a.timestamp);
 
       // Display the most recent report
       const latestReport = sortedReports[0];
-      const reportElement = document.createElement("div");
-      reportElement.innerHTML = `
-        <p>Date: ${latestReport.timestamp}</p>
-        <p>Title: ${latestReport.title}</p>
-        <hr>
-      `;
-      notificationContent.appendChild(reportElement);
+
+      // Check if the latest report is different from the currently displayed one
+      if (
+        !notificationContent.lastReport ||
+        notificationContent.lastReport.timestamp < latestReport.timestamp
+      ) {
+        // Clear previous content
+        notificationContent.innerHTML = "<h5>Notifications:</h5>";
+
+        // Create and append the new report element
+        const reportElement = document.createElement("div");
+        reportElement.innerHTML = `
+          <p>${latestReport.title}</p>
+          <p>${latestReport.message}</p>
+          <p>${new Date(latestReport.timestamp).toLocaleString()}</p>
+          <hr>
+        `;
+        notificationContent.appendChild(reportElement);
+
+        // Update the lastReport property for future comparisons
+        notificationContent.lastReport = latestReport;
+      }
     } else {
       // No reports available
-      const noReportsElement = document.createElement("p");
-      noReportsElement.textContent = "No recent reports.";
-      notificationContent.appendChild(noReportsElement);
+      notificationContent.innerHTML = "<h5>Notifications:</h5><p>No recent reports.</p>";
+      // Reset the lastReport property since there are no reports
+      notificationContent.lastReport = null;
     }
   }
 }
+
+
 
 // Example: Add a click event listener for the "Remove Device" button
 const removeDeviceBtn = document.getElementById("removeDeviceBtn");
