@@ -32,3 +32,54 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   // Your code to run since DOM is loaded and ready
 });
+
+
+  // JavaScript to handle navigation and content visibility
+  document.addEventListener("DOMContentLoaded", function () {
+    // Set initial content visibility
+    document.getElementById("welcome-content").style.display = "block";
+    document.getElementById("map-content").style.display = "none";
+    document.getElementById("reports-content").style.display = "none";
+    document.getElementById("stats-content").style.display = "none";
+
+
+     // Handle clicks on navigation links
+     document
+     .getElementById("welcome-link")
+     .addEventListener("click", function () {
+       showContent("welcome");
+     });
+
+
+    // Handle clicks on navigation links
+    document
+      .getElementById("map-link")
+      .addEventListener("click", function () {
+        showContent("map");
+      });
+
+    document
+      .getElementById("reports-link")
+      .addEventListener("click", function () {
+        showContent("reports");
+      });
+
+    document
+      .getElementById("stats-link")
+      .addEventListener("click", function () {
+        showContent("stats");
+      });
+
+    // Function to show/hide content based on the selected link
+    function showContent(contentId) {
+      // Hide all content
+      document.getElementById("welcome-content").style.display = "none";
+      document.getElementById("map-content").style.display = "none";
+      document.getElementById("reports-content").style.display = "none";
+      document.getElementById("stats-content").style.display = "none";
+
+      // Show the selected content
+      document.getElementById(contentId + "-content").style.display =
+        "block";
+    }
+  });
