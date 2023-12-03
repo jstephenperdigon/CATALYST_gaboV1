@@ -104,7 +104,7 @@ document.getElementById("submit").addEventListener('click', function (e) {
                 // Generate a random 6-digit OTP
                 const generatedOTP = Math.floor(100000 + Math.random() * 900000);
 
-                // Set the OTP and timestamp in the database
+                // Set the OTP in the database
                 const otpData = {
                     otp: generatedOTP,
                     
@@ -117,13 +117,18 @@ document.getElementById("submit").addEventListener('click', function (e) {
                         // Data added successfully
                         alert("Register Successful");
 
-                        // Redirect to otp.html
-                        window.location.href = `otp.html?email=${encodeURIComponent(email)}`;
+                        // Store email and generatedOTP in localStorage
+                        localStorage.setItem('signupEmail', email);
+                        localStorage.setItem('generatedOTP', generatedOTP);
 
 
                             sendOTP(email, firstName, generatedOTP)
-                                .then(() => {
-                                    console.log('OTP sent successfully:');
+                                .then((response) => {
+                                    console.log('OTP sent successfully:', response);
+                                      // Redirect to otp.html
+                                      localStorage.removeItem('signupEmail');
+                                      localStorage.removeItem('generatedOTP');
+                                      window.location.href = `otp.html?email=${encodeURIComponent(email)}`;
                                 })
                                 .catch((error) => {
                                     console.error('Error sending OTP:', error);
