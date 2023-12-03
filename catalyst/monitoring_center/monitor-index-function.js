@@ -21,42 +21,37 @@ window.initMap = function () {
     disableDefaultUI: true,
   });
 
-  // Fetch all Garbage Bin Control Numbers
+  const infowindow = new google.maps.InfoWindow();
+
   const binsRef = ref(db, 'GarbageBinControlNumber');
   get(binsRef).then((snapshot) => {
     snapshot.forEach((binSnapshot) => {
       const garbageBinControlNumber = binSnapshot.key;
       const binData = binSnapshot.val();
 
-      // Create a custom marker content
-      const contentString = `
-        <div>
-          <h3>${garbageBinControlNumber}</h3>
-          <p>Status: ${binData.Status}</p>
-          <p>Fill Level: ${binData.FillLevel}</p>
-          <p>Address Line 1: ${binData.Users[Object.keys(binData.Users)[0]].addressLine1}</p>
-          <p>Address Line 2: ${binData.Users[Object.keys(binData.Users)[0]].addressLine2}</p>
-        </div>
-      `;
+      // Check if Location object and its properties exist
+      if (binData && binData.Location && binData.Location.Latitude && binData.Location.Longitude) {
+        const marker = new google.maps.Marker({
+          position: {
+            lat: binData.Location.Latitude,
+            lng: binData.Location.Longitude,
+          },
+          map: map,
+          title: garbageBinControlNumber,
+        });
 
-      const infowindow = new google.maps.InfoWindow({
-        content: contentString,
-      });
+        const contentString = `<div>
+                                  <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
+                                  <p>Other information: ${binData.OtherInfo}</p>
+                                </div>`;
 
-      // Add a marker for each Garbage Bin Control Number
-      const marker = new google.maps.Marker({
-        position: {
-          lat: binData.Location.Latitude,
-          lng: binData.Location.Longitude,
-        },
-        map: map,
-        title: garbageBinControlNumber,
-      });
-
-      // Open the info window when the marker is clicked
-      marker.addListener("click", () => {
-        infowindow.open(map, marker);
-      });
+        marker.addListener("click", () => {
+          infowindow.setContent(contentString);
+          infowindow.open(map, marker);
+        });
+      } else {
+        console.error(`Invalid data for Garbage Bin Control Number: ${garbageBinControlNumber}`);
+      }
     });
   });
 };
