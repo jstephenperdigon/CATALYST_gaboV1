@@ -376,7 +376,7 @@ function listenForFillLevelChangesGB1(gcn) {
         if (initialized) {
           // Check if the fill level is 80 or above and it was different from the previous fill level
           if (fillLevels.GB1 >= 80) {
-            generateNotification("Garbage Bin Fill Level Alert", `The fill level of GB1 is ${fillLevels.GB1}%.`);
+            generateNotification("Fill Level Alert", `The fill level of GB1 is ${fillLevels.GB1}%.`);
           }
 
         }
@@ -408,7 +408,7 @@ function listenForFillLevelChangesGB2(gcn) {
         if (initialized) {
           // Check if the fill level is 80 or above and it was different from the previous fill level
           if (fillLevels.GB2 >= 80) {
-            generateNotification("Garbage Bin Fill Level Alert", `The fill level of GB2 is ${fillLevels.GB2}%.`);
+            generateNotification("Fill Level Alert", `The fill level of GB2 is ${fillLevels.GB2}%.`);
           }
         }
 
@@ -439,7 +439,7 @@ function listenForFillLevelChangesGB3(gcn) {
         if (initialized) {
           // Check if the fill level is 80 or above and it was different from the previous fill level
           if (fillLevels.GB3 >= 80) {
-            generateNotification("Garbage Bin Fill Level Alert", `The fill level of GB3 is ${fillLevels.GB3}%.`);
+            generateNotification("Fill Level Alert", `The fill level of GB3 is ${fillLevels.GB3}%.`);
           }
         }
 
@@ -470,7 +470,7 @@ function listenForFillLevelChangesGB4(gcn) {
         if (initialized) {
           // Check if the fill level is 80 or above and it was different from the previous fill level
           if (fillLevels.GB4 >= 80) {
-            generateNotification("Garbage Bin Fill Level Alert", `The fill level of GB4 is ${fillLevels.GB4}%.`);
+            generateNotification("Fill Level Alert", `The fill level of GB4 is ${fillLevels.GB4}%.`);
           }
         }
 
@@ -995,12 +995,18 @@ function displayLatestReportsInNotification(reports) {
       ) {
         // Create and append the new report element
         const reportElement = document.createElement("div");
+        reportElement.className = "card shadow-none mb-3";
+        
         reportElement.innerHTML = `
-          <p>${latestReport.title}</p>
-          <p>${latestReport.message}</p>
-          <p>${new Date(latestReport.timestamp).toLocaleString()}</p>
-          <hr>
+          <div class="card-header">
+            ${latestReport.title}
+          </div>
+          <div class="card-body">
+            <p class="card-text">${latestReport.message}</p>
+            <p class="card-text"><small class="text-muted">${new Date(latestReport.timestamp).toLocaleString()}</small></p>
+          </div>
         `;
+      
         notificationContent.appendChild(reportElement);
 
         // Update the lastReport property for future comparisons
@@ -1008,7 +1014,7 @@ function displayLatestReportsInNotification(reports) {
       }
     } else {
       // No reports available
-      notificationContent.innerHTML = "<h5>Notifications:</h5><p>No recent reports.</p>";
+      notificationContent.innerHTML = "<h5>Notifications:</h5><p>No recent notification.</p>";
       // Reset the lastReport property since there are no reports
       notificationContent.lastReport = null;
     }
