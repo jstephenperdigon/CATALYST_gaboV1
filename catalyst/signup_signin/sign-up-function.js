@@ -35,6 +35,37 @@ function sendOTP(toEmail, firstName, otp) {
         });
 }
 
+function isValidEmail(email) {
+  // Regular expression for a simple email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Check if the email matches the general format
+  if (!emailRegex.test(email)) {
+      return false;
+  }
+
+  // List of valid email domains
+  const validDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'outlook.ph'];
+
+  // Extract the email domain
+  const domain = email.split('@')[1].toLowerCase();
+
+  // Check if the email domain is in the list of valid domains
+  if (!validDomains.includes(domain)) {
+      return false;
+  }
+
+  return true;
+}
+
+function isValidPhilippineNumber(mobileNumber) {
+    // Regular expression to check if the mobile number starts with +63 or 63
+    const philippineNumberRegex = /^(?:\+63|63)?\d{10}$/;
+
+    // Check if the mobile number matches the pattern
+    return philippineNumberRegex.test(mobileNumber);
+}
+
 document.getElementById("submit").addEventListener('click', function (e) {
     e.preventDefault();
 
@@ -70,6 +101,19 @@ document.getElementById("submit").addEventListener('click', function (e) {
         alert("Password and password confirmation do not match.");
         return;
     }
+
+    // Validate email format
+    if (!isValidEmail(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    // Validate Philippine country code
+    if (!isValidPhilippineNumber(mobileNumber)) {
+        alert("Please enter a valid Philippine mobile number.");
+        return;
+    }
+
 
     // Check if the email or mobile number already exists
     get(ref(db, 'Accounts/Users'))
