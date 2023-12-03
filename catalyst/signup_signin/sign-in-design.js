@@ -25,7 +25,8 @@ window.addEventListener("load", function () {
 
     // Toggle the class to hide the label
     document.getElementById("typeEmailX").classList.add("has-value");
-    document.getElementById("typePasswordX").classList.add("has-value");
+    document.getElementById("typeEmailX").classList.add("active");
+    document.getElementById("typePasswordX").classList.add("active");
   }
 });
 

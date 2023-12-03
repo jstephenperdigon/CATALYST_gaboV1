@@ -97,7 +97,7 @@ a {
 }
 
 .l-navbar:hover {
-  width: 225px; /* Adjust the width as needed */
+  width: 250px; /* Adjust the width as needed */
 }
 
 .body-pd .content {
@@ -105,7 +105,7 @@ a {
 }
 
 .l-navbar:hover ~ .content {
-  margin-left: 225px; /* Adjust the margin-left to match the width of the sidebar */
+  margin-left: 250px; /* Adjust the margin-left to match the width of the sidebar */
 }
 
 @media screen and (max-width: 768px) {
