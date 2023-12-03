@@ -92,6 +92,8 @@ if (verifyBtn) {
             popup: "swal2-mobile",
           },
         });
+
+        
       } else {
         // Use SweetAlert for error message
         Swal.fire({
@@ -734,11 +736,9 @@ async function displayLatestReports(gcn) {
 
 // Function to display reports in the notification content
 function displayReportsInNotification(reports) {
-  const notificationContent = document.querySelector(".card-body.text-center");
+  const notificationContent = document.querySelector(".card-body.notification");
 
   if (notificationContent) {
-    // Clear previous content
-    notificationContent.innerHTML = "<h5>Latest Reports:</h5>";
 
     // Check if there are reports
     if (reports) {
@@ -755,7 +755,7 @@ function displayReportsInNotification(reports) {
     } else {
       // No reports available
       const noReportsElement = document.createElement("p");
-      noReportsElement.textContent = "No recent reports.";
+      noReportsElement.textContent = "No recent notifications.";
       notificationContent.appendChild(noReportsElement);
     }
   }
