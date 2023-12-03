@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import {getDatabase, ref, get, set} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 //Alert Content
 function showAlert(type, message) {
@@ -47,7 +47,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 function handleLogin(email, password) {
   const usersRef = ref(db, "Accounts/Users");
   get(usersRef)
@@ -59,7 +58,17 @@ function handleLogin(email, password) {
         for (const userKey of userKeys) {
           const userData = users[userKey];
           if (userData.email === email && userData.password === password) {
+            if (userData.status === "LoggedIn") {
+              showAlert("warning", "User is already logged in.");
+              return;
+            }
+
             showAlert("success", "Login successful!");
+
+            // Update user status to "LoggedIn"
+            const userRef = ref(db, `Accounts/Users/${userKey}`);
+            set(userRef, { ...userData, status: "LoggedIn" });
+
           
             // Access the user's unique ID
             const userId = userKey;
