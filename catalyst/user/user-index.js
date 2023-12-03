@@ -972,7 +972,7 @@ function displayAllReportsInNotification(reports) {
 
 
 function displayLatestReportsInNotification(reports) {
-  const notificationContent = document.querySelector(".card-body.text-center");
+  const notificationContent = document.querySelector(".card-body.notification");
 
   if (notificationContent) {
     // Check if there are reports
@@ -993,9 +993,6 @@ function displayLatestReportsInNotification(reports) {
         !notificationContent.lastReport ||
         notificationContent.lastReport.timestamp < latestReport.timestamp
       ) {
-        // Clear previous content
-        notificationContent.innerHTML = "<h5>Notifications:</h5>";
-
         // Create and append the new report element
         const reportElement = document.createElement("div");
         reportElement.innerHTML = `
