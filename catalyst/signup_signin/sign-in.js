@@ -47,18 +47,23 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-function handleLogin(email, password) {
-  const usersRef = ref(db, "Accounts/Users");
-  get(usersRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const users = snapshot.val();
-        const userKeys = Object.keys(users);
 
-        for (const userKey of userKeys) {
-          const userData = users[userKey];
-          if (userData.email === email && userData.password === password) {
-            if (userData.status === "LoggedIn") {
+
+function handleLogin(email, password) {
+  const verifiedUsersRef = ref(db, "Accounts/VerifiedUserAccounts");
+  const usersRef = ref(db, "Accounts/Users");
+
+  // Check if the email is in VerifiedUserAccounts
+  get(verifiedUsersRef)
+    .then((verifiedSnapshot) => {
+      if (verifiedSnapshot.exists()) {
+        const verifiedUsers = verifiedSnapshot.val();
+        const verifiedUserKeys = Object.keys(verifiedUsers);
+
+        for (const verifiedUserKey of verifiedUserKeys) {
+          const verifiedUserData = verifiedUsers[verifiedUserKey];
+          if (verifiedUserData.email === email && verifiedUserData.password === password) {
+            if (verifiedUserData.status === "LoggedIn") {
               showAlert("warning", "User is already logged in.");
               return;
             }
@@ -66,29 +71,48 @@ function handleLogin(email, password) {
             showAlert("success", "Login successful!");
 
             // Update user status to "LoggedIn"
-            const userRef = ref(db, `Accounts/Users/${userKey}`);
-            set(userRef, { ...userData, status: "LoggedIn" });
+            const verifiedUserRef = ref(db, `Accounts/VerifiedUserAccounts/${verifiedUserKey}`);
+            set(verifiedUserRef, { ...verifiedUserData, status: "LoggedIn" });
 
-          
             // Access the user's unique ID
-            const userId = userKey;
-          
+            const userId = verifiedUserKey;
+
             // Store the user ID in a session or a cookie
             sessionStorage.setItem("userId", userId);
-          
+
             // Redirect to user/user-index.html
             window.location.href = "../user/user-index.html";
             return;
           }
         }
-
-        showAlert("warning", "Invalid email or password. Please try again.");
-      } else {
-        showAlert("warning", "User not found. Please sign up.");
       }
+
+      // If the email is not found in VerifiedUserAccounts, check Users
+      get(usersRef)
+        .then((usersSnapshot) => {
+          if (usersSnapshot.exists()) {
+            const users = usersSnapshot.val();
+            const userKeys = Object.keys(users);
+
+            for (const userKey of userKeys) {
+              const userData = users[userKey];
+              if (userData.email === email && userData.password === password) {
+                // Redirect to otp.html with the email in the URL
+                window.location.href = `otp.html?email=${encodeURIComponent(email)}`;
+                return;
+              }
+            }
+          }
+
+          // If the email is not found in either VerifiedUserAccounts or Users
+          showAlert("warning", "Invalid email or password. Please try again.");
+        })
+        .catch((error) => {
+          console.error("Error fetching Users data:", error);
+        });
     })
     .catch((error) => {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching VerifiedUserAccounts data:", error);
     });
 }
 

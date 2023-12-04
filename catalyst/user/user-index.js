@@ -33,7 +33,7 @@ function getUserIdFromSession() {
 
 // Function to fetch user data based on the user ID
 async function fetchUserData(userId) {
-  const userRef = ref(db, `Accounts/Users/${userId}`);
+  const userRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}`);
   const snapshot = await get(userRef);
   return snapshot.val();
 }
@@ -126,7 +126,7 @@ if (saveChangesBtn) {
 
     try {
       // Update user data in Accounts/Users
-      const userUpdateRef = ref(db, `Accounts/Users/${userId}`);
+      const userUpdateRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}`);
       await update(userUpdateRef, {
         addressLine1: userData.addressLine1,
         addressLine2: userData.addressLine2,
@@ -237,7 +237,7 @@ function logout() {
     sessionStorage.removeItem("userId");
 
     // Get a reference to the user status field in the database
-    const userStatusRef = ref(db, `Accounts/Users/${userId}/status`);
+    const userStatusRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}/status`);
 
     // Set the user status to null (remove the "LoggedIn" status)
     set(userStatusRef, null)
@@ -764,7 +764,7 @@ function updateFillLevelColor(fillLevelElement, fillLevel) {
 async function getUserInfoFromDatabase(userId) {
   try {
     // Replace the following line with your actual logic to fetch user information based on the user ID
-    const userRef = ref(db, `Accounts/Users/${userId}`);
+    const userRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}`);
     const userSnapshot = await get(userRef);
     const user = userSnapshot.val();
 
@@ -990,7 +990,7 @@ async function removeDevice(userId, gcn) {
     // If the user confirms, proceed with device removal
     if (confirmation) {
       // Reference to the 'Accounts/Users' database
-      const userRef = ref(db, `Accounts/Users/${userId}`);
+      const userRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}`);
 
       // Reference to the 'GarbageBinControlNumber' database
       const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}/Users/${userId}`);
