@@ -74,13 +74,13 @@ forgotPasswordForm.addEventListener('submit', async (e) => {
                     console.log('OTP sent successfully:', response);
 
                     // Update the user data with the generated OTP
-                    const updatedUser = { ...user, newField: generatedOTP };
+                    const updatedUser = { ...user, otp: generatedOTP };
                     update(ref(db, `Accounts/VerifiedUserAccounts/${userId}`), updatedUser);
 
                     // Redirect to otp.html
                     localStorage.removeItem('signupEmail');
                     localStorage.removeItem('generatedOTP');
-                    window.location.href = `otp.html?email=${encodeURIComponent(email)}`;
+                    window.location.href = `forgotOtp.html?email=${encodeURIComponent(email)}`;
                 })
                 .catch((error) => {
                     console.error('Error sending OTP:', error);
@@ -122,13 +122,13 @@ forgotPasswordForm.addEventListener('submit', async (e) => {
                     console.log('OTP sent successfully:', response);
 
                     // Update the user data with the generated OTP
-                    const updatedUser = { ...user, newField: generatedOTP };
+                    const updatedUser = { ...user, otp: generatedOTP };
                     update(ref(db, `Accounts/Users/${userId}`), updatedUser);
 
                     // Redirect to otp.html
                     localStorage.removeItem('signupEmail');
                     localStorage.removeItem('generatedOTP');
-                    window.location.href = `otp.html?email=${encodeURIComponent(email)}`;
+                    window.location.href = `forgotOtp.html?email=${encodeURIComponent(email)}`;
                 })
                 .catch((error) => {
                     console.error('Error sending OTP:', error);

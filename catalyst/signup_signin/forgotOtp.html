@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GABO</title>
+    <link href="../src/bootstrap.min.css" rel="stylesheet" />
+    <link href="../src/mdb.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../src/style.css" />
+    <style>
+        .inputs input {
+            width: 100%;
+            max-width: 40px;
+            height: 40px;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border: 2px solid #11531e;
+        }
+
+        .invalid-input {
+            border: 1px solid red !important;
+        }
+
+        .otp-container {
+            padding-top: 90px;
+        }
+
+        .otp-box {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Add more styling as needed */
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg shadow-none fixed-top" style="height: 86px; background-color: #f5f5f5">
+        <div class="container">
+            <a class="navbar-brand gabo-secondary" href="../index.html">
+                <p class="fw-bold fs-3 mt-2">GABO</p>
+            </a>
+        </div>
+    </nav>
+    <!-- NAVBAR -->
+
+    <div class="container mt-5 d-flex justify-content-center align-items-center otp-container">
+        <div class="col-md-6">
+            <div class="card shadow-none p-2 text-center" style="background-color: #f5f5f5">
+                <h6>Please enter the one-time password <br />to verify</h6>
+                <div>
+                    <span>A code has been sent to</span> <small>user email</small>
+                </div>
+                <form id="otpForm">
+                    <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                        <div class="otp-box m-2"> <input class="text-center form-control rounded" type="text" id="first"
+                                maxlength="1" required/> </div>
+                        <div class="otp-box m-2"> <input class="text-center form-control rounded" type="text" id="second"
+                                maxlength="1" required/> </div>
+                        <div class="otp-box m-2"> <input class="text-center form-control rounded" type="text" id="third"
+                                maxlength="1" required/> </div>
+                        <div class="otp-box m-2"> <input class="text-center form-control rounded" type="text" id="fourth"
+                                maxlength="1" required/> </div>
+                        <div class="otp-box m-2"> <input class="text-center form-control rounded" type="text" id="fifth"
+                                maxlength="1" required/> </div>
+                        <div class="otp-box m-2"> <input class="text-center form-control rounded" type="text" id="sixth"
+                                maxlength="1" required/> </div>
+                    </div>
+                    <div class="mt-4">
+                        <button class="btn btn-primary px-4 shadow-none" type="submit">Confirm</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card shadow-none mt-5" style="background-color: #f5f5f5">
+                <div class="content d-flex justify-content-center align-items-center">
+                    <div class="text-left me-3">Didn't get the code ?</div>
+                    <button id="resend-button" class="btn btn-primary" onclick="startResendTimer()">Resend OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="module" src="forgotOtpResend.js"></script>
+    <script type="module" src="forgotOtp.js"></script>
+    <script src="../src/jquery.min.js"></script>
+    <script src="../src/popper.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/mdb.min.js"></script>
+    
+
+    <script>
+        let resendTimer;
+        let countdown = 60; // Set the countdown time in seconds
+    
+        function startResendTimer() {
+            // Disable the resend button during the countdown
+            document.getElementById("resend-button").disabled = true;
+    
+            resendTimer = setInterval(function () {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(resendTimer);
+                    document.getElementById("resend-button").innerHTML = "Resend";
+                    document.getElementById("resend-button").disabled = false;
+                } else {
+                    document.getElementById("resend-button").innerHTML = countdown + "s";
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>
