@@ -20,6 +20,18 @@ const db = getDatabase(app);
 // emailjs config
 emailjs.init('TN6jayxVlZMzQ3Ljt');
 
+// Function to validate first name and last name
+function isValidName(name) {
+    // Regular expression to check if the name contains only letters and spaces
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    return nameRegex.test(name);
+}
+
+// Function to validate password length
+function isValidPassword(password) {
+    return password.length >= 8;
+}
+
 // Function to send OTP via email
 function sendOTP(toEmail, firstName, otp) {
     const templateParams = {
@@ -59,12 +71,29 @@ function isValidEmail(email) {
 }
 
 function isValidPhilippineNumber(mobileNumber) {
-    // Regular expression to check if the mobile number starts with +63 or 63
-    const philippineNumberRegex = /^(?:\+63|63)?\d{10}$/;
+    // Regular expression to check if the mobile number follows the format XXX-XXX-XXXX
+    const philippineNumberRegex = /^(\+?63|0)?[0-9]{3}-?[0-9]{3}-?[0-9]{4}$/;
 
     // Check if the mobile number matches the pattern
     return philippineNumberRegex.test(mobileNumber);
 }
+
+function formatPhoneNumber(value) {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+    }
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)} ${phoneNumber.slice(6, 10)}`;
+}
+   
+   function phoneNumberFormatter() {
+    const inputField = document.getElementById('mobile_number');
+    const formattedInputValue = formatPhoneNumber(inputField.value);
+    inputField.value = formattedInputValue;
+   }
 
 document.getElementById("submit").addEventListener('click', function (e) {
     e.preventDefault();
@@ -90,6 +119,24 @@ document.getElementById("submit").addEventListener('click', function (e) {
     const confirmPassword = document.getElementById('passwordConfirmation').value;
     const agreeTermsCheckbox = document.getElementById('agreeTerms');
 
+    // Validate first name format
+    if (!isValidName(firstName)) {
+        alert("Please enter a valid first name without numbers or special characters.");
+        return;
+    }
+
+    // Validate last name format
+    if (!isValidName(lastName)) {
+        alert("Please enter a valid last name without numbers or special characters.");
+        return;
+    }
+
+    // Validate password length
+    if (!isValidPassword(password)) {
+        alert("Please enter a password with at least 8 characters.");
+        return;
+    }
+
     // Check if required fields are not empty and checkbox is checked
     if (firstName.trim() === '' || lastName.trim() === '' || email.trim() === '' || mobileNumber.trim() === '' || password.trim() === '' || !agreeTermsCheckbox.checked) {
         console.log("Please fill in all required fields and agree to the terms.");
@@ -114,6 +161,8 @@ document.getElementById("submit").addEventListener('click', function (e) {
         return;
     }
 
+    // Format the phone number
+    phoneNumberFormatter();
 
     // Check if the email or mobile number already exists
     get(ref(db, 'Accounts/Users'))
