@@ -18,14 +18,99 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+var map;
 
-window.initMap = function () {
-  const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 14.769692648299028, lng: 121.07431573155776 },
-    zoom: 18,
-    disableDefaultUI: true,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-  });
+const centerMap = {
+  lat: 14.766794722678402,
+  lng: 121.03637727931373,
+};
+const mapOptions = {
+  center: centerMap,
+  zoom: 13,
+  disableDefaultUI: true,
+  styles: [
+    {
+      featureType: "poi.attraction",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi.business",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi.government",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi.medical",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi.park",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi.place_of_worship",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi.school",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi.sports_complex",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+  ],
+};
+
+function initMap() {
+  // Initialize the map
+  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+  // Set the map type to display streets only
+  map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+
 
   const infowindow = new google.maps.InfoWindow();
 
