@@ -59,7 +59,7 @@ window.initMap = function () {
 
         const contentString = `<div>
                                   <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
-                                  <p>Other information: ${binData.OtherInfo}</p>
+                                  <p>OWNER (GCN001): "Yra Shane Fontanilla"</p>
                                 </div>`;
 
         marker.addListener("click", () => {
