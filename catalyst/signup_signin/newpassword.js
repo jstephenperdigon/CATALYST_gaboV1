@@ -22,83 +22,100 @@ const urlParams = new URLSearchParams(window.location.search);
 const encodedEmail = urlParams.get('email');
 const decodedEmail = decodeURIComponent(encodedEmail);
 
-// Reference to the user accounts in the database
-const usersRef = ref(db, 'Accounts/Users');
-const verifiedUsersRef = ref(db, 'Accounts/VerifiedUserAccounts');
 
-// Function to update the password in the database
-const updatePasswordInDatabase = async (userId, newPassword) => {
-    const userRefInUsers = ref(db, `Accounts/Users/${userId}`);
-    const userRefInVerifiedUsers = ref(db, `Accounts/VerifiedUserAccounts/${userId}`);
-    
+// Function to update the password of the user
+const updatePassword = async (userId, newPassword) => {
+    // Create references for both Users and VerifiedUserAccounts
+    const userRef = ref(db, `Accounts/Users/${userId}`);
+    const verifiedUserRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}`);
+
     try {
-        // Fetch the current user data from both locations
-        const userSnapshotInUsers = await get(userRefInUsers);
-        const userSnapshotInVerifiedUsers = await get(userRefInVerifiedUsers);
+        // Retrieve existing user data from the Users table
+        const userSnapshot = await get(userRef);
+        if (userSnapshot.exists()) {
+            const existingUserData = userSnapshot.val();
 
-        // Check and update the password in the appropriate location
-        if (userSnapshotInUsers.exists()) {
-            // Update the password field in Accounts/Users
-            await set(ref(userRefInUsers, 'password'), newPassword);
+            // Update the password in the Users table
+            await set(userRef, { ...existingUserData, password: newPassword });
+        }
 
-            console.log('Password successfully updated in Accounts/Users!');
-        } else if (userSnapshotInVerifiedUsers.exists()) {
-            // Update the password field in Accounts/VerifiedUserAccounts
-            await set(ref(userRefInVerifiedUsers, 'password'), newPassword);
+        // Retrieve existing user data from the VerifiedUserAccounts table
+        const verifiedUserSnapshot = await get(verifiedUserRef);
+        if (verifiedUserSnapshot.exists()) {
+            const existingVerifiedUserData = verifiedUserSnapshot.val();
 
-            console.log('Password successfully updated in Accounts/VerifiedUserAccounts!');
-        } else {
-            console.error('User not found in either location.');
+            // Update the password in the VerifiedUserAccounts table
+            await set(verifiedUserRef, { ...existingVerifiedUserData, password: newPassword });
         }
     } catch (error) {
-        console.error('Error updating password in the database:', error);
+        console.error('Error updating password:', error.message);
     }
 };
 
-// Query the 'Users' table for the user details based on the email
-get(usersRef).then((usersSnapshot) => {
-    // Query the 'VerifiedUserAccounts' table for the user details based on the email
-    get(verifiedUsersRef).then((verifiedUsersSnapshot) => {
-        const usersData = usersSnapshot.val() || {};
-        const verifiedUsersData = verifiedUsersSnapshot.val() || {};
+// Event listener for the form submission
+document.querySelector('form').addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-        // Combine the data from both tables
-        const allUsersData = { ...usersData, ...verifiedUsersData };
+    // Get the new password and confirmed new password from the input fields
+    const newPassword = document.getElementById('newPassword').value;
+    const cNewPassword = document.getElementById('cNewPassword').value;
 
-        // Find the user based on the email
-        const user = Object.values(allUsersData).find(user => user.email === decodedEmail);
+    // Check if the new password and confirmed new password match
+    if (newPassword === cNewPassword) {
+        try {
+            // Obtain the userId before calling the updatePassword function
+            const userId = await getUserIdByEmail(decodedEmail);
 
-        if (user) {
-            // Log the current password to the console
-            console.log('Current Password:', user.password);
+            // Call the function to update the password
+            if (userId) {
+                // Update the password
+                await updatePassword(userId, newPassword);
 
-            // Update the HTML with the user's input for the new password
-            document.getElementById('newPasswordForm').addEventListener('submit', async (event) => {
-                event.preventDefault();
+                // Display success message
+                alert('Password successfully changed!');
 
-                // Get the new password entered by the user
-                const newPassword = document.getElementById('newPassword').value;
+                // Clear text fields
+                document.getElementById('newPassword').value = '';
+                document.getElementById('cNewPassword').value = '';
 
-                // Update the password in the database
-                try {
-                    await updatePasswordInDatabase(user.UserId, newPassword);
-
-                    // Log success message
-                    console.log('Password change successful!');
-                } catch (error) {
-                    // Log error message
-                    console.error('Error updating password:', error);
-                }
-            });
-        } else {
-            console.error('User not found');
-            // Handle the case when the user is not found
+                // Redirect to sign-in.html and prevent going back
+                window.location.replace('sign-in.html');
+            } else {
+                console.log('User not found');
+            }
+        } catch (error) {
+            console.error('Error obtaining userId:', error.message);
         }
-    }).catch((error) => {
-        console.error('Error getting verified user accounts', error);
-        // Handle errors for the 'VerifiedUserAccounts' table
-    });
-}).catch((error) => {
-    console.error('Error getting user accounts', error);
-    // Handle errors for the 'Users' table
+    } else {
+        console.log('New password and confirmed new password do not match');
+    }
 });
+
+// Function to get the userId based on email
+const getUserIdByEmail = async (email) => {
+    // Form a reference to the user in the Users table based on the provided email
+    const usersQuery = ref(db, `Accounts/Users`);
+    const verifiedUsersQuery = ref(db, `Accounts/VerifiedUserAccounts`);
+
+    try {
+        // Retrieve the user details from the Users table
+        const usersSnapshot = await get(usersQuery);
+        if (usersSnapshot.exists()) {
+            const userId = Object.keys(usersSnapshot.val()).find(key => usersSnapshot.val()[key].email === email);
+            return userId || null;
+        }
+
+        // If user not found in Users table, try finding in VerifiedUserAccounts table
+        const verifiedUsersSnapshot = await get(verifiedUsersQuery);
+        if (verifiedUsersSnapshot.exists()) {
+            const userId = Object.keys(verifiedUsersSnapshot.val()).find(key => verifiedUsersSnapshot.val()[key].email === email);
+            return userId || null;
+        }
+
+        // User not found in either table
+        return null;
+    } catch (error) {
+        console.error('Error obtaining userId:', error.message);
+        throw error;
+    }
+};

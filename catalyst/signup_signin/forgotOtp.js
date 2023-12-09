@@ -70,7 +70,7 @@ async function matchInputWithOTP(userInput, email) {
             const queryParams = new URLSearchParams(window.location.search);
             const userEmail = queryParams.get('email');
             const encodedEmail = encodeURIComponent(userEmail);
-            window.location.href = `newpassword.html?email=${encodedEmail}`;
+            window.location.replace(`newpassword.html?email=${encodedEmail}`);
             
         } else {
             console.log("Input and OTP from the database do not match.");
