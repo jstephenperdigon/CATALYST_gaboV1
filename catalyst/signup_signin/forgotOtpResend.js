@@ -35,21 +35,23 @@ function sendOTP(toEmail, firstName, otp) {
         });
 }
 
-// Resend OTP function for Users
-function resendOTPForUsers(emailParam, firstNameParam) {
+// Resend OTP function
+function resendOTP() {
+    const emailParam = new URLSearchParams(window.location.search).get('email');
+    const firstNameParam = new URLSearchParams(window.location.search).get('firstname');
     const generatedOTP = Math.floor(100000 + Math.random() * 900000);
 
-    // Get a reference to the user in the database based on their email
+    // Update the OTP for the user in 'Accounts/Users'
     const usersRef = ref(db, 'Accounts/Users');
-    get(usersRef).then((snapshot) => {
-        if (snapshot.exists()) {
-            const users = snapshot.val();
+    get(usersRef).then((userSnapshot) => {
+        if (userSnapshot.exists()) {
+            const users = userSnapshot.val();
             const userId = Object.keys(users).find(
                 (key) => users[key].email === emailParam
             );
 
             if (userId) {
-                // Update the OTP for that user
+                // Update the OTP for that user in 'Accounts/Users'
                 const userRef = ref(db, `Accounts/Users/${userId}/otp`);
                 set(userRef, generatedOTP)
                     .then(() => {
@@ -57,62 +59,53 @@ function resendOTPForUsers(emailParam, firstNameParam) {
                         sendOTP(emailParam, firstNameParam, generatedOTP)
                             .then(response => {
                                 // Handle success (if needed)
-                                console.log('OTP resent successfully for Users:', response);
+                                console.log('OTP resent successfully for Accounts/Users:', response);
                             })
                             .catch(error => {
                                 // Handle error (if needed)
-                                console.error('Error resending OTP for Users:', error);
+                                console.error('Error resending OTP for Accounts/Users:', error);
                             });
                     })
                     .catch((error) => {
-                        console.error('Error updating OTP for Users:', error);
+                        console.error('Error updating OTP for Accounts/Users:', error);
                     });
-            } else {
-                console.error('User not found with the given email for Users:', emailParam);
             }
         } else {
-            console.error('No users found in the database for Users');
+            console.error('No users found in the "Accounts/Users" database');
         }
     });
-}
 
-// Resend OTP function for VerifiedUserAccounts
-function resendOTPForVerifiedUserAccounts(emailParam, firstNameParam) {
-    const generatedOTP = Math.floor(100000 + Math.random() * 900000);
-
-    // Get a reference to the user in the database based on their email
+    // Update the OTP for the user in 'Accounts/VerifiedUserAccounts'
     const verifiedUsersRef = ref(db, 'Accounts/VerifiedUserAccounts');
-    get(verifiedUsersRef).then((snapshot) => {
-        if (snapshot.exists()) {
-            const users = snapshot.val();
-            const userId = Object.keys(users).find(
-                (key) => users[key].email === emailParam
+    get(verifiedUsersRef).then((verifiedUserSnapshot) => {
+        if (verifiedUserSnapshot.exists()) {
+            const verifiedUsers = verifiedUserSnapshot.val();
+            const userId = Object.keys(verifiedUsers).find(
+                (key) => verifiedUsers[key].email === emailParam
             );
 
             if (userId) {
-                // Update the OTP for that user
-                const userRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}/otp`);
-                set(userRef, generatedOTP)
+                // Update the OTP for that user in 'Accounts/VerifiedUserAccounts'
+                const verifiedUserRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}/otp`);
+                set(verifiedUserRef, generatedOTP)
                     .then(() => {
                         // Update your logic to send OTP via email here
                         sendOTP(emailParam, firstNameParam, generatedOTP)
                             .then(response => {
                                 // Handle success (if needed)
-                                console.log('OTP resent successfully for VerifiedUserAccounts:', response);
+                                console.log('OTP resent successfully for Accounts/VerifiedUserAccounts:', response);
                             })
                             .catch(error => {
                                 // Handle error (if needed)
-                                console.error('Error resending OTP for VerifiedUserAccounts:', error);
+                                console.error('Error resending OTP for Accounts/VerifiedUserAccounts:', error);
                             });
                     })
                     .catch((error) => {
-                        console.error('Error updating OTP for VerifiedUserAccounts:', error);
+                        console.error('Error updating OTP for Accounts/VerifiedUserAccounts:', error);
                     });
-            } else {
-                console.error('User not found with the given email for VerifiedUserAccounts:', emailParam);
             }
         } else {
-            console.error('No users found in the database for VerifiedUserAccounts');
+            console.error('No users found in the "Accounts/VerifiedUserAccounts" database');
         }
     });
 }
@@ -120,12 +113,5 @@ function resendOTPForVerifiedUserAccounts(emailParam, firstNameParam) {
 // Add event listener to the resend button
 const resendButton = document.getElementById('resend-button');
 if (resendButton) {
-    resendButton.addEventListener('click', () => {
-        const emailParam = new URLSearchParams(window.location.search).get('email');
-        const firstNameParam = new URLSearchParams(window.location.search).get('firstname');
-        
-        // Call both functions
-        resendOTPForUsers(emailParam, firstNameParam);
-        resendOTPForVerifiedUserAccounts(emailParam, firstNameParam);
-    });
+    resendButton.addEventListener('click', resendOTP);
 }
