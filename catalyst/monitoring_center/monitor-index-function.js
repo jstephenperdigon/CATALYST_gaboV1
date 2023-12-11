@@ -3,6 +3,7 @@ import {
   getDatabase,
   ref,
   get,
+  onValue,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -104,13 +105,23 @@ const mapOptions = {
   ],
 };
 
+
+// Function to format timestamp
+function formatTimestamp(timestamp) {
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+  return new Date(timestamp).toLocaleDateString("en-US", options);
+}
+
+// Function to initialize the map
 function initMap() {
   // Initialize the map
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-  // Set the map type to display streets only
-  map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-
 
   const infowindow = new google.maps.InfoWindow();
 
@@ -123,9 +134,12 @@ function initMap() {
       // Check if Location object and its properties exist
       if (
         binData &&
-        binData.Location &&
-        binData.Location.Latitude &&
-        binData.Location.Longitude
+        binData.DeviceStatus &&
+        binData.FillLevel &&
+        binData.FillLevel.GB1FillLevel &&
+        binData.FillLevel.GB2FillLevel &&
+        binData.FillLevel.GB3FillLevel &&
+        binData.FillLevel.GB4FillLevel
       ) {
         const marker = new google.maps.Marker({
           position: {
@@ -142,10 +156,16 @@ function initMap() {
           scaledSize: new google.maps.Size(30, 30), // Adjust the size as needed
         });
 
+        // Dynamically generate contentString based on data structure
         const contentString = `<div>
-                                  <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
-                                  <p>OWNER (GCN001): "Yra Shane Fontanilla"</p>
-                                </div>`;
+          <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
+          <p>Status: ${binData.DeviceStatus}</p>
+          <p>Fill Level:</p>
+          <p>   -Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}% | ${binData.FillLevel.GB1FillLevel.GB1Status}</p>
+          <p>   -Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}% | ${binData.FillLevel.GB2FillLevel.GB2Status}</p>
+          <p>   -Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3}% | ${binData.FillLevel.GB3FillLevel.GB3Status}</p>
+          <p>   -Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4}% | ${binData.FillLevel.GB4FillLevel.GB4Status}</p>
+        </div>`;
 
         marker.addListener("click", () => {
           // Zoom the map when a marker is clicked
@@ -162,8 +182,63 @@ function initMap() {
       }
     });
   });
-};
 
+  // Listen for changes in the reports data
+  const reportsRef = ref(db, "GarbageBinControlNumber");
+  onValue(reportsRef, (snapshot) => {
+    const reportsData = snapshot.val();
+    displayAllReportsInNotification(reportsData);
+  });
+}
+
+// Your existing event listener
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize the map and fetch reports
   initMap();
 });
+
+// Function to append reports to the notification content
+function displayAllReportsInNotification(database) {
+  const notificationContent = document.getElementById("notificationContent");
+
+  // Clear previous content
+  notificationContent.innerHTML = "";
+
+  // Check if the database is not empty
+  if (database && Object.keys(database).length > 0) {
+    // Loop through each garbage bin in the database
+    Object.entries(database).forEach(([garbageBinControlNumber, binData]) => {
+      // Check if the garbage bin has reports
+      if (binData.reports && Object.keys(binData.reports).length > 0) {
+        // Sort reports by timestamp in descending order
+        const sortedReports = Object.values(binData.reports).sort(
+          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+        );
+
+        // Loop through each sorted report and create HTML elements
+        sortedReports.forEach((report) => {
+          // Create a div for each report
+          const reportDiv = document.createElement("div");
+          reportDiv.className = "report";
+
+          // Create HTML content for the report
+          reportDiv.innerHTML = `
+            <div>
+              <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
+              <p>Report Title: ${report.title}</p>
+              <p>Report Message: ${report.message}</p>
+              <p>Timestamp: ${formatTimestamp(report.timestamp)}</p>
+              <hr>
+            </div>
+          `;
+
+          // Append the report div to the notification content
+          notificationContent.appendChild(reportDiv);
+        });
+      }
+    });
+  } else {
+    // If there are no reports, display a message
+    notificationContent.innerHTML = "<p>No reports available</p>";
+  }
+}
