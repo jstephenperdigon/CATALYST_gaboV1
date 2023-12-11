@@ -19,6 +19,24 @@
       /* Same as the width of the sidebar */
       padding: 16px;
     }
+
+    /* Add this style for better table appearance */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
   </style>
 </head>
 
@@ -106,15 +124,33 @@
       <div class="col"></div>
     </div>
   </div>
-  </div>
 
   <div class="content" id="reports-content">
-    <div class="container">
-      <div class="row">
-        <div class="col">
-
-        </div>
-      </div>
+    <h1 class="mt-5">REPORTS CONTENT</h1>
+    <div>
+      <label for="searchInput">Search:</label>
+      <input type="text" id="searchInput" oninput="searchReports()" />
+    </div>
+    <div>
+      <label for="sortDropdown">Sort By: </label>
+      <select id="sortDropdown">
+        <option value="ticketNumber">Ticket #</option>
+        <option value="gcn">GCN</option>
+        <option value="Date">Date</option>
+        <option value="timeFormat12">Time</option>
+        <option value="Problem">Problem</option>
+        <option value="addressLine1">Address Line 1</option>
+        <option value="addressLine2">Address Line 2</option>
+        <option value="barangay">Barangay</option>
+        <option value="district">District</option>
+        <option value="Name">Name</option>
+        <option value="email">Email</option>
+        <option value="mobileNumber">Mobile Number(+63)</option>
+        <option value="action">Action</option><!-- New option for the Action column -->
+      </select>
+    </div>
+    <div id="reportsTable">
+      <!-- The reports table will be dynamically populated here -->
     </div>
   </div>
 
@@ -134,6 +170,7 @@
   <script type="text/javascript" src="monitoring.js"></script>
   <script src="index_map.js"></script>
   <script type="module" src="monitor-index-function.js"></script>
+  <script type="module" src="monitor-index-reports.js"></script>
 </body>
 
 </html>
