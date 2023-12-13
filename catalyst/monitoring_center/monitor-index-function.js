@@ -3,6 +3,7 @@ import {
   getDatabase,
   ref,
   get,
+  set,
   onValue,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
@@ -104,6 +105,44 @@ const mapOptions = {
     },
   ],
 };
+
+// Retrieve userId from sessionStorage
+const userId = sessionStorage.getItem("userId");
+
+// Update the welcome message with the userId
+if (userId) {
+  document.getElementById("welcome-message").innerText = `Welcome, ${userId}!`;
+}
+
+// Logout function
+function logout() {
+  // Retrieve the user ID from the session
+  const userId = sessionStorage.getItem("userId");
+
+  if (userId) {
+    // Clear the user ID from the session
+    sessionStorage.removeItem("userId");
+
+    // Get a reference to the user status field in the database
+    const userStatusRef = ref(db, `Accounts/Monitoring/${userId}/status`);
+
+    // Set the user status to null (remove the "LoggedIn" status)
+    set(userStatusRef, null)
+      .then(() => {
+        // Redirect to the sign-in page after successfully removing the status
+        window.location.href = "monitor-indexSI.html";
+      })
+      .catch((error) => {
+        console.error("Error removing user status:", error);
+      });
+  } else {
+    // If there is no user ID in the session, just redirect to the sign-in page
+    window.location.href = "monitor-indexSI.html";
+  }
+}
+
+// Attach the logout function to the click event of the "SignOut" link
+document.getElementById("signOut").addEventListener("click", logout);
 
 // Function to format timestamp
 function formatTimestamp(timestamp) {
