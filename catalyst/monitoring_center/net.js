@@ -3,6 +3,7 @@ import {
   getDatabase,
   ref,
   get,
+  set,
   onValue,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
@@ -31,38 +32,8 @@ const mapOptions = {
   disableDefaultUI: true,
   styles: [
     {
-      featureType: "all",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          saturation: 36,
-        },
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 40,
-        },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          visibility: "on",
-        },
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 16,
-        },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "labels.icon",
+      featureType: "poi.attraction",
+      elementType: "labels",
       stylers: [
         {
           visibility: "off",
@@ -70,133 +41,108 @@ const mapOptions = {
       ],
     },
     {
-      featureType: "administrative",
-      elementType: "geometry.fill",
+      featureType: "poi.business",
+      elementType: "labels",
       stylers: [
         {
-          color: "#000000",
-        },
-        {
-          lightness: 20,
+          visibility: "off",
         },
       ],
     },
     {
-      featureType: "administrative",
-      elementType: "geometry.stroke",
+      featureType: "poi.government",
+      elementType: "labels",
       stylers: [
         {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
-        },
-        {
-          weight: 1.2,
+          visibility: "off",
         },
       ],
     },
     {
-      featureType: "landscape",
-      elementType: "geometry",
+      featureType: "poi.medical",
+      elementType: "labels",
       stylers: [
         {
-          color: "#000000",
-        },
-        {
-          lightness: 20,
+          visibility: "off",
         },
       ],
     },
     {
-      featureType: "poi",
-      elementType: "geometry",
+      featureType: "poi.park",
+      elementType: "labels",
       stylers: [
         {
-          color: "#000000",
-        },
-        {
-          lightness: 21,
+          visibility: "off",
         },
       ],
     },
     {
-      featureType: "road.highway",
-      elementType: "geometry.fill",
+      featureType: "poi.place_of_worship",
+      elementType: "labels",
       stylers: [
         {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
+          visibility: "off",
         },
       ],
     },
     {
-      featureType: "road.highway",
-      elementType: "geometry.stroke",
+      featureType: "poi.school",
+      elementType: "labels",
       stylers: [
         {
-          color: "#000000",
-        },
-        {
-          lightness: 29,
-        },
-        {
-          weight: 0.2,
+          visibility: "off",
         },
       ],
     },
     {
-      featureType: "road.arterial",
-      elementType: "geometry",
+      featureType: "poi.sports_complex",
+      elementType: "labels",
       stylers: [
         {
-          color: "#000000",
-        },
-        {
-          lightness: 18,
-        },
-      ],
-    },
-    {
-      featureType: "road.local",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 16,
-        },
-      ],
-    },
-    {
-      featureType: "transit",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 19,
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
+          visibility: "off",
         },
       ],
     },
   ],
 };
+
+// Retrieve userId from sessionStorage
+const userId = sessionStorage.getItem("userId");
+
+// Update the welcome message with the userId
+if (userId) {
+  document.getElementById("welcome-message").innerText = `Welcome, ${userId}!`;
+}
+
+// Logout function
+function logout() {
+  // Retrieve the user ID from the session
+  const userId = sessionStorage.getItem("userId");
+
+  if (userId) {
+    // Clear the user ID from the session
+    sessionStorage.removeItem("userId");
+
+    // Get a reference to the user status field in the database
+    const userStatusRef = ref(db, `Accounts/Monitoring/${userId}/status`);
+
+    // Set the user status to null (remove the "LoggedIn" status)
+    set(userStatusRef, null)
+      .then(() => {
+        // Redirect to the sign-in page after successfully removing the status
+        window.location.href = "monitor-indexSI.html";
+      })
+      .catch((error) => {
+        console.error("Error removing user status:", error);
+      });
+  } else {
+    // If there is no user ID in the session, just redirect to the sign-in page
+    window.location.href = "monitor-indexSI.html";
+  }
+}
+
+// Attach the logout function to the click event of the "SignOut" link
+document.getElementById("signOut").addEventListener("click", logout);
 
 // Function to format timestamp
 function formatTimestamp(timestamp) {
@@ -212,12 +158,13 @@ function formatTimestamp(timestamp) {
 
 // Function to initialize the map
 function initMap() {
-  // Initialize the map
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
   const infowindow = new google.maps.InfoWindow();
 
   const binsRef = ref(db, "GarbageBinControlNumber");
+
+  // Listen for changes in the data
   onValue(binsRef, (snapshot) => {
     snapshot.forEach((binSnapshot) => {
       const garbageBinControlNumber = binSnapshot.key;
@@ -248,55 +195,16 @@ function initMap() {
           scaledSize: new google.maps.Size(30, 30), // Adjust the size as needed
         });
 
-        // Assuming you are using Font Awesome for icons
-        const contentString = `<div class="container shadow-none">
-    <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
-    <p><strong>Status:</strong> ${
-      binData.DeviceStatus === "On"
-        ? '<i class="fas fa-check-circle text-success"></i> Online'
-        : '<i class="fas fa-times-circle text-danger"></i> Offline'
-    }</p>
-    <p><strong>Fill Level:</strong></p>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-success" role="progressbar" style="width: ${
-          binData.FillLevel.GB1FillLevel.GB1
-        }%" aria-valuenow="${
-          binData.FillLevel.GB1FillLevel.GB1
-        }" aria-valuemin="0" aria-valuemax="100">
-            Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-warning" role="progressbar" style="width: ${
-          binData.FillLevel.GB2FillLevel.GB2
-        }%" aria-valuenow="${
-          binData.FillLevel.GB2FillLevel.GB2
-        }" aria-valuemin="0" aria-valuemax="100">
-            Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-info" role="progressbar" style="width: ${
-          binData.FillLevel.GB3FillLevel.GB3
-        }%" aria-valuenow="${
-          binData.FillLevel.GB3FillLevel.GB3
-        }" aria-valuemin="0" aria-valuemax="100">
-            Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-danger" role="progressbar" style="width: ${
-          binData.FillLevel.GB4FillLevel.GB4
-        }%" aria-valuenow="${
-          binData.FillLevel.GB4FillLevel.GB4
-        }" aria-valuemin="0" aria-valuemax="100">
-            Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4}%
-        </div>
-    </div>
-    <div class="mb-3">
-        Trash Bags: Trash Bag Count
-    </div>
-</div>`;
+        // Dynamically generate contentString based on data structure
+        const contentString = `<div>
+          <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
+          <p>Status: ${binData.DeviceStatus}</p>
+          <p>Fill Level:</p>
+          <p>   -Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}% | ${binData.FillLevel.GB1FillLevel.GB1Status}</p>
+          <p>   -Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}% | ${binData.FillLevel.GB2FillLevel.GB2Status}</p>
+          <p>   -Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3}% | ${binData.FillLevel.GB3FillLevel.GB3Status}</p>
+          <p>   -Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4}% | ${binData.FillLevel.GB4FillLevel.GB4Status}</p>
+        </div>`;
 
         marker.addListener("click", () => {
           // Zoom the map when a marker is clicked
@@ -354,11 +262,12 @@ function displayAllReportsInNotification(database) {
 
           // Create HTML content for the report
           reportDiv.innerHTML = `
-            <div class="card p-3 mb-3">
+            <div>
               <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
               <p>Report Title: ${report.title}</p>
               <p>Report Message: ${report.message}</p>
-              <small> ${formatTimestamp(report.timestamp)}</small>
+              <p>Timestamp: ${formatTimestamp(report.timestamp)}</p>
+              <hr>
             </div>
           `;
 
