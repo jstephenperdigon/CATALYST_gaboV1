@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Geo Location Map</title>
+    <style>
+      #map {
+        height: 300px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Geo Location Map</h1>
+
+    <button onclick="getLocation()">Get My Location</button>
+
+    <div>
+      <label for="latitude">Latitude:</label>
+      <input type="text" id="latitude" readonly />
+    </div>
+
+    <div>
+      <label for="longitude">Longitude:</label>
+      <input type="text" id="longitude" readonly />
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+      let map;
+      let marker;
+      let latitudeInput = document.getElementById("latitude");
+      let longitudeInput = document.getElementById("longitude");
+      let addressInput = document.getElementById("address");
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 0, lng: 0 },
+          zoom: 15,
+        });
+
+        marker = new google.maps.Marker({
+          map: map,
+          draggable: false,
+        });
+      }
+
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+
+              latitudeInput.value = latitude;
+              longitudeInput.value = longitude;
+
+              getAddressFromLatLng(latitude, longitude);
+
+              map.setCenter({ lat: latitude, lng: longitude });
+              map.setZoom(15);
+
+              // Set marker position
+              marker.setPosition({ lat: latitude, lng: longitude });
+            },
+            (error) => {
+              console.error("Error getting location:", error.message);
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 5000,
+              maximumAge: 0,
+            }
+          );
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      }
+
+      function getAddressFromLatLng(latitude, longitude) {
+        const geocoder = new google.maps.Geocoder();
+        const latLng = new google.maps.LatLng(latitude, longitude);
+
+        geocoder.geocode({ location: latLng }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            const address = results[0].formatted_address;
+            addressInput.value = address;
+            alert("Current Address: " + address);
+          } else {
+            console.error("Error getting address:", status);
+          }
+        });
+      }
+    </script>
+
+    <!-- Replace 'YOUR_API_KEY' with your actual Google Maps API key -->
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
+    ></script>
+  </body>
+</html>
