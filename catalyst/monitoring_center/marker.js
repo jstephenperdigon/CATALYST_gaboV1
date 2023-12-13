@@ -300,55 +300,16 @@ function initMap() {
 
           markers[garbageBinControlNumber] = marker;
 
-          // Assuming you are using Font Awesome for icons
-          const contentString = `<div class="container shadow-none">
-    <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
-    <p><strong>Status:</strong> ${
-      binData.DeviceStatus === "On"
-        ? '<i class="fas fa-check-circle text-success"></i> Online'
-        : '<i class="fas fa-times-circle text-danger"></i> Offline'
-    }</p>
-    <p><strong>Fill Level:</strong></p>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-success" role="progressbar" style="width: ${
-          binData.FillLevel.GB1FillLevel.GB1
-        }%" aria-valuenow="${
-            binData.FillLevel.GB1FillLevel.GB1
-          }" aria-valuemin="0" aria-valuemax="100">
-            Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-warning" role="progressbar" style="width: ${
-          binData.FillLevel.GB2FillLevel.GB2
-        }%" aria-valuenow="${
-            binData.FillLevel.GB2FillLevel.GB2
-          }" aria-valuemin="0" aria-valuemax="100">
-            Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-info" role="progressbar" style="width: ${
-          binData.FillLevel.GB3FillLevel.GB3
-        }%" aria-valuenow="${
-            binData.FillLevel.GB3FillLevel.GB3
-          }" aria-valuemin="0" aria-valuemax="100">
-            Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-danger" role="progressbar" style="width: ${
-          binData.FillLevel.GB4FillLevel.GB4
-        }%" aria-valuenow="${
-            binData.FillLevel.GB4FillLevel.GB4
-          }" aria-valuemin="0" aria-valuemax="100">
-            Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4}%
-        </div>
-    </div>
-    <div class="mb-3">
-        Trash Bags: Trash Bag Count
-    </div>
-</div>`;
+          // Dynamically generate contentString based on data structure
+          const contentString = `<div>
+            <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
+            <p>Status: ${binData.DeviceStatus}</p>
+            <p>Fill Level:</p>
+            <p>   -Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}% | ${binData.FillLevel.GB1FillLevel.GB1Status}</p>
+            <p>   -Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}% | ${binData.FillLevel.GB2FillLevel.GB2Status}</p>
+            <p>   -Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3}% | ${binData.FillLevel.GB3FillLevel.GB3Status}</p>
+            <p>   -Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4}% | ${binData.FillLevel.GB4FillLevel.GB4Status}</p>
+          </div>`;
 
           marker.addListener("click", () => {
             // Zoom the map when a marker is clicked
