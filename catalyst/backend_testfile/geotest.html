@@ -26,6 +26,11 @@
       <input type="text" id="longitude" readonly />
     </div>
 
+    <div>
+      <label for="address">Address:</label>
+      <input type="text" id="address" readonly />
+    </div>
+
     <div id="map"></div>
 
     <script>
@@ -67,11 +72,6 @@
             },
             (error) => {
               console.error("Error getting location:", error.message);
-            },
-            {
-              enableHighAccuracy: true,
-              timeout: 5000,
-              maximumAge: 0,
             }
           );
         } else {
