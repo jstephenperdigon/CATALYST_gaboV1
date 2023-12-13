@@ -26,11 +26,6 @@
       <input type="text" id="longitude" readonly />
     </div>
 
-    <div>
-      <label for="address">Address:</label>
-      <input type="text" id="address" readonly />
-    </div>
-
     <div id="map"></div>
 
     <script>
@@ -38,7 +33,6 @@
       let marker;
       let latitudeInput = document.getElementById("latitude");
       let longitudeInput = document.getElementById("longitude");
-      let addressInput = document.getElementById("address");
 
       function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
@@ -62,8 +56,6 @@
               latitudeInput.value = latitude;
               longitudeInput.value = longitude;
 
-              getAddressFromLatLng(latitude, longitude);
-
               map.setCenter({ lat: latitude, lng: longitude });
               map.setZoom(15);
 
@@ -72,26 +64,12 @@
             },
             (error) => {
               console.error("Error getting location:", error.message);
-            }
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
           );
         } else {
           alert("Geolocation is not supported by this browser.");
         }
-      }
-
-      function getAddressFromLatLng(latitude, longitude) {
-        const geocoder = new google.maps.Geocoder();
-        const latLng = new google.maps.LatLng(latitude, longitude);
-
-        geocoder.geocode({ location: latLng }, (results, status) => {
-          if (status === "OK" && results[0]) {
-            const address = results[0].formatted_address;
-            addressInput.value = address;
-            alert("Current Address: " + address);
-          } else {
-            console.error("Error getting address:", status);
-          }
-        });
       }
     </script>
 
