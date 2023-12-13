@@ -1,24 +1,24 @@
 /* Montserrat Font Face */
 @font-face {
-  font-family: 'Montserrat';
-  src: url('../src/fonts/Montserrat-Regular.ttf') format('truetype'); /* Adjust the path to your font file */
+  font-family: "Montserrat";
+  src: url("fonts/Montserrat-Regular.ttf") format("truetype"); /* Adjust the path to your font file */
   font-weight: 400; /* Regular */
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Montserrat';
-  src: url('../src/fonts/Montserrat-Bold.ttf') format('truetype'); /* Adjust the path to your font file */
+  font-family: "Montserrat";
+  src: url("fonts/Montserrat-Bold.ttf") format("truetype"); /* Adjust the path to your font file */
   font-weight: 700; /* Bold */
   font-style: normal;
 }
 
-
-h1, h2, h3 {
-  font-family: 'Montserrat', sans-serif;
+h1,
+h2,
+h3 {
+  font-family: "Montserrat", sans-serif;
   font-weight: 700; /* Bold */
 }
-
 
 :root {
   --header-height: 3rem;
@@ -36,7 +36,7 @@ h1, h2, h3 {
   box-sizing: border-box;
 }
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400; /* Regular */
   position: relative;
   transition: 0.5s;
@@ -50,7 +50,6 @@ a {
 .nav_link.active {
   color: var(--white-color);
 }
-
 
 .nav_link:hover::before,
 .nav_link.active::before {
@@ -116,8 +115,7 @@ a {
   }
 }
 
-
-.bg-gradient-1{
+.bg-gradient-1 {
   background: linear-gradient(
     45deg,
     #ff8c00 0%,
@@ -137,7 +135,6 @@ a {
   justify-content: space-between;
   overflow: hidden;
 }
-
 
 .nav_logo,
 .nav_link {
