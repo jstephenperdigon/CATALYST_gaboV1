@@ -42,7 +42,14 @@
 
         marker = new google.maps.Marker({
           map: map,
-          draggable: false,
+          draggable: true, // Make the marker draggable
+        });
+
+        // Add event listener for the marker dragend event
+        google.maps.event.addListener(marker, "dragend", function () {
+          const position = marker.getPosition();
+          latitudeInput.value = position.lat();
+          longitudeInput.value = position.lng();
         });
       }
 
