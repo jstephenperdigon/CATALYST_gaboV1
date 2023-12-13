@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site":"garbagebinoptimized",
+    "site":"garbagebinoptimized-v1",
     "public": "catalyst",
     "ignore": [
       "firebase.json",
@@ -9,7 +9,7 @@
     ],
     "rewrites": [
       {
-        "source": "**/*.html",
+        "source": "**",
         "destination": "/index.html"
       }
     ]

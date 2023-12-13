@@ -22,6 +22,12 @@
       src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
     ></script>
     <style></style>
+    <style>
+      #map {
+        height: 100px;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
     <!-- Navbar -->
@@ -103,6 +109,39 @@
             <div id="step2" class="form-step" style="display: none">
               <!-- District Dropdown -->
               <div class="form-group">
+                <div id="map"></div>
+
+                <button
+                  class="btn btn-primary"
+                  onclick="getLocation()"
+                  style="position: absolute; top: 10px; right: 10px"
+                >
+                  <i class="fas fa-map-marker-alt"></i> Current Location
+                </button>
+
+                <div>
+                  <label for="latitude" style="display: none">Latitude:</label>
+                  <input
+                    type="text"
+                    id="latitude"
+                    readonly
+                    style="display: none"
+                  />
+                </div>
+
+                <div>
+                  <label for="longitude" style="display: none"
+                    >Longitude:</label
+                  >
+                  <input
+                    type="text"
+                    id="longitude"
+                    readonly
+                    style="display: none"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
                 <label for="districtDropdown">District</label>
                 <select class="form-select" id="districtDropdown">
                   <option selected disabled>Select District</option>
@@ -180,6 +219,7 @@
     <!-- Your content sections -->
     <div class="content device-container" id="garbageBin">
       <!-- Content Section -->
+
       <section class="">
         <div class="container">
           <div class="row justify-content-center">
@@ -897,5 +937,57 @@
     <script src="../src/sweetalert.js"></script>
     <script type="module" src="user-index.js"></script>
     <script type="text/javascript" src="user-index-design.js"></script>
+    <script>
+      let map;
+      let marker;
+      let latitudeInput = document.getElementById("latitude");
+      let longitudeInput = document.getElementById("longitude");
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 14.7101668, lng: 120.9473325 },
+          zoom: 13,
+          disableDefaultUI: true,
+        });
+
+        marker = new google.maps.Marker({
+          map: map,
+          draggable: false,
+        });
+      }
+
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+
+              latitudeInput.value = latitude;
+              longitudeInput.value = longitude;
+
+              map.setCenter({ lat: latitude, lng: longitude });
+              map.setZoom(15);
+
+              // Set marker position
+              marker.setPosition({ lat: latitude, lng: longitude });
+            },
+            (error) => {
+              console.error("Error getting location:", error.message);
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+          );
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      }
+    </script>
+
+    <!-- Replace 'YOUR_API_KEY' with your actual Google Maps API key -->
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
+    ></script>
   </body>
 </html>
