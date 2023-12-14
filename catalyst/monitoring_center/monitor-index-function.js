@@ -296,6 +296,16 @@ function displayAllReportsInNotification(database) {
 
 // Function to get MDBootstrap card color class based on report title
 function getCardColorClass(title) {
+  // Check if the title includes "Fill Level Alert (80%)"
+  if (title.includes("Fill Level Alert (80%)")) {
+    return "bg-warning text-dark"; // Replace "custom-color" with the desired color class
+  }
+
+  if (title.includes("Fill Level Alert (100%)")) {
+    return "bg-danger text-white"; // Replace "custom-color" with the desired color class
+  }
+
+  // For other titles, use the existing switch statement
   switch (title.toLowerCase()) {
     case "error":
       return "bg-danger text-white";
@@ -367,50 +377,39 @@ function initMap() {
           // Assuming you are using Font Awesome for icons
           const contentString = `<div class="container shadow-none">
             <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
-            <p><strong>Status:</strong> ${
-              binData.DeviceStatus === "On"
-                ? '<i class="fas fa-check-circle text-success"></i> Online'
-                : '<i class="fas fa-times-circle text-danger"></i> Offline'
+            <p><strong>Status:</strong> ${binData.DeviceStatus === "On"
+              ? '<i class="fas fa-check-circle text-success"></i> Online'
+              : '<i class="fas fa-times-circle text-danger"></i> Offline'
             }</p>
             <p><strong>Fill Level:</strong></p>
             <div class="progress mb-3">
-                <div class="progress-bar bg-success" role="progressbar" style="width: ${
-                  binData.FillLevel.GB1FillLevel.GB1
-                }%" aria-valuenow="${
-            binData.FillLevel.GB1FillLevel.GB1
-          }" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" role="progressbar" style="width: ${binData.FillLevel.GB1FillLevel.GB1
+            }%" aria-valuenow="${binData.FillLevel.GB1FillLevel.GB1
+            }" aria-valuemin="0" aria-valuemax="100">
                     Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
                 </div>
             </div>
             <div class="progress mb-3">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: ${
-                  binData.FillLevel.GB2FillLevel.GB2
-                }%" aria-valuenow="${
-            binData.FillLevel.GB2FillLevel.GB2
-          }" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: ${binData.FillLevel.GB2FillLevel.GB2
+            }%" aria-valuenow="${binData.FillLevel.GB2FillLevel.GB2
+            }" aria-valuemin="0" aria-valuemax="100">
                     Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}%
                 </div>
             </div>
             <div class="progress mb-3">
-                <div class="progress-bar bg-info" role="progressbar" style="width: ${
-                  binData.FillLevel.GB3FillLevel.GB3
-                }%" aria-valuenow="${
-            binData.FillLevel.GB3FillLevel.GB3
-          }" aria-valuemin="0" aria-valuemax="100">
-                    Biodegradable Waste Bin: ${
-                      binData.FillLevel.GB3FillLevel.GB3
-                    }%
+                <div class="progress-bar bg-info" role="progressbar" style="width: ${binData.FillLevel.GB3FillLevel.GB3
+            }%" aria-valuenow="${binData.FillLevel.GB3FillLevel.GB3
+            }" aria-valuemin="0" aria-valuemax="100">
+                    Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3
+            }%
                 </div>
             </div>
             <div class="progress mb-3">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: ${
-                  binData.FillLevel.GB4FillLevel.GB4
-                }%" aria-valuenow="${
-            binData.FillLevel.GB4FillLevel.GB4
-          }" aria-valuemin="0" aria-valuemax="100">
-                    Non-Biodegradable Waste Bin: ${
-                      binData.FillLevel.GB4FillLevel.GB4
-                    }%
+                <div class="progress-bar bg-danger" role="progressbar" style="width: ${binData.FillLevel.GB4FillLevel.GB4
+            }%" aria-valuenow="${binData.FillLevel.GB4FillLevel.GB4
+            }" aria-valuemin="0" aria-valuemax="100">
+                    Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4
+            }%
                 </div>
             </div>
             <div class="mb-3">
