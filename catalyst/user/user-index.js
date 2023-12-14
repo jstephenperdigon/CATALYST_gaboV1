@@ -665,7 +665,7 @@ function listenForFillLevelChangesGB4(gcn) {
 
 // Function to listen for changes in the status and display notification
 function listenForStatusChanges(gcn) {
-  const statusRef = ref(db, `GarbageBinControlNumber/${gcn}/Status`);
+  const statusRef = ref(db, `GarbageBinControlNumber/${gcn}/DeviceStatus`);
   let initialized = false; // Flag to track whether the listener is initialized
 
   onValue(
@@ -679,13 +679,13 @@ function listenForStatusChanges(gcn) {
           // Check if the status is "off" and it was different from the previous status
           if (status === "off") {
             generateNotification(
-              "Garbage Bin Status Alert",
+              "Garbage Bin Status (OFF)",
               "The device is offline."
             );
           }
           if (status === "on") {
             generateNotification(
-              "Garbage Bin Status Alert",
+              "Garbage Bin Status (ON)",
               "The device is online."
             );
           }

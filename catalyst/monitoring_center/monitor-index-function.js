@@ -259,34 +259,40 @@ function displayAllReportsInNotification(database) {
 
   // Check if the database is not empty
   if (database && Object.keys(database).length > 0) {
-    // Loop through each garbage bin in the database
+    // Combine all reports from all garbage bins into a single array
+    const allReports = [];
     Object.entries(database).forEach(([garbageBinControlNumber, binData]) => {
-      // Check if the garbage bin has reports
       if (binData.reports && Object.keys(binData.reports).length > 0) {
-        // Sort reports by timestamp in descending order
-        const sortedReports = Object.values(binData.reports).sort(
-          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-        );
-
-        // Loop through each sorted report and create HTML elements
-        sortedReports.forEach((report) => {
-          // Create a div for each report
-          const reportDiv = document.createElement("div");
-          reportDiv.className = "report";
-
-          // Create HTML content for the report
-          reportDiv.innerHTML = `
-      <div class="card shadow-none p-3 mb-3 ${getCardColorClass(report.title)}">
-        <p><strong>GCN: </strong> ${garbageBinControlNumber}</p>
-        <p> ${report.title}</p>
-        <p class="text-muted"> ${formatTimestamp(report.timestamp)}</p>
-      </div>
-    `;
-
-          // Append the report div to the notification content
-          notificationContent.appendChild(reportDiv);
-        });
+        const reports = Object.values(binData.reports).map((report) => ({
+          ...report,
+          garbageBinControlNumber: garbageBinControlNumber,
+        }));
+        allReports.push(...reports);
       }
+    });
+
+    // Sort all reports by timestamp in descending order
+    const sortedReports = allReports.sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    );
+
+    // Loop through each sorted report and create HTML elements
+    sortedReports.forEach((report) => {
+      // Create a div for each report
+      const reportDiv = document.createElement("div");
+      reportDiv.className = "report";
+
+      // Create HTML content for the report
+      reportDiv.innerHTML = `
+        <div class="card shadow-none p-3 mb-3 ${getCardColorClass(report.title)}">
+          <p><strong>GCN: </strong> ${report.garbageBinControlNumber}</p>
+          <p> ${report.title}</p>
+          <p class="text-muted"> ${formatTimestamp(report.timestamp)}</p>
+        </div>
+      `;
+
+      // Append the report div to the notification content
+      notificationContent.appendChild(reportDiv);
     });
   } else {
     // If there are no reports, display a message
