@@ -5,6 +5,7 @@ import {
   get,
   set,
   onValue,
+  onChildRemoved,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -348,93 +349,95 @@ function initMap() {
         binData.FillLevel.GB3FillLevel &&
         binData.FillLevel.GB4FillLevel
       ) {
-        if (markers[garbageBinControlNumber]) {
-          // If the marker already exists, update its position
-          markers[garbageBinControlNumber].setPosition({
-            lat: binData.Location.Latitude,
-            lng: binData.Location.Longitude,
-          });
-        } else {
-          // If the marker doesn't exist, create a new one
-          const marker = new google.maps.Marker({
-            position: {
+        const users = binData.Users || {}; // Ensure users is an object
+
+        // Check if there is at least one user
+        const hasUser = Object.keys(users).length > 0;
+
+        if (hasUser) {
+          if (markers[garbageBinControlNumber]) {
+            // If the marker already exists, update its position
+            markers[garbageBinControlNumber].setPosition({
               lat: binData.Location.Latitude,
               lng: binData.Location.Longitude,
-            },
-            map: map,
-            title: garbageBinControlNumber,
-          });
+            });
+          } else {
+            // If the marker doesn't exist, create a new one
+            const marker = new google.maps.Marker({
+              position: {
+                lat: binData.Location.Latitude,
+                lng: binData.Location.Longitude,
+              },
+              map: map,
+              title: garbageBinControlNumber,
+            });
 
-          // Set the custom image as the icon for the Google Maps marker
-          marker.setIcon({
-            url: "../img/bx-radio-circle-marked.svg", // Replace with the actual path to your image
-            scaledSize: new google.maps.Size(30, 30), // Adjust the size as needed
-          });
+            // Set the custom image as the icon for the Google Maps marker
+            marker.setIcon({
+              url: "../img/bx-radio-circle-marked.svg", // Replace with the actual path to your image
+              scaledSize: new google.maps.Size(30, 30), // Adjust the size as needed
+            });
 
-          markers[garbageBinControlNumber] = marker;
+            markers[garbageBinControlNumber] = marker;
 
-          // Assuming you are using Font Awesome for icons
-          const contentString = `<div class="container shadow-none">
-            <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
-            <p><strong>Status:</strong> ${
-              binData.DeviceStatus === "On"
+            // Assuming you are using Font Awesome for icons
+            const contentString = `<div class="container shadow-none">
+              <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
+              <p><strong>Status:</strong> ${binData.DeviceStatus === "On"
                 ? '<i class="fas fa-check-circle text-success"></i> Online'
                 : '<i class="fas fa-times-circle text-danger"></i> Offline'
-            }</p>
-            <p><strong>Fill Level:</strong></p>
-            <div class="progress mb-3">
-                <div class="progress-bar bg-success" role="progressbar" style="width: ${
-                  binData.FillLevel.GB1FillLevel.GB1
-                }%" aria-valuenow="${
-            binData.FillLevel.GB1FillLevel.GB1
-          }" aria-valuemin="0" aria-valuemax="100">
-                    Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
-                </div>
-            </div>
-            <div class="progress mb-3">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: ${
-                  binData.FillLevel.GB2FillLevel.GB2
-                }%" aria-valuenow="${
-            binData.FillLevel.GB2FillLevel.GB2
-          }" aria-valuemin="0" aria-valuemax="100">
-                    Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}%
-                </div>
-            </div>
-            <div class="progress mb-3">
-                <div class="progress-bar bg-info" role="progressbar" style="width: ${
-                  binData.FillLevel.GB3FillLevel.GB3
-                }%" aria-valuenow="${
-            binData.FillLevel.GB3FillLevel.GB3
-          }" aria-valuemin="0" aria-valuemax="100">
-                    Biodegradable Waste Bin: ${
-                      binData.FillLevel.GB3FillLevel.GB3
-                    }%
-                </div>
-            </div>
-            <div class="progress mb-3">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: ${
-                  binData.FillLevel.GB4FillLevel.GB4
-                }%" aria-valuenow="${
-            binData.FillLevel.GB4FillLevel.GB4
-          }" aria-valuemin="0" aria-valuemax="100">
-                    Non-Biodegradable Waste Bin: ${
-                      binData.FillLevel.GB4FillLevel.GB4
-                    }%
-                </div>
-            </div>
-            <div class="mb-3">
-                Trash Bags: Trash Bag Count
-            </div>
-          </div>`;
+              }</p>
+              <p><strong>Fill Level:</strong></p>
+              <div class="progress mb-3">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: ${binData.FillLevel.GB1FillLevel.GB1
+              }%" aria-valuenow="${binData.FillLevel.GB1FillLevel.GB1
+              }" aria-valuemin="0" aria-valuemax="100">
+                      Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
+                  </div>
+              </div>
+              <div class="progress mb-3">
+                  <div class="progress-bar bg-warning" role="progressbar" style="width: ${binData.FillLevel.GB2FillLevel.GB2
+              }%" aria-valuenow="${binData.FillLevel.GB2FillLevel.GB2
+              }" aria-valuemin="0" aria-valuemax="100">
+                      Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}%
+                  </div>
+              </div>
+              <div class="progress mb-3">
+                  <div class="progress-bar bg-info" role="progressbar" style="width: ${binData.FillLevel.GB3FillLevel.GB3
+              }%" aria-valuenow="${binData.FillLevel.GB3FillLevel.GB3
+              }" aria-valuemin="0" aria-valuemax="100">
+                      Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3
+              }%
+                  </div>
+              </div>
+              <div class="progress mb-3">
+                  <div class="progress-bar bg-danger" role="progressbar" style="width: ${binData.FillLevel.GB4FillLevel.GB4
+              }%" aria-valuenow="${binData.FillLevel.GB4FillLevel.GB4
+              }" aria-valuemin="0" aria-valuemax="100">
+                      Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4
+              }%
+                  </div>
+              </div>
+              <div class="mb-3">
+                  Trash Bags: Trash Bag Count
+              </div>
+            </div>`;
 
-          marker.addListener("click", () => {
-            // Zoom the map when a marker is clicked
-            map.setZoom(20); // Adjust the zoom level as needed
-            map.setCenter(marker.getPosition());
+            marker.addListener("click", () => {
+              // Zoom the map when a marker is clicked
+              map.setZoom(20); // Adjust the zoom level as needed
+              map.setCenter(marker.getPosition());
 
-            infowindow.setContent(contentString);
-            infowindow.open(map, marker);
-          });
+              infowindow.setContent(contentString);
+              infowindow.open(map, marker);
+            });
+          }
+        } else {
+          // If there are no users, remove the marker if it exists
+          if (markers[garbageBinControlNumber]) {
+            markers[garbageBinControlNumber].setMap(null);
+            delete markers[garbageBinControlNumber];
+          }
         }
       } else {
         console.error(
@@ -442,6 +445,17 @@ function initMap() {
         );
       }
     });
+  });
+
+  // Listen for marker removal when a bin is deleted
+  onChildRemoved(binsRef, (binSnapshot) => {
+    const garbageBinControlNumber = binSnapshot.key;
+
+    // If the marker exists, remove it
+    if (markers[garbageBinControlNumber]) {
+      markers[garbageBinControlNumber].setMap(null);
+      delete markers[garbageBinControlNumber];
+    }
   });
 }
 
