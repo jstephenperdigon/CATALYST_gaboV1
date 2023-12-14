@@ -275,14 +275,13 @@ function displayAllReportsInNotification(database) {
 
           // Create HTML content for the report
           reportDiv.innerHTML = `
-            <div>
-              <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
-              <p>Report Title: ${report.title}</p>
-              <p>Report Message: ${report.message}</p>
-              <p>Timestamp: ${formatTimestamp(report.timestamp)}</p>
-              <hr>
-            </div>
-          `;
+      <div class="card shadow-none p-3 ${getCardColorClass(report.title)}">
+        <p>Garbage Bin Control Number: ${garbageBinControlNumber}</p>
+        <p>Report Title: ${report.title}</p>
+        <p>Report Message: ${report.message}</p>
+        <p>Timestamp: ${formatTimestamp(report.timestamp)}</p>
+      </div>
+    `;
 
           // Append the report div to the notification content
           notificationContent.appendChild(reportDiv);
@@ -295,7 +294,19 @@ function displayAllReportsInNotification(database) {
   }
 }
 
-
+// Function to get MDBootstrap card color class based on report title
+function getCardColorClass(title) {
+  switch (title.toLowerCase()) {
+    case "error":
+      return "bg-danger text-white";
+    case "warning":
+      return "bg-warning text-dark";
+    case "success":
+      return "bg-success text-white";
+    default:
+      return "bg-primary text-white";
+  }
+}
 
 // Function to initialize the map
 function initMap() {
@@ -356,37 +367,50 @@ function initMap() {
           // Assuming you are using Font Awesome for icons
           const contentString = `<div class="container shadow-none">
             <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
-            <p><strong>Status:</strong> ${binData.DeviceStatus === "On"
-              ? '<i class="fas fa-check-circle text-success"></i> Online'
-              : '<i class="fas fa-times-circle text-danger"></i> Offline'
+            <p><strong>Status:</strong> ${
+              binData.DeviceStatus === "On"
+                ? '<i class="fas fa-check-circle text-success"></i> Online'
+                : '<i class="fas fa-times-circle text-danger"></i> Offline'
             }</p>
             <p><strong>Fill Level:</strong></p>
             <div class="progress mb-3">
-                <div class="progress-bar bg-success" role="progressbar" style="width: ${binData.FillLevel.GB1FillLevel.GB1
-            }%" aria-valuenow="${binData.FillLevel.GB1FillLevel.GB1
-            }" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" role="progressbar" style="width: ${
+                  binData.FillLevel.GB1FillLevel.GB1
+                }%" aria-valuenow="${
+            binData.FillLevel.GB1FillLevel.GB1
+          }" aria-valuemin="0" aria-valuemax="100">
                     Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
                 </div>
             </div>
             <div class="progress mb-3">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: ${binData.FillLevel.GB2FillLevel.GB2
-            }%" aria-valuenow="${binData.FillLevel.GB2FillLevel.GB2
-            }" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: ${
+                  binData.FillLevel.GB2FillLevel.GB2
+                }%" aria-valuenow="${
+            binData.FillLevel.GB2FillLevel.GB2
+          }" aria-valuemin="0" aria-valuemax="100">
                     Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}%
                 </div>
             </div>
             <div class="progress mb-3">
-                <div class="progress-bar bg-info" role="progressbar" style="width: ${binData.FillLevel.GB3FillLevel.GB3
-            }%" aria-valuenow="${binData.FillLevel.GB3FillLevel.GB3
-            }" aria-valuemin="0" aria-valuemax="100">
-                    Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3}%
+                <div class="progress-bar bg-info" role="progressbar" style="width: ${
+                  binData.FillLevel.GB3FillLevel.GB3
+                }%" aria-valuenow="${
+            binData.FillLevel.GB3FillLevel.GB3
+          }" aria-valuemin="0" aria-valuemax="100">
+                    Biodegradable Waste Bin: ${
+                      binData.FillLevel.GB3FillLevel.GB3
+                    }%
                 </div>
             </div>
             <div class="progress mb-3">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: ${binData.FillLevel.GB4FillLevel.GB4
-            }%" aria-valuenow="${binData.FillLevel.GB4FillLevel.GB4
-            }" aria-valuemin="0" aria-valuemax="100">
-                    Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4}%
+                <div class="progress-bar bg-danger" role="progressbar" style="width: ${
+                  binData.FillLevel.GB4FillLevel.GB4
+                }%" aria-valuenow="${
+            binData.FillLevel.GB4FillLevel.GB4
+          }" aria-valuemin="0" aria-valuemax="100">
+                    Non-Biodegradable Waste Bin: ${
+                      binData.FillLevel.GB4FillLevel.GB4
+                    }%
                 </div>
             </div>
             <div class="mb-3">
@@ -417,4 +441,3 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize the map and fetch reports
   initMap();
 });
-
