@@ -1,26 +1,28 @@
 /* Montserrat Font Face */
 @font-face {
-  font-family: 'Montserrat';
-  src: url('../src/fonts/Montserrat-Regular.ttf') format('truetype'); /* Adjust the path to your font file */
+  font-family: "Montserrat";
+  src: url("../src/fonts/Montserrat-Regular.ttf") format("truetype"); /* Adjust the path to your font file */
   font-weight: 400; /* Regular */
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Montserrat';
-  src: url('../src/fonts/Montserrat-Bold.ttf') format('truetype'); /* Adjust the path to your font file */
+  font-family: "Montserrat";
+  src: url("../src/fonts/Montserrat-Bold.ttf") format("truetype"); /* Adjust the path to your font file */
   font-weight: 700; /* Bold */
   font-style: normal;
 }
 
 /* Apply Montserrat in CSS */
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400; /* Regular */
 }
 
-h1, h2, h3 {
-  font-family: 'Montserrat', sans-serif;
+h1,
+h2,
+h3 {
+  font-family: "Montserrat", sans-serif;
   font-weight: 700; /* Bold */
 }
 
@@ -67,11 +69,11 @@ h1, h2, h3 {
   color: white;
 }
 
-.notification-card{
-	border: none;
-	border-radius: 20px;
-	background-color: #3083ff;
-  color: #ffff  ;
+.notification-card {
+  border: none;
+  border-radius: 20px;
+  background-color: #3083ff;
+  color: #ffff;
 }
 
 @media (max-width: 768px) {
@@ -80,7 +82,7 @@ h1, h2, h3 {
   }
 }
 /* Responsive styles for small screens */
-@media (max-width: 320px) {
+@media (max-width: 374px) {
   .bottom-bar {
     margin-top: 0;
     background-color: #eee;
@@ -262,7 +264,7 @@ h1, h2, h3 {
   color: #fff;
 }
 
-.categories-bg1{
+.categories-bg1 {
   background: linear-gradient(
     45deg,
     #ff8c00 0%,
