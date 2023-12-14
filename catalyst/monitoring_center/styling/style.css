@@ -1,14 +1,14 @@
 /* Montserrat Font Face */
 @font-face {
-  font-family: "Montserrat";
-  src: url("fonts/Montserrat-Regular.ttf") format("truetype"); /* Adjust the path to your font file */
+  font-family: "ProductSans";
+  src: url("fonts/Product Sans/ProductSans-Regular.ttf") format("truetype"); /* Adjust the path to your font file */
   font-weight: 400; /* Regular */
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Montserrat";
-  src: url("fonts/Montserrat-Bold.ttf") format("truetype"); /* Adjust the path to your font file */
+  font-family: "ProductSans";
+  src: url("fonts/Product Sans/ProductSans-Bold.ttf") format("truetype"); /* Adjust the path to your font file */
   font-weight: 700; /* Bold */
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 h1,
 h2,
 h3 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "ProductSans", sans-serif;
   font-weight: 700; /* Bold */
 }
 
@@ -36,11 +36,11 @@ h3 {
   box-sizing: border-box;
 }
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Product Sans", sans-serif;
   font-weight: 400; /* Regular */
   position: relative;
   transition: 0.5s;
-  background-color: #ffff;
+  background-color: #f5f5f5;
 }
 a {
   text-decoration: none;
@@ -83,7 +83,6 @@ a {
   width: 40px;
 }
 .l-navbar {
-  position: fixed;
   top: 0;
   left: -30%;
   width: var(--nav-width);
