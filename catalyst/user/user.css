@@ -73,8 +73,6 @@ h3 {
 .notification-card {
   border: none;
   border-radius: 20px;
-  background-color: #3083ff;
-  color: #ffff;
 }
 
 @media (max-width: 768px) {
