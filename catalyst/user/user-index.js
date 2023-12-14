@@ -25,6 +25,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+
 // Function to retrieve user ID from session
 function getUserIdFromSession() {
   const userId = sessionStorage.getItem("userId");
@@ -123,6 +124,10 @@ if (saveChangesBtn) {
     userData.district = document.getElementById("districtDropdown").value;
     userData.barangay = document.getElementById("barangayDropdown").value;
 
+    // Get latitude and longitude values
+    const latitude = parseFloat(document.getElementById("latitude").value);
+    const longitude = parseFloat(document.getElementById("longitude").value);
+
     try {
       // Update user data in Accounts/Users
       const userUpdateRef = ref(db, `Accounts/VerifiedUserAccounts/${userId}`);
@@ -131,7 +136,7 @@ if (saveChangesBtn) {
         addressLine2: userData.addressLine2,
         gcn: userData.gcn,
         district: userData.district, // Add district to user data
-        barangay: userData.barangay, // Add barangay to user data
+        barangay: userData.barangay, // Add barangay to user data 
       });
 
       // Update user data in GarbageBinControlNumber/corresponding GCN/Users
@@ -151,7 +156,17 @@ if (saveChangesBtn) {
         barangay: userData.barangay,
       });
 
-      alert("User data updated successfully.");
+      // Update latitude and longitude in GarbageBinControlNumber/Location
+      const locationUpdateRef = ref(
+        db,
+        `GarbageBinControlNumber/${userData.gcn}/Location`
+      );
+      await update(locationUpdateRef, {
+        Latitude: latitude,
+        Longitude: longitude,
+      });
+
+      alert("User data and location updated successfully.");
 
       // Check and display bins immediately after updating the user's address
       await checkAndDisplayBins();
@@ -163,10 +178,11 @@ if (saveChangesBtn) {
         mdb.Modal.getInstance(modalElement).hide();
       }
     } catch (error) {
-      console.error("Error updating user data:", error);
+      console.error("Error updating user data and location:", error);
     }
   });
 }
+
 
 // Add a click event listener to the "Cancel" button
 const cancelBtn = document.getElementById("next");
@@ -1022,6 +1038,12 @@ async function removeDevice(userId, gcn) {
       // Reference to the 'GarbageBinControlNumber' database
       const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}/Users/${userId}`);
 
+      // Reference to the 'GarbageBinControlNumber/Location' database
+      const locationRef = ref(
+        db,
+        `GarbageBinControlNumber/${gcn}/Location`
+      );
+
       // Remove specific fields from user data
       const updatedUserData = {
         addressLine1: null,
@@ -1029,13 +1051,21 @@ async function removeDevice(userId, gcn) {
         barangay: null,
         district: null,
         gcn: null,
+        latitude: null, // Remove latitude
+        longitude: null, // Remove longitude
       };
 
       // Update user data in 'Accounts/Users'
       await update(userRef, updatedUserData);
 
-      // Remove the user from 'GarbageBinControlNumber'
+      // Remove the user from 'GarbageBinControlNumber/Users'
       await set(gcnRef, null);
+
+      // Remove latitude and longitude from 'GarbageBinControlNumber/Location'
+      await update(locationRef, {
+        Latitude: null,
+        Longitude: null,
+      });
 
       // After successful removal, update the UI
       updateDeviceButtons(false);
