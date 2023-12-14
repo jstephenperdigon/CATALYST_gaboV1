@@ -112,17 +112,6 @@ function submitForm() {
   Swal.fire(swalConfig);
 }
 
-$(document).ready(function () {
-  $('[data-toggle="popover"]').popover({
-    container: "body",
-    html: true,
-    content: function () {
-      // Add the content you want to show in the popover
-      return "<div>Notification Content</div>";
-    },
-  });
-});
-
 document.addEventListener("DOMContentLoaded", function () {
   const districtDropdown = document.getElementById("districtDropdown");
   const barangayDropdown = document.getElementById("barangayDropdown");

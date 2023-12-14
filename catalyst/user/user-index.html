@@ -24,12 +24,12 @@
     <style></style>
     <style>
       #map {
-        height: 400px;
+        height: 300px;
         width: 100%;
       }
       #location-button {
         position: absolute;
-        top: 20px;
+        top: 300px;
         left: 20px;
         z-index: 1;
       }
@@ -86,7 +86,7 @@
                   id="garbageControlNumber"
                   required
                 />
-                <label class="form-label" for="garbageControlNumber"
+                <label class="form-label text-break" for="garbageControlNumber"
                   >Garbage Control Number</label
                 >
               </div>
@@ -97,7 +97,9 @@
                   id="gcPassword"
                   required
                 />
-                <label class="form-label" for="gcPassword">Password</label>
+                <label class="form-label text-break" for="gcPassword"
+                  >Password</label
+                >
               </div>
               <div class="d-grid mb-4">
                 <button
@@ -115,9 +117,45 @@
             <div id="step2" class="form-step" style="display: none">
               <!-- District Dropdown -->
               <div class="form-group">
+                <div class="form-group">
+                  <label for="districtDropdown">District</label>
+                  <select class="form-select" id="districtDropdown">
+                    <option selected disabled>Select District</option>
+                    <option value="District1">District 1</option>
+                    <option value="District2">District 2</option>
+                    <option value="District3">District 3</option>
+                  </select>
+                </div>
+
+                <!-- Barangay Dropdown -->
+                <div class="form-group">
+                  <label for="barangayDropdown">Barangay</label>
+                  <select class="form-select mdb-select" id="barangayDropdown">
+                    <option selected disabled>Select Barangay</option>
+                  </select>
+                </div>
+                <hr />
+                <div class="form-outline mb-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="addressLine1"
+                    placeholder=""
+                  />
+                  <label class="form-label" for="addressLine1"
+                    >Address Line 1</label
+                  >
+                </div>
+                <div class="form-outline mb-4">
+                  <input type="text" class="form-control" id="addressLine2" />
+                  <label class="form-label" for="addressLine2"
+                    >Address Line 2</label
+                  >
+                </div>
+
                 <button
                   type="button"
-                  class="btn btn-outline-primary mb-3 btn-sm"
+                  class="btn btn-primary mb-3 btn-sm"
                   data-mdb-ripple-init
                   data-mdb-ripple-color="dark"
                   onclick="getLocation()"
@@ -150,47 +188,6 @@
                     style="display: none"
                   />
                 </div>
-              </div>
-            </div>
-
-            <!-- Step 3: Enter Address -->
-            <div id="step3" class="form-step" style="display: none">
-              <!-- Input fields for addressLine1 and addressLine2 -->
-
-              <div class="form-group">
-                <label for="districtDropdown">District</label>
-                <select class="form-select" id="districtDropdown">
-                  <option selected disabled>Select District</option>
-                  <option value="District1">District 1</option>
-                  <option value="District2">District 2</option>
-                  <option value="District3">District 3</option>
-                </select>
-              </div>
-
-              <!-- Barangay Dropdown -->
-              <div class="form-group">
-                <label for="barangayDropdown">Barangay</label>
-                <select class="form-select" id="barangayDropdown">
-                  <option selected disabled>Select Barangay</option>
-                </select>
-              </div>
-              <hr />
-              <div class="form-outline mb-4">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="addressLine1"
-                  placeholder=""
-                />
-                <label class="form-label" for="addressLine1"
-                  >Address Line 1</label
-                >
-              </div>
-              <div class="form-outline">
-                <input type="text" class="form-control" id="addressLine2" />
-                <label class="form-label" for="addressLine2"
-                  >Address Line 2</label
-                >
               </div>
             </div>
           </div>
