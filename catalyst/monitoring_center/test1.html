@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Google Maps</title>
+    <title>Google Maps with KML Layer</title>
   </head>
   <body>
     <!-- Google Maps -->
@@ -41,6 +41,14 @@
         google.maps.event.addListener(marker, "dragend", function (event) {
           updateLocation(event.latLng.lat(), event.latLng.lng());
         });
+
+        // Add KML layer to the map
+        var kmlUrl =
+          "https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=120X_uerNyJsBmMYlojmTckDFiG5GUsY&lid=PXV_SFlrKa0"; // Replace with the actual URL of your KML file
+        var kmlLayer = new google.maps.KmlLayer({
+          url: kmlUrl,
+          map: map,
+        });
       }
 
       function useCurrentLocation() {
@@ -52,7 +60,11 @@
       }
 
       function showPosition(position) {
-        document.querySelector("");
+        // Get the input element by its id
+        var locationInput = document.getElementById("location");
+
+        // Set the input value with the latitude and longitude
+        locationInput.value = `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
       }
     </script>
   </body>
