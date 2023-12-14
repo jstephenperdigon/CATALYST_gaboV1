@@ -249,131 +249,6 @@ function formatTimestamp(timestamp) {
   return new Date(timestamp).toLocaleDateString("en-US", options);
 }
 
-// Function to initialize the map
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-  const infowindow = new google.maps.InfoWindow();
-
-  const binsRef = ref(db, "GarbageBinControlNumber");
-
-  const markers = {};
-
-  // Listen for changes in the data
-  onValue(binsRef, (snapshot) => {
-    snapshot.forEach((binSnapshot) => {
-      const garbageBinControlNumber = binSnapshot.key;
-      const binData = binSnapshot.val();
-
-      // Check if Location object and its properties exist
-      if (
-        binData &&
-        binData.DeviceStatus &&
-        binData.FillLevel &&
-        binData.FillLevel.GB1FillLevel &&
-        binData.FillLevel.GB2FillLevel &&
-        binData.FillLevel.GB3FillLevel &&
-        binData.FillLevel.GB4FillLevel
-      ) {
-        if (markers[garbageBinControlNumber]) {
-          // If the marker already exists, update its position
-          markers[garbageBinControlNumber].setPosition({
-            lat: binData.Location.Latitude,
-            lng: binData.Location.Longitude,
-          });
-        } else {
-          // If the marker doesn't exist, create a new one
-          const marker = new google.maps.Marker({
-            position: {
-              lat: binData.Location.Latitude,
-              lng: binData.Location.Longitude,
-            },
-            map: map,
-            title: garbageBinControlNumber,
-          });
-
-          // Set the custom image as the icon for the Google Maps marker
-          marker.setIcon({
-            url: "../img/bx-radio-circle-marked.svg", // Replace with the actual path to your image
-            scaledSize: new google.maps.Size(30, 30), // Adjust the size as needed
-          });
-
-          markers[garbageBinControlNumber] = marker;
-
-          // Assuming you are using Font Awesome for icons
-          const contentString = `<div class="container shadow-none">
-    <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
-    <p><strong>Status:</strong> ${
-      binData.DeviceStatus === "On"
-        ? '<i class="fas fa-check-circle text-success"></i> Online'
-        : '<i class="fas fa-times-circle text-danger"></i> Offline'
-    }</p>
-    <p><strong>Fill Level:</strong></p>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-success" role="progressbar" style="width: ${
-          binData.FillLevel.GB1FillLevel.GB1
-        }%" aria-valuenow="${
-            binData.FillLevel.GB1FillLevel.GB1
-          }" aria-valuemin="0" aria-valuemax="100">
-            Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-warning" role="progressbar" style="width: ${
-          binData.FillLevel.GB2FillLevel.GB2
-        }%" aria-valuenow="${
-            binData.FillLevel.GB2FillLevel.GB2
-          }" aria-valuemin="0" aria-valuemax="100">
-            Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-info" role="progressbar" style="width: ${
-          binData.FillLevel.GB3FillLevel.GB3
-        }%" aria-valuenow="${
-            binData.FillLevel.GB3FillLevel.GB3
-          }" aria-valuemin="0" aria-valuemax="100">
-            Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3}%
-        </div>
-    </div>
-    <div class="progress mb-3">
-        <div class="progress-bar bg-danger" role="progressbar" style="width: ${
-          binData.FillLevel.GB4FillLevel.GB4
-        }%" aria-valuenow="${
-            binData.FillLevel.GB4FillLevel.GB4
-          }" aria-valuemin="0" aria-valuemax="100">
-            Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4}%
-        </div>
-    </div>
-    <div class="mb-3">
-        Trash Bags: Trash Bag Count
-    </div>
-</div>`;
-
-          marker.addListener("click", () => {
-            // Zoom the map when a marker is clicked
-            map.setZoom(20); // Adjust the zoom level as needed
-            map.setCenter(marker.getPosition());
-
-            infowindow.setContent(contentString);
-            infowindow.open(map, marker);
-          });
-        }
-      } else {
-        console.error(
-          `Invalid data for Garbage Bin Control Number: ${garbageBinControlNumber}`
-        );
-      }
-    });
-  });
-}
-
-// Your existing event listener
-document.addEventListener("DOMContentLoaded", function () {
-  // Initialize the map and fetch reports
-  initMap();
-});
-
 // Function to append reports to the notification content
 function displayAllReportsInNotification(database) {
   const notificationContent = document.getElementById("notificationContent");
@@ -419,3 +294,127 @@ function displayAllReportsInNotification(database) {
     notificationContent.innerHTML = "<p>No reports available</p>";
   }
 }
+
+
+
+// Function to initialize the map
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+  const infowindow = new google.maps.InfoWindow();
+
+  const binsRef = ref(db, "GarbageBinControlNumber");
+
+  const markers = {};
+
+  // Listen for changes in the data
+  onValue(binsRef, (snapshot) => {
+    const database = snapshot.val();
+
+    // Call the function to display reports in the notification
+    displayAllReportsInNotification(database);
+
+    snapshot.forEach((binSnapshot) => {
+      const garbageBinControlNumber = binSnapshot.key;
+      const binData = binSnapshot.val();
+
+      // Check if Location object and its properties exist
+      if (
+        binData &&
+        binData.DeviceStatus &&
+        binData.FillLevel &&
+        binData.FillLevel.GB1FillLevel &&
+        binData.FillLevel.GB2FillLevel &&
+        binData.FillLevel.GB3FillLevel &&
+        binData.FillLevel.GB4FillLevel
+      ) {
+        if (markers[garbageBinControlNumber]) {
+          // If the marker already exists, update its position
+          markers[garbageBinControlNumber].setPosition({
+            lat: binData.Location.Latitude,
+            lng: binData.Location.Longitude,
+          });
+        } else {
+          // If the marker doesn't exist, create a new one
+          const marker = new google.maps.Marker({
+            position: {
+              lat: binData.Location.Latitude,
+              lng: binData.Location.Longitude,
+            },
+            map: map,
+            title: garbageBinControlNumber,
+          });
+
+          // Set the custom image as the icon for the Google Maps marker
+          marker.setIcon({
+            url: "../img/bx-radio-circle-marked.svg", // Replace with the actual path to your image
+            scaledSize: new google.maps.Size(30, 30), // Adjust the size as needed
+          });
+
+          markers[garbageBinControlNumber] = marker;
+
+          // Assuming you are using Font Awesome for icons
+          const contentString = `<div class="container shadow-none">
+            <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
+            <p><strong>Status:</strong> ${binData.DeviceStatus === "On"
+              ? '<i class="fas fa-check-circle text-success"></i> Online'
+              : '<i class="fas fa-times-circle text-danger"></i> Offline'
+            }</p>
+            <p><strong>Fill Level:</strong></p>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-success" role="progressbar" style="width: ${binData.FillLevel.GB1FillLevel.GB1
+            }%" aria-valuenow="${binData.FillLevel.GB1FillLevel.GB1
+            }" aria-valuemin="0" aria-valuemax="100">
+                    Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
+                </div>
+            </div>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: ${binData.FillLevel.GB2FillLevel.GB2
+            }%" aria-valuenow="${binData.FillLevel.GB2FillLevel.GB2
+            }" aria-valuemin="0" aria-valuemax="100">
+                    Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2}%
+                </div>
+            </div>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-info" role="progressbar" style="width: ${binData.FillLevel.GB3FillLevel.GB3
+            }%" aria-valuenow="${binData.FillLevel.GB3FillLevel.GB3
+            }" aria-valuemin="0" aria-valuemax="100">
+                    Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3}%
+                </div>
+            </div>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: ${binData.FillLevel.GB4FillLevel.GB4
+            }%" aria-valuenow="${binData.FillLevel.GB4FillLevel.GB4
+            }" aria-valuemin="0" aria-valuemax="100">
+                    Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4}%
+                </div>
+            </div>
+            <div class="mb-3">
+                Trash Bags: Trash Bag Count
+            </div>
+          </div>`;
+
+          marker.addListener("click", () => {
+            // Zoom the map when a marker is clicked
+            map.setZoom(20); // Adjust the zoom level as needed
+            map.setCenter(marker.getPosition());
+
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
+          });
+        }
+      } else {
+        console.error(
+          `Invalid data for Garbage Bin Control Number: ${garbageBinControlNumber}`
+        );
+      }
+    });
+  });
+}
+
+// Your existing event listener
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize the map and fetch reports
+  initMap();
+});
+
