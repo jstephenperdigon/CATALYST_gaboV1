@@ -1,14 +1,15 @@
 /* Montserrat Font Face */
 @font-face {
   font-family: "Montserrat";
-  src: url("../src/fonts/Montserrat-Regular.ttf") format("truetype"); /* Adjust the path to your font file */
+  src: url("../src/fonts/Product Sans/ProductSans-Regular.ttf")
+    format("truetype"); /* Adjust the path to your font file */
   font-weight: 400; /* Regular */
   font-style: normal;
 }
 
 @font-face {
   font-family: "Montserrat";
-  src: url("../src/fonts/Montserrat-Bold.ttf") format("truetype"); /* Adjust the path to your font file */
+  src: url("../src/fonts/Product Sans/ProductSans-Bold.ttf") format("truetype"); /* Adjust the path to your font file */
   font-weight: 700; /* Bold */
   font-style: normal;
 }

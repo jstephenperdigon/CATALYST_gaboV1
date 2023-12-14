@@ -1,118 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Geo Location Map</title>
-  <style>
-    #map {
-      height: 300px;
-      width: 100%;
-    }
-
-    #location-search {
-      margin-top: 10px;
-    }
-  </style>
-</head>
-
-<body>
-  <h1>Geo Location Map</h1>
-
-  <button onclick="getLocation()">Get My Location</button>
-
-  <div>
-    <label for="latitude">Latitude:</label>
-    <input type="text" id="latitude" readonly />
-  </div>
-
-  <div>
-    <label for="longitude">Longitude:</label>
-    <input type="text" id="longitude" readonly />
-  </div>
-
-  <div id="location-search">
-    <label for="location">Location Search:</label>
-    <input type="text" id="location" />
-    <button onclick="searchLocation()">Search</button>
-  </div>
-
-  <div id="map"></div>
-
-  <script>
-    let map;
-    let marker;
-    let latitudeInput = document.getElementById("latitude");
-    let longitudeInput = document.getElementById("longitude");
-    let locationInput = document.getElementById("location");
-
-    function initMap() {
-      map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 0, lng: 0 },
-        zoom: 15,
-      });
-
-      marker = new google.maps.Marker({
-        map: map,
-        draggable: true,
-      });
-
-      google.maps.event.addListener(marker, "dragend", function () {
-        const position = marker.getPosition();
-        latitudeInput.value = position.lat();
-        longitudeInput.value = position.lng();
-      });
-    }
-
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            latitudeInput.value = latitude;
-            longitudeInput.value = longitude;
-
-            map.setCenter({ lat: latitude, lng: longitude });
-            map.setZoom(15);
-
-            marker.setPosition({ lat: latitude, lng: longitude });
-          },
-          (error) => {
-            console.error("Error getting location:", error.message);
-          },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
-      } else {
-        alert("Geolocation is not supported by this browser.");
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Geo Location Map</title>
+    <style>
+      #map {
+        height: 300px;
+        width: 100%;
       }
-    }
 
-    function searchLocation() {
-      const geocoder = new google.maps.Geocoder();
-      const location = locationInput.value;
+      #location-search {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
 
-      geocoder.geocode({ address: location }, (results, status) => {
-        if (status === "OK" && results[0]) {
-          const position = results[0].geometry.location;
+  <body>
+    <h1>Geo Location Map</h1>
+
+    <button onclick="getLocation()">Get My Location</button>
+
+    <div>
+      <label for="latitude">Latitude:</label>
+      <input type="text" id="latitude" readonly />
+    </div>
+
+    <div>
+      <label for="longitude">Longitude:</label>
+      <input type="text" id="longitude" readonly />
+    </div>
+
+    <div id="location-search">
+      <label for="location">Location Search:</label>
+      <input type="text" id="location" />
+      <button onclick="searchLocation()">Search</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+      let map;
+      let marker;
+      let latitudeInput = document.getElementById("latitude");
+      let longitudeInput = document.getElementById("longitude");
+      let locationInput = document.getElementById("location");
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 0, lng: 0 },
+          zoom: 15,
+        });
+
+        marker = new google.maps.Marker({
+          map: map,
+          draggable: true,
+        });
+
+        google.maps.event.addListener(marker, "dragend", function () {
+          const position = marker.getPosition();
           latitudeInput.value = position.lat();
           longitudeInput.value = position.lng();
+        });
+      }
 
-          map.setCenter(position);
-          map.setZoom(15);
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
 
-          marker.setPosition(position);
+              latitudeInput.value = latitude;
+              longitudeInput.value = longitude;
+
+              map.setCenter({ lat: latitude, lng: longitude });
+              map.setZoom(15);
+
+              marker.setPosition({ lat: latitude, lng: longitude });
+            },
+            (error) => {
+              console.error("Error getting location:", error.message);
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+          );
         } else {
-          alert("Location not found");
+          alert("Geolocation is not supported by this browser.");
         }
-      });
-    }
-  </script>
+      }
 
-  <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap&libraries=places"></script>
-</body>
+      function searchLocation() {
+        const geocoder = new google.maps.Geocoder();
+        const location = locationInput.value;
 
+        geocoder.geocode({ address: location }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            const position = results[0].geometry.location;
+            latitudeInput.value = position.lat();
+            longitudeInput.value = position.lng();
+
+            map.setCenter(position);
+            map.setZoom(15);
+
+            marker.setPosition(position);
+          } else {
+            alert("Location not found");
+          }
+        });
+      }
+    </script>
+
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap&libraries=places"
+    ></script>
+  </body>
 </html>
