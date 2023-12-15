@@ -425,10 +425,25 @@ function initMap() {
               }%
                   </div>
               </div>
-              <div class="mb-3">
-                  Trash Bags: Trash Bag Count
-              </div>
-            </div>`;
+                            <div class="mb-3">
+                                Trash Bags: Trash Bag Count
+                            </div>
+                              <div class="mb-3">
+                                  <strong>User Details:</strong>
+                                  ${Object.keys(users).map(userId => {
+                const user = users[userId];
+                return `
+                                          <p><strong>Owner:</strong> ${user.firstName || 'N/A'} ${user.lastName || 'N/A'}</p>
+
+                                          <strong>Address Information</strong>
+                                          <p><strong>District:</strong> ${user.district || 'N/A'}</p>
+                                          <p><strong>Barangay:</strong> ${user.barangay || 'N/A'}</p>
+                                          <p><strong>Address Line 1:</strong> ${user.addressLine1 || 'N/A'}</p>
+                                          <p><strong>Address Line 2:</strong> ${user.addressLine2 || 'N/A'}</p>
+                                      `;
+              }).join('')}
+                              </div>
+                        </div>`;
 
             marker.addListener("click", () => {
               // Zoom the map when a marker is clicked
