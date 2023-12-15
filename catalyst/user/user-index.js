@@ -166,6 +166,29 @@ if (saveChangesBtn) {
         Longitude: longitude,
       });
 
+      // Update DeviceConnection to "connected"
+      const deviceConnectionUpdateRef = ref(
+        db,
+        `GarbageBinControlNumber/${userData.gcn}/DeviceConnection`
+      );
+      await set(deviceConnectionUpdateRef, "connected");
+
+      // Check if DeviceConnection is set to "connected" and generate a notification
+      const deviceConnectionRef = ref(
+        db,
+        `GarbageBinControlNumber/${userData.gcn}/DeviceConnection`
+      );
+      const deviceConnectionSnapshot = await get(deviceConnectionRef);
+      const deviceConnectionStatus = deviceConnectionSnapshot.val();
+
+      if (deviceConnectionStatus === "connected") {
+        // Generate a notification for DeviceConnection being connected
+        generateNotification(
+          "Device Connected",
+          "The device is now connected."
+        );
+      }
+
       alert("User data and location updated successfully.");
 
       // Check and display bins immediately after updating the user's address
@@ -381,6 +404,8 @@ function displayFillLevels() {
         listenForFillLevelChangesGB3(user.gcn);
         listenForFillLevelChangesGB4(user.gcn);
         listenForStatusChanges(user.gcn);
+
+
       } else {
         console.error("User data or control number not available.");
       }
@@ -703,6 +728,9 @@ function listenForStatusChanges(gcn) {
   );
 }
 
+
+
+// Duplicate function for generating notifications with adjustments for DeviceConnection
 function generateNotification(title, message) {
   // Fetch user ID from session
   const userId = getUserIdFromSession();
@@ -760,6 +788,9 @@ function generateNotification(title, message) {
     console.error("User ID or GCN not available.");
   }
 }
+
+
+
 
 // Function to update fill level for a specific bin
 function updateFillLevel(binId, fillLevel) {
@@ -1044,6 +1075,12 @@ async function removeDevice(userId, gcn) {
         `GarbageBinControlNumber/${gcn}/Location`
       );
 
+      // Reference to the 'GarbageBinControlNumber/DeviceConnection' database
+      const deviceConnectionRef = ref(
+        db,
+        `GarbageBinControlNumber/${gcn}/DeviceConnection`
+      );
+
       // Remove specific fields from user data
       const updatedUserData = {
         addressLine1: null,
@@ -1066,6 +1103,22 @@ async function removeDevice(userId, gcn) {
         Latitude: null,
         Longitude: null,
       });
+
+      // Update DeviceConnection to "disconnected"
+      await set(deviceConnectionRef, "disconnected");
+
+      // Check if DeviceConnection is set to "disconnected" and generate a notification
+      const deviceConnectionSnapshot = await get(deviceConnectionRef);
+      const deviceConnectionStatus = deviceConnectionSnapshot.val();
+
+      if (deviceConnectionStatus === "disconnected") {
+        // Generate a notification for DeviceConnection being disconnected
+        generateNotification(
+          "Device Disconnected",
+          "The device is now disconnected."
+        );
+      }
+
 
       // After successful removal, update the UI
       updateDeviceButtons(false);
