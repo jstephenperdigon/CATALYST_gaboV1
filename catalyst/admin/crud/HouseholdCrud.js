@@ -27,15 +27,19 @@ const db = getDatabase(app);
 function generateReportHTML(report) {
   return `
         <tr>
-            <td>${report.ticketNumber}</td>
+            <td>${report.gcn}</td>
             <td>${report.firstName} ${report.lastName}</td>
             <td>${report.email}</td>
             <td>${report.mobileNumber}</td>
             <td>${report.barangay}</td>
             <td>${report.district}</td>
-            <td>${report.gcn}</td>
             <td>${report.addressLine1}</td>
             <td>${report.addressLine2}</td>
+            <td class="actions-column">
+                <button onclick="updateReport('${report.gcn}')">Update</button>
+                <button onclick="viewReport('${report.gcn}')">View</button>
+                <button onclick="deleteReport('${report.gcn}')">Delete</button>
+            </td>
         </tr>
     `;
 }
@@ -52,6 +56,15 @@ function filterReports(searchInput, sortKey) {
   });
 }
 
+// Add an event listener for Enter key press on the search input field
+document
+  .getElementById("searchInput")
+  .addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+      searchReports();
+    }
+  });
+
 // Modify the searchReports function to use the filterReports function
 window.searchReports = function () {
   const searchInput = document
@@ -65,44 +78,38 @@ window.searchReports = function () {
 // Function to get the index of the selected column
 function getIndex(key) {
   const headers = [
-    "ticketNumber",
+    "gcn",
     "Name",
     "email",
     "mobileNumber",
     "barangay",
     "district",
-    "gcn",
     "addressLine1",
     "addressLine2",
+    "action",
   ];
   return headers.indexOf(key) + 1;
 }
 
 // Function to display the reports table
 function displayReportsTable(reportsArray) {
-  // Sort reports by date and time initially
-  reportsArray.sort((a, b) => {
-    const dateA = new Date(`${a.Date} ${a.timeFormat12}`);
-    const dateB = new Date(`${b.Date} ${b.timeFormat12}`);
-    return dateA - dateB;
-  });
+  // Sort reports alphabetically based on last name
+  reportsArray.sort((a, b) => a.lastName.localeCompare(b.lastName));
 
   const reportsTable = document.getElementById("reportsTable");
   const tableHTML = `
         <table border="1">
             <thead>
                 <tr>
-                    <th>Ticket #</th>
+                    <th>GCN</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile Number(+63)</th>
                     <th>Barangay</th>
                     <th>District</th>
-                    <th>GCN</th>
                     <th>Address Line 1</th>
                     <th>Address Line 2</th>
-                    
- 
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -129,19 +136,22 @@ function updateTable() {
   });
 }
 
-// Function to reset the list
-window.resetList = function () {
-  // Clear the search input
-  document.getElementById("searchInput").value = "";
-
-  // Reset the sort dropdown to the default option
-  document.getElementById("sortDropdown").selectedIndex = 0;
-
-  // Retrieve the initial data and update the table
-  updateTable();
-};
-
 // Display the initial reports table when the page loads
 window.onload = function () {
   updateTable();
 };
+
+function updateReport(gcn) {
+  // Implement your update logic here using the GCN
+  console.log(`Update report with GCN: ${gcn}`);
+}
+
+function viewReport(gcn) {
+  // Implement your view logic here using the GCN
+  console.log(`View report with GCN: ${gcn}`);
+}
+
+function deleteReport(gcn) {
+  // Implement your delete logic here using the GCN
+  console.log(`Delete report with GCN: ${gcn}`);
+}

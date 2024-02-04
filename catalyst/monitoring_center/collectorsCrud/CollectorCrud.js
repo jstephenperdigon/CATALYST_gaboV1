@@ -27,15 +27,11 @@ const db = getDatabase(app);
 function generateReportHTML(report) {
   return `
         <tr>
-            <td>${report.ticketNumber}</td>
             <td>${report.firstName} ${report.lastName}</td>
             <td>${report.email}</td>
             <td>${report.mobileNumber}</td>
-            <td>${report.barangay}</td>
             <td>${report.district}</td>
-            <td>${report.gcn}</td>
-            <td>${report.addressLine1}</td>
-            <td>${report.addressLine2}</td>
+            <td>${report.password}</td>
         </tr>
     `;
 }
@@ -65,15 +61,13 @@ window.searchReports = function () {
 // Function to get the index of the selected column
 function getIndex(key) {
   const headers = [
-    "ticketNumber",
+    "gcn",
     "Name",
     "email",
     "mobileNumber",
     "barangay",
     "district",
-    "gcn",
-    "addressLine1",
-    "addressLine2",
+    "password",
   ];
   return headers.indexOf(key) + 1;
 }
@@ -92,17 +86,11 @@ function displayReportsTable(reportsArray) {
         <table border="1">
             <thead>
                 <tr>
-                    <th>Ticket #</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile Number(+63)</th>
-                    <th>Barangay</th>
                     <th>District</th>
-                    <th>GCN</th>
-                    <th>Address Line 1</th>
-                    <th>Address Line 2</th>
-                    
- 
+                    <th>Password</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,7 +103,7 @@ function displayReportsTable(reportsArray) {
 
 // Function to update the table when data changes
 function updateTable() {
-  const reportsRef = ref(db, "Accounts/VerifiedUserAccounts");
+  const reportsRef = ref(db, "Accounts/Collectors");
   onValue(reportsRef, (snapshot) => {
     const reportsData = snapshot.val();
     if (reportsData) {
