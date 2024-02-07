@@ -5,6 +5,7 @@ import {
   ref,
   get,
   onValue,
+  remove, // Import the remove function
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
@@ -23,22 +24,29 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// Function to redirect to the "View User" page
+window.viewReport = function (name) {
+  // Add the logic to redirect to the "View User" page with the appropriate query parameter
+  window.location.href = `HouseholdView.html?name=${name}`;
+};
+
+// Function to redirect to the "View User" page
+window.updateReport = function (name) {
+  // Add the logic to redirect to the "View User" page with the appropriate query parameter
+  window.location.href = `HouseholdUpdate.html?name=${name}`;
+};
+
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
   return `
         <tr>
-            <td>${report.gcn}</td>
             <td>${report.firstName} ${report.lastName}</td>
             <td>${report.email}</td>
             <td>${report.mobileNumber}</td>
-            <td>${report.barangay}</td>
-            <td>${report.district}</td>
-            <td>${report.addressLine1}</td>
-            <td>${report.addressLine2}</td>
             <td class="actions-column">
-                <button onclick="updateReport('${report.gcn}')">Update</button>
-                <button onclick="viewReport('${report.gcn}')">View</button>
-                <button onclick="deleteReport('${report.gcn}')">Delete</button>
+                <button onclick="viewReport('${report.name}')">View</button>
+                <button onclick="updateReport('${report.name}')">Update</button>
+                <button onclick="deleteReport('${report.name}')">Delete</button>
             </td>
         </tr>
     `;
@@ -77,17 +85,7 @@ window.searchReports = function () {
 
 // Function to get the index of the selected column
 function getIndex(key) {
-  const headers = [
-    "gcn",
-    "Name",
-    "email",
-    "mobileNumber",
-    "barangay",
-    "district",
-    "addressLine1",
-    "addressLine2",
-    "action",
-  ];
+  const headers = ["Name", "email", "mobileNumber", "action"];
   return headers.indexOf(key) + 1;
 }
 
@@ -101,14 +99,9 @@ function displayReportsTable(reportsArray) {
         <table border="1">
             <thead>
                 <tr>
-                    <th>GCN</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile Number(+63)</th>
-                    <th>Barangay</th>
-                    <th>District</th>
-                    <th>Address Line 1</th>
-                    <th>Address Line 2</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -122,12 +115,12 @@ function displayReportsTable(reportsArray) {
 
 // Function to update the table when data changes
 function updateTable() {
-  const reportsRef = ref(db, "Accounts/VerifiedUserAccounts");
+  const reportsRef = ref(db, "Accounts/HouseHoldUsers");
   onValue(reportsRef, (snapshot) => {
     const reportsData = snapshot.val();
     if (reportsData) {
       const reportsArray = Object.entries(reportsData).map(
-        ([ticketNumber, report]) => ({ ticketNumber, ...report })
+        ([name, report]) => ({ name, ...report })
       );
       displayReportsTable(reportsArray);
     } else {
@@ -139,19 +132,53 @@ function updateTable() {
 // Display the initial reports table when the page loads
 window.onload = function () {
   updateTable();
+
+  // Check if there is a query parameter for viewing a specific user
+  const params = new URLSearchParams(window.location.search);
+  const userNameToView = params.get("name");
+
+  if (userNameToView) {
+    // If there is a user name in the query parameter, trigger the viewReport function
+    window.viewReport(userNameToView);
+  }
 };
 
-function updateReport(gcn) {
-  // Implement your update logic here using the GCN
-  console.log(`Update report with GCN: ${gcn}`);
+function updateReport(name) {
+  // Check if there is a query parameter for viewing a specific user
+  const params = new URLSearchParams(window.location.search);
+  const userNameToView = params.get("name");
+
+  if (userNameToUpdate) {
+    // If there is a user name in the query parameter, trigger the viewReport function
+    window.updateReport(userNameToUpdate);
+  }
 }
 
-function viewReport(gcn) {
-  // Implement your view logic here using the GCN
-  console.log(`View report with GCN: ${gcn}`);
-}
+// Function to delete a report
+window.deleteReport = function (name) {
+  // Reference to the specific report in the database
+  const reportRef = ref(db, `Accounts/HouseHoldUsers/${name}`);
 
-function deleteReport(gcn) {
-  // Implement your delete logic here using the GCN
-  console.log(`Delete report with GCN: ${gcn}`);
-}
+  // Ask for confirmation before deleting the report
+  const confirmation = confirm(
+    `Are you sure you want to delete ${name}'s report?`
+  );
+
+  if (confirmation) {
+    // Remove the report from the database
+    remove(reportRef)
+      .then(() => {
+        console.log(`Report with name ${name} deleted successfully.`);
+        // Update the table after deletion
+        updateTable();
+      })
+      .catch((error) => {
+        console.error(
+          `Error deleting report with name ${name}:`,
+          error.message
+        );
+      });
+  } else {
+    console.log(`Deletion of ${name}'s report canceled.`);
+  }
+};
