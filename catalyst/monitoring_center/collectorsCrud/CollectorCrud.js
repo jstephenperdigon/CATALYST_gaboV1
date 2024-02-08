@@ -5,6 +5,7 @@ import {
   ref,
   get,
   onValue,
+  remove, // Import the remove function
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
@@ -23,6 +24,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// Function to redirect to the "View User" page
+window.viewReport = function (name) {
+  // Add the logic to redirect to the "View User" page with the appropriate query parameter
+  window.location.href = `HouseholdView.html?name=${name}`;
+};
+
+// Function to redirect to the "View User" page
+window.updateReport = function (name) {
+  // Add the logic to redirect to the "View User" page with the appropriate query parameter
+  window.location.href = `HouseholdUpdate.html?name=${name}`;
+};
+
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
   return `
@@ -32,6 +45,11 @@ function generateReportHTML(report) {
             <td>${report.mobileNumber}</td>
             <td>${report.district}</td>
             <td>${report.password}</td>
+            <td class="actions-column">
+                <button onclick="viewReport('${report.name}')">View</button>
+                <button onclick="updateReport('${report.name}')">Update</button>
+                <button onclick="deleteReport('${report.name}')">Delete</button>
+            </td>
         </tr>
     `;
 }
@@ -48,6 +66,15 @@ function filterReports(searchInput, sortKey) {
   });
 }
 
+// Add an event listener for Enter key press on the search input field
+document
+  .getElementById("searchInput")
+  .addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+      searchReports();
+    }
+  });
+
 // Modify the searchReports function to use the filterReports function
 window.searchReports = function () {
   const searchInput = document
@@ -61,25 +88,20 @@ window.searchReports = function () {
 // Function to get the index of the selected column
 function getIndex(key) {
   const headers = [
-    "gcn",
     "Name",
     "email",
     "mobileNumber",
-    "barangay",
     "district",
     "password",
+    "action",
   ];
   return headers.indexOf(key) + 1;
 }
 
 // Function to display the reports table
 function displayReportsTable(reportsArray) {
-  // Sort reports by date and time initially
-  reportsArray.sort((a, b) => {
-    const dateA = new Date(`${a.Date} ${a.timeFormat12}`);
-    const dateB = new Date(`${b.Date} ${b.timeFormat12}`);
-    return dateA - dateB;
-  });
+  // Sort reports alphabetically based on last name
+  reportsArray.sort((a, b) => a.lastName.localeCompare(b.lastName));
 
   const reportsTable = document.getElementById("reportsTable");
   const tableHTML = `
@@ -91,6 +113,7 @@ function displayReportsTable(reportsArray) {
                     <th>Mobile Number(+63)</th>
                     <th>District</th>
                     <th>Password</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,7 +131,7 @@ function updateTable() {
     const reportsData = snapshot.val();
     if (reportsData) {
       const reportsArray = Object.entries(reportsData).map(
-        ([ticketNumber, report]) => ({ ticketNumber, ...report })
+        ([name, report]) => ({ name, ...report })
       );
       displayReportsTable(reportsArray);
     } else {
@@ -117,19 +140,56 @@ function updateTable() {
   });
 }
 
-// Function to reset the list
-window.resetList = function () {
-  // Clear the search input
-  document.getElementById("searchInput").value = "";
-
-  // Reset the sort dropdown to the default option
-  document.getElementById("sortDropdown").selectedIndex = 0;
-
-  // Retrieve the initial data and update the table
-  updateTable();
-};
-
 // Display the initial reports table when the page loads
 window.onload = function () {
   updateTable();
+
+  // Check if there is a query parameter for viewing a specific user
+  const params = new URLSearchParams(window.location.search);
+  const userNameToView = params.get("name");
+
+  if (userNameToView) {
+    // If there is a user name in the query parameter, trigger the viewReport function
+    window.viewReport(userNameToView);
+  }
+};
+
+function updateReport(name) {
+  // Check if there is a query parameter for viewing a specific user
+  const params = new URLSearchParams(window.location.search);
+  const userNameToView = params.get("name");
+
+  if (userNameToUpdate) {
+    // If there is a user name in the query parameter, trigger the viewReport function
+    window.updateReport(userNameToUpdate);
+  }
+}
+
+// Function to delete a report
+window.deleteReport = function (name) {
+  // Reference to the specific report in the database
+  const reportRef = ref(db, `Accounts/Collectors/${name}`);
+
+  // Ask for confirmation before deleting the report
+  const confirmation = confirm(
+    `Are you sure you want to delete ${name}'s report?`
+  );
+
+  if (confirmation) {
+    // Remove the report from the database
+    remove(reportRef)
+      .then(() => {
+        console.log(`Report with name ${name} deleted successfully.`);
+        // Update the table after deletion
+        updateTable();
+      })
+      .catch((error) => {
+        console.error(
+          `Error deleting report with name ${name}:`,
+          error.message
+        );
+      });
+  } else {
+    console.log(`Deletion of ${name}'s report canceled.`);
+  }
 };

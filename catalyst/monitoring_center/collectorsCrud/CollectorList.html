@@ -34,10 +34,29 @@
             padding: 8px;
             text-align: left;
         }
+
+        #BackButton {
+            margin-left: 0px;
+            margin-right: 1250px;
+            margin-top: -12px;
+        }
+
+        #reportsTable table .actions-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #reportsTable table .actions-column button {
+            margin-top: 5px;
+        }
     </style>
 </head>
+<button id="BackButton" onclick="Back()">Back</button>
 
 <body>
+
+
     <div id="searchContainer">
         <label for="searchInput">Search: </label>
         <input type="text" id="searchInput" />
@@ -49,12 +68,8 @@
             <option value="email">Email</option>
             <option value="mobileNumber">Mobile Number(+63)</option>
             <option value="district">District</option>
-            <option value="password">Password</option>
-
         </select>
     </div>
-
-    <button onclick="resetList()">Reset List</button>
 
     <div id="reportsTable">
         <table>
@@ -65,16 +80,19 @@
                     <th>Mobile Number(+63)</th>
                     <th>District</th>
                     <th>Password</th>
+                    <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Add rows dynamically using JavaScript -->
-            </tbody>
+
         </table>
     </div>
 
-
     <script type="module" src="CollectorCrud.js"> </script>
+    <script>
+        function Back() {
+            window.history.back();
+        }
+    </script>
 </body>
 
 </html>
