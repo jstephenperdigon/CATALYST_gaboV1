@@ -27,13 +27,19 @@ const db = getDatabase(app);
 // Function to redirect to the "View User" page
 window.viewReport = function (name) {
   // Add the logic to redirect to the "View User" page with the appropriate query parameter
-  window.location.href = `HouseholdView.html?name=${name}`;
+  window.location.href = `CollectorView.html?name=${name}`;
 };
 
 // Function to redirect to the "View User" page
 window.updateReport = function (name) {
   // Add the logic to redirect to the "View User" page with the appropriate query parameter
-  window.location.href = `HouseholdUpdate.html?name=${name}`;
+  window.location.href = `CollectorUpdate.html?name=${name}`;
+};
+
+// Function to redirect to the "View User" page
+window.AddUser = function () {
+  // Add the logic to redirect to the "View User" page with the appropriate query parameter
+  window.location.href = `CollectorCreate.html?name=${""}`;
 };
 
 // Function to generate the HTML for a single report
