@@ -1,104 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Collectors Table</title>
+    <link rel="stylesheet" href="../src/mdb.min.css" />
+    <link rel="stylesheet" href="../src/bootstrap.min.css" />
+    <link rel="stylesheet" href="styling/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px;
-        }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+      }
 
-        #searchContainer {
-            margin-bottom: 20px;
-        }
+      #searchContainer {
+        margin-bottom: 20px;
+      }
 
-        #reportsTable {
-            text-align: center;
-            margin-top: 20px;
-        }
+      #reportsTable {
+        text-align: center;
+        margin-top: 20px;
+      }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
 
-        th,
-        td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
 
-        #BackButton {
-            margin-left: 0px;
-            margin-right: 1250px;
-            margin-top: -12px;
-        }
-        
-        #AddUserButton {
-            margin-left: 0px;
-            margin-right: -1220px;
-            margin-top: -22px;
-        }
+      #BackButton {
+        margin-left: 0px;
+        margin-right: 1250px;
+        margin-top: -12px;
+      }
 
-        #reportsTable table .actions-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      #AddUserButton {
+        margin-left: 0px;
+        margin-right: -1220px;
+        margin-top: -22px;
+      }
 
-        #reportsTable table .actions-column button {
-            margin-top: 5px;
-        }
+      #reportsTable table .actions-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #reportsTable table .actions-column button {
+        margin-top: 5px;
+      }
     </style>
-</head>
-<button id="BackButton" onclick="Back()">Back</button>
-<button id="AddUserButton" onclick="AddUser()">Add User</button>
-<body>
-
-
+  </head>
+  <button id="BackButton" onclick="Back()">Back</button>
+  <button id="AddUserButton" onclick="AddUser()">Add User</button>
+  <body>
     <div id="searchContainer">
-        <label for="searchInput">Search: </label>
-        <input type="text" id="searchInput" />
-        <button onclick="searchReports()">Search</button>
+      <label for="searchInput">Search: </label>
+      <input type="text" id="searchInput" />
+      <label for="searchButton" onclick="searchReports()">
+        <i class="bx bx-search"></i>
+      </label>
+      <button id="searchButton" style="display: none" onclick="searchReports()">
+        Search
+      </button>
 
-        <label for="sortDropdown">Sort By: </label>
-        <select id="sortDropdown">
-            <option value="Name">Name</option>
-            <option value="email">Email</option>
-            <option value="mobileNumber">Mobile Number(+63)</option>
-            <option value="district">District</option>
-        </select>
+      <label for="sortDropdown">Sort By: </label>
+      <select id="sortDropdown">
+        <option value="Name">Name</option>
+        <option value="email">Email</option>
+        <option value="mobileNumber">Mobile Number(+63)</option>
+        <option value="district">District</option>
+      </select>
     </div>
 
     <div id="reportsTable">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile Number(+63)</th>
-                    <th>District</th>
-                    <th>Password</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-        </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile Number(+63)</th>
+            <th>District</th>
+            <th>Password</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+      </table>
     </div>
 
-    <script type="module" src="CollectorCrud.js"> </script>
+    <script type="module" src="CollectorCrud.js"></script>
     <script>
-        function Back() {
-            window.history.back();
-        }
+      function Back() {
+        window.history.back();
+      }
     </script>
-</body>
-
+  </body>
 </html>
