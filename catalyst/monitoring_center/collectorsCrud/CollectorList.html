@@ -107,8 +107,20 @@
 
     <script type="module" src="CollectorCrud.js"></script>
     <script>
+      // Function to handle navigation based on user actions
+      function handleNavigation(action) {
+        // Perform any necessary actions based on the provided action parameter
+
+        // Example: If action is 'view', you can handle it here
+
+        // Update the navigation history
+        window.history.pushState({ page: action }, "", `#${action}`);
+      }
+
+      // Function to go back, considering the navigation history
       function Back() {
-        window.history.back();
+        // Redirect to index.html
+        window.location.href = "../index.html";
       }
     </script>
   </body>
