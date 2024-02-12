@@ -30,25 +30,35 @@
       #reportsTable {
         text-align: center;
         margin-top: 20px;
+        width: 95vw; /* Adjust the width to fit the screen */
       }
 
       table {
-        border-collapse: collapse;
+        border: none;
         width: 100%;
         margin-top: 20px;
       }
 
-      th,
-      td {
-        border: 1px solid black;
+      th {
+        border: none;
         padding: 8px;
-        text-align: left;
+        text-align: center;
+        background-color: white;
+      }
+
+      td {
+        border: none;
+        padding: 8px;
+        text-align: center;
+        background-color: rgb(255, 255, 255);
       }
 
       #BackButton {
-        margin-left: 0px;
-        margin-right: 1250px;
+        margin-right: auto; /* Align to the left */
         margin-top: -12px;
+        background: none; /* Remove background */
+        border: none; /* Remove border */
+        cursor: pointer; /* Add pointer cursor on hover */
       }
 
       #AddUserButton {
@@ -66,9 +76,55 @@
       #reportsTable table .actions-column button {
         margin-top: 5px;
       }
+      .view-button {
+        background-color: rgb(54, 238, 54);
+      }
+
+      .update-button {
+        background-color: rgb(0, 102, 255);
+      }
+
+      .delete-button {
+        background-color: red;
+      }
+
+      /* Style the icon inside the button */
+      .actions-column button i {
+        color: white; /* Set the color of the icon to white */
+      }
+
+      .actions-column button {
+        border: none; /* Remove border from all buttons */
+      }
+      /* Apply gray background to odd rows */
+      table tr:nth-child(odd) td {
+        background-color: gray;
+      }
+
+      /* Apply white background to even rows */
+      table tr:nth-child(even) td {
+        background-color: white;
+      }
+      /* Style for horizontal icons */
+      .horizontal-icons {
+        display: flex;
+        justify-content: center; /* Align icons horizontally */
+      }
+
+      /* Add margin between the icons */
+      .horizontal-icons button {
+        margin-right: 5px;
+      }
+      /* Increase the size of the icons */
+      .actions-column button i {
+        font-size: 20px; /* Adjust the size as needed */
+      }
     </style>
   </head>
-  <button id="BackButton" onclick="Back()">Back</button>
+  <button id="BackButton" onclick="Back()">
+    <i class="bx bx-arrow-back"></i>
+  </button>
+
   <button id="AddUserButton" onclick="AddUser()">Add User</button>
   <body>
     <div id="searchContainer">
@@ -107,20 +163,8 @@
 
     <script type="module" src="CollectorCrud.js"></script>
     <script>
-      // Function to handle navigation based on user actions
-      function handleNavigation(action) {
-        // Perform any necessary actions based on the provided action parameter
-
-        // Example: If action is 'view', you can handle it here
-
-        // Update the navigation history
-        window.history.pushState({ page: action }, "", `#${action}`);
-      }
-
-      // Function to go back, considering the navigation history
       function Back() {
-        // Redirect to index.html
-        window.location.href = "../index.html";
+        window.history.back();
       }
     </script>
   </body>
