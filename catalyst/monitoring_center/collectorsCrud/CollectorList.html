@@ -105,7 +105,7 @@
       }
       /* Apply gray background to odd rows */
       table tr:nth-child(odd) td {
-        background-color: gray;
+        background-color: #e4e4e4;
       }
 
       /* Apply white background to even rows */
@@ -128,18 +128,22 @@
       }
     </style>
   </head>
-  <button id="BackButton" onclick="GoToIndex()">
-    <i class="bx bx-arrow-back"></i>
-  </button>
 
-  <button id="AddUserButton" onclick="AddUser()">Add User</button>
   <body>
+    <button id="BackButton" onclick="GoToIndex()" class="btn btn-outline-dark">
+      <i class="bx bx-arrow-back"></i>
+    </button>
+    <button id="AddUserButton" onclick="AddUser()" class="btn btn-outline-dark">
+      Add Item
+    </button>
+
     <div id="searchContainer">
       <label for="searchInput">Search: </label>
       <input type="text" id="searchInput" />
       <label for="searchButton" onclick="searchReports()">
         <i class="bx bx-search"></i>
       </label>
+
       <button id="searchButton" style="display: none" onclick="searchReports()">
         Search
       </button>

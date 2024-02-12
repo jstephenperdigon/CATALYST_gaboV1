@@ -40,11 +40,18 @@ function generateReportHTML(report) {
             <td>${report.firstName} ${report.lastName}</td>
             <td>${report.email}</td>
             <td>${report.mobileNumber}</td>
-            <td>
-                <!-- Action buttons go here -->
-                <button onclick="performAction('edit', '${report.ticketNumber}')">Edit</button>
-                <button onclick="performAction('delete', '${report.ticketNumber}')">Delete</button>
-                <button onclick="performAction('details', '${report.ticketNumber}')">Details</button>
+            <td class="actions-column">
+              <div class="horizontal-icons">
+                <button class="view-button" onclick="viewReport('${report.name}')">
+                  <i class="bx bxs-show"></i>
+                </button>
+                <button class="update-button" onclick="updateReport('${report.name}')">
+                  <i class="bx bxs-edit"></i>
+                </button>
+                <button class="delete-button" onclick="deleteReport('${report.name}')">
+                  <i class="bx bxs-trash"></i>
+                </button>
+              </div>
             </td>
         </tr>
     `;

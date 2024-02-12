@@ -28,20 +28,23 @@
 
       /* Add this style for better table appearance */
       table {
+        border: none;
         border-collapse: collapse;
         width: 100%;
         margin-top: 20px;
       }
 
-      th,
       td {
-        border: 1px solid #ddd;
+        border: solid #e4e4e4 1px;
         padding: 8px;
-        text-align: left;
+        text-align: center;
       }
 
       th {
-        background-color: #f2f2f2;
+        border: none;
+        background-color: #e4e4e4;
+        padding: 8px;
+        text-align: center;
       }
 
       .notification-box {
@@ -54,6 +57,42 @@
         background-color: #fff;
         border: 1px solid #ccc;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      /* Style for horizontal icons */
+      .horizontal-icons {
+        border: none;
+        display: flex;
+        justify-content: center; /* Align icons horizontally */
+      }
+
+      /* Add margin between the icons */
+      .horizontal-icons button {
+        margin-right: 10px;
+        border: none;
+      }
+      /* Increase the size of the icons */
+      .actions-column button i {
+        color: white;
+        font-size: 20px; /* Adjust the size as needed */
+      }
+      .view-button {
+        background-color: blue;
+      }
+
+      .update-button {
+        background-color: orange;
+      }
+
+      .delete-button {
+        background-color: red;
+      }
+
+      #reportsTable {
+        text-align: center;
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        width: 80vw; /* Adjust the width to fit the screen */
       }
     </style>
   </head>
@@ -194,8 +233,6 @@
       <div>
         <label for="searchInput">Search:</label>
         <input type="text" id="searchInput" oninput="searchReports()" />
-      </div>
-      <div>
         <label for="sortDropdown">Sort By: </label>
         <select id="sortDropdown">
           <option value="ticketNumber">Ticket #</option>

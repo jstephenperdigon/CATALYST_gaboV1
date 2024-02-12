@@ -51,19 +51,19 @@ function generateReportHTML(report) {
             <td>${report.mobileNumber}</td>
             <td>${report.district}</td>
             <td>${report.password}</td>
-<td class="actions-column">
-  <div class="horizontal-icons">
-    <button class="view-button" onclick="viewReport('${report.name}')">
-      <i class='bx bxs-show'></i>
-    </button>
-    <button class="update-button" onclick="updateReport('${report.name}')">
-      <i class='bx bxs-edit'></i>
-    </button>
-    <button class="delete-button" onclick="deleteReport('${report.name}')">
-      <i class='bx bxs-trash'></i>
-    </button>
-  </div>
-</td>
+          <td class="actions-column">
+            <div class="horizontal-icons">
+              <button class="view-button" onclick="viewReport('${report.name}')">
+                <i class='bx bxs-show'></i>
+              </button>
+              <button class="update-button" onclick="updateReport('${report.name}')">
+                <i class='bx bxs-edit'></i>
+              </button>
+              <button class="delete-button" onclick="deleteReport('${report.name}')">
+                <i class='bx bxs-trash'></i>
+              </button>
+            </div>
+          </td>
 
 
         </tr>
