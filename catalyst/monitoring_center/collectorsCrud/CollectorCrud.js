@@ -101,7 +101,7 @@ function getIndex(key) {
 // Function to display the reports table
 function displayReportsTable(reportsArray) {
   // Sort reports alphabetically based on last name
-  reportsArray.sort((a, b) => a.lastName.localeCompare(b.lastName));
+  reportsArray.sort((a, b) => a.firstName.localeCompare(b.lastName));
 
   const reportsTable = document.getElementById("reportsTable");
   const tableHTML = `
@@ -157,7 +157,7 @@ window.onload = function () {
 function updateReport(name) {
   // Check if there is a query parameter for viewing a specific user
   const params = new URLSearchParams(window.location.search);
-  const userNameToView = params.get("name");
+  const userNameToUpdate = params.get("name");
 
   if (userNameToUpdate) {
     // If there is a user name in the query parameter, trigger the viewReport function

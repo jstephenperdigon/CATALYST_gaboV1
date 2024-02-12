@@ -1,9 +1,11 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+// Import necessary Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
 import {
   getDatabase,
   ref,
-  get,
-} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+  push,
+  set,
+} from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -21,48 +23,44 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Function to get user details by name
-async function getUserDetails(name) {
-  const userRef = ref(db, `Accounts/Collectors/${name}`);
-  const snapshot = await get(userRef);
+const usersRef = ref(db, "Accounts/Collectors");
 
-  if (snapshot.exists()) {
-    return snapshot.val();
-  } else {
-    console.error(`User with name ${name} not found.`);
-    return null;
-  }
+// Function to handle form submission
+function addUser(event) {
+  event.preventDefault(); // Prevent the default form submission behavior
+
+  // Get form values
+  const firstName = document.getElementById("firstName").value;
+  const lastName = document.getElementById("lastName").value;
+  const email = document.getElementById("email").value;
+  const mobileNumber = document.getElementById("mobileNumber").value;
+  const district = document.getElementById("district").value;
+  const password = document.getElementById("password").value;
+
+  // Create a new user object
+  const newUser = {
+    firstName,
+    lastName,
+    email,
+    mobileNumber,
+    district,
+    password,
+  };
+
+  // Push the new user data to the "users" node in the database
+  const newUserRef = push(usersRef);
+  set(newUserRef, newUser);
+
+  // Optionally, you can redirect the user to another page after successful submission
+  window.location.href = "CollectorList.html";
 }
 
-// Function to display user details on the page
-function displayUserDetails(user) {
-  document.getElementById("name").textContent =
-    user.firstName + " " + user.lastName;
-  document.getElementById("email").textContent = user.email;
-  document.getElementById("mobile").textContent = user.mobileNumber;
-  document.getElementById("district").textContent = user.district;
-  document.getElementById("password").textContent = user.password;
-}
+// Attach the addUser function to the form submission event
+document.getElementById("viewForm").addEventListener("submit", addUser);
 
 // Function to navigate back to HouseholdList.html
 function Back() {
   window.location.href = "CollectorList.html";
-}
-
-// Extract user name from the URL parameter
-const params = new URLSearchParams(window.location.search);
-const userName = params.get("name");
-
-// Check if a user name is provided in the URL
-if (userName) {
-  // Fetch user details and display on the page
-  getUserDetails(userName).then((user) => {
-    if (user) {
-      displayUserDetails(user);
-    }
-  });
-} else {
-  console.error("User name not provided in the URL.");
 }
 
 // Attach the goBack function to the BackButton click event
