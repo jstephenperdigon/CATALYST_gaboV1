@@ -121,7 +121,7 @@
       }
     </style>
   </head>
-  <button id="BackButton" onclick="Back()">
+  <button id="BackButton" onclick="GoToIndex()">
     <i class="bx bx-arrow-back"></i>
   </button>
 
@@ -163,8 +163,8 @@
 
     <script type="module" src="CollectorCrud.js"></script>
     <script>
-      function Back() {
-        window.history.back();
+      function GoToIndex() {
+        window.location.href = "../index.html";
       }
     </script>
   </body>
