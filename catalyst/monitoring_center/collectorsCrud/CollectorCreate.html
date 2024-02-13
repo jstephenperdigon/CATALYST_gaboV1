@@ -71,7 +71,7 @@
 
       input[type="submit"] {
         width: auto;
-        margin-left: 10px; /* Add some spacing between buttons */
+        margin-left: 10px;
         padding: 10px;
         border: none;
         border-radius: 5px;
@@ -87,7 +87,7 @@
 
       button[type="button"] {
         width: 100%;
-        margin: 0 auto; /* Center the button horizontally */
+        margin: 0 auto;
         padding: 10px;
         border: none;
         border-radius: 5px;
@@ -103,12 +103,12 @@
       .button-container {
         display: flex;
         justify-content: space-between;
-        margin-right: 15px; /* Add spacing between the buttons */
+        margin-right: 15px;
       }
 
       .back-button {
-        flex: 1; /* Take up the available space */
-        margin-right: 5px; /* Add some spacing between buttons */
+        flex: 1;
+        margin-right: 5px;
       }
 
       .error-message {
@@ -139,7 +139,7 @@
   </head>
   <body>
     <div class="container">
-      <h1><i class="fas fa-user-plus"></i> Add User</h1>
+      <h1><i class="fas fa-user-plus"></i> ADD USER</h1>
 
       <form id="viewForm" onsubmit="return validateContactNumber()">
         <div class="input-container">
@@ -206,8 +206,13 @@
           />
         </div>
         <div class="button-container">
-          <button type="button" class="back-button" id="BackButton" onclick="Back()">
-            <i class="fas fa-arrow-left"></i> Back
+          <button
+            type="button"
+            class="back-button"
+            id="BackButton"
+            onclick="Back()"
+          >
+            Back
           </button>
           <input type="submit" value="Create" />
         </div>
