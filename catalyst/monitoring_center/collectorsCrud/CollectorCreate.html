@@ -4,33 +4,235 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add User</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1BX6hO0pWih6LvwB3t3uLzLbUGVDgj8d5lnv6h0V+hzChnr8wO3IgIdckbPWHPLoOipULjyTyi0X8j+Ojpqf3g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+
+      .container {
+        max-width: 400px;
+        margin: 100px auto 0;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        justify-content: center; /* Center its child elements horizontally */
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: center; /* Center align the content inside the form */
+      }
+
+      .input-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        width: calc(100% - 24px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      input[type="tel"] {
+        width: calc(88% - 24px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        width: auto;
+        margin-left: 10px; /* Add some spacing between buttons */
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        flex: 1;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      button[type="button"] {
+        width: 100%;
+        margin: 0 auto; /* Center the button horizontally */
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      button[type="button"]:hover {
+        background-color: #0056b3;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-right: 15px; /* Add spacing between the buttons */
+      }
+
+      .back-button {
+        flex: 1; /* Take up the available space */
+        margin-right: 5px; /* Add some spacing between buttons */
+      }
+
+      .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .prefix-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .prefix {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        background-color: #ffffff;
+        font-size: 15px;
+        color: gray;
+      }
+
+      .prefix-text {
+        margin-left: 5px;
+      }
+    </style>
   </head>
-  <button id="BackButton" onclick="Back()">Back</button>
   <body>
-    <h1>Add User</h1>
+    <div class="container">
+      <h1><i class="fas fa-user-plus"></i> Add User</h1>
 
-    <form id="viewForm">
-      <label for="name">First Name:</label>
-      <input type="text" id="firstName" name="name" required /><br />
+      <form id="viewForm" onsubmit="return validateContactNumber()">
+        <div class="input-container">
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            required
+            placeholder="First Name"
+          />
+        </div>
 
-      <label for="name">Last Name:</label>
-      <input type="text" id="lastName" name="name" required /><br />
+        <div class="input-container">
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            required
+            placeholder="Last Name"
+          />
+        </div>
 
-      <label for="email">Email:</label>
-      <input type="text" id="email" name="email" required /><br />
+        <div class="input-container">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="Email Address"
+          />
+        </div>
 
-      <label for="mobile">Mobile Number(+63):</label>
-      <input type="text" id="mobileNumber" name="mobile" required /><br />
+        <div class="input-container">
+          <div class="prefix-container">
+            <div class="prefix">+63</div>
+            <input
+              type="tel"
+              id="mobileNumber"
+              name="mobileNumber"
+              required
+              placeholder="Mobile Number"
+            />
+          </div>
+          <span id="mobileNumberError" class="error-message"></span>
+        </div>
 
-      <label for="district">District:</label>
-      <input type="text" id="district" name="district" required /><br />
+        <div class="input-container">
+          <input
+            type="text"
+            id="district"
+            name="district"
+            required
+            placeholder="District"
+          />
+        </div>
 
-      <label for="password">Password:</label>
-      <input type="text" id="password" name="password" required /><br />
-
-      <input type="submit" value="Create" />
-    </form>
+        <div class="input-container">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            placeholder="Password"
+          />
+        </div>
+        <div class="button-container">
+          <button type="button" class="back-button" onclick="Back()">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <input type="submit" value="Create" />
+        </div>
+      </form>
+    </div>
 
     <script type="module" src="CollectorCreate.js"></script>
+
+    <script>
+      function validateContactNumber() {
+        const mobileNumberInput = document.getElementById("mobileNumber");
+        const mobileNumberError = document.getElementById("mobileNumberError");
+        const mobileNumber = mobileNumberInput.value;
+
+        const mobileNumberPattern = /^\d{9}$/;
+
+        if (!mobileNumberPattern.test(mobileNumber)) {
+          mobileNumberError.textContent =
+            "Please enter a valid 9-digit mobile number.";
+          return false;
+        }
+
+        mobileNumberError.textContent = "";
+        return true;
+      }
+    </script>
   </body>
 </html>
