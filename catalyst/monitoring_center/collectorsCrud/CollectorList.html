@@ -199,19 +199,21 @@
           onclick="AddUser()"
           class="btn btn-outline-dark"
         >
-          Add Item
+          Add User
         </button>
       </div>
     </header>
 
-    <div id="searchContainer" style="margin-right: 70%">
-      <input type="text" id="searchInput" placeholder="Search..." />
-
+    <div id="searchContainer" style="margin-right: 65%">
+      <input type="text" id="searchInput" placeholder="Search...">
+      <p>Sort By:</p>
       <select id="sortDropdown">
-        <option value="Name">Sort By: Name</option>
-        <option value="email">Sort By: Email</option>
-        <option value="mobileNumber">Sort By: Mobile Number(+63)</option>
-        <option value="district">Sort By: District</option>
+        <option value="GCL">GCL Number</option>
+        <option value="Name">Name</option>
+        <option value="email">Email</option>
+        <option value="mobileNumber">Mobile Number(+63)</option>
+        <option value="district">District</option>
+        <option value="barangay">Barangay</option>
       </select>
     </div>
 
@@ -219,11 +221,12 @@
       <table>
         <thead>
           <tr>
+            <th>GCL Number</th>
             <th>Name</th>
             <th>Email</th>
             <th>Mobile Number(+63)</th>
             <th>District</th>
-            <th>Password</th>
+            <th>Barangay</th>
             <th>Action</th>
           </tr>
         </thead>

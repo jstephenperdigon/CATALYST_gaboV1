@@ -141,7 +141,7 @@
     <div class="container">
       <h1><i class="fas fa-user-plus"></i> ADD USER</h1>
 
-      <form id="viewForm" onsubmit="return validateContactNumber()">
+      <form id="viewForm">
         <div class="input-container">
           <input
             type="text"
@@ -185,26 +185,26 @@
           </div>
           <span id="mobileNumberError" class="error-message"></span>
         </div>
-
+        
         <div class="input-container">
-          <input
-            type="text"
-            id="district"
-            name="district"
-            required
-            placeholder="District"
-          />
+          <label for="districtDropdown"></label>
+          <select class="form-select" id="districtDropdown" required>
+            <option selected disabled>Select District</option>
+            <option value="1">District 1</option>
+            <option value="2">District 2</option>
+            <option value="3">District 3</option>
+          </select>
         </div>
+          <br>
+        
+          <div class="input-container">
+            <label for="barangayDropdown"></label>
+            <select class="form-select" id="barangayDropdown" required>
+              <option selected disabled>Select Barangay</option>
+            </select>
+          </div>
+          <br>
 
-        <div class="input-container">
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            placeholder="Password"
-          />
-        </div>
         <div class="button-container">
           <button
             type="button"
@@ -221,23 +221,5 @@
 
     <script type="module" src="CollectorCreate.js"></script>
 
-    <script>
-      function validateContactNumber() {
-        const mobileNumberInput = document.getElementById("mobileNumber");
-        const mobileNumberError = document.getElementById("mobileNumberError");
-        const mobileNumber = mobileNumberInput.value;
-
-        const mobileNumberPattern = /^\d{9}$/;
-
-        if (!mobileNumberPattern.test(mobileNumber)) {
-          mobileNumberError.textContent =
-            "Please enter a valid 9-digit mobile number.";
-          return false;
-        }
-
-        mobileNumberError.textContent = "";
-        return true;
-      }
-    </script>
   </body>
 </html>
