@@ -21,49 +21,56 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Function to get user details by name
-async function getUserDetails(name) {
-  const userRef = ref(db, `Accounts/Collectors/${name}`);
-  const snapshot = await get(userRef);
-
-  if (snapshot.exists()) {
-    return snapshot.val();
-  } else {
-    console.error(`User with name ${name} not found.`);
-    return null;
-  }
-}
-
-// Function to display user details on the page
-function displayUserDetails(user) {
-  document.getElementById("name").textContent =
-    user.firstName + " " + user.lastName;
-  document.getElementById("email").textContent = user.email;
-  document.getElementById("mobile").textContent = user.mobileNumber;
-  document.getElementById("district").textContent = user.district;
-  document.getElementById("password").textContent = user.password;
-}
-
-// Function to navigate back to HouseholdList.html
-function goBack() {
+// Function to navigate back to CollectorList.html
+function Back() {
   window.location.href = "CollectorList.html";
 }
 
-// Extract user name from the URL parameter
-const params = new URLSearchParams(window.location.search);
-const userName = params.get("name");
+// Attach the goBack function to the BackButton click event
+document.getElementById("BackButton").addEventListener("click", Back);
 
-// Check if a user name is provided in the URL
-if (userName) {
-  // Fetch user details and display on the page
-  getUserDetails(userName).then((user) => {
-    if (user) {
-      displayUserDetails(user);
-    }
-  });
-} else {
-  console.error("User name not provided in the URL.");
+// Function to fetch and display the account details
+function viewAccount(UId) {
+  const accountRef = ref(db, `Accounts/Collectors/${UId}`);
+
+  get(accountRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const accountData = snapshot.val();
+
+        // Save UId to sessionStorage
+        sessionStorage.setItem("currentUId", UId);
+
+        // Display account details in HTML elements
+        document.getElementById("GCL").textContent = accountData.GCL;
+        document.getElementById(
+          "Name"
+        ).textContent = `${accountData.UserInfo.firstName} ${accountData.UserInfo.lastName}`;
+        document.getElementById("email").textContent =
+          accountData.UserInfo.email;
+        document.getElementById("mobileNumber").textContent =
+          accountData.UserInfo.mobileNumber;
+        document.getElementById("district").textContent =
+          accountData.UserInfo.district;
+        document.getElementById("barangay").textContent =
+          accountData.UserInfo.barangay;
+        document.getElementById("password").textContent = accountData.password;
+      } else {
+        console.log("No such account exists");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching account:", error);
+    });
 }
 
-// Attach the goBack function to the BackButton click event
-document.getElementById("BackButton").addEventListener("click", goBack);
+// Retrieve UId from sessionStorage
+const storedUId = sessionStorage.getItem("currentUId");
+
+// If UId is found in sessionStorage, call viewAccount with the stored UId
+if (storedUId) {
+  viewAccount(storedUId);
+} else {
+  // If UId is not found in sessionStorage or URL, navigate back to CollectorList.html
+  Back();
+}

@@ -41,9 +41,10 @@
         width: 100%; /* Set width to 100% to occupy full width of the form */
       }
 
-      label {
-        display: none; /* Hide label */
-      }
+      /* Remove the CSS rule to hide the label */
+      /* label {
+        display: none; // Hide label
+      } */
 
       input[type="text"],
       input[type="email"],
@@ -155,25 +156,29 @@
       </div>
 
       <div class="input-container">
-        <label for="district">District:</label>
-        <input
-          type="text"
-          id="district"
-          name="district"
-          required
-          placeholder="District"
-        />
+        <label for="districtDropdown">District:</label>
+        <select class="form-select" id="districtDropdown" required>
+          <option selected disabled>Select District</option>
+          <option value="1">District 1</option>
+          <option value="2">District 2</option>
+          <option value="3">District 3</option>
+        </select>
       </div>
+      <br>
+      
+      <div class="input-container">
+        <label for="barangayDropdown">Barangay:</label>
+        <select class="form-select" id="barangayDropdown" required>
+          <option selected disabled>Select Barangay</option>
+        </select>
+      </div>
+      <br>
 
       <div class="input-container">
         <label for="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required
-          placeholder="Password"
+        <input type="text" id="password" name="password" required placeholder="Password" readonly 
         />
+        <button type="button" id="generatePasswordButton">Generate New Password</button>
       </div>
 
       <div class="button-container">
@@ -181,7 +186,7 @@
           type="button"
           class="back-button"
           id="BackButton"
-          onclick="goBack()"
+          onclick="Back()"
         >
           Back
         </button>

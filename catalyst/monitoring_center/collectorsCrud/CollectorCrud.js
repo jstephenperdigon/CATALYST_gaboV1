@@ -1,13 +1,13 @@
-// Import the functions you need from the SDKs you need
+// Import the necessary Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
 import {
   getDatabase,
   ref,
   get,
   onValue,
-  remove, // Import the remove function
+  remove,
+  update, // Import the update function
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
@@ -26,14 +26,28 @@ const db = getDatabase(app);
 
 // Function to redirect to the "View User" page
 window.viewReport = function (UId) {
-  // Add the logic to redirect to the "View User" page with the appropriate query parameter
-  window.location.href = `CollectorView.html?UId=${UId}`;
+  // Save UId to sessionStorage
+  sessionStorage.setItem("currentUId", UId);
+
+  // Remove UId from the URL
+  const newUrl = window.location.href.split("?")[0];
+  history.replaceState({}, document.title, newUrl);
+
+  // Redirect to the "View User" page
+  window.location.href = "CollectorView.html";
 };
 
 // Function to redirect to the "Update User" page
 window.updateReport = function (UId) {
-  // Add the logic to redirect to the "Update User" page with the appropriate query parameter
-  window.location.href = `CollectorUpdate.html?UId=${UId}`;
+  // Save UId to sessionStorage
+  sessionStorage.setItem("currentUId", UId);
+
+  // Remove UId from the URL
+  const newUrl = window.location.href.split("?")[0];
+  history.replaceState({}, document.title, newUrl);
+
+  // Redirect to the "Update User" page
+  window.location.href = "CollectorUpdate.html";
 };
 
 // Function to redirect to the "Add User" page
@@ -156,29 +170,27 @@ function updateTable() {
     }
   });
 }
-
 // Display the initial reports table when the page loads
 window.onload = function () {
   updateTable();
 
   // Check if there is a query parameter for viewing a specific user
   const params = new URLSearchParams(window.location.search);
-  const UIdToView = params.get("newUserId");
+  const currentUId = params.get("currentId");
 
-  if (UIdToView) {
+  if (currentUId) {
     // If there is a GCL in the query parameter, trigger the viewReport function
-    window.viewReport(UIdToView);
+    window.viewReport(currentUId);
   }
 };
 
-function updateReport(name) {
+function updateReport(UId) {
   // Check if there is a query parameter for viewing a specific user
   const params = new URLSearchParams(window.location.search);
-  const userNameToView = params.get("name");
 
-  if (userNameToUpdate) {
+  if (currentUId) {
     // If there is a user name in the query parameter, trigger the viewReport function
-    window.updateReport(userNameToUpdate);
+    window.updateReport(currentUId);
   }
 }
 
