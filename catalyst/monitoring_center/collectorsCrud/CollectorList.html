@@ -184,9 +184,11 @@
       <button id="BackButton" onclick="GoToIndex()" class="btn btn-outline-dark">
         <i class="bx bx-arrow-back"></i> Back
       </button>
-      <button id="AddUserButton" onclick="AddUser()" class="btn btn-outline-dark">
+      <button id="AddUserButton" class="btn btn-warning shadow-none align-items-end btn-sm" data-mdb-toggle="modal"
+        data-mdb-target="#exampleModal">
         Add User
       </button>
+
     </div>
   </header>
 
@@ -219,32 +221,79 @@
     </table>
   </div>
 
-
-
-  <button id="modal" class="btn btn-warning shadow-none align-items-end btn-sm" data-mdb-toggle="modal"
-    data-mdb-target="#exampleModal">
-    Connect Device
-  </button>
-
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">ADD USER</h5>
           <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
             aria-label="Close"></button>
         </div>
-        <div class="modal-body">...</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+        <div class="modal-body">
+          <div class="container">
+
+
+            <form id="viewForm">
+
+              <!-- Name input -->
+              <div class="form-outline mb-4">
+                <input type="text" id="firstName" class="form-control" />
+                <label class="form-label" for="firstName">First Name</label>
+              </div>
+
+              <div class="form-outline mb-4">
+                <input type="text" id="lastName" class="form-control" />
+                <label class="form-label" for="lastName">Last Name</label>
+              </div>
+
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" id="email" class="form-control" />
+                <label class="form-label" for="email">Email address</label>
+              </div>
+
+              <!-- Number input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input type="number" id="mobileNumber" class="form-control" />
+                <label class="form-label" for="mobileNumber">Mobile Number</label>
+              </div>
+
+              <!-- District dropdown -->
+              <div class="form-outline mb-4">
+                <select class="form-select" id="districtDropdown" required>
+                  <option selected disabled>Select District</option>
+                  <option value="1">District 1</option>
+                  <option value="2">District 2</option>
+                  <option value="3">District 3</option>
+                </select>
+              </div>
+
+              <!-- Barangay dropdown -->
+              <div class="form-outline mb-4">
+                <select class="form-select" id="barangayDropdown" required>
+                  <option selected disabled>Select Barangay</option>
+                </select>
+              </div>
+
+              <div class="button-container">
+                <button type="button" class="btn btn-secondary" data-mdb-ripple-init
+                  data-mdb-dismiss="modal">Close</button>
+                <input type="submit" value="Create" class="btn btn-primary" data-mdb-ripple-init>
+              </div>
+
+            </form>
+
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+
   <script type="module" src="CollectorCrud.js"></script>
+  <script type="module" src="CollectorCreate.js"></script>
+
   <script>
     // Get the modal
     var modal = document.getElementById("myModal");
@@ -272,7 +321,9 @@
       }
     }
   </script>
+
   <script>
+    // Function to navigate back to index.html
     function GoToIndex() {
       window.location.href = "../index.html";
     }

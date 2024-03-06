@@ -37,6 +37,7 @@ window.viewReport = function (UId) {
   window.location.href = "CollectorView.html";
 };
 
+
 // Function to redirect to the "Update User" page
 window.updateReport = function (UId) {
   // Save UId to sessionStorage
@@ -55,6 +56,11 @@ window.AddUser = function () {
   // Add the logic to redirect to the "Add User" page
   window.location.href = `CollectorCreate.html?UId=${""}`;
 };
+
+// Function to navigate back to index.html
+function GoToIndex() {
+  window.location.href = "../index.html";
+}
 
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
