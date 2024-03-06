@@ -165,9 +165,7 @@
                     </div>
                     <p class="fs-5">Accounts</p>
                     <p
-                      class="fs-1 fw-bold text-success"
-                      id="accounts-count"
-                    ></p>
+                      class="fs-1 text-success" id="uidCount"></p>
                   </div>
                 </div>
               </a>
@@ -179,7 +177,7 @@
                     <i class="fas fa-trash-can fa-2x text-success"></i>
                   </div>
                   <p class="fs-5">Smart Garbage Bins</p>
-                  <p class="fs-1 text-success">20</p>
+                  <p class="fs-1 text-success" id="gbCount"></p>
                 </div>
               </div>
             </div>
@@ -269,30 +267,7 @@
     <script type="text/javascript" src="monitoring.js"></script>
     <script type="module" src="monitor-index-function.js"></script>
     <script type="module" src="monitor-index-reports.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function (event) {
-        const showNavbar = (toggleId, navId, bodyId, headerId) => {
-          // ... (Your existing showNavbar function)
-        };
-
-        showNavbar("header-toggle", "nav-bar", "body-pd", "header");
-
-        // Your code to run since DOM is loaded and ready
-
-        // Function to update the number of accounts
-        function updateAccountsCount() {
-          // Simulate fetching the count (replace this with your actual logic)
-          const accountsCount = 3; // Replace with the actual count
-
-          // Update the count in the HTML
-          document.getElementById("accounts-count").textContent = accountsCount;
-        }
-
-        // Call the function initially
-        updateAccountsCount();
-
-        // Your existing code for handling navigation and content visibility...
-      });
+    <script type="module" src="monitoring-gb-account-count.js"></script>
     </script>
-  </body>
+    </body>
 </html>
