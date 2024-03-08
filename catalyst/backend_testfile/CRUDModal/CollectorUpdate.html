@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update User</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center; /* Center the content horizontally */
+        align-items: center; /* Center the content vertically */
+        height: 100vh; /* Take up the full height of the viewport */
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      form {
+        width: 60%; /* Initial width */
+        max-width: 400px; /* Maximum width */
+        margin: 0 auto; /* Center the form horizontally */
+        padding: 40px; /* Increase padding for bigger size */
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center the form content vertically */
+      }
+
+      .input-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+        width: 100%; /* Set width to 100% to occupy full width of the form */
+      }
+
+      /* Remove the CSS rule to hide the label */
+      /* label {
+        display: none; // Hide label
+      } */
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="tel"] {
+        width: calc(100% - 20px); /* Adjust input width */
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        width: 320px;
+        margin-left: 10px; /* Add some spacing between buttons */
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        flex: 1;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      button[type="button"] {
+        width: 100%;
+        margin: 0 auto; /* Center the button horizontally */
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      button[type="button"]:hover {
+        background-color: #0056b3;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-right: 15px; /* Add spacing between the buttons */
+      }
+
+      .back-button {
+        flex: 1; /* Take up the available space */
+        margin-right: 5px; /* Add some spacing between buttons */
+      }
+      @media only screen and (max-width: 768px) {
+        form {
+          width: 90%; /* Adjust width for smaller screens */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <form id="updateForm">
+      <h1 style="text-align: center; font-weight: bold; font-size: 30px">
+        UPDATE USER
+      </h1>
+      <div class="input-container">
+        <label for="firstName">First Name:</label>
+        <input
+          type="text"
+          id="firstName"
+          name="firstName"
+          required
+          placeholder="First Name"
+        />
+      </div>
+
+      <div class="input-container">
+        <label for="lastName">Last Name:</label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          required
+          placeholder="Last Name"
+        />
+      </div>
+
+      <div class="input-container">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="Email"
+        />
+      </div>
+
+      <div class="input-container">
+        <label for="mobile">Mobile Number (+63):</label>
+        <input
+          type="tel"
+          id="mobile"
+          name="mobile"
+          required
+          placeholder="Mobile Number (+63)"
+        />
+      </div>
+
+      <div class="input-container">
+        <label for="districtDropdown">District:</label>
+        <select class="form-select" id="districtDropdown" required>
+          <option selected disabled>Select District</option>
+          <option value="1">District 1</option>
+          <option value="2">District 2</option>
+          <option value="3">District 3</option>
+        </select>
+      </div>
+      <br>
+      
+      <div class="input-container">
+        <label for="barangayDropdown">Barangay:</label>
+        <select class="form-select" id="barangayDropdown" required>
+          <option selected disabled>Select Barangay</option>
+        </select>
+      </div>
+      <br>
+
+      <div class="input-container">
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="password" required placeholder="Password" readonly 
+        />
+        <button type="button" id="generatePasswordButton">Generate New Password</button>
+      </div>
+
+      <div class="button-container">
+        <button
+          type="button"
+          class="back-button"
+          id="BackButton"
+          onclick="Back()"
+        >
+          Back
+        </button>
+        <input type="submit" value="Update" />
+      </div>
+    </form>
+
+    <script type="module" src="CollectorUpdate.js"></script>
+  </body>
+</html>

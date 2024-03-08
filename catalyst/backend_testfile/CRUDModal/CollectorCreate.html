@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add User</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1BX6hO0pWih6LvwB3t3uLzLbUGVDgj8d5lnv6h0V+hzChnr8wO3IgIdckbPWHPLoOipULjyTyi0X8j+Ojpqf3g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 100px auto 0;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      justify-content: center;
+      /* Center its child elements horizontally */
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+      /* Center align the content inside the form */
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: calc(100% - 24px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    input[type="tel"] {
+      width: calc(88% - 24px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      width: auto;
+      margin-left: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    button[type="button"] {
+      width: 100%;
+      margin: 0 auto;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button[type="button"]:hover {
+      background-color: #0056b3;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-right: 15px;
+    }
+
+    .back-button {
+      flex: 1;
+      margin-right: 5px;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .prefix-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .prefix {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      background-color: #ffffff;
+      font-size: 15px;
+      color: gray;
+    }
+
+    .prefix-text {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1><i class="fas fa-user-plus"></i> ADD USER</h1>
+
+    <form id="viewForm">
+      <div class="input-container">
+        <input type="text" id="firstName" name="firstName" required placeholder="First Name" />
+      </div>
+
+      <div class="input-container">
+        <input type="text" id="lastName" name="lastName" required placeholder="Last Name" />
+      </div>
+
+      <div class="input-container">
+        <input type="email" id="email" name="email" required placeholder="Email Address" />
+      </div>
+
+      <div class="input-container">
+        <div class="prefix-container">
+          <div class="prefix">+63</div>
+          <input type="tel" id="mobileNumber" name="mobileNumber" required placeholder="Mobile Number" />
+        </div>
+        <span id="mobileNumberError" class="error-message"></span>
+      </div>
+
+      <div class="input-container">
+        <label for="districtDropdown"></label>
+        <select class="form-select" id="districtDropdown" required>
+          <option selected disabled>Select District</option>
+          <option value="1">District 1</option>
+          <option value="2">District 2</option>
+          <option value="3">District 3</option>
+        </select>
+      </div>
+      <br>
+
+      <div class="input-container">
+        <label for="barangayDropdown"></label>
+        <select class="form-select" id="barangayDropdown" required>
+          <option selected disabled>Select Barangay</option>
+        </select>
+      </div>
+      <br>
+
+      <div class="button-container">
+        <button type="button" class="back-button" id="BackButton" onclick="Back()">
+          Back
+        </button>
+        <input type="submit" value="Create" />
+      </div>
+    </form>
+  </div>
+
+  <script type="module" src="CollectorCreate.js"></script>
+
+</body>
+
+</html>

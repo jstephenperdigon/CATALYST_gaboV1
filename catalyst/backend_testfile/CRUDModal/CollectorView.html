@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View User</title>
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 20px; /* Add padding to the body */
+        background-color: #f0f0f0;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+        text-align: center; /* Center the heading */
+      }
+
+      table {
+        width: 100%; /* Expand the table to fit the screen */
+        background-color: #fff;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: center; /* Center the text */
+        border-bottom: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+      }
+
+      th:first-child,
+      td:first-child {
+        border-left: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+
+      .container {
+        margin-bottom: 15px;
+      }
+
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      span {
+        padding: 5px;
+        display: inline-block;
+        min-width: 100px;
+        width: calc(100% - 120px); /* Adjust data column width */
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        width: 80%;
+        max-width: 150px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: block;
+        margin-left: auto; /* Align the button to the right */
+        margin-right: auto; /* Align the button to the right */
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>View User</h1>
+
+    <table>
+      <tr>
+        <th>GCL Number</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Mobile Number(+63)</th>
+        <th>District</th>
+        <th>Barangay</th>
+        <th>Password</th>
+      </tr>
+      <tr>
+        <td><span id="GCL"></span></td>
+        <td><span id="Name"></span></td>
+        <td><span id="email"></span></td>
+        <td><span id="mobileNumber"></span></td>
+        <td><span id="district"></span></td>
+        <td><span id="barangay"></span></td>
+        <td><span id="password"></span></td>
+      </tr>
+    </table>
+
+    <button id="BackButton" onclick="Back()">Back</button>
+
+    <script type="module" src="CollectorView.js"></script>
+  </body>
+</html>

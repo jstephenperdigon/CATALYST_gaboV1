@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collectors Table</title>
+  <link rel="stylesheet" href="../src/mdb.min.css" />
+  <link rel="stylesheet" href="../src/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px;
+      font-family: "Roboto", sans-serif;
+    }
+
+    h1 {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      padding: 10px;
+      width: 55vw;
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+    }
+
+    header {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      background-color: rgb(255, 255, 255);
+      border-radius: 10px;
+      width: 95vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #searchContainer {
+      display: flex;
+      align-items: center;
+    }
+
+    #searchInput {
+      padding: 10px;
+      margin-right: 10px;
+      border-radius: 20px;
+    }
+
+    #sortDropdown {
+      padding: 10px;
+      border-radius: 20px;
+      border-color: rgb(0, 0, 0);
+    }
+
+    #reportsTable {
+      text-align: center;
+      margin-top: 20px;
+      width: 95vw;
+    }
+
+    table {
+      border: none;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    th {
+      border: none;
+      padding: 8px;
+      text-align: center;
+      background-color: white;
+    }
+
+    td {
+      border: none;
+      padding: 8px;
+      text-align: center;
+      background-color: rgb(255, 255, 255);
+    }
+
+    #reportsTable table .actions-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #reportsTable table .actions-column button {
+      margin-top: 5px;
+    }
+
+    .view-button {
+      background-color: rgb(54, 238, 54);
+    }
+
+    .update-button {
+      background-color: rgb(0, 102, 255);
+    }
+
+    .delete-button {
+      background-color: red;
+    }
+
+    .actions-column button i {
+      color: white;
+    }
+
+    .actions-column button {
+      border: none;
+    }
+
+    table tr:nth-child(odd) td {
+      background-color: #e4e4e4;
+    }
+
+    table tr:nth-child(even) td {
+      background-color: white;
+    }
+
+    .horizontal-icons {
+      display: flex;
+      justify-content: center;
+    }
+
+    .horizontal-icons button {
+      margin-right: 5px;
+    }
+
+    .actions-column button i {
+      font-size: 20px;
+    }
+
+    #navtable {
+      width: 100%;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-right: 15px;
+    }
+
+    #BackButton {
+      width: 100%;
+      margin: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #AddUserButton {
+      width: 100%;
+      margin: 10px;
+      padding: 5px;
+      border: none;
+      border-radius: 10px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #BackButton:hover,
+    #AddUserButton:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div>
+      <h1>COLLECTOR'S ACCOUNT</h1>
+    </div>
+
+    <div class="button-container">
+      <button id="BackButton" onclick="GoToIndex()" class="btn btn-outline-dark">
+        <i class="bx bx-arrow-back"></i> Back
+      </button>
+      <button id="AddUserButton" class="btn btn-warning shadow-none align-items-end btn-sm" data-mdb-toggle="modal"
+        data-mdb-target="#exampleModal">
+        Add Collector
+      </button>
+
+    </div>
+  </header>
+
+  <div id="searchContainer" style="margin-right: 65%">
+    <input type="text" id="searchInput" placeholder="Search...">
+    <p>Sort By:</p>
+    <select id="sortDropdown">
+      <option value="GCL">GCL Number</option>
+      <option value="Name">Name</option>
+      <option value="email">Email</option>
+      <option value="mobileNumber">Mobile Number(+63)</option>
+      <option value="district">District</option>
+      <option value="barangay">Barangay</option>
+    </select>
+  </div>
+
+  <div id="reportsTable">
+    <table>
+      <thead>
+        <tr>
+          <th>GCL Number</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Mobile Number(+63)</th>
+          <th>District</th>
+          <th>Barangay</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">ADD COLLECTOR</h5>
+          <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+        
+        
+            <form id="viewForm">
+        
+              <!-- Name input -->
+              <div class="form-outline mb-4">
+                <input type="text" id="firstName" class="form-control" />
+                <label class="form-label" for="firstName">First Name</label>
+              </div>
+        
+              <div class="form-outline mb-4">
+                <input type="text" id="lastName" class="form-control" />
+                <label class="form-label" for="lastName">Last Name</label>
+              </div>
+        
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" id="email" class="form-control" />
+                <label class="form-label" for="email">Email address</label>
+              </div>
+        
+              <!-- Number input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input type="number" id="mobileNumber" class="form-control" />
+                <label class="form-label" for="mobileNumber">Mobile Number</label>
+              </div>
+        
+              <!-- District dropdown -->
+              <div class="form-outline mb-4">
+                <select class="form-select" id="districtDropdown" required>
+                  <option selected disabled>Select District</option>
+                  <option value="1">District 1</option>
+                  <option value="2">District 2</option>
+                  <option value="3">District 3</option>
+                </select>
+              </div>
+        
+              <!-- Barangay dropdown -->
+              <div class="form-outline mb-4">
+                <select class="form-select" id="barangayDropdown" required>
+                  <option selected disabled>Select Barangay</option>
+                </select>
+              </div>
+        
+              <div class="button-container">
+                <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
+                <input type="submit" value="Create" class="btn btn-primary" data-mdb-ripple-init>
+              </div>
+        
+            </form>
+        
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+ 
+
+  <script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("openModalBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    
+  </script>
+
+  <script>
+    // Function to navigate back to index.html
+    function GoToIndex() {
+      window.location.href = "../index.html";
+    }
+  </script>
+  <script type="module" src="CollectorCrud.js"></script>
+  <script type="module" src="CollectorCreate.js"></script>
+</body>
+</body>
+
+</html>
