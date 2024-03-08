@@ -93,13 +93,7 @@ function generateRandomPassword() {
 // Attach the addUser function to the form submission event
 document.getElementById("viewForm").addEventListener("submit", addUser);
 
-// Function to navigate back to HouseholdList.html
-function Back() {
-  window.location.href = "CollectorList.html";
-}
 
-// Attach the goBack function to the BackButton click event
-document.getElementById("BackButton").addEventListener("click", Back);
 
 document.addEventListener("DOMContentLoaded", function () {
   const districtDropdown = document.getElementById("districtDropdown");

@@ -53,8 +53,13 @@ window.updateReport = function (UId) {
 // Function to redirect to the "Add User" page
 window.AddUser = function () {
   // Add the logic to redirect to the "Add User" page
-  window.location.href = `CollectorCreate.html?UId=${""}`;
+  window.location.href = `CollectorCreate.html`;
 };
+
+// Function to navigate back to index.html
+function GoToIndex() {
+  window.location.href = "../index.html";
+}
 
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {

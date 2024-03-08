@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   showNavbar("header-toggle", "nav-bar", "body-pd", "header");
 
+  //Function for Account Counter
+
   /*===== LINK ACTIVE =====*/
   const linkColor = document.querySelectorAll(".nav_link");
 
@@ -79,8 +81,4 @@ document.addEventListener("DOMContentLoaded", function () {
     // Show the selected content
     document.getElementById(contentId + "-content").style.display = "block";
   }
-});
-
-document.getElementById("accounts-link").addEventListener("click", function () {
-  window.location.href = "CollectorList.html";
 });
