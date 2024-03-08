@@ -186,7 +186,7 @@
       </button>
       <button id="AddUserButton" class="btn btn-warning shadow-none align-items-end btn-sm" data-mdb-toggle="modal"
         data-mdb-target="#exampleModal">
-        Add User
+        Add Collector
       </button>
 
     </div>
@@ -226,39 +226,39 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">ADD USER</h5>
+          <h5 class="modal-title" id="exampleModalLabel">ADD COLLECTOR</h5>
           <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
             aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="container">
-
-
+        
+        
             <form id="viewForm">
-
+        
               <!-- Name input -->
               <div class="form-outline mb-4">
                 <input type="text" id="firstName" class="form-control" />
                 <label class="form-label" for="firstName">First Name</label>
               </div>
-
+        
               <div class="form-outline mb-4">
                 <input type="text" id="lastName" class="form-control" />
                 <label class="form-label" for="lastName">Last Name</label>
               </div>
-
+        
               <!-- Email input -->
               <div class="form-outline mb-4">
                 <input type="email" id="email" class="form-control" />
                 <label class="form-label" for="email">Email address</label>
               </div>
-
+        
               <!-- Number input -->
               <div data-mdb-input-init class="form-outline mb-4">
                 <input type="number" id="mobileNumber" class="form-control" />
                 <label class="form-label" for="mobileNumber">Mobile Number</label>
               </div>
-
+        
               <!-- District dropdown -->
               <div class="form-outline mb-4">
                 <select class="form-select" id="districtDropdown" required>
@@ -268,22 +268,21 @@
                   <option value="3">District 3</option>
                 </select>
               </div>
-
+        
               <!-- Barangay dropdown -->
               <div class="form-outline mb-4">
                 <select class="form-select" id="barangayDropdown" required>
                   <option selected disabled>Select Barangay</option>
                 </select>
               </div>
-
+        
               <div class="button-container">
-                <button type="button" class="btn btn-secondary" data-mdb-ripple-init
-                  data-mdb-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
                 <input type="submit" value="Create" class="btn btn-primary" data-mdb-ripple-init>
               </div>
-
+        
             </form>
-
+        
           </div>
         </div>
       </div>
@@ -291,8 +290,7 @@
   </div>
 
 
-  <script type="module" src="CollectorCrud.js"></script>
-  <script type="module" src="CollectorCreate.js"></script>
+ 
 
   <script>
     // Get the modal
@@ -304,22 +302,7 @@
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks on the button, open the modal
-    btn.onclick = function () {
-      modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-      modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
+    
   </script>
 
   <script>
@@ -332,6 +315,9 @@
   <script type="text/javascript" src="src/mdb.min.js"></script>
   <script src="src/bootstrap.min.js"></script>
   <script src="src/popper.min.js"></script>
+  <script type="module" src="CollectorCrud.js"></script>
+  <script type="module" src="CollectorCreate.js"></script>
+</body>
 </body>
 
 </html>

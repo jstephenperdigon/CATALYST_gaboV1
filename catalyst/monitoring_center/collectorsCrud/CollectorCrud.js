@@ -8,6 +8,7 @@ import {
   remove,
   update, // Import the update function
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
@@ -175,6 +176,7 @@ function updateTable() {
     }
   });
 }
+
 // Display the initial reports table when the page loads
 window.onload = function () {
   updateTable();
