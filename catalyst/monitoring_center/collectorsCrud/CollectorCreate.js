@@ -31,6 +31,9 @@ const usersRef = ref(db, "Accounts/Collectors");
 async function addUser(event) {
   event.preventDefault(); // Prevent the default form submission behavior
 
+  // Disable the submit button to prevent multiple submissions
+  document.getElementById("submitBtn").disabled = true;
+
   // Get form values
   const firstName = document.getElementById("firstName").value;
   const middleName = document.getElementById("middleName").value;
@@ -41,6 +44,14 @@ async function addUser(event) {
   const district = document.getElementById("districtDropdown").value;
   const barangay = document.getElementById("barangayDropdown").value;
 
+  // Check if District and Barangay are selected
+  if (district === "Select District" || barangay === "Select Barangay") {
+    alert("Please select District and Barangay.");
+    // Re-enable the submit button
+    document.getElementById("submitBtn").disabled = false;
+    return; // Stop further execution
+  }
+
   // Generate unique ID
   const UId = push(usersRef).key;
 
@@ -50,10 +61,13 @@ async function addUser(event) {
     (key) => gclNumbersSnapshot.val()[key].GCL
   );
 
-  // Generate GCL number based on the count of existing GCL numbers
-  const newGCLNumber =
-    "GCL" + (gclNumbers.length + 1).toString().padStart(3, "0");
-  // Generate random password
+  // Find the first available GCL number starting from "GCL001"
+  let newGCLNumber = "GCL001";
+  while (gclNumbers.includes(newGCLNumber)) {
+    const number = parseInt(newGCLNumber.slice(3)) + 1;
+    newGCLNumber = "GCL" + number.toString().padStart(3, "0");
+  }
+
   const randomPassword = generateRandomPassword();
 
   // Create a new user object
