@@ -8,7 +8,6 @@ import {
   remove,
   update, // Import the update function
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
@@ -54,33 +53,38 @@ window.updateReport = function (UId) {
 // Function to redirect to the "Add User" page
 window.AddUser = function () {
   // Add the logic to redirect to the "Add User" page
-  window.location.href = `CollectorCreate.html`;
+  window.location.href = `CollectorCreate.html?UId=${""}`;
 };
-
-// Function to navigate back to index.html
-function GoToIndex() {
-  window.location.href = "../index.html";
-}
 
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
+  const middleName = report.UserInfo.middleName
+    ? report.UserInfo.middleName
+    : "";
+  const suffix = report.UserInfo.suffix ? report.UserInfo.suffix : "";
+
   return `
         <tr>
             <td>${report.GCL}</td>
-            <td>${report.UserInfo.firstName} ${report.UserInfo.lastName}</td>
+            <td>${report.UserInfo.lastName} ${report.UserInfo.firstName}
+            ${middleName} ${suffix}</td>
             <td>${report.UserInfo.email}</td>
             <td>${report.UserInfo.mobileNumber}</td>
-            <td>${report.UserInfo.district}</td>
-            <td>${report.UserInfo.barangay}</td>
+            <td>${report.AssignedArea ? report.AssignedArea.district : ""}</td>
+            <td>${report.AssignedArea ? report.AssignedArea.barangay : ""}</td>
           <td class="actions-column">
             <div class="horizontal-icons">
               <button class="view-button" onclick="viewReport('${report.UId}')">
                 <i class='bx bxs-show'></i>
               </button>
-              <button class="update-button" onclick="updateReport('${report.UId}')">
+              <button class="update-button" onclick="updateReport('${
+                report.UId
+              }')">
                 <i class='bx bxs-edit'></i>
               </button>
-              <button class="delete-button" onclick="deleteReport('${report.UId}')">
+              <button class="delete-button" onclick="deleteReport('${
+                report.UId
+              }')">
                 <i class='bx bxs-trash'></i>
               </button>
             </div>
@@ -119,6 +123,11 @@ window.searchReports = function () {
 
   filterReports(searchInput, sortKey);
 };
+
+// Function to handle live search while typing
+document.getElementById("searchInput").addEventListener("input", function () {
+  window.searchReports();
+});
 
 // Function to get the index of the selected column
 function getIndex(key) {
@@ -176,7 +185,6 @@ function updateTable() {
     }
   });
 }
-
 // Display the initial reports table when the page loads
 window.onload = function () {
   updateTable();

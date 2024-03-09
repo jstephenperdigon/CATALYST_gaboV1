@@ -51,9 +51,9 @@ function viewAccount(UId) {
         document.getElementById("mobileNumber").textContent =
           accountData.UserInfo.mobileNumber;
         document.getElementById("district").textContent =
-          accountData.UserInfo.district;
+          accountData.AssignedArea.district;
         document.getElementById("barangay").textContent =
-          accountData.UserInfo.barangay;
+          accountData.AssignedArea.barangay;
         document.getElementById("password").textContent = accountData.password;
       } else {
         console.log("No such account exists");
