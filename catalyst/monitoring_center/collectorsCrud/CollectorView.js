@@ -45,7 +45,7 @@ function viewAccount(UId) {
         document.getElementById("GCL").textContent = accountData.GCL;
         document.getElementById(
           "Name"
-        ).textContent = `${accountData.UserInfo.firstName} ${accountData.UserInfo.lastName}`;
+        ).textContent = `${accountData.UserInfo.firstName} ${accountData.UserInfo.middleName} ${accountData.UserInfo.lastName} ${accountData.UserInfo.suffix}`;
         document.getElementById("email").textContent =
           accountData.UserInfo.email;
         document.getElementById("mobileNumber").textContent =

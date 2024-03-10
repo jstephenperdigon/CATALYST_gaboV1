@@ -47,15 +47,18 @@ document.addEventListener("DOMContentLoaded", function () {
         // Populate form fields with collector data
         document.getElementById("firstName").value =
           collectorData.UserInfo.firstName;
+        document.getElementById("middleName").value =
+          collectorData.UserInfo.middleName;
         document.getElementById("lastName").value =
           collectorData.UserInfo.lastName;
+        document.getElementById("suffix").value = collectorData.UserInfo.suffix;
         document.getElementById("email").value = collectorData.UserInfo.email;
         document.getElementById("mobile").value =
           collectorData.UserInfo.mobileNumber;
         document.getElementById("districtDropdown").value =
-          collectorData.UserInfo.district;
+          collectorData.AssignedArea.district;
         document.getElementById("barangayDropdown").value =
-          collectorData.UserInfo.barangay;
+          collectorData.AssignedArea.barangay;
         document.getElementById("password").value = collectorData.password;
 
         // Update the barangay dropdown based on the selected district
@@ -315,13 +318,14 @@ function Back() {
   window.location.href = "CollectorList.html";
 }
 
-// Function to update collector information
 function updateCollector(event) {
   event.preventDefault(); // Prevent form submission
 
   // Get form inputs
   const firstName = document.getElementById("firstName").value;
+  const middleName = document.getElementById("middleName").value;
   const lastName = document.getElementById("lastName").value;
+  const suffix = document.getElementById("suffix").value;
   const email = document.getElementById("email").value;
   const mobile = document.getElementById("mobile").value;
   const district = document.getElementById("districtDropdown").value;
@@ -333,9 +337,13 @@ function updateCollector(event) {
   const newData = {
     UserInfo: {
       firstName,
+      middleName,
       lastName,
+      suffix,
       email,
       mobileNumber: mobile,
+    },
+    AssignedArea: {
       district,
       barangay,
     },
