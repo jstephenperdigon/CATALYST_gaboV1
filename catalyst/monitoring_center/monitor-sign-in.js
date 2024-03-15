@@ -123,3 +123,5 @@ document.addEventListener("DOMContentLoaded", function () {
     handleLogin(username, password);
   });
 });
+
+//ADMIN SIGN IN FUNCTION

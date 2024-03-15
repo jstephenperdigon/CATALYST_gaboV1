@@ -53,7 +53,7 @@ window.updateReport = function (UId) {
 // Function to redirect to the "Add User" page
 window.AddUser = function () {
   // Add the logic to redirect to the "Add User" page
-  window.location.href = `CollectorCreate.html?UId=${""}`;
+  window.location.href = `CollectorCreate.html`;
 };
 
 // Function to generate the HTML for a single report
@@ -123,11 +123,6 @@ window.searchReports = function () {
 
   filterReports(searchInput, sortKey);
 };
-
-// Function to handle live search while typing
-document.getElementById("searchInput").addEventListener("input", function () {
-  window.searchReports();
-});
 
 // Function to get the index of the selected column
 function getIndex(key) {

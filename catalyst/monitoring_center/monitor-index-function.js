@@ -220,8 +220,8 @@ function logout() {
     // Get a reference to the user status field in the database
     const userStatusRef = ref(db, `Accounts/Monitoring/${userId}/status`);
 
-    // Set the user status to null (remove the "LoggedIn" status)
-    set(userStatusRef, null)
+    // Set the user status to "LoggedOut" instead of null
+    set(userStatusRef, "LoggedOut") // Updated this line
       .then(() => {
         // Redirect to the sign-in page after successfully removing the status
         window.location.href = "monitor-indexSI.html";
@@ -284,7 +284,9 @@ function displayAllReportsInNotification(database) {
 
       // Create HTML content for the report
       reportDiv.innerHTML = `
-        <div class="card shadow-none p-3 mb-3 ${getCardColorClass(report.title)}">
+        <div class="card shadow-none p-3 mb-3 ${getCardColorClass(
+          report.title
+        )}">
           <p><strong>GCN: </strong> ${report.garbageBinControlNumber}</p>
           <p> ${report.title}</p>
           <p class="text-muted"> ${formatTimestamp(report.timestamp)}</p>
@@ -389,40 +391,52 @@ function initMap() {
             // Assuming you are using Font Awesome for icons
             const contentString = `<div class="container shadow-none">
               <p><strong>GCN:</strong> ${garbageBinControlNumber}</p>
-              <p><strong>Status:</strong> ${binData.DeviceStatus === "On"
-                ? '<i class="fas fa-check-circle text-success"></i> Online'
-                : '<i class="fas fa-times-circle text-danger"></i> Offline'
+              <p><strong>Status:</strong> ${
+                binData.DeviceStatus === "On"
+                  ? '<i class="fas fa-check-circle text-success"></i> Online'
+                  : '<i class="fas fa-times-circle text-danger"></i> Offline'
               }</p>
               <p><strong>Fill Level:</strong></p>
               <div class="progress mb-3">
-                  <div class="progress-bar bg-success" role="progressbar" style="width: ${binData.FillLevel.GB1FillLevel.GB1
-              }%" aria-valuenow="${binData.FillLevel.GB1FillLevel.GB1
-              }" aria-valuemin="0" aria-valuemax="100">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: ${
+                    binData.FillLevel.GB1FillLevel.GB1
+                  }%" aria-valuenow="${
+              binData.FillLevel.GB1FillLevel.GB1
+            }" aria-valuemin="0" aria-valuemax="100">
                       Special Waste Bin: ${binData.FillLevel.GB1FillLevel.GB1}%
                   </div>
               </div>
               <div class="progress mb-3">
-                  <div class="progress-bar bg-warning" role="progressbar" style="width: ${binData.FillLevel.GB2FillLevel.GB2
-              }%" aria-valuenow="${binData.FillLevel.GB2FillLevel.GB2
-              }" aria-valuemin="0" aria-valuemax="100">
-                      Hazardous Waste Bin: ${binData.FillLevel.GB2FillLevel.GB2
-              }%
+                  <div class="progress-bar bg-warning" role="progressbar" style="width: ${
+                    binData.FillLevel.GB2FillLevel.GB2
+                  }%" aria-valuenow="${
+              binData.FillLevel.GB2FillLevel.GB2
+            }" aria-valuemin="0" aria-valuemax="100">
+                      Hazardous Waste Bin: ${
+                        binData.FillLevel.GB2FillLevel.GB2
+                      }%
                   </div>
               </div>
               <div class="progress mb-3">
-                  <div class="progress-bar bg-info" role="progressbar" style="width: ${binData.FillLevel.GB3FillLevel.GB3
-              }%" aria-valuenow="${binData.FillLevel.GB3FillLevel.GB3
-              }" aria-valuemin="0" aria-valuemax="100">
-                      Biodegradable Waste Bin: ${binData.FillLevel.GB3FillLevel.GB3
-              }%
+                  <div class="progress-bar bg-info" role="progressbar" style="width: ${
+                    binData.FillLevel.GB3FillLevel.GB3
+                  }%" aria-valuenow="${
+              binData.FillLevel.GB3FillLevel.GB3
+            }" aria-valuemin="0" aria-valuemax="100">
+                      Biodegradable Waste Bin: ${
+                        binData.FillLevel.GB3FillLevel.GB3
+                      }%
                   </div>
               </div>
               <div class="progress mb-3">
-                  <div class="progress-bar bg-danger" role="progressbar" style="width: ${binData.FillLevel.GB4FillLevel.GB4
-              }%" aria-valuenow="${binData.FillLevel.GB4FillLevel.GB4
-              }" aria-valuemin="0" aria-valuemax="100">
-                      Non-Biodegradable Waste Bin: ${binData.FillLevel.GB4FillLevel.GB4
-              }%
+                  <div class="progress-bar bg-danger" role="progressbar" style="width: ${
+                    binData.FillLevel.GB4FillLevel.GB4
+                  }%" aria-valuenow="${
+              binData.FillLevel.GB4FillLevel.GB4
+            }" aria-valuemin="0" aria-valuemax="100">
+                      Non-Biodegradable Waste Bin: ${
+                        binData.FillLevel.GB4FillLevel.GB4
+                      }%
                   </div>
               </div>
                             <div class="mb-3">
@@ -430,18 +444,30 @@ function initMap() {
                             </div>
                               <div class="mb-3">
                                   <strong>User Details:</strong>
-                                  ${Object.keys(users).map(userId => {
-                const user = users[userId];
-                return `
-                                          <p><strong>Owner:</strong> ${user.firstName || 'N/A'} ${user.lastName || 'N/A'}</p>
+                                  ${Object.keys(users)
+                                    .map((userId) => {
+                                      const user = users[userId];
+                                      return `
+                                          <p><strong>Owner:</strong> ${
+                                            user.firstName || "N/A"
+                                          } ${user.lastName || "N/A"}</p>
 
                                           <strong>Address Information</strong>
-                                          <p><strong>District:</strong> ${user.district || 'N/A'}</p>
-                                          <p><strong>Barangay:</strong> ${user.barangay || 'N/A'}</p>
-                                          <p><strong>Address Line 1:</strong> ${user.addressLine1 || 'N/A'}</p>
-                                          <p><strong>Address Line 2:</strong> ${user.addressLine2 || 'N/A'}</p>
+                                          <p><strong>District:</strong> ${
+                                            user.district || "N/A"
+                                          }</p>
+                                          <p><strong>Barangay:</strong> ${
+                                            user.barangay || "N/A"
+                                          }</p>
+                                          <p><strong>Address Line 1:</strong> ${
+                                            user.addressLine1 || "N/A"
+                                          }</p>
+                                          <p><strong>Address Line 2:</strong> ${
+                                            user.addressLine2 || "N/A"
+                                          }</p>
                                       `;
-              }).join('')}
+                                    })
+                                    .join("")}
                               </div>
                         </div>`;
 
