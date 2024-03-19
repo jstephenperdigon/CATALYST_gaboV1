@@ -55,7 +55,7 @@ const db = getDatabase(app);
 
 //ADMIN SIGN IN FUNCTION
 function findAdminIndex() {
-  const adminFolderPath = "catalyst/admin/"; // Path to the admin folder
+  const adminFolderPath = "monitoring_center/admin"; // Path to the admin folder
   const adminIndexFilename = "adminIndex.html"; // Name of the admin index file
 
   // Recursive function to traverse directories
@@ -180,5 +180,3 @@ document.addEventListener("DOMContentLoaded", function () {
     handleLogin(username, password);
   });
 });
-
-//ADMIN SIGN IN FUNCTION
