@@ -10,10 +10,8 @@
     <link rel="stylesheet" href="src/style.css" />
     <link rel="stylesheet" href="src/shapes.css" />
     <link rel="stylesheet" href="src/aos.css" />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet"/>
+
     <style>
       .feature-section {
         margin-top: 50px;
@@ -25,6 +23,20 @@
         height: 800px;
         background-color: #11531e;
         z-index: -1;
+      }
+
+      .download-apk-button {
+        color: #11531e; /* Green color matching your color scheme */
+        border-color: #11531e; /* Border color matching the green */
+        background-color: transparent; /* Remove default Bootstrap background color */
+      }
+
+      .download-apk-button:hover,
+      .download-apk-button:focus,
+      .download-apk-button:active {
+        color: #ffffff; /* Change text color on hover, focus, and click */
+        background-color: #11531e; /* Change background color on hover, focus, and click */
+        border-color: #11531e; /* Change border color on hover, focus, and click */
       }
     </style>
   </head>
@@ -92,11 +104,8 @@
               >
             </li>
           </ul>
-          <a
-            href="signup_signin/sign-in.html"
-            class="btn btn-outline-primary mx-3 d-block shadow-none"
-            >Download APK</a
-          >
+          <a class="btn mx-3 d-block shadow-none download-apk-button" data-bs-toggle="modal"
+            data-bs-target="#downloadModal">Download APP</a>
         </div>
       </div>
     </nav>
@@ -347,6 +356,92 @@
         >
       </div>
     </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="downloadModalLabel">GABO App</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- Left section content -->
+                  <div class="text-center">
+                    <h4>Household App</h4>
+                    <a href="apk/Gabo_User.apk" download class="btn btn-primary">Download APP</a>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <!-- Right section content -->
+                  <div class="text-center">
+                    <h4>Collector App</h4>
+                    <a href="apk/Gabo_User.apk" download class="btn btn-primary">Download APP</a>
+                  </div>
+                </div>
+                <div class="col-md-12 position-relative">
+                  <!-- Vertical line -->
+                  <div class="vertical-line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <style>
+      /* CSS adjustments */
+    .vertical-line {
+      border-left: 1px solid #ccc;
+      height: 100%;
+    }
+
+    .modal-body {
+      max-height: calc(100vh - 120px); /* Adjusted height for smaller screens */
+      overflow-y: auto; /* Enable scrolling for smaller screens */
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    /* Button style for the buttons inside the modal */
+    .btn-primary {
+      background-color: #11531e; /* Green color matching your color scheme */
+      border-color: #11531e; /* Border color matching the green */
+      color: #ffffff; /* Text color */
+      border: none; /* Remove border */
+      padding: 10px 20px; /* Adjust padding as needed */
+      border-radius: 5px; /* Add border radius for rounded corners */
+      cursor: pointer; /* Change cursor to pointer on hover */
+    }
+
+    /* Button hover effect */
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active {
+      background-color: #0d3a15; /* Darker green on hover */
+      border-color: #0d3a15; /* Darker border on hover */
+    }
+
+    /* Media query for responsiveness */
+    @media (max-width: 576px) {
+      .btn-primary {
+        padding: 8px 16px; /* Adjusted padding for smaller screens */
+        font-size: 14px; /* Adjusted font size for smaller screens */
+      }
+    }
+    </style>
+
     <!-- IMPORTS -->
     <script>
       // Function to highlight the active link
@@ -384,6 +479,19 @@
     <script src="src/aos.js"></script>
     <script>
       AOS.init();
+
+      // Add event listener to show modal when "Download APK" button is clicked
+        document.addEventListener("DOMContentLoaded", function () {
+          // Select the "Download APK" button
+          var downloadButton = document.querySelector('.download-apk-button');
+
+          // Add event listener to the button
+          downloadButton.addEventListener('click', function () {
+            // Show the modal when the button is clicked
+            var downloadModal = new bootstrap.Modal(document.getElementById('downloadModal'));
+            downloadModal.show();
+          });
+        });
     </script>
   </body>
 </html>
