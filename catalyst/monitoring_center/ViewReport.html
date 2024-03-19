@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Modal Example</title>
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            text-align: left;
+            /* Align text to left */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Style for labels */
+        .label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Button to open the modal -->
+    <button id="openModalBtn">View Button</button>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="ticket-info">
+                <div>
+                    <span class="label">Ticket number:</span>
+                    <span id="ticketNumber"></span>
+                </div>
+                <div>
+                    <span class="label">GCN:</span>
+                    <span id="GCN"></span>
+                </div>
+                <div>
+                    <span class="label">Name:</span>
+                    <span id="Name"></span>
+                </div>
+                <div>
+                    <span class="label">Email:</span>
+                    <span id="email"></span>
+                </div>
+                <div>
+                    <span class="label">Mobile Number:</span>
+                    <span id="mobileNumber"></span>
+                </div>
+                <div>
+                    <span class="label">Issue:</span>
+                    <span id="Issue"></span>
+                </div>
+                <div>
+                    <span class="label">District:</span>
+                    <span id="district"></span>
+                </div>
+                <div>
+                    <span class="label">Barangay:</span>
+                    <span id="barangay"></span>
+                </div>
+                <div>
+                    <span class="label">City:</span>
+                    <span id="city"></span>
+                </div>
+                <div>
+                    <span class="label">Province:</span>
+                    <span id="province"></span>
+                </div>
+                <div>
+                    <span class="label">Country:</span>
+                    <span id="country"></span>
+                </div>
+                <div>
+                    <span class="label">Time Sent:</span>
+                    <span id="TimeSent"></span>
+                </div>
+                <div>
+                    <span class="label">Date Sent:</span>
+                    <span id="DateSent"></span>
+                </div>
+                <div>
+                    <span class="label">Address Line 1:</span>
+                    <span id="addressLine1"></span>
+                </div>
+                <div>
+                    <span class="label">Address Line 2:</span>
+                    <span id="addressLine2"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="ViewReport.js"></script>
+
+</body>
+
+</html>
