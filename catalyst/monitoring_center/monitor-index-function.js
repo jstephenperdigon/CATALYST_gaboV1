@@ -425,9 +425,6 @@ function initMap() {
               }%
                   </div>
               </div>
-                            <div class="mb-3">
-                                Trash Bags: Trash Bag Count
-                            </div>
                               <div class="mb-3">
                                   <strong>User Details:</strong>
                                   ${Object.keys(users).map(userId => {

@@ -1,281 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Monitoring</title>
-    <link rel="stylesheet" href="../src/mdb.min.css" />
-    <link rel="stylesheet" href="../src/bootstrap.min.css" />
-    <link rel="stylesheet" href="styling/style.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <script
-      defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
-    ></script>
-    <style>
-      .content {
-        margin-left: 70px;
-        /* Same as the width of the sidebar */
-        padding: 16px;
-      }
 
-      /* Add this style for better table appearance */
-      table {
-        border: none;
-        border-collapse: collapse;
-        width: 100%;
-        margin-top: 20px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoring</title>
+  <link rel="stylesheet" href="../src/mdb.min.css" />
+  <link rel="stylesheet" href="../src/bootstrap.min.css" />
+  <link rel="stylesheet" href="styling/style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet" />
+  <script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"></script>
+  <style>
+    .content {
+      margin-left: 70px;
+      /* Same as the width of the sidebar */
+      padding: 16px;
+    }
 
-      td {
-        border: solid #e4e4e4 1px;
-        padding: 8px;
-        text-align: center;
-      }
+    /* Add this style for better table appearance */
+    table {
+      border: none;
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
 
-      th {
-        border: none;
-        background-color: #e4e4e4;
-        padding: 8px;
-        text-align: center;
-      }
+    td {
+      border: solid #e4e4e4 1px;
+      padding: 8px;
+      text-align: center;
+    }
 
-      .notification-box {
-        z-index: 1;
-        display: none;
-        position: absolute;
-        top: 50px;
-        right: 100px;
-        padding: 10px;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      /* Style for horizontal icons */
-      .horizontal-icons {
-        border: none;
-        display: flex;
-        justify-content: center; /* Align icons horizontally */
-      }
+    th {
+      border: none;
+      background-color: #e4e4e4;
+      padding: 8px;
+      text-align: center;
+    }
 
-      /* Add margin between the icons */
-      .horizontal-icons button {
-        margin-right: 10px;
-        border: none;
-      }
-      /* Increase the size of the icons */
-      .actions-column button i {
-        color: white;
-        font-size: 20px; /* Adjust the size as needed */
-      }
-      .view-button {
-        background-color: blue;
-      }
+    .notification-box {
+      z-index: 1;
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 100px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-      .update-button {
-        background-color: orange;
-      }
+    /* Style for horizontal icons */
+    .horizontal-icons {
+      border: none;
+      display: flex;
+      justify-content: center;
+      /* Align icons horizontally */
+    }
 
-      .delete-button {
-        background-color: red;
-      }
+    /* Add margin between the icons */
+    .horizontal-icons button {
+      margin-right: 10px;
+      border: none;
+    }
 
-      #reportsTable {
-        text-align: center;
-        margin-top: 20px;
-        margin-left: 20px;
-        margin-right: 20px;
-        width: 80vw; /* Adjust the width to fit the screen */
-      }
-    </style>
-  </head>
+    /* Increase the size of the icons */
+    .actions-column button i {
+      color: white;
+      font-size: 20px;
+      /* Adjust the size as needed */
+    }
 
-  <body id="body-pd">
-    <div class="l-navbar header" id="nav-bar">
-      <nav class="nav">
-        <div class="header_toggle">
-          <a href="#" class="nav_logo">
-            <img src="../img/GaboV1_LOGO.png" class="nav_logo-icon" />
-            <span class="nav_logo-name">Monitoring Center</span>
-          </a>
-          <div class="nav_list">
-            <a href="#" class="nav_link active" id="welcome-link">
-              <i class="bx bx-home-alt-2 nav_icon"></i>
-              <span class="nav_name">Home</span>
-            </a>
-            <a href="#" class="nav_link" id="map-link">
-              <i class="bx bx-map-alt nav_icon"></i>
-              <span class="nav_name">Map</span>
-            </a>
-            <a href="#" class="nav_link" id="reports-link">
-              <i class="bx bx-message-square-detail nav_icon"></i>
-              <span class="nav_name">Reports</span>
-            </a>
-            <a href="#" class="nav_link" id="bins-link">
-              <i class="bx bxs-trash nav_icon"></i>
-              <span class="nav_name">Bins</span>
-            </a>
-            <a href="#" class="nav_link" id="stats-link">
-              <i class="bx bx-bar-chart-alt-2 nav_icon"></i>
-              <span class="nav_name">Stats</span>
-            </a>
-          </div>
-        </div>
-        <a href="#" class="nav_link" id="signOut">
-          <i class="bx bx-log-out nav_icon"></i>
-          <span class="nav_name">SignOut</span>
+    .view-button {
+      background-color: blue;
+    }
+
+    .update-button {
+      background-color: orange;
+    }
+
+    .delete-button {
+      background-color: red;
+    }
+
+    #reportsTable {
+      text-align: center;
+      margin-top: 20px;
+      margin-left: 20px;
+      margin-right: 20px;
+      width: 80vw;
+      /* Adjust the width to fit the screen */
+    }
+  </style>
+</head>
+
+<body id="body-pd">
+  <div class="l-navbar header" id="nav-bar">
+    <nav class="nav">
+      <div class="header_toggle">
+        <a href="#" class="nav_logo">
+          <img src="../img/GaboV1_LOGO.png" class="nav_logo-icon" />
+          <span class="nav_logo-name">Monitoring Center</span>
         </a>
-      </nav>
-    </div>
-    <!-- NAVBAR -->
-    <!-- Container Main start -->
-    <div class="content" id="welcome-content">
-      <!--<div class="container-fluid bg-dark p-3 rounded-4">
+        <div class="nav_list">
+          <a href="#" class="nav_link active" id="welcome-link">
+            <i class="bx bx-home-alt-2 nav_icon"></i>
+            <span class="nav_name">Home</span>
+          </a>
+          <a href="#" class="nav_link" id="map-link">
+            <i class="bx bx-map-alt nav_icon"></i>
+            <span class="nav_name">Map</span>
+          </a>
+          <a href="#" class="nav_link" id="reports-link">
+            <i class="bx bx-message-square-detail nav_icon"></i>
+            <span class="nav_name">Reports</span>
+          </a>
+          <a href="#" class="nav_link" id="bins-link">
+            <i class="bx bxs-trash nav_icon"></i>
+            <span class="nav_name">Bins</span>
+          </a>
+          <a href="#" class="nav_link" id="stats-link">
+            <i class="bx bx-bar-chart-alt-2 nav_icon"></i>
+            <span class="nav_name">Stats</span>
+          </a>
+        </div>
+      </div>
+      <a href="#" class="nav_link" id="signOut">
+        <i class="bx bx-log-out nav_icon"></i>
+        <span class="nav_name">SignOut</span>
+      </a>
+    </nav>
+  </div>
+  <!-- NAVBAR -->
+  <!-- Container Main start -->
+  <div class="content" id="welcome-content">
+    <!--<div class="container-fluid bg-dark p-3 rounded-4">
        <div class="d-flex container flex-row-reverse">
           <i class="fas fa-user-check text-white"></i>
         </div> 
       </div>-->
 
-      <section>
-        <div class="container mt-5">
-          <div class="row">
-            <div class="col-4">
-              <p class="fs-1 fw-bold">Monitoring Center</p>
-            </div>
+    <section>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-4">
+            <p class="fs-1 fw-bold">Monitoring Center</p>
           </div>
-          <div class="row">
-            <div class="col">
-              <div class="card shadow-none border-0 bg-gradient-1">
-                <div class="card-body">
-                  <h1 id="welcome-message">Welcome, CEMD!</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-3">
-              <a href="collectorsCrud/CollectorList.html" class="card-link">
-                <div class="card shadow-none p-1 border-0 clickable-box">
-                  <div class="card-body">
-                    <div class="float-end mt-3">
-                      <i class="fas fa-users fa-2x text-success"></i>
-                    </div>
-                    <p class="fs-5">Accounts</p>
-                    <p
-                      class="fs-1 text-success" id="uidCount"></p>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-3">
-              <div class="card shadow-none p-1 border-0">
-                <div class="card-body">
-                  <div class="float-end mt-3">
-                    <i class="fas fa-trash-can fa-2x text-success"></i>
-                  </div>
-                  <p class="fs-5">Smart Garbage Bins</p>
-                  <p class="fs-1 text-success" id="gbCount"></p>
-                </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="card shadow-none border-0 bg-gradient-1">
+              <div class="card-body">
+                <h1 id="welcome-message">Welcome, CEMD!</h1>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+        <div class="row mt-3">
+          <div class="col-3">
+            <a href="collectorsCrud/CollectorList.html" class="card-link">
+              <div class="card shadow-none p-1 border-0 clickable-box">
+                <div class="card-body">
+                  <div class="float-end mt-3">
+                    <i class="fas fa-users fa-2x text-success"></i>
+                  </div>
+                  <p class="fs-5">Accounts</p>
+                  <p class="fs-1 text-success" id="uidCount"></p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-3">
+            <div class="card shadow-none p-1 border-0">
+              <div class="card-body">
+                <div class="float-end mt-3">
+                  <i class="fas fa-trash-can fa-2x text-success"></i>
+                </div>
+                <p class="fs-5">Smart Garbage Bins</p>
+                <p class="fs-1 text-success" id="gbCount"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-    <div
-      class="content"
-      id="map-content"
-      style="position: relative; height: 850px"
-    >
-      <!-- The container for the map -->
-      <div id="map" style="height: 100%; width: 70%; float: left"></div>
+  <div class="content" id="map-content" style="position: relative; height: 850px">
+    <!-- The container for the map -->
+    <div id="map" style="height: 100%; width: 100%; float: left"></div>
 
-      <!-- Notifications content on the right side -->
-      <div
-        class="container mt-3"
-        style="
+    <!-- Notifications content on the right side -->
+    <div class="container mt-3" style="
           position: absolute;
           top: 0;
-          right: 0;
+          right: -100px;
           width: 30%;
           height: 100%;
           padding: 10px;
           box-sizing: border-box;
+          display: none;
 
           overflow-y: auto;
-        "
-      >
-        <p class="fs-2 fw-bold">Notifications</p>
+        ">
+      <p class="fs-2 fw-bold">Notifications</p>
 
-        <!-- Container for reports -->
+      <!-- Container for reports -->
 
-        <div id="notificationContainer mb-3">
-          <!-- Container for the scrollable content -->
-          <div id="notificationContent"></div>
-        </div>
+      <div id="notificationContainer mb-3">
+        <!-- Container for the scrollable content -->
+        <div id="notificationContent"></div>
       </div>
     </div>
+  </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col"></div>
-      </div>
+  <div class="container">
+    <div class="row">
+      <div class="col"></div>
     </div>
+  </div>
 
-    <div class="content" id="reports-content">
-      <h1 class="mt-5">REPORTS CONTENT</h1>
-      <div>
-        <label for="searchInput">Search:</label>
-        <input type="text" id="searchInput" oninput="searchReports()" />
-        <label for="sortDropdown">Sort By: </label>
-        <select id="sortDropdown">
-          <option value="ticketNumber">Ticket #</option>
-          <option value="gcn">GCN</option>
-          <option value="Date">Date</option>
-          <option value="timeFormat12">Time</option>
-          <option value="Problem">Problem</option>
-          <option value="addressLine1">Address Line 1</option>
-          <option value="addressLine2">Address Line 2</option>
-          <option value="barangay">Barangay</option>
-          <option value="district">District</option>
-          <option value="Name">Name</option>
-          <option value="email">Email</option>
-          <option value="mobileNumber">Mobile Number(+63)</option>
-          <option value="action">Action</option>
-          <!-- New option for the Action column -->
-        </select>
-      </div>
-      <div id="reportsTable">
-        <!-- The reports table will be dynamically populated here -->
-      </div>
+  <div class="content" id="reports-content">
+    <h1 class="mt-5">REPORTS CONTENT</h1>
+    <div>
+      <label for="searchInput">Search:</label>
+      <input type="text" id="searchInput" oninput="searchReports()" />
+      <label for="sortDropdown">Sort By: </label>
+      <select id="sortDropdown">
+        <option value="ticketNumber">Ticket #</option>
+        <option value="gcn">GCN</option>
+        <option value="Date">Date</option>
+        <option value="timeFormat12">Time</option>
+        <option value="Problem">Problem</option>
+        <option value="addressLine1">Address Line 1</option>
+        <option value="addressLine2">Address Line 2</option>
+        <option value="barangay">Barangay</option>
+        <option value="district">District</option>
+        <option value="Name">Name</option>
+        <option value="email">Email</option>
+        <option value="mobileNumber">Mobile Number(+63)</option>
+        <option value="action">Action</option>
+        <!-- New option for the Action column -->
+      </select>
     </div>
+    <div id="reportsTable">
+      <!-- The reports table will be dynamically populated here -->
+    </div>
+  </div>
 
-    <div class="content" id="bins-content">
-      <h1>Bins</h1>
-    </div>
+  <div class="content" id="bins-content">
+    <h1>Bins</h1>
+  </div>
 
-    <div class="content" id="stats-content">
-      <h1 class="mt-5">STATS CONTENT</h1>
-    </div>
-    <script type="text/javascript" src="../src/jquery.min.js"></script>
-    <script type="text/javascript" src="../src/mdb.min.js"></script>
-    <script src="../src/bootstrap.min.js"></script>
-    <script src="../src/popper.min.js"></script>
-    <script type="text/javascript" src="../src/mdb.min.js"></script>
-    <script src="../src/bootstrap.min.js"></script>
-    <script src="../src/popper.min.js"></script>
-    <script type="text/javascript" src="monitoring.js"></script>
-    <script type="module" src="monitor-index-function.js"></script>
-    <script type="module" src="monitor-index-reports.js"></script>
-    <script type="module" src="monitoring-gb-account-count.js"></script>
-    </script>
-    </body>
+  <div class="content" id="stats-content">
+    <h1 class="mt-5">STATS CONTENT</h1>
+  </div>
+  <script type="text/javascript" src="../src/jquery.min.js"></script>
+  <script type="text/javascript" src="../src/mdb.min.js"></script>
+  <script src="../src/bootstrap.min.js"></script>
+  <script src="../src/popper.min.js"></script>
+  <script type="text/javascript" src="../src/mdb.min.js"></script>
+  <script src="../src/bootstrap.min.js"></script>
+  <script src="../src/popper.min.js"></script>
+  <script type="text/javascript" src="monitoring.js"></script>
+  <script type="module" src="monitor-index-function.js"></script>
+  <script type="module" src="monitor-index-reports.js"></script>
+  <script type="module" src="monitoring-gb-account-count.js"></script>
+  </script>
+</body>
+
 </html>

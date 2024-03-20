@@ -27,28 +27,31 @@ const db = getDatabase(app);
 function generateReportHTML(report) {
   return `
         <tr>
-            <td>${report.ticketNumber}</td>
-            <td>${report.gcn}</td>
-            <td>${report.Date}</td>
-            <td>${report.timeFormat12}</td>
-            <td>${report.Problem}</td>
-            <td>${report.Description}</td>
-            <td>${report.addressLine1}</td>
-            <td>${report.addressLine2}</td>
-            <td>${report.barangay}</td>
-            <td>${report.district}</td>
-            <td>${report.firstName} ${report.lastName}</td>
-            <td>${report.email}</td>
-            <td>${report.mobileNumber}</td>
+            <td>${report.ticketNumber || ""}</td>
+            <td>${report.GCN || ""}</td>
+            <td>${(report.firstName || "") + " " + (report.lastName || "")}</td>
+            <td>${report.email || ""}</td>
+            <td>${report.mobileNumber || ""}</td>
+            <td>${report.Issue || ""}</td>
+            <td>${report.Description || ""}</td>
+            <td>${report.district || ""}</td>
+            <td>${report.barangay || ""}</td>
+            <td>${report.TimeSent || ""}</td>
+            <td>${report.DateSent || ""}</td>
+            <td>${report.addressLine1 || ""}</td>
+            <td>${report.addressLine2 || ""}</td>
             <td class="actions-column">
               <div class="horizontal-icons">
-                <button class="view-button" onclick="viewReport('${report.name}')">
+                <button class="view-button" onclick="viewReport('${report.name
+    }')">
                   <i class="bx bxs-show"></i>
                 </button>
-                <button class="update-button" onclick="updateReport('${report.name}')">
+                <button class="update-button" onclick="updateReport('${report.name
+    }')">
                   <i class="bx bxs-edit"></i>
                 </button>
-                <button class="delete-button" onclick="deleteReport('${report.name}')">
+                <button class="delete-button" onclick="deleteReport('${report.name
+    }')">
                   <i class="bx bxs-trash"></i>
                 </button>
               </div>
@@ -89,30 +92,29 @@ window.performAction = function (action, ticketNumber) {
 function getIndex(key) {
   const headers = [
     "ticketNumber",
-    "gcn",
-    "Date",
-    "timeFormat12",
-    "Problem",
-    "Description",
-    "addressLine1",
-    "addressLine2",
-    "barangay",
-    "district",
+    "GCN",
     "Name",
     "email",
     "mobileNumber",
-    "action",
+    "Issue",
+    "Description",
+    "district",
+    "barangay",
+    "TimeSent",
+    "DateSent",
+    "addressLine1",
+    "addressLine2",
   ];
   return headers.indexOf(key) + 1;
 }
 
 // Function to display the reports table
 function displayReportsTable(reportsArray) {
-  // Sort reports by date and time initially
+  // Sort the reports based on TimeSent and DateSent in ascending order (oldest to newest)
   reportsArray.sort((a, b) => {
-    const dateA = new Date(`${a.Date} ${a.timeFormat12}`);
-    const dateB = new Date(`${b.Date} ${b.timeFormat12}`);
-    return dateA - dateB;
+    const timeSentA = new Date(`${a.DateSent} ${a.TimeSent}`).getTime();
+    const timeSentB = new Date(`${b.DateSent} ${b.TimeSent}`).getTime();
+    return timeSentA - timeSentB;
   });
 
   const reportsTable = document.getElementById("reportsTable");
@@ -122,17 +124,17 @@ function displayReportsTable(reportsArray) {
                 <tr>
                     <th>Ticket #</th>
                     <th>GCN</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Problem</th>
-                    <th>Description</th>
-                    <th>Address Line 1</th>
-                    <th>Address Line 2</th>
-                    <th>Barangay</th>
-                    <th>District</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile Number(+63)</th>
+                    <th>Issue</th>
+                    <th>Description</th>
+                    <th>District</th>
+                    <th>Barangay</th>
+                    <th>Time Sent</th>
+                    <th>Date Sent</th>
+                    <th>Address Line 1</th>
+                    <th>Address Line 2</th>
                     <th>Action</th><!-- New column for Action buttons -->
                 </tr>
             </thead>
