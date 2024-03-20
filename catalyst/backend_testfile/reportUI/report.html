@@ -32,35 +32,75 @@
             padding: 8px;
             text-align: left;
         }
+
+        /* Modal styles */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+          padding-top: 60px;
+        }
+
+        /* Modal content */
+        .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto; /* 15% from the top and centered */
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* Close button */
+        .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div id="searchContainer">
-        <label for="searchInput">Search: </label>
-        <input type="text" id="searchInput" />
-        <button onclick="searchReports()">Search</button>
-    
-        <label for="sortDropdown">Filter By: </label>
-        <select id="sortDropdown">
-            <option value="ticketNumber">Ticket #</option>
-            <option value="GCN">GCN</option>
-            <option value="Name">Name</option>
-            <option value="email">Email</option>
-            <option value="mobileNumber">Mobile Number(+63)</option>
-            <option value="Issue">Issue</option>
-            <option value="Description">Description</option>
-            <option value="district">District</option>
-            <option value="barangay">Barangay</option>
-            <option value="TimeSent">Time Sent</option>
-            <option value="DateSent">Date Sent</option>
-            <option value="addressLine1">Address Line 1</option>
-            <option value="addressLine2">Address Line 2</option>    
-        </select>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent"></div>
+        </div>
     </div>
 
-    <div id="reportsTable">
-    </div>
+<div id="searchContainer">
+    <label for="searchInput">Search: </label>
+    <input type="text" id="searchInput" />
 
-    <script type="module" src="report.js"> </script>
+    <label for="sortDropdown">Filter By: </label>
+    <select id="sortDropdown">
+        <option value="ticketNumber">Ticket #</option>
+        <option value="GCN">GCN</option>
+        <option value="Issue">Issue</option>
+        <option value="Description">Description</option>
+        <option value="district">District</option>
+        <option value="barangay">Barangay</option>
+        <option value="TimeSent">Time Sent</option>
+        <option value="DateSent">Date Sent</option>
+    </select>
+</div>
+
+<div id="reportsTable">
+</div>
+
+<script type="module" src="report.js"> </script>
 </body>
+
 </html>

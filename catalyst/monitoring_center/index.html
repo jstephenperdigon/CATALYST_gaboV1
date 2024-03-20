@@ -93,6 +93,42 @@
       width: 80vw;
       /* Adjust the width to fit the screen */
     }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -230,45 +266,38 @@
       <label for="sortDropdown">Sort By: </label>
       <select id="sortDropdown">
         <option value="ticketNumber">Ticket #</option>
-        <option value="gcn">GCN</option>
-        <option value="Date">Date</option>
-        <option value="timeFormat12">Time</option>
-        <option value="Problem">Problem</option>
-        <option value="addressLine1">Address Line 1</option>
-        <option value="addressLine2">Address Line 2</option>
-        <option value="barangay">Barangay</option>
-        <option value="district">District</option>
+        <option value="GCN">GCN</option>
         <option value="Name">Name</option>
         <option value="email">Email</option>
         <option value="mobileNumber">Mobile Number(+63)</option>
-        <option value="action">Action</option>
-        <!-- New option for the Action column -->
+        <option value="Issue">Issue</option>
+        <option value="Description">Description</option>
+        <option value="district">District</option>
+        <option value="barangay">Barangay</option>
+        <option value="TimeSent">Time Sent</option>
+        <option value="DateSent">Date Sent</option>
+        <option value="addressLine1">Address Line 1</option>
+        <option value="addressLine2">Address Line 2</option>
       </select>
     </div>
     <div id="reportsTable">
-      <!-- The reports table will be dynamically populated here -->
     </div>
-  </div>
 
-  <div class="content" id="bins-content">
-    <h1>Bins</h1>
-  </div>
+    <div class="content" id="bins-content">
+      <h1>Bins</h1>
+    </div>
 
-  <div class="content" id="stats-content">
-    <h1 class="mt-5">STATS CONTENT</h1>
-  </div>
-  <script type="text/javascript" src="../src/jquery.min.js"></script>
-  <script type="text/javascript" src="../src/mdb.min.js"></script>
-  <script src="../src/bootstrap.min.js"></script>
-  <script src="../src/popper.min.js"></script>
-  <script type="text/javascript" src="../src/mdb.min.js"></script>
-  <script src="../src/bootstrap.min.js"></script>
-  <script src="../src/popper.min.js"></script>
-  <script type="text/javascript" src="monitoring.js"></script>
-  <script type="module" src="monitor-index-function.js"></script>
-  <script type="module" src="monitor-index-reports.js"></script>
-  <script type="module" src="monitoring-gb-account-count.js"></script>
-  </script>
+    <div class="content" id="stats-content">
+      <h1 class="mt-5">STATS CONTENT</h1>
+    </div>
+    <script type="text/javascript" src="../src/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/mdb.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/popper.min.js"></script>
+    <script type="text/javascript" src="monitoring.js"></script>
+    <script type="module" src="monitor-index-function.js"></script>
+    <script type="module" src="monitor-index-reports.js"></script>
+    <script type="module" src="monitoring-gb-account-count.js"></script>
 </body>
 
 </html>

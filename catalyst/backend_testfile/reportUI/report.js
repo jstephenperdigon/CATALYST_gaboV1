@@ -26,22 +26,20 @@ const db = getDatabase(app);
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
   return `
-        <tr>
-            <td>${report.ticketNumber}</td>
-            <td>${report.GCN}</td>
-            <td>${report.firstName} ${report.lastName}</td>
-            <td>${report.email}</td>
-            <td>${report.mobileNumber}</td>
-            <td>${report.Issue}</td>
-            <td>${report.Description}</td>
-            <td>${report.district}</td>
-            <td>${report.barangay}</td>
-            <td>${report.TimeSent}</td>
-            <td>${report.DateSent}</td>
-            <td>${report.addressLine1}</td>
-            <td>${report.addressLine2}</td>
-        </tr>
-    `;
+              <tr>
+                  <td>${report.ticketNumber}</td>
+                  <td>${report.GCN}</td>
+                  <td>${report.Issue}</td>
+                  <td>${report.Description}</td>
+                  <td>${report.district}</td>
+                  <td>${report.barangay}</td>
+                  <td>${report.TimeSent}</td>
+                  <td>${report.DateSent}</td>
+                  <td class="viewButtonContainer">
+                      <button class="viewButton">View</button>
+                  </td>
+              </tr>
+          `;
 }
 
 // Function to filter reports based on search input and selected sorting column
@@ -76,17 +74,12 @@ function getIndex(key) {
   const headers = [
     "ticketNumber",
     "GCN",
-    "Name",
-    "email",
-    "mobileNumber",
     "Issue",
     "Description",
     "district",
     "barangay",
     "TimeSent",
     "DateSent",
-    "addressLine1",
-    "addressLine2",
   ];
   return headers.indexOf(key) + 1;
 }
@@ -102,30 +95,33 @@ function displayReportsTable(reportsArray) {
 
   const reportsTable = document.getElementById("reportsTable");
   const tableHTML = `
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Ticket #</th>
-                    <th>GCN</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile Number(+63)</th>
-                    <th>Issue</th>
-                    <th>Description</th>
-                    <th>District</th>
-                    <th>Barangay</th>
-                    <th>Time Sent</th>
-                    <th>Date Sent</th>
-                    <th>Address Line 1</th>
-                    <th>Address Line 2</th>  
-                </tr>
-            </thead>
-            <tbody>
-                ${reportsArray.map(generateReportHTML).join("")}
-            </tbody>
-        </table>
-    `;
+              <table border="1">
+                  <thead>
+                      <tr>
+                          <th>Ticket #</th>
+                          <th>GCN</th>
+                          <th>Issue</th>
+                          <th>Description</th>
+                          <th>District</th>
+                          <th>Barangay</th>
+                          <th>Time Sent</th>
+                          <th>Date Sent</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${reportsArray.map(generateReportHTML).join("")}
+                  </tbody>
+              </table>
+          `;
   reportsTable.innerHTML = tableHTML;
+
+  // Add event listener to "View" buttons
+  document.querySelectorAll(".viewButton").forEach((button) => {
+    button.addEventListener("click", function () {
+      const ticketNumber = this.parentNode.parentNode.children[0].textContent;
+      displayModal(ticketNumber);
+    });
+  });
 }
 
 // Function to update the table when data changes
@@ -155,6 +151,65 @@ window.resetList = function () {
   // Retrieve the initial data and update the table
   updateTable();
 };
+
+function displayModal(ticketNumber) {
+  const modal = document.getElementById("modal");
+  const modalContent = document.getElementById("modalContent");
+
+  // Retrieve report data from Firebase based on ticketNumber
+  const reportRef = ref(db, `Reports/${ticketNumber}`);
+  get(reportRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const report = snapshot.val();
+
+        // Populate modal content with report details
+        modalContent.innerHTML = `
+          <p>Ticket Number: ${ticketNumber}</p>
+          <p>GCN: ${report.GCN}</p>
+          <p>Name: ${report.firstName} ${report.lastName}</p>
+          <p>Email: ${report.email}</p>
+          <p>Mobile Number: ${report.mobileNumber}</p>
+          <p>Issue: ${report.Issue}</p>
+          <p>District: ${report.district}</p>
+          <p>Barangay: ${report.barangay}</p>
+          <p>City: ${report.city}</p>
+          <p>Province: ${report.province}</p>
+          <p>Country: ${report.country}</p>
+          <p>Time Sent: ${report.TimeSent}</p>
+          <p>Date Sent: ${report.DateSent}</p>
+          <p>Address Line 1: ${report.addressLine1}</p>
+          <p>Address Line 2: ${report.addressLine2}</p>
+        `;
+      } else {
+        // If the report doesn't exist, display a message
+        modalContent.innerHTML = "<p>Report not found.</p>";
+      }
+
+      // Display the modal
+      modal.style.display = "block";
+    })
+    .catch((error) => {
+      console.error("Error retrieving report:", error);
+      // Display an error message if there's an issue fetching the report
+      modalContent.innerHTML = "<p>Error retrieving report data.</p>";
+      // Display the modal
+      modal.style.display = "block";
+    });
+
+  // Close modal when the user clicks on the close button
+  const closeButton = document.querySelector(".close");
+  closeButton.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  // Close modal when the user clicks outside the modal
+  window.onclick = function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+}
 
 // Display the initial reports table when the page loads
 window.onload = function () {
