@@ -46,7 +46,6 @@ function generateReportHTML(report) {
           `;
 }
 
-// Function to handle move action from Reports to ReportsArchive
 function handleMoveToArchive(ticketNumber) {
   const reportRef = ref(db, `Reports/${ticketNumber}`);
   const archiveRef = ref(db, `ReportsArchive/${ticketNumber}`);
@@ -75,6 +74,55 @@ function handleMoveToArchive(ticketNumber) {
     })
     .then(() => {
       console.log("TicketNumber removed from Reports successfully.");
+
+      // Show quick message for undo at the bottom of the screen
+      const undoMessage = document.createElement("div");
+      undoMessage.classList.add("undoMessage");
+      undoMessage.innerHTML = `
+        <div>
+          Report archived. <button id="undoButton">Undo</button>
+        </div>
+      `;
+      document.body.appendChild(undoMessage);
+
+      // Position the message at the bottom of the screen
+      undoMessage.style.position = "fixed";
+      undoMessage.style.bottom = "10px";
+      undoMessage.style.left = "50%";
+      undoMessage.style.transform = "translateX(-50%)";
+
+      // Handle undo action
+      const undoButton = undoMessage.querySelector("#undoButton");
+      undoButton.addEventListener("click", function () {
+        // Remove the quick message
+        document.body.removeChild(undoMessage);
+
+        // Restore report from archive
+        const archivedReportRef = ref(db, `ReportsArchive/${ticketNumber}`);
+        const originalReportRef = ref(db, `Reports/${ticketNumber}`);
+
+        get(archivedReportRef)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              const reportData = snapshot.val();
+              return set(originalReportRef, reportData);
+            } else {
+              console.error("Archived report not found.");
+              return Promise.reject(new Error("Archived report not found."));
+            }
+          })
+          .then(() => {
+            console.log("Report restored successfully.");
+          })
+          .catch((error) => {
+            console.error("Error restoring report:", error);
+          });
+      });
+
+      // Automatically hide the quick message after 10 seconds
+      setTimeout(() => {
+        document.body.removeChild(undoMessage);
+      }, 10000);
     })
     .catch((error) => {
       console.error("Error handling move to archive action:", error);
