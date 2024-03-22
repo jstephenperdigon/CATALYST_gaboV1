@@ -25,6 +25,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// Initialize EmailJS with your User ID
+emailjs.init("TN6jayxVlZMzQ3Ljt");
+
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
   return `
@@ -230,10 +233,25 @@ function displayModal(ticketNumber) {
         // Add event listener to the button inside the modal
         const respondButton = document.getElementById("respondButton");
         respondButton.addEventListener("click", function () {
-          // Implement your functionality when the button is clicked
-          // For example, you can handle the response action here
-          // This is just a placeholder
-          alert("Respond button clicked!");
+          // Get the email from the report data
+          const userEmail = report.email;
+          const userName = `${report.firstName} ${report.lastName}`;
+
+          const templateParams = {
+            to_email: userEmail,
+            UserName: userName,
+          };
+
+          emailjs
+            .send("service_qpkq4ee", "template_l3cy9we", templateParams)
+            .then((response) => {
+              console.log("Email sent successfully:", response);
+              alert("Email sent successfully!");
+            })
+            .catch((error) => {
+              console.error("Error sending Email:", error);
+              alert("Error sending Email. Please try again.");
+            });
         });
       } else {
         // If the report doesn't exist, display a message
