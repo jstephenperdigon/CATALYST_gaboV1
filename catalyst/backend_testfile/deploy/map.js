@@ -174,7 +174,7 @@ const mapOptions = {
     },
   ],
 };
-// Function to update marker data text and apply styling based on quota limits
+
 function updateMarkerDataText(selectedMarkers) {
   const totalQuota = selectedMarkers.reduce((acc, m) => acc + m.TotalQuota, 0);
   const barangays = [...new Set(selectedMarkers.map((m) => m.barangay))];
@@ -184,22 +184,36 @@ function updateMarkerDataText(selectedMarkers) {
   const minRequirement = 45;
   const maxLimit = 50;
 
-  let text = `Selected GCN: ${selectedGCNs} | Barangay: ${barangays.join(", ")} | TotalQuota: ${totalQuota}`;
+  let text = "";
 
-  // Check if the total quota meets the minimum requirement
-  if (totalQuota < minRequirement) {
-    text += ` (Below minimum requirement)`;
-    document.getElementById("markerDataText").style.color = "red";
-  } else if (totalQuota > maxLimit) {
-    text += ` (Exceeds maximum limit)`;
-    document.getElementById("markerDataText").style.color = "red";
+  if (selectedMarkers.length > 0) {
+    text = `Selected GCN: ${selectedGCNs} | Barangay: ${barangays.join(", ")} | TotalQuota: ${totalQuota}`;
+
+    // Check if the total quota meets the minimum requirement
+    if (totalQuota < minRequirement) {
+      text += ` (Below minimum requirement)`;
+      document.getElementById("markerDataText").style.color = "red";
+      document.getElementById("openModalBtn").style.display = "none";
+    } else if (totalQuota > maxLimit) {
+      text += ` (Exceeds maximum limit)`;
+      document.getElementById("markerDataText").style.color = "red";
+      document.getElementById("openModalBtn").style.display = "none";
+    } else {
+      // Total quota is within valid range
+      document.getElementById("markerDataText").style.color = "green";
+      // Show the "Set Schedule" button
+      document.getElementById("openModalBtn").style.display = "inline-block";
+    }
   } else {
-    // Total quota is within valid range
-    document.getElementById("markerDataText").style.color = "green";
+    // If there are no selected markers, hide the text
+    document.getElementById("markerDataText").style.display = "none";
+    return;
   }
 
   // Update marker data text
   document.getElementById("markerDataText").textContent = text;
+  // Display the text element
+  document.getElementById("markerDataText").style.display = "block";
 }
 
 function initMap() {
