@@ -295,6 +295,40 @@ function displayModal(ticketNumber) {
             .then((response) => {
               console.log("Email sent successfully:", response);
               alert("Email sent successfully!");
+
+              // Once email is sent successfully, move the report to ReportsResponded
+              const respondedReportRef = ref(
+                db,
+                `ReportsResponded/${ticketNumber}`
+              );
+              const reportRef = ref(db, `Reports/${ticketNumber}`);
+
+              get(reportRef)
+                .then((snapshot) => {
+                  if (snapshot.exists()) {
+                    const reportData = snapshot.val();
+                    return set(respondedReportRef, reportData);
+                  } else {
+                    console.error("Report not found.");
+                    return Promise.reject(new Error("Report not found."));
+                  }
+                })
+                .then(() => {
+                  console.log("Report moved to ReportsResponded successfully.");
+                  return remove(reportRef);
+                })
+                .then(() => {
+                  console.log("Report removed from Reports successfully.");
+
+                  // Close the modal after responding
+                  modal.style.display = "none";
+                })
+                .catch((error) => {
+                  console.error(
+                    "Error moving report to ReportsResponded:",
+                    error
+                  );
+                });
             })
             .catch((error) => {
               console.error("Error sending Email:", error);
