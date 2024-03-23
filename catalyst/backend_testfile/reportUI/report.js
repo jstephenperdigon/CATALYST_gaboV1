@@ -35,13 +35,15 @@ function generateReportHTML(report) {
                   <td>${report.ticketNumber}</td>
                   <td>${report.GCN}</td>
                   <td>${report.Issue}</td>
-                  <td>${report.district}</td>
-                  <td>${report.barangay}</td>
+                  <td>${report.district.split(" ")[1]}</td>
+                  <td>${report.barangay.split(" ")[1]}</td>
                   <td>${report.TimeSent}</td>
                   <td>${report.DateSent}</td>
                   <td class="viewButtonContainer">
                       <button class="viewButton">Respond</button>
-                      <button class="deleteButton" data-ticket="${report.ticketNumber}">Archive</button>
+                      <button class="deleteButton" data-ticket="${
+                        report.ticketNumber
+                      }">Archive</button>
               </tr>
           `;
 }
@@ -258,6 +260,10 @@ function displayModal(ticketNumber) {
       if (snapshot.exists()) {
         const report = snapshot.val();
 
+        // Extracting only the numbers from Barangay and District
+        const districtNumber = report.district.split(" ")[1];
+        const barangayNumber = report.barangay.split(" ")[1];
+
         // Populate modal content with report details
         modalContent.innerHTML = `
           <p>Ticket Number: ${ticketNumber}</p>
@@ -266,9 +272,9 @@ function displayModal(ticketNumber) {
           <p>Email: ${report.email}</p>
           <p>Mobile Number: ${report.mobileNumber}</p>
           <p>Issue: ${report.Issue}</p>
-          <p>Description: ${report.Description}</p>
-          <p>District: ${report.district}</p>
-          <p>Barangay: ${report.barangay}</p>
+          <p>Description: ${report.Description || "N/A"}</p>
+          <p>District: ${districtNumber}</p>
+          <p>Barangay: ${barangayNumber}</p>
           <p>City: ${report.city}</p>
           <p>Province: ${report.province}</p>
           <p>Country: ${report.country}</p>
