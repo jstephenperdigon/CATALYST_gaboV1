@@ -213,7 +213,7 @@ function initMap() {
     barangays.forEach((barangay) => {
       const option = document.createElement("option");
       option.value = barangay;
-      option.text = `Barangay ${barangay}`;
+      option.text = `${barangay}`;
       barangayDropdown.appendChild(option);
     });
 
@@ -319,41 +319,124 @@ function initMap() {
       marker.infoWindow.close();
     });
   });
-
   // Select button event listener
   document.getElementById("selectBtn").addEventListener("click", function () {
     const selectedBarangay = document.getElementById("barangay").value;
+    const selectedMarkers = allMarkers.filter(
+      (marker) => marker.barangay === selectedBarangay && marker.getVisible()
+    );
 
-    // Loop through all markers
+    // Hide markers that don't match the selected barangay
     allMarkers.forEach((marker) => {
-      // Check if the marker's barangay matches the selected barangay
-      if (marker.barangay === selectedBarangay) {
-        // Show the marker
-        marker.setVisible(true);
-      } else {
-        // Hide the marker
+      if (marker.barangay !== selectedBarangay) {
         marker.setVisible(false);
       }
     });
 
+    // Filter markers based on total quota condition
+    let totalQuota = 0;
+    const filteredMarkers = selectedMarkers.filter((marker) => {
+      if (totalQuota + marker.TotalQuota <= 50) {
+        totalQuota += marker.TotalQuota;
+        return true;
+      }
+      return false;
+    });
+
+    // Display selected markers and highlight them
+    const selectedDescriptions = filteredMarkers
+      .map((marker) => {
+        marker.setIcon({
+          url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+          scaledSize: new google.maps.Size(32, 32),
+        });
+        return marker.title;
+      })
+      .join(", ");
+
+    const selectedTotalQuota = filteredMarkers.reduce(
+      (total, marker) => total + marker.TotalQuota,
+      0
+    );
+
+    // Check if total quota meets the condition
+    if (selectedTotalQuota >= 45 && selectedTotalQuota <= 50) {
+      const selectedMarkersHTML = `
+      <div>
+        <p>Selected GCN: ${selectedDescriptions}</p>
+        <p>Barangay: ${selectedBarangay}</p>
+        <p>Total Quota: ${selectedTotalQuota}</p>
+      </div>
+    `;
+      document.getElementById("selectedMarkers").innerHTML =
+        selectedMarkersHTML;
+      // Show further action button
+      document.getElementById("furtherActionBtn").style.display = "block";
+    } else {
+      document.getElementById("selectedMarkers").innerHTML =
+        "<p>No valid selection. Total quota does not meet the condition.</p>";
+      // Hide further action button
+      document.getElementById("furtherActionBtn").style.display = "none";
+    }
+
     // Disable select button and enable cancel button
     document.getElementById("selectBtn").disabled = true;
     document.getElementById("cancelBtn").disabled = false;
+    document.getElementById("district").disabled = true;
+    document.getElementById("barangay").disabled = true;
   });
 
   // Cancel button event listener
   document.getElementById("cancelBtn").addEventListener("click", function () {
     // Reset dropdowns
-    districtDropdown.selectedIndex = 0;
-    barangayDropdown.innerHTML = "<option value=''>Select</option>";
+    document.getElementById("district").selectedIndex = 0;
+    document.getElementById("barangay").innerHTML =
+      "<option value=''>Select</option>";
 
-    // Show all markers
+    // Show all markers and reset their icons to default
     allMarkers.forEach((marker) => {
       marker.setVisible(true);
+      marker.setIcon({
+        url: customMarkerUrl,
+        scaledSize: new google.maps.Size(32, 32),
+      });
     });
 
-    // Enable select button and disable cancel button
+    // Clear selected markers display
+    document.getElementById("selectedMarkers").innerHTML = "";
+
+    // Disable select button and enable cancel button
     document.getElementById("selectBtn").disabled = true;
     document.getElementById("cancelBtn").disabled = true;
+    document.getElementById("district").disabled = false;
+    document.getElementById("barangay").disabled = false;
+    document.getElementById("furtherActionBtn").style.display = "none";
+  });
+
+  // Cancel button event listener
+  document.getElementById("cancelBtn").addEventListener("click", function () {
+    // Reset dropdowns
+    document.getElementById("district").selectedIndex = 0;
+    document.getElementById("barangay").innerHTML =
+      "<option value=''>Select</option>";
+
+    // Show all markers and reset their icons to default
+    allMarkers.forEach((marker) => {
+      marker.setVisible(true);
+      marker.setIcon({
+        url: customMarkerUrl,
+        scaledSize: new google.maps.Size(32, 32),
+      });
+    });
+
+    // Clear selected markers display
+    document.getElementById("selectedMarkers").innerHTML = "";
+
+    // Disable select button and enable cancel button
+    document.getElementById("selectBtn").disabled = true;
+    document.getElementById("cancelBtn").disabled = true;
+    document.getElementById("district").disabled = false;
+    document.getElementById("barangay").disabled = false;
+    document.getElementById("furtherActionBtn").style.display = "none";
   });
 }
