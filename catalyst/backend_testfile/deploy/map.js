@@ -174,52 +174,64 @@ const mapOptions = {
     },
   ],
 };
-
-function updateMarkerDataText(selectedMarkers) {
-  const totalQuota = selectedMarkers.reduce((acc, m) => acc + m.TotalQuota, 0);
-  const barangays = [...new Set(selectedMarkers.map((m) => m.barangay))];
-  const selectedGCNs = selectedMarkers.map((m) => m.title).join(", ");
-
-  // Set the minimum requirement and maximum limit
-  const minRequirement = 45;
-  const maxLimit = 50;
-
-  let text = "";
-
-  if (selectedMarkers.length > 0) {
-    text = `Selected GCN: ${selectedGCNs} | Barangay: ${barangays.join(", ")} | TotalQuota: ${totalQuota}`;
-
-    // Check if the total quota meets the minimum requirement
-    if (totalQuota < minRequirement) {
-      text += ` (Below minimum requirement)`;
-      document.getElementById("markerDataText").style.color = "red";
-      document.getElementById("openModalBtn").style.display = "none";
-    } else if (totalQuota > maxLimit) {
-      text += ` (Exceeds maximum limit)`;
-      document.getElementById("markerDataText").style.color = "red";
-      document.getElementById("openModalBtn").style.display = "none";
-    } else {
-      // Total quota is within valid range
-      document.getElementById("markerDataText").style.color = "green";
-      // Show the "Set Schedule" button
-      document.getElementById("openModalBtn").style.display = "inline-block";
-    }
-  } else {
-    // If there are no selected markers, hide the text
-    document.getElementById("markerDataText").style.display = "none";
-    return;
-  }
-
-  // Update marker data text
-  document.getElementById("markerDataText").textContent = text;
-  // Display the text element
-  document.getElementById("markerDataText").style.display = "block";
-}
-
 function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), mapOptions);
   const customMarkerUrl =
     "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+
+  // Populate Barangay dropdown based on the selected District
+  const districtDropdown = document.getElementById("district");
+  const barangayDropdown = document.getElementById("barangay");
+  const selectBtn = document.getElementById("selectBtn"); // Get select button
+
+  // Disable select button initially
+  selectBtn.disabled = true;
+
+  districtDropdown.addEventListener("change", function () {
+    const district = this.value;
+    let barangays = [];
+
+    if (district === "1") {
+      barangays = ["1", "4", "6", "7", "10"];
+    } else if (district === "2") {
+      barangays = ["2", "3", "5", "8", "11"];
+    } else if (district === "3") {
+      barangays = ["9", "12", "13", "14", "15"];
+    }
+
+    // Clear previous options
+    barangayDropdown.innerHTML = "";
+
+    // Add new options
+    const selectOption = document.createElement("option");
+    selectOption.value = "";
+    selectOption.text = "Select";
+    selectOption.disabled = true; // Disable the "Select" option
+    selectOption.selected = true; // Make "Select" the default selected option
+    barangayDropdown.appendChild(selectOption);
+
+    barangays.forEach((barangay) => {
+      const option = document.createElement("option");
+      option.value = barangay;
+      option.text = `Barangay ${barangay}`;
+      barangayDropdown.appendChild(option);
+    });
+
+    // Validate dropdowns after populating barangays
+    validateDropdowns();
+  });
+
+  // Add event listener for barangay dropdown change
+  barangayDropdown.addEventListener("change", validateDropdowns);
+
+  // Function to validate dropdowns
+  function validateDropdowns() {
+    const districtValue = districtDropdown.value;
+    const barangayValue = barangayDropdown.value;
+
+    // Enable select button only if both dropdowns have valid values
+    selectBtn.disabled = districtValue === "" || barangayValue === "";
+  }
 
   // Marker positions, descriptions, barangay, and TotalQuota
   const markers = [
@@ -261,38 +273,8 @@ function initMap() {
     },
   ];
 
-
   // Create markers array to store references to all markers
   const allMarkers = [];
-
-  // Define a variable to track the SelectState
-  let SelectState = false;
-
-  // Event listener for the select button
-  document.getElementById("selectBtn").addEventListener("click", () => {
-    // Toggle the SelectState
-    SelectState = !SelectState;
-
-    // Update the text content of the button
-    const selectBtn = document.getElementById("selectBtn");
-    if (SelectState) {
-      selectBtn.textContent = "Cancel";
-      allMarkers.forEach((marker) => {
-        marker.infoWindow.close();
-      });
-    } else {
-      selectBtn.textContent = "Select";
-      // Clear data for markerDataText
-      document.getElementById("markerDataText").textContent = "";
-
-      // Return all markers to original state
-      allMarkers.forEach((marker) => {
-        marker.setIcon(customMarkerUrl);
-        marker.highlighted = false;
-        marker.setVisible(true);
-      });
-    }
-  });
 
   // Loop through markers and add markers with descriptions
   markers.forEach((markerData) => {
@@ -323,50 +305,8 @@ function initMap() {
 
     // Marker click event listener
     marker.addListener("click", () => {
-      // Check if SelectState is true
-      if (SelectState) {
-        // Toggle highlight state
-        marker.highlighted = !marker.highlighted;
-
-        // Change marker color based on its highlighted state
-        if (marker.highlighted) {
-          marker.setIcon(
-            "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-          );
-        } else {
-          marker.setIcon(
-            "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-          );
-        }
-
-        // Filter markers based on barangay if there are highlighted markers
-        const hasHighlightedMarkers = allMarkers.some((m) => m.highlighted);
-        if (!hasHighlightedMarkers) {
-          allMarkers.forEach((m) => {
-            m.setVisible(true);
-          });
-        } else {
-          const clickedBarangay = marker.barangay;
-          allMarkers.forEach((m) => {
-            if (m !== marker) {
-              if (m.barangay !== clickedBarangay) {
-                m.setVisible(false);
-              } else {
-                m.setVisible(true);
-              }
-            }
-          });
-        }
-
-        // Fetch data and handle display in <p> element
-        const selectedMarkers = allMarkers.filter((m) => m.highlighted);
-
-        // Update marker data text and apply styling based on quota limits
-        updateMarkerDataText(selectedMarkers);
-      } else {
-        // Open info window
-        infoWindow.open(map, marker);
-      }
+      // Open info window
+      infoWindow.open(map, marker);
     });
 
     // Store the info window reference with the marker
@@ -378,5 +318,42 @@ function initMap() {
     allMarkers.forEach((marker) => {
       marker.infoWindow.close();
     });
+  });
+
+  // Select button event listener
+  document.getElementById("selectBtn").addEventListener("click", function () {
+    const selectedBarangay = document.getElementById("barangay").value;
+
+    // Loop through all markers
+    allMarkers.forEach((marker) => {
+      // Check if the marker's barangay matches the selected barangay
+      if (marker.barangay === selectedBarangay) {
+        // Show the marker
+        marker.setVisible(true);
+      } else {
+        // Hide the marker
+        marker.setVisible(false);
+      }
+    });
+
+    // Disable select button and enable cancel button
+    document.getElementById("selectBtn").disabled = true;
+    document.getElementById("cancelBtn").disabled = false;
+  });
+
+  // Cancel button event listener
+  document.getElementById("cancelBtn").addEventListener("click", function () {
+    // Reset dropdowns
+    districtDropdown.selectedIndex = 0;
+    barangayDropdown.innerHTML = "<option value=''>Select</option>";
+
+    // Show all markers
+    allMarkers.forEach((marker) => {
+      marker.setVisible(true);
+    });
+
+    // Enable select button and disable cancel button
+    document.getElementById("selectBtn").disabled = true;
+    document.getElementById("cancelBtn").disabled = true;
   });
 }
