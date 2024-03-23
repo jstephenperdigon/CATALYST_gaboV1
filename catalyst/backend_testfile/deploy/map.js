@@ -174,6 +174,34 @@ const mapOptions = {
     },
   ],
 };
+// Function to update marker data text and apply styling based on quota limits
+function updateMarkerDataText(selectedMarkers) {
+  const totalQuota = selectedMarkers.reduce((acc, m) => acc + m.TotalQuota, 0);
+  const barangays = [...new Set(selectedMarkers.map((m) => m.barangay))];
+  const selectedGCNs = selectedMarkers.map((m) => m.title).join(", ");
+
+  // Set the minimum requirement and maximum limit
+  const minRequirement = 45;
+  const maxLimit = 50;
+
+  let text = `Selected GCN: ${selectedGCNs} | Barangay: ${barangays.join(", ")} | TotalQuota: ${totalQuota}`;
+
+  // Check if the total quota meets the minimum requirement
+  if (totalQuota < minRequirement) {
+    text += ` (Below minimum requirement)`;
+    document.getElementById("markerDataText").style.color = "red";
+  } else if (totalQuota > maxLimit) {
+    text += ` (Exceeds maximum limit)`;
+    document.getElementById("markerDataText").style.color = "red";
+  } else {
+    // Total quota is within valid range
+    document.getElementById("markerDataText").style.color = "green";
+  }
+
+  // Update marker data text
+  document.getElementById("markerDataText").textContent = text;
+}
+
 function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), mapOptions);
   const customMarkerUrl =
@@ -211,7 +239,14 @@ function initMap() {
       barangay: "3",
       TotalQuota: 10,
     },
+    {
+      position: { lat: 14.769794122216513, lng: 121.07285593266207 },
+      description: "GCN006",
+      barangay: "1",
+      TotalQuota: 25,
+    },
   ];
+
 
   // Create markers array to store references to all markers
   const allMarkers = [];
@@ -311,18 +346,9 @@ function initMap() {
 
         // Fetch data and handle display in <p> element
         const selectedMarkers = allMarkers.filter((m) => m.highlighted);
-        const totalQuota = selectedMarkers.reduce(
-          (acc, m) => acc + m.TotalQuota,
-          0
-        );
-        const barangays = [...new Set(selectedMarkers.map((m) => m.barangay))];
-        const selectedGCNs = selectedMarkers.map((m) => m.title).join(", ");
 
-        // Update marker data text
-        const markerDataText = document.getElementById("markerDataText");
-        markerDataText.textContent = `Selected GCN: ${selectedGCNs} | Barangay: ${barangays.join(
-          ", "
-        )} | TotalQuota: ${totalQuota}`;
+        // Update marker data text and apply styling based on quota limits
+        updateMarkerDataText(selectedMarkers);
       } else {
         // Open info window
         infoWindow.open(map, marker);
