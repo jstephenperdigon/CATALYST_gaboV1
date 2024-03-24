@@ -59,8 +59,8 @@ function populateForm() {
           // Populate the form fields with user data
           document.getElementById("firstName").value = userData.firstName || "";
           document.getElementById("lastName").value = userData.lastName || "";
-          document.getElementById("email").value = userData.email || "";
           document.getElementById("mobile").value = userData.mobileNumber || "";
+          document.getElementById("status").value = userData.status;
         } else {
           console.error("User not found");
         }
@@ -87,8 +87,8 @@ document
     const updatedInfo = {
       firstName: document.getElementById("firstName").value,
       lastName: document.getElementById("lastName").value,
-      email: document.getElementById("email").value,
       mobileNumber: document.getElementById("mobile").value,
+      status: document.getElementById("status").value,
     };
 
     // Check if there is a query parameter for updating a specific user

@@ -43,6 +43,7 @@ function generateReportHTML(report) {
             <td>${report.firstName} ${report.lastName}</td>
             <td>${report.email}</td>
             <td>${report.mobileNumber}</td>
+            <td>${report.status}</td>
             <td class="actions-column">
                 <button onclick="viewReport('${report.name}')">View</button>
                 <button onclick="updateReport('${report.name}')">Update</button>
@@ -83,12 +84,6 @@ window.searchReports = function () {
   filterReports(searchInput, sortKey);
 };
 
-// Function to get the index of the selected column
-function getIndex(key) {
-  const headers = ["Name", "email", "mobileNumber", "action"];
-  return headers.indexOf(key) + 1;
-}
-
 // Function to display the reports table
 function displayReportsTable(reportsArray) {
   // Sort reports alphabetically based on last name
@@ -102,6 +97,7 @@ function displayReportsTable(reportsArray) {
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile Number(+63)</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -142,17 +138,6 @@ window.onload = function () {
     window.viewReport(userNameToView);
   }
 };
-
-function updateReport(name) {
-  // Check if there is a query parameter for viewing a specific user
-  const params = new URLSearchParams(window.location.search);
-  const userNameToView = params.get("name");
-
-  if (userNameToUpdate) {
-    // If there is a user name in the query parameter, trigger the viewReport function
-    window.updateReport(userNameToUpdate);
-  }
-}
 
 // Function to delete a report
 window.deleteReport = function (name) {
