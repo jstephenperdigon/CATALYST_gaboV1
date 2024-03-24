@@ -1,3 +1,5 @@
+
+
 const centerMap = {
   lat: 14.769617915353559,
   lng: 121.07431904782344,
@@ -192,11 +194,203 @@ function initMap() {
     let barangays = [];
 
     if (district === "1") {
-      barangays = ["1", "4", "6", "7", "10"];
+      barangays = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "77",
+        "78",
+        "79",
+        "80",
+        "81",
+        "82",
+        "83",
+        "84",
+        "85",
+        "132",
+        "133",
+        "134",
+        "135",
+        "136",
+        "137",
+        "138",
+        "139",
+        "140",
+        "141",
+        "142",
+        "143",
+        "144",
+        "145",
+        "146",
+        "147",
+        "148",
+        "149",
+        "150",
+        "151",
+        "152",
+        "153",
+        "154",
+        "155",
+        "156",
+        "157",
+        "158",
+        "159",
+        "160",
+        "161",
+        "162",
+        "163",
+        "164",
+        "165",
+        "166",
+        "167",
+        "168",
+        "169",
+        "170",
+        "171",
+        "172",
+        "173",
+        "174",
+        "175",
+        "176",
+        "177"
+      ];
     } else if (district === "2") {
-      barangays = ["2", "3", "5", "8", "11"];
+      barangays = [
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68",
+        "69",
+        "70",
+        "71",
+        "72",
+        "73",
+        "74",
+        "75",
+        "76",
+        "86",
+        "87",
+        "88",
+        "89",
+        "90",
+        "91",
+        "92",
+        "93",
+        "94",
+        "95",
+        "96",
+        "97",
+        "98",
+        "99",
+        "100",
+        "101",
+        "102",
+        "103",
+        "104",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+        "111",
+        "112",
+        "113",
+        "114",
+        "115",
+        "116",
+        "117",
+        "118",
+        "119",
+        "120",
+        "121",
+        "123",
+        "124",
+        "125",
+        "126",
+        "127",
+        "128",
+        "129",
+        "130",
+        "131",
+        "131"
+
+      ];
     } else if (district === "3") {
-      barangays = ["9", "12", "13", "14", "15"];
+      barangays = [
+        "178",
+        "179",
+        "180",
+        "181",
+        "182",
+        "183",
+        "184",
+        "185",
+        "186",
+        "187",
+        "188"
+      ];
     }
 
     // Clear previous options
@@ -238,38 +432,44 @@ function initMap() {
     {
       position: { lat: 14.769617915353559, lng: 121.07431904782344 },
       description: "GCN001",
-      barangay: "1",
-      TotalQuota: 25,
+      barangay: "2",
+      district: "1",
+      TotalQuota: 40,
     },
     {
       position: { lat: 14.769826984613763, lng: 121.07434180712067 },
       description: "GCN002",
       barangay: "1",
-      TotalQuota: 25,
+      district: "1",
+      TotalQuota: 4,
     },
     {
       position: { lat: 14.7695188824759, lng: 121.07366282142037 },
       description: "GCN003",
-      barangay: "2",
+      barangay: "1",
+      district: "1",
       TotalQuota: 30,
     },
     {
       position: { lat: 14.769214447791597, lng: 121.07394351941939 },
       description: "GCN004",
       barangay: "2",
-      TotalQuota: 15,
+      district: "2",
+      TotalQuota: 5,
     },
     {
       position: { lat: 14.7693244844737, lng: 121.07458836617384 },
       description: "GCN005",
       barangay: "3",
+      district: "2",
       TotalQuota: 10,
     },
     {
       position: { lat: 14.769794122216513, lng: 121.07285593266207 },
       description: "GCN006",
       barangay: "1",
-      TotalQuota: 25,
+      district: "1",
+      TotalQuota: 15,
     },
   ];
 
@@ -282,7 +482,7 @@ function initMap() {
       position: markerData.position,
       map: map,
       title: markerData.description, // Use the description as the marker title
-      visible: true, // Initially show all markers
+      visible: markerData.TotalQuota >= 4, // Initially show all markers
       barangay: markerData.barangay, // Store barangay info in marker object
       TotalQuota: markerData.TotalQuota, // Store TotalQuota info in marker object
       highlighted: false,
@@ -326,6 +526,9 @@ function initMap() {
       (marker) => marker.barangay === selectedBarangay && marker.getVisible()
     );
 
+    // Sort markers based on total quota in descending order
+    selectedMarkers.sort((a, b) => b.TotalQuota - a.TotalQuota);
+
     // Hide markers that don't match the selected barangay
     allMarkers.forEach((marker) => {
       if (marker.barangay !== selectedBarangay) {
@@ -362,12 +565,13 @@ function initMap() {
     // Check if total quota meets the condition
     if (selectedTotalQuota >= 45 && selectedTotalQuota <= 50) {
       const selectedMarkersHTML = `
-      <div>
-        <p>Selected GCN: ${selectedDescriptions}</p>
-        <p>Barangay: ${selectedBarangay}</p>
-        <p>Total Quota: ${selectedTotalQuota}</p>
-      </div>
-    `;
+    <div>
+    <p>Selected GCN: ${selectedDescriptions}</p>
+    <p>Barangay: ${selectedBarangay}</p>
+    <p>District: ${districtDropdown.value}</p>
+    <p>Total Quota: ${selectedTotalQuota}</p>
+    </div>
+  `;
       document.getElementById("selectedMarkers").innerHTML =
         selectedMarkersHTML;
       // Show further action button
@@ -413,30 +617,5 @@ function initMap() {
     document.getElementById("furtherActionBtn").style.display = "none";
   });
 
-  // Cancel button event listener
-  document.getElementById("cancelBtn").addEventListener("click", function () {
-    // Reset dropdowns
-    document.getElementById("district").selectedIndex = 0;
-    document.getElementById("barangay").innerHTML =
-      "<option value=''>Select</option>";
 
-    // Show all markers and reset their icons to default
-    allMarkers.forEach((marker) => {
-      marker.setVisible(true);
-      marker.setIcon({
-        url: customMarkerUrl,
-        scaledSize: new google.maps.Size(32, 32),
-      });
-    });
-
-    // Clear selected markers display
-    document.getElementById("selectedMarkers").innerHTML = "";
-
-    // Disable select button and enable cancel button
-    document.getElementById("selectBtn").disabled = true;
-    document.getElementById("cancelBtn").disabled = true;
-    document.getElementById("district").disabled = false;
-    document.getElementById("barangay").disabled = false;
-    document.getElementById("furtherActionBtn").style.display = "none";
-  });
 }
