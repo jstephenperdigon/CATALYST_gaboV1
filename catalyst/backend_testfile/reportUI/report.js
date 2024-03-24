@@ -58,73 +58,35 @@ function handleMoveToArchive(ticketNumber) {
       if (snapshot.exists()) {
         const reportData = snapshot.val();
 
-        // Set report data to ReportsArchive
-        return set(archiveRef, reportData);
+        // Show confirmation dialog for archiving
+        if (
+          confirm("Are you sure you want to move this report to the archive?")
+        ) {
+          // Set report data to ReportsArchive
+          return set(archiveRef, reportData)
+            .then(() => {
+              console.log("Report moved to ReportsArchive successfully.");
+
+              // Once moved to ReportsArchive, remove ticketNumber from Reports
+              const reportToRemoveRef = ref(db, `Reports/${ticketNumber}`);
+              return remove(reportToRemoveRef);
+            })
+            .then(() => {
+              console.log("TicketNumber removed from Reports successfully.");
+            })
+            .catch((error) => {
+              console.error("Error removing ticketNumber from Reports:", error);
+            });
+        } else {
+          console.log("Archive action canceled by user.");
+          return Promise.reject(new Error("Archive action canceled by user."));
+        }
       } else {
         // If report not found, log an error and exit
         const errorMessage = `Report not found for ticketNumber: ${ticketNumber}`;
         console.error(errorMessage);
         return Promise.reject(new Error(errorMessage));
       }
-    })
-    .then(() => {
-      console.log("Report moved to ReportsArchive successfully.");
-
-      // Once moved to ReportsArchive, remove ticketNumber from Reports
-      const reportToRemoveRef = ref(db, `Reports/${ticketNumber}`);
-      return remove(reportToRemoveRef);
-    })
-    .then(() => {
-      console.log("TicketNumber removed from Reports successfully.");
-
-      // Show quick message for undo at the bottom of the screen
-      const undoMessage = document.createElement("div");
-      undoMessage.classList.add("undoMessage");
-      undoMessage.innerHTML = `
-        <div>
-          Report archived. <button id="undoButton">Undo</button>
-        </div>
-      `;
-      document.body.appendChild(undoMessage);
-
-      // Position the message at the bottom of the screen
-      undoMessage.style.position = "fixed";
-      undoMessage.style.bottom = "10px";
-      undoMessage.style.left = "50%";
-      undoMessage.style.transform = "translateX(-50%)";
-
-      // Handle undo action
-      const undoButton = undoMessage.querySelector("#undoButton");
-      undoButton.addEventListener("click", function () {
-        // Remove the quick message
-        document.body.removeChild(undoMessage);
-
-        // Restore report from archive
-        const archivedReportRef = ref(db, `ReportsArchive/${ticketNumber}`);
-        const originalReportRef = ref(db, `Reports/${ticketNumber}`);
-
-        get(archivedReportRef)
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              const reportData = snapshot.val();
-              return set(originalReportRef, reportData);
-            } else {
-              console.error("Archived report not found.");
-              return Promise.reject(new Error("Archived report not found."));
-            }
-          })
-          .then(() => {
-            console.log("Report restored successfully.");
-          })
-          .catch((error) => {
-            console.error("Error restoring report:", error);
-          });
-      });
-
-      // Automatically hide the quick message after 10 seconds
-      setTimeout(() => {
-        document.body.removeChild(undoMessage);
-      }, 10000);
     })
     .catch((error) => {
       console.error("Error handling move to archive action:", error);
