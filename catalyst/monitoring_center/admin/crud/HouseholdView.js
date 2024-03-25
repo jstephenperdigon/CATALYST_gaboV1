@@ -37,9 +37,13 @@ async function getUserDetails(name) {
 // Function to display user details on the page
 function displayUserDetails(user) {
   document.getElementById("name").textContent =
-    user.firstName + " " + user.lastName;
+    (user.firstName ? user.firstName + " " : "") +
+    (user.middleName ? user.middleName + " " : "") +
+    (user.lastName ? user.lastName + " " : "") +
+    (user.suffix ? user.suffix : "");
   document.getElementById("email").textContent = user.email;
   document.getElementById("mobile").textContent = user.mobileNumber;
+  document.getElementById("status").textContent = user.status;
 }
 
 // Function to navigate back to HouseholdList.html

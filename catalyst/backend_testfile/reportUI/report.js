@@ -4,6 +4,8 @@ import {
   getDatabase,
   ref,
   get,
+  set,
+  remove,
   onValue,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
@@ -23,6 +25,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// Initialize EmailJS with your User ID
+emailjs.init("TN6jayxVlZMzQ3Ljt");
+
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
   return `
@@ -30,16 +35,62 @@ function generateReportHTML(report) {
                   <td>${report.ticketNumber}</td>
                   <td>${report.GCN}</td>
                   <td>${report.Issue}</td>
-                  <td>${report.Description}</td>
-                  <td>${report.district}</td>
-                  <td>${report.barangay}</td>
+                  <td>${report.district.split(" ")[1]}</td>
+                  <td>${report.barangay.split(" ")[1]}</td>
                   <td>${report.TimeSent}</td>
                   <td>${report.DateSent}</td>
                   <td class="viewButtonContainer">
-                      <button class="viewButton">View</button>
-                  </td>
+                      <button class="viewButton">Respond</button>
+                      <button class="deleteButton" data-ticket="${
+                        report.ticketNumber
+                      }">Archive</button>
               </tr>
           `;
+}
+
+function handleMoveToArchive(ticketNumber) {
+  const reportRef = ref(db, `Reports/${ticketNumber}`);
+  const archiveRef = ref(db, `ReportsArchive/${ticketNumber}`);
+
+  // Retrieve report data from Reports
+  get(reportRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const reportData = snapshot.val();
+
+        // Show confirmation dialog for archiving
+        if (
+          confirm("Are you sure you want to move this report to the archive?")
+        ) {
+          // Set report data to ReportsArchive
+          return set(archiveRef, reportData)
+            .then(() => {
+              console.log("Report moved to ReportsArchive successfully.");
+
+              // Once moved to ReportsArchive, remove ticketNumber from Reports
+              const reportToRemoveRef = ref(db, `Reports/${ticketNumber}`);
+              return remove(reportToRemoveRef);
+            })
+            .then(() => {
+              console.log("TicketNumber removed from Reports successfully.");
+            })
+            .catch((error) => {
+              console.error("Error removing ticketNumber from Reports:", error);
+            });
+        } else {
+          console.log("Archive action canceled by user.");
+          return Promise.reject(new Error("Archive action canceled by user."));
+        }
+      } else {
+        // If report not found, log an error and exit
+        const errorMessage = `Report not found for ticketNumber: ${ticketNumber}`;
+        console.error(errorMessage);
+        return Promise.reject(new Error(errorMessage));
+      }
+    })
+    .catch((error) => {
+      console.error("Error handling move to archive action:", error);
+    });
 }
 
 // Function to filter reports based on search input and selected sorting column
@@ -75,11 +126,11 @@ function getIndex(key) {
     "ticketNumber",
     "GCN",
     "Issue",
-    "Description",
     "district",
     "barangay",
     "TimeSent",
     "DateSent",
+    "Action",
   ];
   return headers.indexOf(key) + 1;
 }
@@ -101,11 +152,11 @@ function displayReportsTable(reportsArray) {
                           <th>Ticket #</th>
                           <th>GCN</th>
                           <th>Issue</th>
-                          <th>Description</th>
                           <th>District</th>
                           <th>Barangay</th>
                           <th>Time Sent</th>
                           <th>Date Sent</th>
+                          <th>Action</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -120,6 +171,14 @@ function displayReportsTable(reportsArray) {
     button.addEventListener("click", function () {
       const ticketNumber = this.parentNode.parentNode.children[0].textContent;
       displayModal(ticketNumber);
+    });
+  });
+
+  // Add event listener to "Delete" buttons
+  document.querySelectorAll(".deleteButton").forEach((button) => {
+    button.addEventListener("click", function () {
+      const ticketNumber = this.dataset.ticket;
+      handleMoveToArchive(ticketNumber);
     });
   });
 }
@@ -163,6 +222,10 @@ function displayModal(ticketNumber) {
       if (snapshot.exists()) {
         const report = snapshot.val();
 
+        // Extracting only the numbers from Barangay and District
+        const districtNumber = report.district.split(" ")[1];
+        const barangayNumber = report.barangay.split(" ")[1];
+
         // Populate modal content with report details
         modalContent.innerHTML = `
           <p>Ticket Number: ${ticketNumber}</p>
@@ -171,8 +234,9 @@ function displayModal(ticketNumber) {
           <p>Email: ${report.email}</p>
           <p>Mobile Number: ${report.mobileNumber}</p>
           <p>Issue: ${report.Issue}</p>
-          <p>District: ${report.district}</p>
-          <p>Barangay: ${report.barangay}</p>
+          <p>Description: ${report.Description || "N/A"}</p>
+          <p>District: ${districtNumber}</p>
+          <p>Barangay: ${barangayNumber}</p>
           <p>City: ${report.city}</p>
           <p>Province: ${report.province}</p>
           <p>Country: ${report.country}</p>
@@ -180,7 +244,65 @@ function displayModal(ticketNumber) {
           <p>Date Sent: ${report.DateSent}</p>
           <p>Address Line 1: ${report.addressLine1}</p>
           <p>Address Line 2: ${report.addressLine2}</p>
+          <button id="respondButton">Send Respond</button>
         `;
+        // Add event listener to the button inside the modal
+        const respondButton = document.getElementById("respondButton");
+        respondButton.addEventListener("click", function () {
+          // Get the email from the report data
+          const userEmail = report.email;
+          const userName = `${report.firstName} ${report.lastName}`;
+
+          const templateParams = {
+            to_email: userEmail,
+            UserName: userName,
+          };
+
+          emailjs
+            .send("service_qpkq4ee", "template_l3cy9we", templateParams)
+            .then((response) => {
+              console.log("Email sent successfully:", response);
+              alert("Email sent successfully!");
+
+              // Once email is sent successfully, move the report to ReportsResponded
+              const respondedReportRef = ref(
+                db,
+                `ReportsResponded/${ticketNumber}`
+              );
+              const reportRef = ref(db, `Reports/${ticketNumber}`);
+
+              get(reportRef)
+                .then((snapshot) => {
+                  if (snapshot.exists()) {
+                    const reportData = snapshot.val();
+                    return set(respondedReportRef, reportData);
+                  } else {
+                    console.error("Report not found.");
+                    return Promise.reject(new Error("Report not found."));
+                  }
+                })
+                .then(() => {
+                  console.log("Report moved to ReportsResponded successfully.");
+                  return remove(reportRef);
+                })
+                .then(() => {
+                  console.log("Report removed from Reports successfully.");
+
+                  // Close the modal after responding
+                  modal.style.display = "none";
+                })
+                .catch((error) => {
+                  console.error(
+                    "Error moving report to ReportsResponded:",
+                    error
+                  );
+                });
+            })
+            .catch((error) => {
+              console.error("Error sending Email:", error);
+              alert("Error sending Email. Please try again.");
+            });
+        });
       } else {
         // If the report doesn't exist, display a message
         modalContent.innerHTML = "<p>Report not found.</p>";

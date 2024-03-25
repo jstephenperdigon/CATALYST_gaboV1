@@ -194,16 +194,6 @@ window.onload = function () {
   }
 };
 
-function updateReport(UId) {
-  // Check if there is a query parameter for viewing a specific user
-  const params = new URLSearchParams(window.location.search);
-
-  if (currentUId) {
-    // If there is a user name in the query parameter, trigger the viewReport function
-    window.updateReport(currentUId);
-  }
-}
-
 // Function to delete a report
 window.deleteReport = function (UId) {
   // Reference to the specific report in the database
