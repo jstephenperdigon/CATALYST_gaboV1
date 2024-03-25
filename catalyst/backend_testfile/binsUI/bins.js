@@ -53,11 +53,11 @@ function generateReportHTML(bins) {
     <tr>
       <td>${bins.GCN}</td>
       <td>${bins.status}</td>
-      <td>${bins.district}</td>
-      <td>${bins.barangay}</td>
+      <td>${district}</td>
+      <td>${barangay}</td>
       <td class="actionButtons">
         <button class="viewButton" data-gcn="${bins.GCN}">View</button>
-        <button class="editButton" data-gcn="${bins.barangay}">Edit</button>
+        <button class="editButton" data-gcn="${bins.GCN}">Edit</button>
         <button class="deleteButton" data-gcn="${bins.GCN}">Reset</button>
       </td>
     </tr>
