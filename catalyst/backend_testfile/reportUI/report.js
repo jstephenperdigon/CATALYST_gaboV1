@@ -67,6 +67,9 @@ function handleMoveToArchive(ticketNumber) {
             .then(() => {
               console.log("Report moved to ReportsArchive successfully.");
 
+              // Once moved to ReportsArchive, add ReportStatus: Archived
+              reportData.ReportStatus = "Archived";
+
               // Once moved to ReportsArchive, remove ticketNumber from Reports
               const reportToRemoveRef = ref(db, `Reports/${ticketNumber}`);
               return remove(reportToRemoveRef);
@@ -275,6 +278,7 @@ function displayModal(ticketNumber) {
                 .then((snapshot) => {
                   if (snapshot.exists()) {
                     const reportData = snapshot.val();
+                    reportData.ReportsResponded = "Responded";
                     return set(respondedReportRef, reportData);
                   } else {
                     console.error("Report not found.");

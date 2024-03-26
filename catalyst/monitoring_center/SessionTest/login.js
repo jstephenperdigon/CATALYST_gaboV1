@@ -9,17 +9,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const password = document.getElementById("password").value;
 
     // Check if the username and password are valid
-    if (username === "admin" && password === "pass") {
+    if (username === "admin" && password === "123") {
       // Generate a unique ID for the account
       const accountId = generateUniqueId();
 
       // Save the account ID to session storage
       sessionStorage.setItem("accountId", accountId);
 
-      // If valid, redirect to loginsuccess.html
-      window.location.href = "loginsuccess.html";
+      // If valid, redirect to admin.html
+      window.location.href = "admin.html";
+    } else if (username === "monitoring" && password === "123") {
+      // Generate a unique ID for the account
+      const accountId = generateUniqueId();
+
+      // Save the account ID to session storage
+      sessionStorage.setItem("accountId", accountId);
+
+      // If valid, redirect to monitoring.html
+      window.location.href = "monitoring.html";
     } else {
-      // If invalid, display an error message (you can customize this part)
+      // If invalid, display an error message
       alert("Invalid username or password. Please try again.");
     }
   });
