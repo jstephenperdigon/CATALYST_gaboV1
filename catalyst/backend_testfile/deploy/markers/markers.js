@@ -18,6 +18,9 @@ function addMarkersFromFirebase(map) {
             if (binData && binData.Location && binData.Users && binData.TotalQuota >= 4) {
                 if (!markers[binUID]) {
                     markers[binUID] = addMarker(binUID, binData);
+                } else {
+                    // Update total quota if marker already exists
+                    markers[binUID].infoWindow.setContent(getInfoContent(binUID, binData));
                 }
             } else {
                 if (markers[binUID]) {
@@ -36,27 +39,8 @@ function addMarkersFromFirebase(map) {
 
         const defaultIcon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
 
-
-        // Iterate through Users object to retrieve barangay and district
-        let barangay, district;
-        for (const userID in binData.Users) {
-            const user = binData.Users[userID];
-            barangay = user.barangay;
-            district = user.district;
-            // Assuming only one user data is relevant here, you can break after the first iteration
-            break;
-        }
-
         // Create content for the info window
-        const infoContent = `
-            <div>
-                <h3>Garbage Bin - ${binUID}</h3>
-                <p>UID: ${binUID}</p>
-                <p>Total Quota: ${binData.TotalQuota}</p>
-                <p>Barangay: ${barangay}</p>
-                <p>District: ${district}</p>
-            </div>
-        `;
+        const infoContent = getInfoContent(binUID, binData);
 
         // Create marker for each garbage bin
         const marker = new google.maps.Marker({
@@ -78,6 +62,34 @@ function addMarkersFromFirebase(map) {
 
         // Return marker and infoWindow for later updates
         return { marker, infoWindow };
+    }
+
+    // Function to get content for the info window
+    function getInfoContent(binUID, binData) {
+        // Extract numerical part from the barangay value using regular expressions
+        let barangay = '';
+        if (binData.Users && Object.keys(binData.Users).length > 0) {
+            const barangayMatch = binData.Users[Object.keys(binData.Users)[0]].barangay.match(/\d+/);
+            barangay = barangayMatch ? barangayMatch[0] : '';
+        }
+
+        // Extract numerical part from the district value using regular expressions
+        let district = '';
+        if (binData.Users && Object.keys(binData.Users).length > 0) {
+            const districtMatch = binData.Users[Object.keys(binData.Users)[0]].district.match(/\d+/);
+            district = districtMatch ? districtMatch[0] : '';
+        }
+
+        // Create content for the info window
+        return `
+            <div>
+                <h3>Garbage Bin - ${binUID}</h3>
+                <p>UID: ${binUID}</p>
+                <p>Total Quota: ${binData.TotalQuota}</p>
+                <p>Barangay: ${barangay}</p>
+                <p>District: ${district}</p>
+            </div>
+        `;
     }
 
     // Stop listening for changes when this function is called

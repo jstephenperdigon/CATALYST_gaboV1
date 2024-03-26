@@ -1,4 +1,3 @@
-// dropdown.js
 document.addEventListener("DOMContentLoaded", () => {
     const districtDropdown = document.getElementById("district");
     const barangayDropdown = document.getElementById("barangay");
@@ -18,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Populate barangay options based on selected district
         switch (selectedDistrict) {
             case "1":
-                populateBarangay([1, 4, 7]);
+                populateBarangay([1, 4, 7, 176]);
                 break;
             case "2":
                 populateBarangay([2, 5, 8]);
