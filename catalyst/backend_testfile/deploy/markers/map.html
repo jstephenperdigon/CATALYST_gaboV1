@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Schedule</title>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Set Schedule</h1>
+
+    <div>
+        <label for="district">District:</label>
+        <select id="district">
+            <option value="" selected disabled>Select District</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        <label for="barangay">Barangay:</label>
+        <select id="barangay" disabled>
+            <option value="" selected disabled>Select Barangay</option>
+        </select>
+        <!-- Buttons -->
+        <button id="selectButton">Select</button>
+        <button id="cancelButton">Cancel</button>
+
+    </div>
+
+    <div id="map"></div>
+
+    <script src="map.js" type="module" defer></script>
+    <script src="markers.js" type="module" defer></script>
+    <script src="dropdown.js" type="module" defer></script>
+
+    <!-- Include Google Maps API script with initMap callback -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
+        defer></script>
+
+</body>
+
+</html>

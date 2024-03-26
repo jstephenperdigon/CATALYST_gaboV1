@@ -1,5 +1,3 @@
-
-
 const centerMap = {
   lat: 14.769617915353559,
   lng: 121.07431904782344,
@@ -484,6 +482,7 @@ function initMap() {
       title: markerData.description, // Use the description as the marker title
       visible: markerData.TotalQuota >= 4, // Initially show all markers
       barangay: markerData.barangay, // Store barangay info in marker object
+      district: markerData.district,
       TotalQuota: markerData.TotalQuota, // Store TotalQuota info in marker object
       highlighted: false,
       icon: {
@@ -496,7 +495,7 @@ function initMap() {
     allMarkers.push(marker);
 
     // Create info window content
-    const infoContent = `<strong>Description:</strong> ${markerData.description}<br><strong>Barangay:</strong> ${markerData.barangay}<br><strong>TotalQuota:</strong> ${markerData.TotalQuota}`;
+    const infoContent = `<strong>Description:</strong> ${markerData.description}<br><strong>Barangay:</strong> ${markerData.barangay}<br><strong>District:</strong> ${markerData.district}<br><strong>TotalQuota:</strong> ${markerData.TotalQuota}`;
 
     // Create info window for each marker
     const infoWindow = new google.maps.InfoWindow({
