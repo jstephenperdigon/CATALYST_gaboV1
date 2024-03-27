@@ -272,11 +272,11 @@ function displayModal(GCN, isEditModal = false) {
             // Append fill level details to the string
             fillLevelDetails += `
               <h4>${fillLevelKey}</h4>
-              <p>GB${i}: ${bins[`GB${i}`]}</p>
-              <p>Flag: ${bins[`GB${i}Flag`]}</p>
-              <p>Quota Count: ${bins[`GB${i}QuotaCount`]}</p>
-              <p>Quota Flag: ${bins[`GB${i}QuotaFlag`]}</p>
-              <p>Status: ${bins[`GB${i}Status`]}</p>
+              <p>GB${i}: ${fillLevelData[`GB${i}`]}</p>
+              <p>Flag: ${fillLevelData[`GB${i}Flag`]}</p>
+              <p>Quota Count: ${fillLevelData[`GB${i}QuotaCount`]}</p>
+              <p>Quota Flag: ${fillLevelData[`GB${i}QuotaFlag`]}</p>
+              <p>Status: ${fillLevelData[`GB${i}Status`]}</p>
               <hr>
             `;
           }
