@@ -4,7 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports Table</title>
-      
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        #searchContainer {
+            margin-bottom: 20px;
+        }
+
+        #reportsTable {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* Modal styles */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+          padding-top: 60px;
+        }
+
+        /* Modal content */
+        .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto;
+          padding: 15px;
+          border: 1px solid #888;
+          width: 25%;
+        }
+
+        /* Close button */
+        .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        
+        /* Style for the button inside the modal */
+        #respondButton {
+        margin-top: 20px; /* Add margin to the top to separate from other content */
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 15px; /* Increase font size */
+        padding: 12px 20px; /* Increase padding */
+        }
+    </style>
 </head>
 <body>
     <div id="modal" class="modal">
@@ -23,7 +99,6 @@
         <option value="ticketNumber">Ticket #</option>
         <option value="GCN">GCN</option>
         <option value="Issue">Issue</option>
-        <option value="Description">Description</option>
         <option value="district">District</option>
         <option value="barangay">Barangay</option>
         <option value="TimeSent">Time Sent</option>
