@@ -57,7 +57,7 @@ function generateReportHTML(bins) {
       <td>${barangay}</td>
       <td class="actionButtons">
         <button class="viewButton" data-gcn="${bins.GCN}">View</button>
-        <button class="editButton" data-gcn="${bins.barangay}">Edit</button>  
+        <button class="editButton" data-gcn="${bins.GCN}">Edit</button>  
         <button class="deleteButton" data-gcn="${bins.GCN}">Reset</button>
       </td>
     </tr>
@@ -300,16 +300,16 @@ function displayModal(GCN, isEditModal = false) {
             ${Object.keys(bins.Users).map((userId) => {
               const user = bins.Users[userId];
               return `
-                  <p>Address Line 1: ${bins.addressLine1}</p>
-                  <p>Address Line 2: ${bins.addressLine2}</p>
-                  <p>Barangay: ${bins.barangay}</p>
-                  <p>City: ${bins.city}</p>
-                  <p>Country: ${bins.country}</p>
-                  <p>District: ${bins.district}</p>
-                  <p>Email: ${bins.email}</p>
-                  <p>First Name: ${bins.firstName}</p>
-                  <p>Last Name: ${bins.lastName}</p>
-                  <p>Mobile Number: ${bins.mobileNumber}</p>
+                  <p>Address Line 1: ${user.addressLine1}</p>
+                  <p>Address Line 2: ${user.addressLine2}</p>
+                  <p>Barangay: ${user.barangay}</p>
+                  <p>City: ${user.city}</p>
+                  <p>Country: ${user.country}</p>
+                  <p>District: ${user.district}</p>
+                  <p>Email: ${user.email}</p>
+                  <p>First Name: ${user.firstName}</p>
+                  <p>Last Name: ${user.lastName}</p>
+                  <p>Mobile Number: ${user.mobileNumber}</p>
               `;
             }).join("")}
           </ul>
