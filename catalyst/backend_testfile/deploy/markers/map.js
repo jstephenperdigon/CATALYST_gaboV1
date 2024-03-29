@@ -1,4 +1,4 @@
-import { addMarkersFromFirebase } from "./markers.js";
+import { addMarkersFromFirebase } from "./mapFunction.js";
 
 const centerMap = {
     lat: 14.772311100791017,
@@ -180,7 +180,6 @@ const mapOptions = {
 // Export the initMap function
 function initMap() {
     const map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    // Call addMarkersFromFirebase function to add markers
     addMarkersFromFirebase(map);
 }
 
