@@ -2,8 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebas
 import {
   getDatabase,
   ref,
+  child,
   get,
-  set,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 //Alert Content
@@ -53,72 +53,59 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function handleLogin(username, password) {
-  console.log("Entered username:", username);
-  console.log("Entered password:", password);
+// Function to handle sign-in process
+document
+  .getElementById("adminSignInButton")
+  .addEventListener("click", async (event) => {
+    event.preventDefault(); // Prevent form submission
 
-  const monitoringRef = ref(db, "Accounts/Monitoring");
+    // Retrieve username and password from input fields
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("typePasswordX").value;
 
-  get(monitoringRef)
-    .then((monitoringSnapshot) => {
-      if (monitoringSnapshot.exists()) {
-        const monitoringData = monitoringSnapshot.val();
+    try {
+      // Get a reference to the Firebase database
+      const db = getDatabase();
 
-        // Check if the provided username and password match any in Monitoring
-        const userTypes = Object.keys(monitoringData);
+      // Retrieve all UIDs from the database
+      const uidSnapshot = await get(ref(db, "Accounts"));
+      if (uidSnapshot.exists()) {
+        const uids = Object.keys(uidSnapshot.val());
 
-        for (const userType of userTypes) {
-          const userData = monitoringData[userType];
+        // Loop through each UID to find a match for the provided username and password
+        for (const uid of uids) {
+          const userDataSnapshot = await get(
+            child(ref(db, `Accounts/${uid}`), "/")
+          );
+          const userData = userDataSnapshot.val();
 
-          // Exact match for username and password
+          // Check if username and password match
           if (
             userData.username === username &&
             userData.password === password
           ) {
-            console.log("Account matched:", userData);
+            // Store UID in session storage
+            sessionStorage.setItem("uid", uid);
 
-            if (userData.status === "LoggedIn") {
-              showAlert("warning", "User is already logged in.");
-              return;
+            // Check user's usertype and redirect accordingly
+            if (userData.usertype === "Admin") {
+              window.location.href = "../admin/adminIndex.html";
+            } else if (userData.usertype === "Monitoring") {
+              window.location.href = "../index.html";
+            } else {
+              showAlert("warning", "Invalid user type");
             }
-
-            showAlert("success", "Login successful!");
-
-            // Update user status to "LoggedIn"
-            const userRef = ref(db, `Accounts/Monitoring/${userType}`);
-            set(userRef, { ...userData, status: "LoggedIn" });
-
-            // Access the user's unique ID
-            const userId = userType;
-
-            // Store the user ID in a session or a cookie
-            sessionStorage.setItem("userId", userId);
-
-            // Redirect to user/user-index.html
-            window.location.href = "index.html";
-            return;
+            return; // Exit the loop once a match is found
           }
         }
 
-        showAlert("warning", "Invalid username or password. Please try again.");
+        // If no match is found after looping through all UIDs
+        showAlert("warning", "Invalid username or password");
       } else {
-        showAlert("warning", "Monitoring data not available.");
+        showAlert("warning", "No users found in the database");
       }
-    })
-    .catch((error) => {
-      console.error("Error fetching Monitoring data:", error);
-    });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  const usernameInput = document.getElementById("username");
-  const passwordInput = document.getElementById("typePasswordX");
-  const signInButton = document.querySelector(".btn-primary");
-
-  signInButton.addEventListener("click", function () {
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-
-    handleLogin(username, password);
+    } catch (error) {
+      console.error("Error signing in:", error);
+      showAlert("warning", "An error occurred while signing in");
+    }
   });
-});
