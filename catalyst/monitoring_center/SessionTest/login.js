@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
       sessionStorage.setItem("accountId", accountId);
 
       // If valid, redirect to admin.html
-      window.location.href = "admin.html";
+      window.location.href = "admin/admin.html";
     } else if (username === "monitoring" && password === "123") {
       // Generate a unique ID for the account
       const accountId = generateUniqueId();
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
       sessionStorage.setItem("accountId", accountId);
 
       // If valid, redirect to monitoring.html
-      window.location.href = "monitoring.html";
+      window.location.href = "monitoring/monitoring.html";
     } else {
       // If invalid, display an error message
       alert("Invalid username or password. Please try again.");

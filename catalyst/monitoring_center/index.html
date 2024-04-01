@@ -326,12 +326,12 @@
               <p class="fs-1 fw-bold">Monitoring Center</p>
             </div>
           </div>
-          <div class="row">
-            <div class="col">
-              <div class="card shadow-none border-0 bg-gradient-1">
-                <div class="card-body">
-                  <h1 id="welcome-message">Welcome, CEMD!</h1>
-                </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="card shadow-none border-0 bg-gradient-1">
+              <div class="card-body">
+                <h1 id="welcome-message">Welcome,</h1>
               </div>
             </div>
           </div>
@@ -757,6 +757,39 @@
     <script type="module" src="monitor-index-function.js"></script>
     <script type="module" src="monitor-index-reports.js"></script>
     <script type="module" src="monitoring-gb-account-count.js"></script>
+<<<<<<< HEAD
     <!--<script type="module" src="collectorscipt/collector.js"></script> -->
   </body>
 </html>
+=======
+</body>
+    <script>
+      // Check if accountId exists in session storage
+      document.addEventListener("DOMContentLoaded", function () {
+        const accountId = sessionStorage.getItem("uid");
+        if (!accountId) {
+          // If accountId doesn't exist, redirect to index.html
+          window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
+        }
+      });
+
+      // Logout functionality (similar to login.js)
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if logout link exists
+        const logoutLink = document.getElementById("logout");
+        if (logoutLink) {
+          // Add click event listener to logout link
+          logoutLink.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default link behavior
+
+            // Remove accountId from session storage
+            sessionStorage.removeItem("uid");
+
+            // Redirect to index page
+            window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
+          });
+        }
+      });
+    </script>
+</html>
+>>>>>>> 40b125db3819f0bf298e939c887f97886a5ba0c4

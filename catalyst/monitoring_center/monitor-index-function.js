@@ -201,38 +201,38 @@ const mapOptions = {
 };
 
 // Retrieve userId from sessionStorage
-const userId = sessionStorage.getItem("userId");
+const accountId = sessionStorage.getItem("uid");
 
-// Update the welcome message with the userId
-if (userId) {
-  document.getElementById("welcome-message").innerText = `Welcome, ${userId}!`;
-}
+// Reference to the user's data in the database
+const userRef = ref(db, `Accounts/${accountId}`);
+
+// Retrieve user data from the database
+get(userRef)
+  .then((snapshot) => {
+    if (snapshot.exists()) {
+      // Extract username from user data
+      const userData = snapshot.val();
+      const username = userData.username;
+
+      // Update the welcome message with the username
+      document.getElementById(
+        "welcome-message"
+      ).innerText = `Welcome, ${username}!`;
+    } else {
+      console.error("User data not found");
+    }
+  })
+  .catch((error) => {
+    console.error("Error retrieving user data:", error);
+  });
 
 // Logout function
 function logout() {
-  // Retrieve the user ID from the session
-  const userId = sessionStorage.getItem("userId");
+  // Remove the UID from session storage
+  sessionStorage.removeItem("uid");
 
-  if (userId) {
-    // Clear the user ID from the session
-    sessionStorage.removeItem("userId");
-
-    // Get a reference to the user status field in the database
-    const userStatusRef = ref(db, `Accounts/Monitoring/${userId}/status`);
-
-    // Set the user status to "LoggedOut" instead of null
-    set(userStatusRef, "LoggedOut") // Updated this line
-      .then(() => {
-        // Redirect to the sign-in page after successfully removing the status
-        window.location.href = "monitor-indexSI.html";
-      })
-      .catch((error) => {
-        console.error("Error removing user status:", error);
-      });
-  } else {
-    // If there is no user ID in the session, just redirect to the sign-in page
-    window.location.href = "monitor-indexSI.html";
-  }
+  // Redirect to the sign-in page
+  window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
 }
 
 // Attach the logout function to the click event of the "SignOut" link
