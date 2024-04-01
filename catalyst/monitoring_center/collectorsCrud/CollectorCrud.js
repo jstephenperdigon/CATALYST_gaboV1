@@ -55,7 +55,6 @@ window.AddUser = function () {
   // Add the logic to redirect to the "Add User" page
   window.location.href = `CollectorCreate.html`;
 };
-
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
   const middleName = report.UserInfo.middleName
@@ -64,33 +63,40 @@ function generateReportHTML(report) {
   const suffix = report.UserInfo.suffix ? report.UserInfo.suffix : "";
 
   return `
-        <tr>
-            <td>${report.GCL}</td>
-            <td>${report.UserInfo.lastName} ${report.UserInfo.firstName}
-            ${middleName} ${suffix}</td>
-            <td>${report.UserInfo.email}</td>
-            <td>${report.UserInfo.mobileNumber}</td>
-            <td>${report.AssignedArea ? report.AssignedArea.district : ""}</td>
-            <td>${report.AssignedArea ? report.AssignedArea.barangay : ""}</td>
-          <td class="actions-column">
-            <div class="horizontal-icons">
-              <button class="view-button" onclick="viewReport('${report.UId}')">
-                <i class='bx bxs-show'></i>
-              </button>
-              <button class="update-button" onclick="updateReport('${
-                report.UId
-              }')">
-                <i class='bx bxs-edit'></i>
-              </button>
-              <button class="delete-button" onclick="deleteReport('${
-                report.UId
-              }')">
-                <i class='bx bxs-trash'></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-    `;
+  <div class="table-responsive-md">
+
+    <tr>
+      <td>${report.GCL}</td>
+      <td>${report.UserInfo.lastName} ${
+    report.UserInfo.firstName
+  } ${middleName} ${suffix}</td>
+      <td>${report.UserInfo.email}</td>
+      <td>${report.UserInfo.mobileNumber}</td>
+      <td>${report.AssignedArea ? report.AssignedArea.district : ""}</td>
+      <td>${report.AssignedArea ? report.AssignedArea.barangay : ""}</td>
+      <td class="actions-column">
+        <div class="btn-group shadow-none" role="group">
+          <button type="button" class="btn btn-primary shadow-none" onclick="viewReport('${
+            report.UId
+          }')">
+            <i class="bx bxs-show"></i> View
+          </button>
+          <button type="button" class="btn btn-warning text-light shadow-none" onclick="updateReport('${
+            report.UId
+          }')">
+            <i class="bx bxs-edit"></i> Edit
+          </button>
+          <button type="button" class="btn btn-danger shadow-none" onclick="deleteReport('${
+            report.UId
+          }')">
+            <i class="bx bxs-trash"></i> Delete
+          </button>
+        </div>
+      </td>
+    </tr>
+
+    </div>
+  `;
 }
 
 // Function to filter reports based on search input and selected sorting column
@@ -137,30 +143,35 @@ function getIndex(key) {
   return headers.indexOf(key) + 1;
 }
 
-// Function to display the reports table
 function displayReportsTable(reportsArray) {
+  if (reportsArray.length === 0) {
+    const reportsTable = document.getElementById("reportsTable");
+    reportsTable.innerHTML = "<p>No records found</p>";
+    return;
+  }
+
   // Sort reports by GCL number
   reportsArray.sort((a, b) => a.GCL.localeCompare(b.GCL));
 
   const reportsTable = document.getElementById("reportsTable");
   const tableHTML = `
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>GCL Number</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile Number(+63)</th>
-                    <th>District</th>
-                    <th>Barangay</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${reportsArray.map(generateReportHTML).join("")}
-            </tbody>
-        </table>
-    `;
+    <table border="1">
+        <thead>
+            <tr>
+                <th>GCL Number</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile Number(+63)</th>
+                <th>District</th>
+                <th>Barangay</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${reportsArray.map(generateReportHTML).join("")}
+        </tbody>
+    </table>
+  `;
   reportsTable.innerHTML = tableHTML;
 }
 

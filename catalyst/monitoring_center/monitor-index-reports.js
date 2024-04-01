@@ -1,12 +1,10 @@
-// Import the functions you need from the SDKs you need
+// Import the necessary Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
 import {
   getDatabase,
   ref,
-  get,
   onValue,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
@@ -22,6 +20,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+// Reference to the collectors node
+const collectorsRef = ref(db, "Accounts/Collectors");
 
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
@@ -37,16 +37,19 @@ function generateReportHTML(report) {
             <td>${report.DateSent || ""}</td>
             <td class="actions-column">
               <div class="horizontal-icons">
-                <button class="view-button" onclick="viewReport('${report.ticketNumber
-    }')">
+                <button class="view-button" onclick="viewReport('${
+                  report.ticketNumber
+                }')">
                   <i class="bx bxs-show"></i>
                 </button>
-                <button class="update-button" onclick="updateReport('${report.ticketNumber
-    }')">
+                <button class="update-button" onclick="updateReport('${
+                  report.ticketNumber
+                }')">
                   <i class="bx bxs-edit"></i>
                 </button>
-                <button class="delete-button" onclick="deleteReport('${report.ticketNumber
-    }')">
+                <button class="delete-button" onclick="deleteReport('${
+                  report.ticketNumber
+                }')">
                   <i class="bx bxs-trash"></i>
                 </button>
               </div>
@@ -55,6 +58,43 @@ function generateReportHTML(report) {
     `;
 }
 
+// Function to generate HTML for each collector
+function generateCollectorHTML(collector) {
+  return `
+        <tr>
+          <td>${collector.UserInfo.firstName}</td>
+          <td>${collector.UserInfo.lastName}</td>
+          <td>${collector.UserInfo.email}</td>
+          <td>${collector.UserInfo.mobileNumber}</td>
+          <td>${collector.AssignedArea.district}</td>
+          <td>${collector.AssignedArea.barangay}</td>
+          <td>${collector.UserInfo.suffix}</td>
+          <td>
+            <button type="button" class="btn btn-primary shadow-none" onclick="viewCollector('${collector.UID}')">View</button>
+            <button type="button" class="btn btn-warning shadow-none" onclick="editCollector('${collector.UID}')">Edit</button>
+            <button type="button" class="btn btn-danger shadow-none" onclick="deleteCollector('${collector.UID}')">Delete</button>
+          </td>
+        </tr>
+      `;
+}
+// Function to display collectors in the table
+function displayCollectors() {
+  onValue(collectorsRef, (snapshot) => {
+    const collectorsData = snapshot.val();
+    if (collectorsData) {
+      const collectorsTableBody = document.querySelector(
+        "#collectorsTable tbody"
+      );
+      let tableHTML = "";
+      Object.values(collectorsData).forEach((uid) => {
+        tableHTML += generateCollectorHTML(uid);
+      });
+      collectorsTableBody.innerHTML = tableHTML;
+    } else {
+      console.log("No collectors found.");
+    }
+  });
+}
 // Function to filter reports based on search input and selected sorting column
 function filterReports(searchInput, sortKey) {
   const reportsArray = document.querySelectorAll("#reportsTable tbody tr");
@@ -162,4 +202,5 @@ window.resetList = function () {
 // Display the initial reports table when the page loads
 window.onload = function () {
   updateTable();
+  displayCollectors();
 };

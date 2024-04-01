@@ -1,235 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoring</title>
+    <link rel="stylesheet" href="../src/mdb.min.css" />
+    <link rel="stylesheet" href="../src/bootstrap.min.css" />
+    <link rel="stylesheet" href="styling/style.css" />
+    <link rel="stylesheet" href="styling/pulse.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Monitoring</title>
-  <link rel="stylesheet" href="../src/mdb.min.css" />
-  <link rel="stylesheet" href="../src/bootstrap.min.css" />
-  <link rel="stylesheet" href="styling/style.css" />
-  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet" />
-  <script defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"></script>
-  <style>
-    .content {
-      margin-left: 70px;
-      /* Same as the width of the sidebar */
-      padding: 16px;
-    }
+    <style>
+      .content {
+        margin-left: 70px;
+        /* Same as the width of the sidebar */
+        padding: 16px;
+      }
 
-    /* Add this style for better table appearance */
-    table {
-      border: none;
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
-    }
+      /* Add this style for better table appearance */
+      table {
+        border: none;
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
 
-    td {
-      border: solid #e4e4e4 1px;
-      padding: 8px;
-      text-align: center;
-    }
+      td {
+        border: solid #e4e4e4 1px;
+        padding: 8px;
+        text-align: center;
+      }
 
-    th {
-      border: none;
-      background-color: #e4e4e4;
-      padding: 8px;
-      text-align: center;
-    }
+      th {
+        border: none;
+        background-color: #e4e4e4;
+        padding: 8px;
+        text-align: center;
+      }
 
-    .notification-box {
-      z-index: 1;
-      display: none;
-      position: absolute;
-      top: 50px;
-      right: 100px;
-      padding: 10px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+      .notification-box {
+        z-index: 1;
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 100px;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-    /* Style for horizontal icons */
-    .horizontal-icons {
-      border: none;
-      display: flex;
-      justify-content: center;
-      /* Align icons horizontally */
-    }
+      /* Style for horizontal icons */
+      .horizontal-icons {
+        border: none;
+        display: flex;
+        justify-content: center;
+        /* Align icons horizontally */
+      }
 
-    /* Add margin between the icons */
-    .horizontal-icons button {
-      margin-right: 10px;
-      border: none;
-    }
+      /* Add margin between the icons */
+      .horizontal-icons button {
+        margin-right: 10px;
+        border: none;
+      }
 
-    /* Increase the size of the icons */
-    .actions-column button i {
-      color: white;
-      font-size: 20px;
-      /* Adjust the size as needed */
-    }
+      /* Increase the size of the icons */
+      .actions-column button i {
+        color: white;
+        font-size: 20px;
+        /* Adjust the size as needed */
+      }
 
-    .view-button {
-      background-color: blue;
-    }
+      .view-button {
+        background-color: blue;
+      }
 
-    .update-button {
-      background-color: orange;
-    }
+      .update-button {
+        background-color: orange;
+      }
 
-    .delete-button {
-      background-color: red;
-    }
+      .delete-button {
+        background-color: red;
+      }
 
-    #reportsTable {
-      text-align: center;
-      margin-top: 20px;
-      margin-left: 20px;
-      margin-right: 20px;
-      width: 80vw;
-      /* Adjust the width to fit the screen */
-    }
+      #reportsTable {
+        text-align: center;
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        width: 80vw;
+        /* Adjust the width to fit the screen */
+      }
 
-    /* Modal styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgb(0, 0, 0);
-      background-color: rgba(0, 0, 0, 0.4);
-    }
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+      }
 
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-    }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+      }
 
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
 
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-  </style>
-</head>
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
 
-<body id="body-pd">
-  <div class="l-navbar header" id="nav-bar">
-    <nav class="nav">
-      <div class="header_toggle">
-        <a href="#" class="nav_logo">
-          <img src="../img/GaboV1_LOGO.png" class="nav_logo-icon" />
-          <span class="nav_logo-name">Monitoring Center</span>
+  <body id="body-pd">
+    <div class="l-navbar header" id="nav-bar">
+      <nav class="nav">
+        <div class="header_toggle">
+          <a href="#" class="nav_logo">
+            <img src="../img/GaboV1_LOGO.png" class="nav_logo-icon" />
+            <span class="nav_logo-name">Monitoring Center</span>
+          </a>
+          <div class="nav_list">
+            <a href="#" class="nav_link active" id="welcome-link">
+              <i class="bx bx-home-alt-2 nav_icon"></i>
+              <span class="nav_name">Home</span>
+            </a>
+            <a href="#" class="nav_link" id="map-link">
+              <i class="bx bx-map-alt nav_icon"></i>
+              <span class="nav_name">Map</span>
+            </a>
+            <a href="#" class="nav_link" id="reports-link">
+              <i class="bx bx-message-square-detail nav_icon"></i>
+              <span class="nav_name">Tickets</span>
+            </a>
+            <a href="#" class="nav_link" id="collectors-link">
+              <i class="bx bx-hard-hat nav_icon"></i>
+              <span class="nav_name">Collectors</span>
+            </a>
+            <a href="#" class="nav_link" id="bins-link">
+              <i class="bx bxs-trash nav_icon"></i>
+              <span class="nav_name">Bins</span>
+            </a>
+            <a href="#" class="nav_link" id="stats-link">
+              <i class="bx bx-bar-chart-alt-2 nav_icon"></i>
+              <span class="nav_name">Summary</span>
+            </a>
+          </div>
+        </div>
+        <a href="#" class="nav_link" id="signOut">
+          <i class="bx bx-log-out nav_icon"></i>
+          <span class="nav_name">SignOut</span>
         </a>
-        <div class="nav_list">
-          <a href="#" class="nav_link active" id="welcome-link">
-            <i class="bx bx-home-alt-2 nav_icon"></i>
-            <span class="nav_name">Home</span>
-          </a>
-          <a href="#" class="nav_link" id="map-link">
-            <i class="bx bx-map-alt nav_icon"></i>
-            <span class="nav_name">Map</span>
-          </a>
-          <a href="#" class="nav_link" id="reports-link">
-            <i class="bx bx-message-square-detail nav_icon"></i>
-            <span class="nav_name">Reports</span>
-          </a>
-          <a href="#" class="nav_link" id="bins-link">
-            <i class="bx bxs-trash nav_icon"></i>
-            <span class="nav_name">Bins</span>
-          </a>
-          <a href="#" class="nav_link" id="stats-link">
-            <i class="bx bx-bar-chart-alt-2 nav_icon"></i>
-            <span class="nav_name">Stats</span>
-          </a>
+      </nav>
+    </div>
+    <!-- NAVBAR -->
+
+    <div
+      class="modal fade"
+      id="addCollectorModal"
+      tabindex="-1"
+      aria-labelledby="addCollectorModalLabel"
+      aria-hidden="true"
+      style="z-index: 1"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCollectorModalLabel">
+              <i class="fas fa-user-plus"></i> ADD COLLECTOR
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-mdb-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <form id="viewForm" class="needs-validation">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input
+                        type="text"
+                        id="fName"
+                        class="form-control"
+                        required
+                      />
+                      <label class="form-label" for="fName">First Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input type="text" id="mName" class="form-control" />
+                      <label class="form-label" for="mName">Middle Name</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input
+                        type="text"
+                        id="lName"
+                        class="form-control"
+                        required
+                      />
+                      <label class="form-label" for="lName">Last Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input type="text" id="sFix" class="form-control" />
+                      <label class="form-label" for="sFix">Suffix</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-outline mb-3" data-mdb-input-init>
+                  <input
+                    type="email"
+                    id="eMail"
+                    class="form-control"
+                    required
+                  />
+                  <label class="form-label" for="eMail">Email Address</label>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon1">+63</span>
+                  <input
+                    type="text"
+                    id="mobileNumber"
+                    class="form-control"
+                    placeholder="Mobile Number"
+                    aria-label="Mobile Number"
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+                <div class="row mb-5">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <label for="districtDropdown"></label>
+                      <select
+                        class="form-select"
+                        id="districtDropdown"
+                        required
+                      >
+                        <option selected disabled>Select District</option>
+                        <option value="1">District 1</option>
+                        <option value="2">District 2</option>
+                        <option value="3">District 3</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <label for="barangayDropdown"></label>
+                      <select
+                        class="form-select"
+                        id="barangayDropdown"
+                        required
+                      >
+                        <option selected disabled>Select Barangay</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 d-flex">
+                  <input
+                    type="submit"
+                    id="submitBtn"
+                    class="btn btn-primary shadow-none"
+                    value="Submit"
+                    data-mdb-ripple-init
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
-      <a href="#" class="nav_link" id="signOut">
-        <i class="bx bx-log-out nav_icon"></i>
-        <span class="nav_name">SignOut</span>
-      </a>
-    </nav>
-  </div>
-  <!-- NAVBAR -->
-  <!-- Container Main start -->
-  <div class="content" id="welcome-content">
-    <!--<div class="container-fluid bg-dark p-3 rounded-4">
+    </div>
+    <!-- Container Main start -->
+    <div class="content" id="welcome-content">
+      <!--<div class="container-fluid bg-dark p-3 rounded-4">
        <div class="d-flex container flex-row-reverse">
           <i class="fas fa-user-check text-white"></i>
         </div> 
       </div>-->
 
-    <section>
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-4">
-            <p class="fs-1 fw-bold">Monitoring Center</p>
+      <section>
+        <div class="container mt-5">
+          <div class="row">
+            <div class="col-4">
+              <p class="fs-1 fw-bold">Monitoring Center</p>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="card shadow-none border-0 bg-gradient-1">
-              <div class="card-body">
-                <h1 id="welcome-message">Welcome, CEMD!</h1>
+          <div class="row">
+            <div class="col">
+              <div class="card shadow-none border-0 bg-gradient-1">
+                <div class="card-body">
+                  <h1 id="welcome-message">Welcome, CEMD!</h1>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-3">
-            <a href="collectorsCrud/CollectorList.html" class="card-link">
-              <div class="card shadow-none p-1 border-0 clickable-box">
+          <div class="row mt-3">
+            <div class="col-3">
+              <a href="collectorsCrud/CollectorList.html" class="card-link">
+                <div class="card shadow-none p-1 border-0 clickable-box">
+                  <div class="card-body">
+                    <div class="float-end mt-3">
+                      <i class="fas fa-users fa-2x text-success"></i>
+                    </div>
+                    <p class="fs-5">Collector Accounts</p>
+                    <p class="fs-1 text-success" id="uidCount"></p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-3">
+              <div class="card shadow-none p-1 border-0">
                 <div class="card-body">
                   <div class="float-end mt-3">
-                    <i class="fas fa-users fa-2x text-success"></i>
+                    <i class="fas fa-trash-can fa-2x text-success"></i>
                   </div>
-                  <p class="fs-5">Accounts</p>
-                  <p class="fs-1 text-success" id="uidCount"></p>
+                  <p class="fs-5">Smart Garbage Bins</p>
+                  <p class="fs-1 text-success" id="gbCount"></p>
                 </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-3">
-            <div class="card shadow-none p-1 border-0">
-              <div class="card-body">
-                <div class="float-end mt-3">
-                  <i class="fas fa-trash-can fa-2x text-success"></i>
-                </div>
-                <p class="fs-5">Smart Garbage Bins</p>
-                <p class="fs-1 text-success" id="gbCount"></p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </div>
+      </section>
+    </div>
 
-  <div class="content" id="map-content" style="position: relative; height: 850px">
-    <!-- The container for the map -->
-    <div id="map" style="height: 100%; width: 100%; float: left"></div>
+    <div
+      class="content"
+      id="map-content"
+      style="position: relative; height: 850px"
+    >
+      <!-- The container for the map -->
+      <div id="map" style="height: 100%; width: 100%; float: left"></div>
 
-    <!-- Notifications content on the right side -->
-    <div class="container mt-3" style="
+      <!-- Notifications content on the right side -->
+      <div
+        class="container mt-3"
+        style="
           position: absolute;
           top: 0;
           right: -100px;
@@ -240,67 +387,376 @@
           display: none;
 
           overflow-y: auto;
-        ">
-      <p class="fs-2 fw-bold">Notifications</p>
+        "
+      >
+        <p class="fs-2 fw-bold">Notifications</p>
 
-      <!-- Container for reports -->
+        <!-- Container for reports -->
 
-      <div id="notificationContainer mb-3">
-        <!-- Container for the scrollable content -->
-        <div id="notificationContent"></div>
+        <div id="notificationContainer mb-3">
+          <!-- Container for the scrollable content -->
+          <div id="notificationContent"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col"></div>
-    </div>
-  </div>
-
-  <div class="content" id="reports-content">
-    <h1 class="mt-5">REPORTS CONTENT</h1>
-    <div>
-      <label for="searchInput">Search:</label>
-      <input type="text" id="searchInput" oninput="searchReports()" />
-      <label for="sortDropdown">Sort By: </label>
-      <select id="sortDropdown">
-        <option value="ticketNumber">Ticket #</option>
-        <option value="GCN">GCN</option>
-        <option value="Name">Name</option>
-        <option value="email">Email</option>
-        <option value="mobileNumber">Mobile Number(+63)</option>
-        <option value="Issue">Issue</option>
-        <option value="Description">Description</option>
-        <option value="district">District</option>
-        <option value="barangay">Barangay</option>
-        <option value="TimeSent">Time Sent</option>
-        <option value="DateSent">Date Sent</option>
-        <option value="addressLine1">Address Line 1</option>
-        <option value="addressLine2">Address Line 2</option>
-      </select>
-    </div>
-    <div id="reportsTable">
+    <div class="container">
+      <div class="row">
+        <div class="col"></div>
+      </div>
     </div>
 
+    <div class="content" id="reports-content">
+      <div class="container">
+        <label for="searchInput">Search:</label>
+        <input type="text" id="searchInput" oninput="searchReports()" />
+        <label for="sortDropdown">Sort By: </label>
+        <select id="sortDropdown">
+          <option value="ticketNumber">Ticket #</option>
+          <option value="GCN">GCN</option>
+          <option value="Name">Name</option>
+          <option value="email">Email</option>
+          <option value="mobileNumber">Mobile Number(+63)</option>
+          <option value="Issue">Issue</option>
+          <option value="Description">Description</option>
+          <option value="district">District</option>
+          <option value="barangay">Barangay</option>
+          <option value="TimeSent">Time Sent</option>
+          <option value="DateSent">Date Sent</option>
+          <option value="addressLine1">Address Line 1</option>
+          <option value="addressLine2">Address Line 2</option>
+        </select>
+      </div>
+      <div id="reportsTable"></div>
+    </div>
     <div class="content" id="bins-content">
       <h1>Bins</h1>
-
-      
-      
     </div>
+    <div class="content" id="collector-content">
+      <div class="container mb-5 mt-5">
+        <div class="row">
+          <div class="col-md-6">
+            <h2>Collectors</h2>
+          </div>
+          <div class="col-md-6 d-flex justify-content-end">
+            <button
+              class="btn btn-primary shadow-none"
+              id="AddUserButton"
+              data-mdb-toggle="modal"
+              data-mdb-target="#addCollectorModal"
+            >
+              Add Collector
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card shadow-none border-0">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <!-- Search bar -->
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        id="searchInput"
+                        class="form-control"
+                        placeholder="Search..."
+                        aria-label="Search"
+                        aria-describedby="searchButton"
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        id="searchButton"
+                      >
+                        Search
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <!-- Dropdown for search category -->
+                    <div class="input-group mb-3">
+                      <select
+                        class="form-select"
+                        id="searchCategory"
+                        aria-label="Search Category"
+                      >
+                        <option selected>Choose category...</option>
+                        <option value="firstName">First Name</option>
+                        <option value="lastName">Last Name</option>
+                        <option value="email">Email</option>
+                        <option value="mobileNumber">Mobile Number</option>
+                        <option value="district">District</option>
+                        <option value="barangay">Barangay</option>
+                        <option value="suffix">Suffix</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="container mt-5">
+        <table id="collectorsTable" class="table table-striped">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th>District</th>
+              <th>Barangay</th>
+              <th>Suffix</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table body will be populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
     <div class="content" id="stats-content">
-      <h1 class="mt-5">STATS CONTENT</h1>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-md-6">
+            <h1>Summary</h1>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="card shadow-none border-0">
+              <div class="card-body">
+                <canvas id="donutChart" width="700" height="400"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <!-- Geospatial Visualization-->
+            <div class="card shadow-none border-0">
+              <div id="roadmap" style="height: 430px"></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card shadow-none border-0" style="height: 430px">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <p class="fs-5 fw-bolder">
+                      High - Traffic Collection Zones
+                    </p>
+                  </div>
+                  <div class="col-md-6 justify-content-end text-end">
+                    <p class="fw-normal text-primary">See Report</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="fw-bold">Brgy. 176</p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="progress">
+                      <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        style="width: 80%"
+                        aria-valuenow="10"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="fw-bold">Brgy. 1</p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="progress">
+                      <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        style="width: 80%"
+                        aria-valuenow="10"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="fw-bold">Brgy. 175</p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="progress">
+                      <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        style="width: 80%"
+                        aria-valuenow="10"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-md-12">
+            <p class="fw-bolder fs-4">Total Garbage Collected</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="dropdown">
+              <select
+                class="form-select"
+                id="timePeriodDropdown"
+                onchange="updateChart(this.value)"
+              >
+                <option value="" disabled selected>Select Time Period</option>
+                <option value="today">Today</option>
+                <option value="last_week">Last Week</option>
+                <option value="last_month">Last Month</option>
+                <!-- Add more time period options as needed -->
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-6">
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
-    <script type="text/javascript" src="../src/jquery.min.js"></script>
+
+    <script>
+      var lineChart;
+
+      function updateChart(timePeriod) {
+        // Based on the selected time period, fetch data from the server or calculate it locally
+        // Here, I'll just use sample data for demonstration purposes
+
+        var labels;
+        var recyclableData;
+        var specialData;
+        var biodegradableData;
+        var nonBiodegradableData;
+
+        if (timePeriod === "today") {
+          // Sample data for today
+          labels = [
+            "00:00",
+            "03:00",
+            "06:00",
+            "09:00",
+            "12:00",
+            "15:00",
+            "18:00",
+            "21:00",
+          ];
+          recyclableData = [10, 20, 30, 100, 50, 60, 70, 80];
+          specialData = [5, 10, 15, 20, 25, 30, 35, 40];
+          biodegradableData = [15, 25, 35, 45, 55, 65, 75, 85];
+          nonBiodegradableData = [8, 15, 22, 30, 37, 44, 51, 58];
+        } else if (timePeriod === "last_week") {
+          // Sample data for last week
+          labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+          recyclableData = [50, 60, 70, 80, 90, 100, 110];
+          specialData = [30, 40, 50, 60, 70, 80, 90];
+          biodegradableData = [40, 50, 60, 70, 80, 90, 100];
+          nonBiodegradableData = [25, 35, 45, 55, 65, 75, 85];
+        } else if (timePeriod === "last_month") {
+          // Sample data for last month
+          labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+          recyclableData = [100, 200, 140, 160];
+          specialData = [60, 80, 150, 120];
+          biodegradableData = [200, 100, 120, 140];
+          nonBiodegradableData = [50, 70, 180, 110];
+        }
+
+        // Update the chart with the fetched data
+        var data = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Recyclable",
+              data: recyclableData,
+              borderColor: "blue",
+              fill: false,
+            },
+            {
+              label: "Special",
+              data: specialData,
+              borderColor: "red",
+              fill: false,
+            },
+            {
+              label: "Biodegradable",
+              data: biodegradableData,
+              borderColor: "green",
+              fill: false,
+            },
+            {
+              label: "Non-Biodegradable",
+              data: nonBiodegradableData,
+              borderColor: "orange",
+              fill: false,
+            },
+          ],
+        };
+
+        if (lineChart) {
+          lineChart.destroy(); // Destroy previous chart instance if exists
+        }
+
+        // Get the canvas element
+        var ctx = document.getElementById("lineChart").getContext("2d");
+
+        // Create the line chart
+        lineChart = new Chart(ctx, {
+          type: "line",
+          data: data,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+
+      // Initially load the chart for today
+      updateChart("today");
+    </script>
     <script type="text/javascript" src="../src/mdb.min.js"></script>
+    <script type="text/javascript" src="../src/jquery.min.js"></script>
+
     <script src="../src/bootstrap.min.js"></script>
     <script src="../src/popper.min.js"></script>
+    <script type="text/javascript" src="dougnut.js"></script>
     <script type="text/javascript" src="monitoring.js"></script>
     <script type="module" src="monitor-index-function.js"></script>
     <script type="module" src="monitor-index-reports.js"></script>
     <script type="module" src="monitoring-gb-account-count.js"></script>
-</body>
-
+    <!--<script type="module" src="collectorscipt/collector.js"></script> -->
+  </body>
 </html>

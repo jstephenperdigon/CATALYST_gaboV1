@@ -1,217 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collectors Table</title>
+    <link rel="stylesheet" href="../src/mdb.min.css" />
+    <link rel="stylesheet" href="../src/bootstrap.min.css" />
+    <link rel="stylesheet" href="src/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #fff;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Collectors Table</title>
-  <link rel="stylesheet" href="../src/mdb.min.css" />
-  <link rel="stylesheet" href="../src/bootstrap.min.css" />
-  <link rel="stylesheet" href="styling/style.css" />
-  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet" />
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 20px;
-      font-family: "Roboto", sans-serif;
-    }
+      table {
+        border: none;
+        width: 100%;
+        margin-top: 20px;
+      }
 
-    h1 {
-      font-size: 30px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      padding: 10px;
-      width: 55vw;
-      display: flex;
-      justify-content: space-between;
-      text-align: center;
-    }
+      th {
+        border: none;
+        padding: 10px;
+        text-align: center;
+        background-color: #11531e;
+        color: white;
+      }
 
-    header {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      background-color: rgb(255, 255, 255);
-      border-radius: 10px;
-      width: 95vw;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      td {
+        border: solid grey 0px;
+        padding: 12px;
+        text-align: center;
+        background-color: rgb(255, 255, 255);
+      }
 
-    #searchContainer {
-      display: flex;
-      align-items: center;
-    }
+      table tr:nth-child(odd) td {
+        background-color: #e4e4e4;
+      }
 
-    #searchInput {
-      padding: 10px;
-      margin-right: 10px;
-      border-radius: 20px;
-    }
+      table tr:nth-child(even) td {
+        background-color: white;
+      }
 
-    #sortDropdown {
-      padding: 10px;
-      border-radius: 20px;
-      border-color: rgb(0, 0, 0);
-    }
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-right: 15px;
+      }
+    </style>
+  </head>
 
-    #reportsTable {
-      text-align: center;
-      margin-top: 20px;
-      width: 95vw;
-    }
+  <body>
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light mb-5">
+      <div class="container">
+        <a class="navbar-brand fw-bolder fs-3 gabo-secondary" href="#"
+          >COLLECTORS</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- No need for navigation links in this case -->
+          </ul>
+          <div class="d-flex">
+            <button
+              id="BackButton"
+              class="btn btn-outline-dark me-2"
+              onclick="GoToIndex()"
+            >
+              <i class="bx bx-arrow-back"></i> Back
+            </button>
+            <!-- Button to trigger modal -->
+            <button
+              id="AddUserButton"
+              class="btn btn-outline-dark"
+              data-mdb-toggle="modal"
+              data-mdb-target="#addCollectorModal"
+            >
+              Add Collector
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
 
-    table {
-      border: none;
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    th {
-      border: none;
-      padding: 8px;
-      text-align: center;
-      background-color: white;
-    }
-
-    td {
-      border: none;
-      padding: 8px;
-      text-align: center;
-      background-color: rgb(255, 255, 255);
-    }
-
-    #reportsTable table .actions-column {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    #reportsTable table .actions-column button {
-      margin-top: 5px;
-    }
-
-    .view-button {
-      background-color: rgb(54, 238, 54);
-    }
-
-    .update-button {
-      background-color: rgb(0, 102, 255);
-    }
-
-    .delete-button {
-      background-color: red;
-    }
-
-    .actions-column button i {
-      color: white;
-    }
-
-    .actions-column button {
-      border: none;
-    }
-
-    table tr:nth-child(odd) td {
-      background-color: #e4e4e4;
-    }
-
-    table tr:nth-child(even) td {
-      background-color: white;
-    }
-
-    .horizontal-icons {
-      display: flex;
-      justify-content: center;
-    }
-
-    .horizontal-icons button {
-      margin-right: 5px;
-    }
-
-    .actions-column button i {
-      font-size: 20px;
-    }
-
-    #navtable {
-      width: 100%;
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-      margin-right: 15px;
-    }
-
-    #BackButton {
-      width: 100%;
-      margin: 10px;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      background-color: #007bff;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    #AddUserButton {
-      width: 100%;
-      margin: 10px;
-      padding: 5px;
-      border: none;
-      border-radius: 10px;
-      background-color: #007bff;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    #AddUserButton:hover {
-      background-color: #0056b3;
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    <div>
-      <h1>COLLECTOR'S ACCOUNT</h1>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="searchInput"
+              placeholder="Search..."
+            />
+            <button class="btn btn-outline-secondary" type="button">
+              Search
+            </button>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="input-group">
+            <label class="input-group-text" for="sortDropdown"
+              >Filter By:</label
+            >
+            <select class="form-select" id="sortDropdown">
+              <option value="GCL">None</option>
+              <option value="GCL">GCL Number</option>
+              <option value="Name">Name</option>
+              <option value="email">Email</option>
+              <option value="mobileNumber">Mobile Number(+63)</option>
+              <option value="district">District</option>
+              <option value="barangay">Barangay</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="button-container">
-      <button id="BackButton" onclick="GoToIndex()" class="btn btn-outline-dark">
-        <i class="bx bx-arrow-back"></i> Back
-      </button>
-      <button id="AddUserButton" onclick="AddUser()" class="btn btn-outline-dark">
-        Add Collector
-      </button>
+    <div class="row justify-content-center">
+      <div class="col-9">
+        <div id="reportsTable"></div>
+      </div>
     </div>
-  </header>
+    <div
+      class="modal fade"
+      id="addCollectorModal"
+      tabindex="-1"
+      aria-labelledby="addCollectorModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCollectorModalLabel">
+              <i class="fas fa-user-plus"></i> ADD COLLECTOR
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <form id="viewForm" class="needs-validation">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input
+                        type="text"
+                        id="fName"
+                        class="form-control"
+                        required
+                      />
+                      <label class="form-label" for="fName">First Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input type="text" id="mName" class="form-control" />
+                      <label class="form-label" for="mName">Middle Name</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input
+                        type="text"
+                        id="lName"
+                        class="form-control"
+                        required
+                      />
+                      <label class="form-label" for="lName">Last Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input type="text" id="sFix" class="form-control" />
+                      <label class="form-label" for="sFix">Suffix</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-outline mb-3" data-mdb-input-init>
+                  <input
+                    type="email"
+                    id="eMail"
+                    class="form-control"
+                    required
+                  />
+                  <label class="form-label" for="eMail">Email Address</label>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon1">+63</span>
+                  <input
+                    type="text"
+                    id="mobileNumber"
+                    class="form-control"
+                    placeholder="Mobile Number"
+                    aria-label="Mobile Number"
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+                <div class="row mb-5">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <label for="districtDropdown"></label>
+                      <select
+                        class="form-select"
+                        id="districtDropdown"
+                        required
+                      >
+                        <option selected disabled>Select District</option>
+                        <option value="1">District 1</option>
+                        <option value="2">District 2</option>
+                        <option value="3">District 3</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <label for="barangayDropdown"></label>
+                      <select
+                        class="form-select"
+                        id="barangayDropdown"
+                        required
+                      >
+                        <option selected disabled>Select Barangay</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 d-flex">
+                  <input
+                    type="submit"
+                    id="submitBtn"
+                    class="btn btn-primary shadow-none"
+                    value="Submit"
+                    data-mdb-ripple-init
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div id="searchContainer" style="margin-right: 65%">
-    <input type="text" id="searchInput" placeholder="Search...">
-    <p>Filter By:</p>
-    <select id="sortDropdown">
-      <option value="GCL">GCL Number</option>
-      <option value="Name">Name</option>
-      <option value="email">Email</option>
-      <option value="mobileNumber">Mobile Number(+63)</option>
-      <option value="district">District</option>
-      <option value="barangay">Barangay</option>
-    </select>
-  </div>
+    <script>
+      function GoToIndex() {
+        window.location.href = "../index.html";
+      }
 
-  <div id="reportsTable">
-  </div>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      import { Input, Ripple, initMDB } from "mdb-ui-kit";
 
-  <script type="module" src="CollectorCrud.js"></script>
-  <script>
-    function GoToIndex() {
-      window.location.href = "../index.html";
-    }
-  </script>
-</body>
+      initMDB({ Input, Ripple });
 
+      (() => {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll(".needs-validation");
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach((form) => {
+          form.addEventListener(
+            "submit",
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
+    <script type="text/javascript" src="../src/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/mdb.min.js"></script>
+    <script src="../src/bootstrap.min.js"></script>
+    <script src="../src/popper.min.js"></script>
+    <script type="module" src="CollectorCreate.js"></script>
+    <script type="module" src="CollectorCrud.js"></script>
+  </body>
 </html>

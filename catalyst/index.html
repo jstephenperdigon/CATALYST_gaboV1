@@ -1,435 +1,526 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GABOv1</title>
+    <link rel="icon" href="img/GaboV1_LOGO.png" type="image/x-icon" />
+    <link rel="stylesheet" href="src/mdb.min.css" />
+    <link rel="stylesheet" href="src/bootstrap.min.css" />
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="src/shapes.css" />
+    <link rel="stylesheet" href="src/aos.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      rel="stylesheet"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GABOv1</title>
-  <link rel="icon" href="img/GaboV1_LOGO.png" type="image/x-icon" />
-  <link rel="stylesheet" href="src/mdb.min.css" />
-  <link rel="stylesheet" href="src/bootstrap.min.css" />
-  <link rel="stylesheet" href="src/style.css" />
-  <link rel="stylesheet" href="src/shapes.css" />
-  <link rel="stylesheet" href="src/aos.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      /* Button hover effect */
+      .btn-primary:hover,
+      .btn-primary:focus,
+      .btn-primary:active {
+        background-color: #0d3a15;
+        /* Darker green on hover */
+        border-color: #0d3a15;
+        /* Darker border on hover */
+      }
 
-  <style>
-    .feature-section {
-      margin-top: 50px;
-      margin-bottom: 50px;
-    }
+      /* Media query for responsiveness */
+      @media (max-width: 576px) {
+        .btn-primary {
+          padding: 8px 16px;
+          /* Adjusted padding for smaller screens */
+          font-size: 14px;
+          /* Adjusted font size for smaller screens */
+        }
+      }
+      .feature-section {
+        margin-top: 50px;
+        margin-bottom: 50px;
+      }
 
-    .feature-background {
-      width: 100%;
-      height: 800px;
-      background-color: #11531e;
-      z-index: -1;
-    }
+      .feature-background {
+        width: 100%;
+        height: 800px;
+        background-color: #11531e;
+        z-index: -1;
+      }
 
-    .download-apk-button {
-      color: #11531e;
-      /* Green color matching your color scheme */
-      border-color: #11531e;
-      /* Border color matching the green */
-      background-color: transparent;
-      /* Remove default Bootstrap background color */
-    }
+      .download-apk-button {
+        color: #11531e;
+        /* Green color matching your color scheme */
+        border-color: #11531e;
+        /* Border color matching the green */
+        background-color: transparent;
+        /* Remove default Bootstrap background color */
+      }
+      .download-apk-button:hover {
+        background-color: #0d3a15;
+        color: #ffffff;
+      }
+      .download-apk-button:focus,
+      .download-apk-button:active {
+        color: #ffffff;
+        /* Change text color on hover, focus, and click */
+        background-color: #11531e;
+        /* Change background color on hover, focus, and click */
+        border-color: #11531e;
+        /* Change border color on hover, focus, and click */
+      }
+    </style>
+  </head>
 
-    .download-apk-button:hover,
-    .download-apk-button:focus,
-    .download-apk-button:active {
-      color: #ffffff;
-      /* Change text color on hover, focus, and click */
-      background-color: #11531e;
-      /* Change background color on hover, focus, and click */
-      border-color: #11531e;
-      /* Change border color on hover, focus, and click */
-    }
-  </style>
-</head>
-
-<body>
-  <!--  <a href="#featureSection" class="scroll-down-arrow">
+  <body>
+    <!--  <a href="#featureSection" class="scroll-down-arrow">
       <i class="fas fa-chevron-down"></i> 
     </a>  -->
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg shadow-none sticky-top" style="height: 85px; background-color: #f5f5f5">
-    <div class="container">
-      <a class="navbar-brand gabo-secondary" href="#">
-        <p class="fw-bold fs-3 mt-2">GABO</p>
-      </a>
-      <button class="btn shadow-none navbar-toggler gabo-secondary" type="button" data-mdb-toggle="collapse"
-        data-mdb-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" style="background-color: #f5f5f5" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link text-center" href="#mainContent" onclick="highlightLink(this)">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-center" href="#featureSection" onclick="highlightLink(this)">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-center" href="#aboutUs" onclick="highlightLink(this)">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-center" href="#contactUs" onclick="highlightLink(this)">Contact Us</a>
-          </li>
-        </ul>
-        <a class="btn mx-3 d-block shadow-none download-apk-button" data-bs-toggle="modal"
-          data-bs-target="#downloadModal">Download APP</a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- NAVBAR -->
-
-  <!-- <div class="circle"></div> -->
-
-  <!-- MAIN CONTENT -->
-  <section id="mainContent" style="padding-top: 50px" data-aos="fade-up">
-    <div class="py-5 px-md-5 mx-auto text-center text-lg-start text-md-center">
+    <!-- NAVBAR -->
+    <nav
+      class="navbar navbar-expand-lg shadow-none sticky-top"
+      style="height: 85px; background-color: #f5f5f5"
+    >
       <div class="container">
-        <div class="row gx-lg-5 align-items-center">
-          <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
-            <img src="img/GaboV1_LOGO.png" style="height: auto; width: 150px" class="img-fluid" />
-            <h1 class="my-5 display-3 fw-bold gabo-dark">
-              Revolutionizing <br />
-              <span class="gabo-secondary">Waste Management</span>
-            </h1>
-            <p class="text-md" style="color: hsl(217, 10%, 50.8%)">
-              Meet GABO, the smart garbage bin empowered by IoT technology.
-              With GABO, waste management becomes a breeze, as it
-              intelligently optimizes collection schedules and provides
-              real-time status updates. Take a step towards a sustainable
-              future with GABO, your trusted partner in smart, eco-friendly
-              living.
-            </p>
-          </div>
+        <a class="navbar-brand gabo-secondary" href="#">
+          <p class="fw-bold fs-3 mt-2">GABO</p>
+        </a>
+        <button
+          class="btn shadow-none navbar-toggler gabo-secondary"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse"
+          style="background-color: #f5f5f5"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#mainContent"
+                onclick="highlightLink(this)"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#featureSection"
+                onclick="highlightLink(this)"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#aboutUs"
+                onclick="highlightLink(this)"
+                >About Us</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-center"
+                href="#contactUs"
+                onclick="highlightLink(this)"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+          <a
+            class="btn mx-3 d-block shadow-none download-apk-button"
+            data-bs-toggle="modal"
+            data-bs-target="#downloadModal"
+            >Download APP</a
+          >
+        </div>
+      </div>
+    </nav>
 
-          <div class="col-lg-6 mb-5 mb-lg-0 home-img">
-            <div class="d-flex justify-content-center align-items-end h-100">
-              <img src="img/cloud_isometric2.png" style="height: auto; max-width: 500px; width: 100%" id="home-img"
-                class="img-fluid" />
+    <!-- NAVBAR -->
+
+    <!-- <div class="circle"></div> -->
+
+    <!-- MAIN CONTENT -->
+    <section id="mainContent" style="padding-top: 50px" data-aos="fade-up">
+      <div
+        class="py-5 px-md-5 mx-auto text-center text-lg-start text-md-center"
+      >
+        <div class="container">
+          <div class="row gx-lg-5 align-items-center">
+            <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
+              <img
+                src="img/GaboV1_LOGO.png"
+                style="height: auto; width: 150px"
+                class="img-fluid"
+              />
+              <h1 class="my-5 display-3 fw-bold gabo-dark">
+                Revolutionizing <br />
+                <span class="gabo-secondary">Waste Management</span>
+              </h1>
+              <p class="text-md" style="color: hsl(217, 10%, 50.8%)">
+                Meet GABO, the smart garbage bin empowered by IoT technology.
+                With GABO, waste management becomes a breeze, as it
+                intelligently optimizes collection schedules and provides
+                real-time status updates. Take a step towards a sustainable
+                future with GABO, your trusted partner in smart, eco-friendly
+                living.
+              </p>
+            </div>
+
+            <div class="col-lg-6 mb-5 mb-lg-0 home-img">
+              <div class="d-flex justify-content-center align-items-end h-100">
+                <img
+                  src="img/cloud_isometric2.png"
+                  style="height: auto; max-width: 500px; width: 100%"
+                  id="home-img"
+                  class="img-fluid"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section>
-    <div class="container-fluid mt-5" data-aos="zoom-in">
-      <img src="img/steps.png" class="img-fluid" />
-    </div>
-  </section>
-
-  <section class="text-center container-fluid gabo-bg-secondary" style="padding-top: 50px;" id="featureSection">
-    <div class="row">
-      <h3 class="text-light fw-bold mb-5"> Monitor your garbage bin
-        with an app</h3>
-      <div class="col-lg-4 col-md-6 mb-5 mb-md-5 mb-lg-0 position-relative">
-        <i class="fas fa-wrench fa-3x text-white mb-4"></i>
-        <h5 class="text-white fw-bold mb-3">Device Self-Diagnostics</h5>
-        <h6 class="fw-normal mb-0">
-          Monitors Smart Garbage Bins for optimal performance, automatically
-          identifying and addressing issues to minimize downtime.
-        </h6>
-        <div class="vr vr-blurry position-absolute my-0 h-100 d-none d-md-block top-0 end-0"></div>
+    <section>
+      <div class="container-fluid mt-5" data-aos="zoom-in">
+        <img src="img/steps.png" class="img-fluid" />
       </div>
-      <div class="col-lg-4 col-md-6 mb-5 mb-md-5 mb-lg-0 position-relative">
-        <i class="fas fa-signal fa-3x text-white mb-4"></i>
-        <h5 class="text-white fw-bold mb-3">Realtime Sensor</h5>
-        <h6 class="fw-normal mb-0">
-          Consistently monitors the real-time fill level of containers.
-        </h6>
-        <div class="vr vr-blurry position-absolute my-0 h-100 d-none d-md-block top-0 end-0"></div>
-      </div>
+    </section>
 
-      <div class="col-lg-4 col-md-6 mb-5 mb-md-0 position-relative">
-        <i class="fas fa-bell fa-3x text-white mb-4"></i>
-        <h5 class="text-pwhite fw-bold mb-3">
-          Real-time alerts and notifications
+    <section
+      class="text-center container-fluid gabo-bg-secondary"
+      style="padding-top: 50px"
+      id="featureSection"
+    >
+      <div class="row">
+        <h3 class="text-light fw-bold mb-5">
+          Monitor your garbage bin with an app
+        </h3>
+        <div class="col-lg-4 col-md-6 mb-5 mb-md-5 mb-lg-0 position-relative">
+          <i class="fas fa-wrench fa-3x text-white mb-4"></i>
+          <h5 class="text-white fw-bold mb-3">Device Self-Diagnostics</h5>
+          <h6 class="fw-normal mb-0">
+            Monitors Smart Garbage Bins for optimal performance, automatically
+            identifying and addressing issues to minimize downtime.
+          </h6>
+          <div
+            class="vr vr-blurry position-absolute my-0 h-100 d-none d-md-block top-0 end-0"
+          ></div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-5 mb-md-5 mb-lg-0 position-relative">
+          <i class="fas fa-signal fa-3x text-white mb-4"></i>
+          <h5 class="text-white fw-bold mb-3">Realtime Sensor</h5>
+          <h6 class="fw-normal mb-0">
+            Consistently monitors the real-time fill level of containers.
+          </h6>
+          <div
+            class="vr vr-blurry position-absolute my-0 h-100 d-none d-md-block top-0 end-0"
+          ></div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-5 mb-md-0 position-relative">
+          <i class="fas fa-bell fa-3x text-white mb-4"></i>
+          <h5 class="text-pwhite fw-bold mb-3">
+            Real-time alerts and notifications
+          </h5>
+          <h6 class="fw-normal mb-0">
+            Monitors Smart Garbage Bins for optimal performance, automatically
+            identifying and addressing issues to minimize downtime.
+          </h6>
+        </div>
+
+        <h5 class="text-white fw-bold mb-5 mt-5">
+          GABO is not just about technology; it's about community engagement. By
+          using the mobile app, residents can control certain bin features and
+          engage more in responsible waste disposal.
         </h5>
-        <h6 class="fw-normal mb-0">
-          Monitors Smart Garbage Bins for optimal performance, automatically
-          identifying and addressing issues to minimize downtime.
-        </h6>
       </div>
+    </section>
 
-      <h5 class="text-white fw-bold mb-5 mt-5">
-        GABO is not just about technology; it's about community
-        engagement. By using the mobile app, residents can control
-        certain bin features and engage more in responsible waste
-        disposal.
-      </h5>
-    </div>
-  </section>
-
-
-  <section class="" data-aos="fade-right" id="aboutUs">
-    <div class="container mt-5">
-      <div class="text-center fs-1 fw-bold">ABOUT US</div>
-      <div class="text-center mt-2">
-        <p class="section-subtitle text-center text-justify">
-          Welcome to GABO – your gateway to a smarter, cleaner future. At
-          GABO, we are passionate about revolutionizing waste management
-          through cutting-edge technology.
-        </p>
-        <p class="text-justify">
-          Our innovative system combines the power of Internet of Things (IoT)
-          with the humble garbage bin, creating a seamless and intelligent
-          waste disposal experience. GABO smart garbage bins are equipped with
-          real-time sensors that monitor and manage waste levels, ensuring
-          efficiency and sustainability in waste collection processes.
-        </p>
-        <p class="text-justify">
-          We believe in making a positive impact on the environment, and our
-          smart garbage bins are designed to contribute to a greener and
-          cleaner planet. With GABO, you can take a step towards a more
-          sustainable future by optimizing waste management practices and
-          reducing environmental impact.
-        </p>
-      </div>
-      <div class="text-center mt-5">
-        <div class="btn btn-primary shadow-none">Learn More</div>
-      </div>
-    </div>
-  </section>
-
-  <section data-aos="zoom-in-up" id="contactUs">
-    <div class="container-fluid mt-5 mb-4 p-3 gabo-bg-secondary text-white">
-      <div class="fs-1 text-center fw-bold">QUESTIONS?</div>
-      <div class="fs-5 text-center fw-bold">
-        Wether you're curious about our project, we're here to answer any
-        questions.
-      </div>
-      <div class="text-center mt-5 mb-4">
-        <a class="btn btn-primary btn-lg shadow-none" href="contact-us.html">LET'S TALK MORE!</a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="container py-5 mt-5">
-    <div class="row">
-      <div class="col-12 col-md">
-        <img src="img/GaboV1_LOGO.png" width="24" height="auto" viewBox="0 0 24 24" class="d-block mb-2" />
-        <small class="d-block mb-3 text-muted">© 2023-2024</small>
-      </div>
-      <div class="col-6 col-md">
-        <h5>Site Credits</h5>
-        <ul class="list-unstyled text-small">
-          <li>
-            <a class="text-muted" href="https://getbootstrap.com" target="_blank">Bootstrap</a>
-          </li>
-          <li>
-            <a class="text-muted" href="https://www.freepik.com/" target="_blank">Freepik</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-6 col-md">
-        <h5>University and Government Links</h5>
-        <ul class="list-unstyled text-small">
-          <!-- University of Caloocan City link -->
-          <li>
-            <a class="text-muted" href="https://www.universityofcaloocancity.edu.ph/" target="_blank">University of
-              Caloocan City</a>
-          </li>
-          <!-- Republic of the Philippines link -->
-          <li>
-            <a class="text-muted" href="https://www.gov.ph/" target="_blank">Republic of the Philippines</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-6 col-md">
-        <h5>About</h5>
-        <ul class="list-unstyled text-small">
-          <li><a class="text-muted" href="#">Team</a></li>
-          <li><a class="text-muted" href="#">Location</a></li>
-          <li><a class="text-muted" href="#">Privacy</a></li>
-          <li>
-            <a class="text-muted" href="termsandconditions.html">Terms</a>
-          </li>
-          <li><a class="text-muted" href="#">Faqs</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-md">
-        <h5><!-- Features --></h5>
-        <ul class="list-unstyled text-small">
-          <li>
-            <div class="input-group md-form form-sm form-2 pl-0">
-              <input class="form-control my-0 py-1 amber-border" type="text" placeholder="Search" aria-label="Search" />
-              <div class="input-group-append">
-                <span class="input-group-text amber lighten-3" id="basic-text1">
-                  <i class="fas fa-search text-grey" aria-hidden="true"></i>
-                </span>
-              </div>
-            </div>
-          </li>
-          <li><a class="text-muted" href="#"></a></li>
-          <li><a class="text-muted" href="#"></a></li>
-          <li><a class="text-muted" href="#"></a></li>
-          <li><a class="text-muted" href="#"></a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="text-muted text-center">
-      <small>Powered by
-        <a href="https://getbootstrap.com" class="text-muted">Bootstrap</a></small>
-    </div>
-  </footer>
-
-  <!-- Modal -->
-  <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="downloadModalLabel">GABO App</h5>
-          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true"></span>
-          </button>
+    <section class="" data-aos="fade-right" id="aboutUs">
+      <div class="container mt-5">
+        <div class="text-center fs-1 fw-bold">ABOUT US</div>
+        <div class="text-center mt-2">
+          <p class="section-subtitle text-center text-justify">
+            Welcome to GABO – your gateway to a smarter, cleaner future. At
+            GABO, we are passionate about revolutionizing waste management
+            through cutting-edge technology.
+          </p>
+          <p class="text-justify">
+            Our innovative system combines the power of Internet of Things (IoT)
+            with the humble garbage bin, creating a seamless and intelligent
+            waste disposal experience. GABO smart garbage bins are equipped with
+            real-time sensors that monitor and manage waste levels, ensuring
+            efficiency and sustainability in waste collection processes.
+          </p>
+          <p class="text-justify">
+            We believe in making a positive impact on the environment, and our
+            smart garbage bins are designed to contribute to a greener and
+            cleaner planet. With GABO, you can take a step towards a more
+            sustainable future by optimizing waste management practices and
+            reducing environmental impact.
+          </p>
         </div>
-        <div class="modal-body">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-6">
-                <!-- Left section content -->
-                <div class="text-center">
-                  <h4>Household App</h4>
-                  <a href="apk/Gabo_User.apk" download class="btn btn-primary">Download APP</a>
+        <div class="text-center mt-5">
+          <div class="btn btn-primary shadow-none">Learn More</div>
+        </div>
+      </div>
+    </section>
+
+    <section data-aos="zoom-in-up" id="contactUs">
+      <div class="container-fluid mt-5 mb-4 p-3 gabo-bg-secondary text-white">
+        <div class="fs-1 text-center fw-bold">QUESTIONS?</div>
+        <div class="fs-5 text-center fw-bold">
+          Wether you're curious about our project, we're here to answer any
+          questions.
+        </div>
+        <div class="text-center mt-5 mb-4">
+          <a class="btn btn-primary btn-lg shadow-none" href="contact-us.html"
+            >LET'S TALK MORE!</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <footer class="container py-5 mt-5">
+      <div class="row">
+        <div class="col-12 col-md">
+          <img
+            src="img/GaboV1_LOGO.png"
+            width="24"
+            height="auto"
+            viewBox="0 0 24 24"
+            class="d-block mb-2"
+          />
+          <small class="d-block mb-3 text-muted">© 2023-2024</small>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Site Credits</h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a
+                class="text-muted"
+                href="https://getbootstrap.com"
+                target="_blank"
+                >Bootstrap</a
+              >
+            </li>
+            <li>
+              <a
+                class="text-muted"
+                href="https://www.freepik.com/"
+                target="_blank"
+                >Freepik</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>University and Government Links</h5>
+          <ul class="list-unstyled text-small">
+            <!-- University of Caloocan City link -->
+            <li>
+              <a
+                class="text-muted"
+                href="https://www.universityofcaloocancity.edu.ph/"
+                target="_blank"
+                >University of Caloocan City</a
+              >
+            </li>
+            <!-- Republic of the Philippines link -->
+            <li>
+              <a class="text-muted" href="https://www.gov.ph/" target="_blank"
+                >Republic of the Philippines</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Team</a></li>
+            <li><a class="text-muted" href="#">Location</a></li>
+            <li><a class="text-muted" href="#">Privacy</a></li>
+            <li>
+              <a class="text-muted" href="termsandconditions.html">Terms</a>
+            </li>
+            <li><a class="text-muted" href="#">Faqs</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5><!-- Features --></h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <div class="input-group md-form form-sm form-2 pl-0">
+                <input
+                  class="form-control my-0 py-1 amber-border"
+                  type="text"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <div class="input-group-append">
+                  <span
+                    class="input-group-text amber lighten-3"
+                    id="basic-text1"
+                  >
+                    <i class="fas fa-search text-grey" aria-hidden="true"></i>
+                  </span>
                 </div>
               </div>
-              <div class="col-md-6">
-                <!-- Right section content -->
-                <div class="text-center">
-                  <h4>Collector App</h4>
-                  <a href="apk/Gabo_User.apk" download class="btn btn-primary">Download APP</a>
+            </li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+            <li><a class="text-muted" href="#"></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-muted text-center">
+        <small
+          >Powered by
+          <a href="https://getbootstrap.com" class="text-muted"
+            >Bootstrap</a
+          ></small
+        >
+      </div>
+    </footer>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="downloadModal"
+      tabindex="-1"
+      aria-labelledby="downloadModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header justify-content-center">
+            <h5
+              class="modal-title justify-content-center"
+              id="downloadModalLabel"
+            >
+              GABO APK DOWNLOAD
+            </h5>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6 col-sm-6 col-ms-auto">
+                  <!-- Left section content -->
+                  <div class="text-center">
+                    <h1 class="fs-5">
+                      <i class="fas fa-user fa-xs"></i> HOUSEHOLD USER
+                    </h1>
+                    <p class="fs-6 fw-light lh-2">
+                      A household app for monitoring fill level and track bin
+                      items.
+                    </p>
+                    <a
+                      href="apk/Gabo_User.apk"
+                      download
+                      class="btn btn-md shadow-none btn-download"
+                    >
+                      <i class="fa fa-download" aria-hidden="true"></i> Download
+                      USER APP</a
+                    >
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-12 position-relative">
-                <!-- Vertical line -->
-                <div class="vertical-line"></div>
+
+                <div class="col-md-6 col-sm-6 col-ms-auto">
+                  <!-- Vertical line -->
+
+                  <!-- Right section content -->
+                  <div class="text-center">
+                    <h1 class="fs-5">
+                      <i class="fas fa-truck fa-xs"></i> COLLECTOR
+                    </h1>
+                    <p class="fs-6 fw-light">
+                      A collector app for managing collections and optimizing
+                      collection routes.
+                    </p>
+                    <i class="" aria-hidden="true"></i>
+                    <a
+                      href="apk/Gabo_User.apk"
+                      download
+                      class="btn btn-md shadow-none btn-download"
+                    >
+                      <i class="fa fa-download" aria-hidden="true"></i> Download
+                      COLLECTOR APP</a
+                    >
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-        </div>
       </div>
     </div>
-  </div>
 
+    <!-- IMPORTS -->
+    <script>
+      // Function to highlight the active link
+      function highlightActiveLink() {
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".nav-link");
 
-  <style>
-    /* CSS adjustments */
-    .vertical-line {
-      border-left: 1px solid #ccc;
-      height: 100%;
-    }
+        sections.forEach((section, index) => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
 
-    .modal-body {
-      max-height: calc(100vh - 120px);
-      /* Adjusted height for smaller screens */
-      overflow-y: auto;
-      /* Enable scrolling for smaller screens */
-    }
-
-    .text-center {
-      text-align: center;
-    }
-
-    /* Button style for the buttons inside the modal */
-    .btn-primary {
-      background-color: #11531e;
-      /* Green color matching your color scheme */
-      border-color: #11531e;
-      /* Border color matching the green */
-      color: #ffffff;
-      /* Text color */
-      border: none;
-      /* Remove border */
-      padding: 10px 20px;
-      /* Adjust padding as needed */
-      border-radius: 5px;
-      /* Add border radius for rounded corners */
-      cursor: pointer;
-      /* Change cursor to pointer on hover */
-    }
-
-    /* Button hover effect */
-    .btn-primary:hover,
-    .btn-primary:focus,
-    .btn-primary:active {
-      background-color: #0d3a15;
-      /* Darker green on hover */
-      border-color: #0d3a15;
-      /* Darker border on hover */
-    }
-
-    /* Media query for responsiveness */
-    @media (max-width: 576px) {
-      .btn-primary {
-        padding: 8px 16px;
-        /* Adjusted padding for smaller screens */
-        font-size: 14px;
-        /* Adjusted font size for smaller screens */
+          if (
+            window.scrollY >= sectionTop - sectionHeight / 2 &&
+            window.scrollY < sectionTop + sectionHeight / 2
+          ) {
+            // Add 'active' class to the corresponding nav link
+            navLinks.forEach((link) => {
+              link.classList.remove("active");
+            });
+            navLinks[index].classList.add("active");
+          }
+        });
       }
-    }
-  </style>
 
-  <!-- IMPORTS -->
-  <script>
-    // Function to highlight the active link
-    function highlightActiveLink() {
-      const sections = document.querySelectorAll("section");
-      const navLinks = document.querySelectorAll(".nav-link");
+      // Event listener for scroll
+      window.addEventListener("scroll", highlightActiveLink);
 
-      sections.forEach((section, index) => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
+      // Initial highlighting on page load
+      document.addEventListener("DOMContentLoaded", highlightActiveLink);
+    </script>
+    <script src="src/jquery.min.js"></script>
+    <script type="text/javascript" src="src/mdb.min.js"></script>
+    <script src="src/bootstrap.min.js"></script>
+    <script src="src/popper.min.js"></script>
+    <script src="src/aos.js"></script>
+    <script>
+      AOS.init();
 
-        if (
-          window.scrollY >= sectionTop - sectionHeight / 2 &&
-          window.scrollY < sectionTop + sectionHeight / 2
-        ) {
-          // Add 'active' class to the corresponding nav link
-          navLinks.forEach((link) => {
-            link.classList.remove("active");
-          });
-          navLinks[index].classList.add("active");
-        }
+      // Add event listener to show modal when "Download APK" button is clicked
+      document.addEventListener("DOMContentLoaded", function () {
+        // Select the "Download APK" button
+        var downloadButton = document.querySelector(".download-apk-button");
+
+        // Add event listener to the button
+        downloadButton.addEventListener("click", function () {
+          // Show the modal when the button is clicked
+          var downloadModal = new bootstrap.Modal(
+            document.getElementById("downloadModal")
+          );
+          downloadModal.show();
+        });
       });
-    }
-
-    // Event listener for scroll
-    window.addEventListener("scroll", highlightActiveLink);
-
-    // Initial highlighting on page load
-    document.addEventListener("DOMContentLoaded", highlightActiveLink);
-  </script>
-  <script src="src/jquery.min.js"></script>
-  <script type="text/javascript" src="src/mdb.min.js"></script>
-  <script src="src/bootstrap.min.js"></script>
-  <script src="src/popper.min.js"></script>
-  <script src="src/aos.js"></script>
-  <script>
-    AOS.init();
-
-    // Add event listener to show modal when "Download APK" button is clicked
-    document.addEventListener("DOMContentLoaded", function () {
-      // Select the "Download APK" button
-      var downloadButton = document.querySelector('.download-apk-button');
-
-      // Add event listener to the button
-      downloadButton.addEventListener('click', function () {
-        // Show the modal when the button is clicked
-        var downloadModal = new bootstrap.Modal(document.getElementById('downloadModal'));
-        downloadModal.show();
-      });
-    });
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
