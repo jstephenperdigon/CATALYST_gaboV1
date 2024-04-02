@@ -100,7 +100,7 @@ function toggleBarangayDropdown() {
 
   // Define the barangay options based on the selected district
   const barangayOptions = {
-    1: ["1", "3", "5", "176"],
+    1: ["1", "3", "5", "168", "176"],
     2: ["2", "7", "9"],
     3: ["4", "6", "8"],
   };
@@ -175,12 +175,13 @@ function moveMapToCoordinates(map, lat, lng) {
 }
 
 const centerMap = {
-  lat: 14.772311100791017,
-  lng: 121.05275209489858,
+  lat: 14.766794722678402,
+  lng: 121.03637727931373,
 };
+
 const mapOptions = {
   center: centerMap,
-  zoom: 15,
+  zoom: 13,
   disableDefaultUI: true,
   styles: [
     {
@@ -361,8 +362,8 @@ function initMap() {
   resetButton.addEventListener("click", function () {
     resetMapSelection();
     showAllMarkers(map);
-    const newLat = highLatitude;
-    const newLng = highLongitude;
+    const newLat = 14.766794722678402;
+    const newLng = 121.03637727931373;
     moveMapToCoordinates(map, newLat, newLng);
   });
 
