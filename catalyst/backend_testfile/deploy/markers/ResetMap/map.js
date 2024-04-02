@@ -7,6 +7,7 @@ let markers = [];
 function displayMarkersOnMap(map) {
   // Reference to the GarbageBinControlNumber node in the database
   const garbageBinRef = ref(db, "GarbageBinControlNumber");
+  const defaultIcon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
 
   // Fetch data from Firebase in real-time
   onValue(garbageBinRef, (snapshot) => {
@@ -52,6 +53,7 @@ function displayMarkersOnMap(map) {
             position: { lat: latitude, lng: longitude },
             map: map,
             title: gcnKey,
+            icon: defaultIcon,
           });
 
           // Create info window for the new marker
@@ -89,6 +91,8 @@ function displayMarkersOnMap(map) {
 // Function to display all markers on the map
 function showAllMarkers(map) {
   markers.forEach((marker) => {
+    const defaultIcon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+    marker.setIcon(defaultIcon);
     marker.setMap(map);
   });
 }
@@ -139,6 +143,13 @@ function removeMarkersNotMatchingSelection(selectedDistrict, selectedBarangay) {
       district[1] === selectedDistrict &&
       barangay[1] === selectedBarangay
     );
+  });
+
+  // Update icon for matching markers
+  filteredMarkers.forEach((marker) => {
+    const matchingIcon =
+      "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+    marker.setIcon(matchingIcon); // Change icon of matching markers
   });
 
   // Remove markers that don't match the selected district and barangay
