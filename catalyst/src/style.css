@@ -237,7 +237,15 @@ a:hover {
   background-color: #11531e;
 }
 FEATURE SECTION */
-
+.btn-download {
+  color: #ffffff;
+  background-color: #11531e;
+}
+.btn-download:hover {
+  background-color: #ffff;
+  color: #11531e;
+  border-color: #11531e;
+}
 .content {
   z-index: 1;
   position: relative;

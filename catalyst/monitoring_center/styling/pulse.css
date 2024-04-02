@@ -1,0 +1,22 @@
+/* Define the pulse animation */
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Style for the circle marker */
+.pulse-marker {
+  position: absolute;
+  background-color: #ff2a1b; /* Orange background */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+  z-index: 1000;
+}
