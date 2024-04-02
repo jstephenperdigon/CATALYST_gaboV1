@@ -4,7 +4,6 @@ import {
   ref,
   push,
   set,
-  get,
 } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
 
 // Your web app's Firebase configuration
@@ -25,20 +24,22 @@ const db = getDatabase(app);
 
 // Function to create an account and add it to the database
 function createAccount() {
-  const role = document.getElementById("role").value;
-  const usertype = document.getElementById("role").value;
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
   const status = document.getElementById("status").value;
+  const usertype = document.getElementById("usertype").value;
 
   if (username && password) {
-    const newAccountRef = push(ref(db, "Accounts"));
-    set(newAccountRef, {
-      role: role,
-      usertype: usertype,
-      status: status,
+    const userRef = ref(db, `Accounts/${usertype}`);
+    const newAccountRef = push(userRef);
+    const uid = newAccountRef.key; // Get the automatically generated UID
+
+    set(userRef, {
+      uid: uid,
       username: username,
+      status: status,
       password: password,
+      usertype: usertype,
     })
       .then(() => {
         console.log("Account created successfully");

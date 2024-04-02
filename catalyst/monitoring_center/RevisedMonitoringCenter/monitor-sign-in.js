@@ -67,43 +67,60 @@ document
       // Get a reference to the Firebase database
       const db = getDatabase();
 
-      // Retrieve all UIDs from the database
-      const uidSnapshot = await get(ref(db, "Accounts"));
-      if (uidSnapshot.exists()) {
-        const uids = Object.keys(uidSnapshot.val());
+      // Retrieve UID from the Admin node
+      const adminSnapshot = await get(ref(db, "Accounts/Admin"));
+      if (adminSnapshot.exists()) {
+        const adminData = adminSnapshot.val();
+        const uid = adminData.uid;
 
-        // Loop through each UID to find a match for the provided username and password
-        for (const uid of uids) {
-          const userDataSnapshot = await get(
-            child(ref(db, `Accounts/${uid}`), "/")
-          );
-          const userData = userDataSnapshot.val();
+        // Check if username and password match
+        if (
+          adminData.username === username &&
+          adminData.password === password
+        ) {
+          // Store Admin UID in session storage
+          sessionStorage.setItem("uid", uid);
 
-          // Check if username and password match
-          if (
-            userData.username === username &&
-            userData.password === password
-          ) {
-            // Store UID in session storage
-            sessionStorage.setItem("uid", uid);
-
-            // Check user's usertype and redirect accordingly
-            if (userData.usertype === "Admin") {
-              window.location.href = "../admin/adminIndex.html";
-            } else if (userData.usertype === "Monitoring") {
-              window.location.href = "../index.html";
-            } else {
-              showAlert("warning", "Invalid user type");
-            }
-            return; // Exit the loop once a match is found
+          // Redirect to the appropriate page based on usertype
+          if (adminData.usertype === "Admin") {
+            window.location.href = "../admin/adminIndex.html";
+          } else if (adminData.usertype === "Monitoring") {
+            window.location.href = "../index.html";
+          } else {
+            showAlert("warning", "Invalid user type");
           }
+          return; // Exit the loop once a match is found
         }
-
-        // If no match is found after looping through all UIDs
-        showAlert("warning", "Invalid username or password");
-      } else {
-        showAlert("warning", "No users found in the database");
       }
+
+      // Retrieve UID from the Monitoring node
+      const monitoringSnapshot = await get(ref(db, "Accounts/Monitoring"));
+      if (monitoringSnapshot.exists()) {
+        const monitoringData = monitoringSnapshot.val();
+        const uid = monitoringData.uid;
+
+        // Check if username and password match
+        if (
+          monitoringData.username === username &&
+          monitoringData.password === password
+        ) {
+          // Store Monitoring UID in session storage
+          sessionStorage.setItem("uid", uid);
+
+          // Redirect to the appropriate page based on usertype
+          if (monitoringData.usertype === "Admin") {
+            window.location.href = "../admin/adminIndex.html";
+          } else if (monitoringData.usertype === "Monitoring") {
+            window.location.href = "../index.html";
+          } else {
+            showAlert("warning", "Invalid user type");
+          }
+          return; // Exit the loop once a match is found
+        }
+      }
+
+      // If no match is found
+      showAlert("warning", "Invalid username or password");
     } catch (error) {
       console.error("Error signing in:", error);
       showAlert("warning", "An error occurred while signing in");
