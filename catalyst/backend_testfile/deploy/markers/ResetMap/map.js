@@ -155,6 +155,10 @@ function removeMarkersNotMatchingSelection(selectedDistrict, selectedBarangay) {
   });
 }
 
+let highLatitude;
+let highLongitude;
+
+
 // Function to enable/disable select button based on barangay dropdown selection
 function toggleSelectButton() {
   const districtDropdown = document.getElementById("district");
@@ -219,12 +223,16 @@ function toggleSelectButton() {
     if (filteredMarkers.length > 0) {
       const highestQuotaMarker = filteredMarkers[0]; // Get the marker with the highest total quota
       const gcn = highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
-      const latitude = highestQuotaMarker.getPosition().lat();
-      const longitude = highestQuotaMarker.getPosition().lng();
+      const highestQuotaMarkerlatitude = highestQuotaMarker.getPosition().lat();
+      const highestQuotaMarkerlongitude = highestQuotaMarker.getPosition().lng();
 
       console.log(`GCN with highest total quota: ${gcn[1]}`);
-      console.log(`Latitude: ${latitude}`);
-      console.log(`Longitude: ${longitude}`);
+      console.log(`Latitude: ${highestQuotaMarkerlatitude}`);
+      console.log(`Longitude: ${highestQuotaMarkerlongitude}`);
+      // Update global variables with latitude and longitude of GCN with the highest total quota
+      highLatitude = highestQuotaMarkerlatitude;
+      highLongitude = highestQuotaMarkerlongitude;
+
     } else {
       console.log("No markers matching the selection criteria found.");
     }
@@ -239,6 +247,7 @@ function toggleSelectButton() {
     // Enable the cancel button
     cancelButton.disabled = false;
   });
+
 }
 
 // Add event listener to district dropdown
@@ -446,7 +455,6 @@ const mapOptions = {
     },
   ],
 };
-
 // Export the initMap function
 function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), mapOptions);
@@ -459,14 +467,14 @@ function initMap() {
     resetMapSelection();
     showAllMarkers(map);
   });
-  /*   // Add event listener to move button
+  // Add event listener to move button
   document
     .getElementById("selectButton")
     .addEventListener("click", function () {
-      const newLat = latitude;
-      const newLng = longitude;
-      moveMapToCoordinates(map, newLat, newLng);
-    }); */
+      // Log the values of highLatitude and highLongitude
+      console.log("High Latitude:", highLatitude);
+      console.log("High Longitude:", highLongitude);
+    });
 }
 
 // Make initMap accessible in the global scope
