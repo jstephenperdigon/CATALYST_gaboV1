@@ -93,12 +93,6 @@ function showAllMarkers(map) {
   });
 }
 
-// Function to move the map to new coordinates
-function moveMapToCoordinates(map, lat, lng) {
-  const newCenter = { lat: lat, lng: lng };
-  map.setCenter(newCenter);
-}
-
 // Function to enable/disable barangay dropdown based on district dropdown selection
 function toggleBarangayDropdown() {
   const districtDropdown = document.getElementById("district");
@@ -155,111 +149,6 @@ function removeMarkersNotMatchingSelection(selectedDistrict, selectedBarangay) {
   });
 }
 
-let highLatitude;
-let highLongitude;
-
-
-// Function to enable/disable select button based on barangay dropdown selection
-function toggleSelectButton() {
-  const districtDropdown = document.getElementById("district");
-  const barangayDropdown = document.getElementById("barangay");
-  const selectButton = document.getElementById("selectButton");
-  const cancelButton = document.getElementById("cancelButton");
-
-  // Get the selected barangay value
-  const selectedBarangay = barangayDropdown.value;
-
-  // Enable select button if a valid barangay is selected
-  selectButton.disabled = selectedBarangay === "";
-
-  // Add event listener to select button
-  selectButton.addEventListener("click", () => {
-    const selectedDistrict = districtDropdown.value;
-    const selectedBarangay = barangayDropdown.value;
-
-    // Filter markers based on selected district and barangay
-    const filteredMarkers = markers.filter((marker) => {
-      const district = marker.infoWindow.content.match(/District: (\d+)/);
-      const barangay = marker.infoWindow.content.match(/Barangay: (\d+)/);
-
-      return (
-        district &&
-        barangay &&
-        district[1] === selectedDistrict &&
-        barangay[1] === selectedBarangay
-      );
-    });
-
-    // Remove markers not matching the selected district and barangay
-    removeMarkersNotMatchingSelection(selectedDistrict, selectedBarangay);
-
-    // Sort filtered markers by highest total quota
-    filteredMarkers.sort((a, b) => {
-      const totalQuotaA = a.infoWindow.content.match(/Total Quota: (\d+)/)[1];
-      const totalQuotaB = b.infoWindow.content.match(/Total Quota: (\d+)/)[1];
-
-      return totalQuotaB - totalQuotaA;
-    });
-
-    // Display details of filtered markers
-    filteredMarkers.forEach((marker) => {
-      const gcn = marker.infoWindow.content.match(/GCN: (.+?)</);
-      const district = marker.infoWindow.content.match(/District: (\d+)/);
-      const barangay = marker.infoWindow.content.match(/Barangay: (\d+)/);
-      const totalQuota = marker.infoWindow.content.match(/Total Quota: (\d+)/);
-      const latitude = marker.getPosition().lat();
-      const longitude = marker.getPosition().lng();
-
-      console.log(`GCN: ${gcn[1]}`);
-      console.log(`District: ${district[1]}`);
-      console.log(`Barangay: ${barangay[1]}`);
-      console.log(`Total Quota: ${totalQuota[1]}`);
-      console.log(`Latitude: ${latitude}`);
-      console.log(`Longitude: ${longitude}`);
-      console.log("--------------------------");
-    });
-
-    // Print latitude and longitude of GCN with the highest total quota
-    if (filteredMarkers.length > 0) {
-      const highestQuotaMarker = filteredMarkers[0]; // Get the marker with the highest total quota
-      const gcn = highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
-      const highestQuotaMarkerlatitude = highestQuotaMarker.getPosition().lat();
-      const highestQuotaMarkerlongitude = highestQuotaMarker.getPosition().lng();
-
-      console.log(`GCN with highest total quota: ${gcn[1]}`);
-      console.log(`Latitude: ${highestQuotaMarkerlatitude}`);
-      console.log(`Longitude: ${highestQuotaMarkerlongitude}`);
-      // Update global variables with latitude and longitude of GCN with the highest total quota
-      highLatitude = highestQuotaMarkerlatitude;
-      highLongitude = highestQuotaMarkerlongitude;
-
-    } else {
-      console.log("No markers matching the selection criteria found.");
-    }
-
-    // Disable the district and barangay dropdowns
-    districtDropdown.disabled = true;
-    barangayDropdown.disabled = true;
-
-    // Disable itself
-    selectButton.disabled = true;
-
-    // Enable the cancel button
-    cancelButton.disabled = false;
-  });
-
-}
-
-// Add event listener to district dropdown
-document
-  .getElementById("district")
-  .addEventListener("change", toggleBarangayDropdown);
-
-// Add event listener to barangay dropdown
-document
-  .getElementById("barangay")
-  .addEventListener("change", toggleSelectButton);
-
 // Function to reset the status of dropdowns, select button, and cancel button
 function resetMapSelection() {
   const districtDropdown = document.getElementById("district");
@@ -277,6 +166,12 @@ function resetMapSelection() {
   // Reset buttons to initial state
   selectButton.disabled = true;
   cancelButton.disabled = true;
+}
+
+// Function to move the map to new coordinates
+function moveMapToCoordinates(map, lat, lng) {
+  const newCenter = { lat: lat, lng: lng };
+  map.setCenter(newCenter);
 }
 
 const centerMap = {
@@ -466,15 +361,122 @@ function initMap() {
   resetButton.addEventListener("click", function () {
     resetMapSelection();
     showAllMarkers(map);
+    const newLat = highLatitude;
+    const newLng = highLongitude;
+    moveMapToCoordinates(map, newLat, newLng);
   });
-  // Add event listener to move button
-  document
-    .getElementById("selectButton")
-    .addEventListener("click", function () {
-      // Log the values of highLatitude and highLongitude
-      console.log("High Latitude:", highLatitude);
-      console.log("High Longitude:", highLongitude);
+
+  let highLatitude;
+  let highLongitude;
+
+  // Function to enable/disable select button based on barangay dropdown selection
+  function toggleSelectButton() {
+    const districtDropdown = document.getElementById("district");
+    const barangayDropdown = document.getElementById("barangay");
+    const selectButton = document.getElementById("selectButton");
+    const cancelButton = document.getElementById("cancelButton");
+
+    // Get the selected barangay value
+    const selectedBarangay = barangayDropdown.value;
+
+    // Enable select button if a valid barangay is selected
+    selectButton.disabled = selectedBarangay === "";
+
+    // Add event listener to select button
+    selectButton.addEventListener("click", () => {
+      const selectedDistrict = districtDropdown.value;
+      const selectedBarangay = barangayDropdown.value;
+
+      // Filter markers based on selected district and barangay
+      const filteredMarkers = markers.filter((marker) => {
+        const district = marker.infoWindow.content.match(/District: (\d+)/);
+        const barangay = marker.infoWindow.content.match(/Barangay: (\d+)/);
+
+        return (
+          district &&
+          barangay &&
+          district[1] === selectedDistrict &&
+          barangay[1] === selectedBarangay
+        );
+      });
+
+      // Remove markers not matching the selected district and barangay
+      removeMarkersNotMatchingSelection(selectedDistrict, selectedBarangay);
+
+      // Sort filtered markers by highest total quota
+      filteredMarkers.sort((a, b) => {
+        const totalQuotaA = a.infoWindow.content.match(/Total Quota: (\d+)/)[1];
+        const totalQuotaB = b.infoWindow.content.match(/Total Quota: (\d+)/)[1];
+
+        return totalQuotaB - totalQuotaA;
+      });
+
+      // Display details of filtered markers
+      filteredMarkers.forEach((marker) => {
+        const gcn = marker.infoWindow.content.match(/GCN: (.+?)</);
+        const district = marker.infoWindow.content.match(/District: (\d+)/);
+        const barangay = marker.infoWindow.content.match(/Barangay: (\d+)/);
+        const totalQuota =
+          marker.infoWindow.content.match(/Total Quota: (\d+)/);
+        const latitude = marker.getPosition().lat();
+        const longitude = marker.getPosition().lng();
+
+        console.log(`GCN: ${gcn[1]}`);
+        console.log(`District: ${district[1]}`);
+        console.log(`Barangay: ${barangay[1]}`);
+        console.log(`Total Quota: ${totalQuota[1]}`);
+        console.log(`Latitude: ${latitude}`);
+        console.log(`Longitude: ${longitude}`);
+        console.log("--------------------------");
+      });
+
+      // Print latitude and longitude of GCN with the highest total quota
+      if (filteredMarkers.length > 0) {
+        const highestQuotaMarker = filteredMarkers[0]; // Get the marker with the highest total quota
+        const gcn = highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
+        const highestQuotaMarkerlatitude = highestQuotaMarker
+          .getPosition()
+          .lat();
+        const highestQuotaMarkerlongitude = highestQuotaMarker
+          .getPosition()
+          .lng();
+
+        console.log(`GCN with highest total quota: ${gcn[1]}`);
+        console.log(`Latitude: ${highestQuotaMarkerlatitude}`);
+        console.log(`Longitude: ${highestQuotaMarkerlongitude}`);
+
+        // Assign values to highLatitude and highLongitude
+        highLatitude = highestQuotaMarkerlatitude;
+        highLongitude = highestQuotaMarkerlongitude;
+      } else {
+        console.log("No markers matching the selection criteria found.");
+      }
+
+      // Disable the district and barangay dropdowns
+      districtDropdown.disabled = true;
+      barangayDropdown.disabled = true;
+
+      // Disable itself
+      selectButton.disabled = true;
+
+      // Enable the cancel button
+      cancelButton.disabled = false;
+
+      const newLat = highLatitude;
+      const newLng = highLongitude;
+      moveMapToCoordinates(map, newLat, newLng);
     });
+  }
+
+  // Add event listener to district dropdown
+  document
+    .getElementById("district")
+    .addEventListener("change", toggleBarangayDropdown);
+
+  // Add event listener to barangay dropdown
+  document
+    .getElementById("barangay")
+    .addEventListener("change", toggleSelectButton);
 }
 
 // Make initMap accessible in the global scope
