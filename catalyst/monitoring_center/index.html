@@ -16,6 +16,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
       rel="stylesheet"
     />
+
     <script
       defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
@@ -70,6 +71,13 @@
         /* Align icons horizontally */
       }
 
+      hr.vertical {
+        border: 0;
+        margin: 0;
+        border-left: 1px solid grey;
+        height: 200px;
+        float: left;
+      }
       /* Add margin between the icons */
       .horizontal-icons button {
         margin-right: 10px;
@@ -81,18 +89,6 @@
         color: white;
         font-size: 20px;
         /* Adjust the size as needed */
-      }
-
-      .view-button {
-        background-color: blue;
-      }
-
-      .update-button {
-        background-color: orange;
-      }
-
-      .delete-button {
-        background-color: red;
       }
 
       #reportsTable {
@@ -139,12 +135,15 @@
         text-decoration: none;
         cursor: pointer;
       }
+      .header-color {
+        color: #11531e;
+      }
     </style>
   </head>
 
   <body id="body-pd">
     <div class="l-navbar header" id="nav-bar">
-      <nav class="nav">
+      <nav class="nav1">
         <div class="header_toggle">
           <a href="#" class="nav_logo">
             <img src="../img/GaboV1_LOGO.png" class="nav_logo-icon" />
@@ -179,7 +178,7 @@
         </div>
         <a href="#" class="nav_link" id="signOut">
           <i class="bx bx-log-out nav_icon"></i>
-          <span class="nav_name">SignOut</span>
+          <span class="nav_name">SIGN OUT</span>
         </a>
       </nav>
     </div>
@@ -318,51 +317,143 @@
           <i class="fas fa-user-check text-white"></i>
         </div> 
       </div>-->
+      <nav class="navbar navbar-light bg-light shadow-none bg-transparent mb-4">
+        <div class="container-fluid">
+          <div class="col-md-3">
+            <a class="navbar-brand header-color fs-5 fw-bolder" href="#">
+              Monitoring Center
+            </a>
+          </div>
 
-      <section>
-        <div class="container mt-5">
-          <div class="row">
-            <div class="col-4">
-              <p class="fs-1 fw-bold">Monitoring Center</p>
-            </div>
+          <div class="col-md-2 d-flex">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
           </div>
         </div>
-        <div class="row">
-          <div class="col">
+      </nav>
+      <!-- <div class="container-fluid">
+        <div class="row justify-content-start">
+          <div class="col-md-12 text-center">
             <div class="card shadow-none border-0 bg-gradient-1">
               <div class="card-body">
                 <h1 id="welcome-message">Welcome,</h1>
               </div>
             </div>
           </div>
-          <div class="row mt-3">
-            <div class="col-3">
-              <a href="collectorsCrud/CollectorList.html" class="card-link">
-                <div class="card shadow-none p-1 border-0 clickable-box">
+        </div>
+      </div> -->
+      <div class="container-fluid">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="pills-home-tab"
+              data-mdb-toggle="pill"
+              data-mdb-target="#pills-home"
+              type="button"
+              role="tab"
+              aria-controls="pills-home"
+              aria-selected="true"
+            >
+              Dashboard
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="pills-profile-tab"
+              data-mdb-toggle="pill"
+              data-mdb-target="#pills-profile"
+              type="button"
+              role="tab"
+              aria-controls="pills-profile"
+              aria-selected="false"
+            >
+              Scheduling
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="pills-contact-tab"
+              data-mdb-toggle="pill"
+              data-mdb-target="#pills-contact"
+              type="button"
+              role="tab"
+              aria-controls="pills-contact"
+              aria-selected="false"
+            >
+              Contact
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content" id="pills-tabContent">
+        <div
+          class="tab-pane fade show active container-fluid"
+          id="pills-home"
+          role="tabpanel"
+          aria-labelledby="pills-home-tab"
+        >
+          <div class="container">
+            <div class="row">
+              <div class="col-3">
+                <a href="collectorsCrud/CollectorList.html" class="card-link">
+                  <div class="card shadow-none p-1 border-0 clickable-box">
+                    <div class="card-body">
+                      <div class="float-end mt-3">
+                        <i class="fas fa-users fa-2x text-success"></i>
+                      </div>
+                      <p class="fs-5">Collectors</p>
+                      <p class="fs-1 text-success" id="uidCount"></p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-3">
+                <a href="collectorsCrud/CollectorList.html" class="card-link">
+                  <div class="card shadow-none p-1 border-0 clickable-box">
+                    <div class="card-body">
+                      <div class="float-end mt-3">
+                        <i class="fas fa-users fa-2x text-success"></i>
+                      </div>
+                      <p class="fs-5">Household Users</p>
+                      <p class="fs-1 text-success">50</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-3">
+                <div class="card shadow-none p-1 border-0">
                   <div class="card-body">
                     <div class="float-end mt-3">
-                      <i class="fas fa-users fa-2x text-success"></i>
+                      <i class="fas fa-trash-can fa-2x text-success"></i>
                     </div>
-                    <p class="fs-5">Collector Accounts</p>
-                    <p class="fs-1 text-success" id="uidCount"></p>
+                    <p class="fs-5">Smart Garbage Bins</p>
+                    <p class="fs-1 text-success" id="gbCount"></p>
                   </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-3">
-              <div class="card shadow-none p-1 border-0">
-                <div class="card-body">
-                  <div class="float-end mt-3">
-                    <i class="fas fa-trash-can fa-2x text-success"></i>
-                  </div>
-                  <p class="fs-5">Smart Garbage Bins</p>
-                  <p class="fs-1 text-success" id="gbCount"></p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+        <div
+          class="tab-pane fade"
+          id="pills-profile"
+          role="tabpanel"
+          aria-labelledby="pills-profile-tab"
+        ></div>
+        <div
+          class="tab-pane fade"
+          id="pills-contact"
+          role="tabpanel"
+          aria-labelledby="pills-contact-tab"
+        ></div>
+      </div>
     </div>
 
     <div
@@ -525,14 +616,38 @@
     <div class="content" id="stats-content">
       <div class="container mt-5">
         <div class="row">
-          <div class="col-md-6">
-            <h1>Summary</h1>
+          <div class="col-md-12">
+            <div class="card shadow-none border-0">
+              <div class="card-body">
+                <h1 class="header-color fw-bold p-1">
+                  Waste Composition Report
+                </h1>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3"></div>
         </div>
       </div>
       <div class="container mt-5">
         <div class="row">
           <div class="col-md-3">
+            <p class="fs-5">Garbage Composition</p>
+            <div class="dropdown mb-2">
+              <select
+                class="form-select"
+                id="timePeriodDropdown"
+                onchange="updateDonutChart(this.value)"
+              >
+                <option value="today">Today</option>
+                <option value="last_week">Last Week</option>
+                <option value="last_month">Last Month</option>
+                <!-- Add more time period options as needed -->
+              </select>
+            </div>
             <div class="card shadow-none border-0">
               <div class="card-body">
                 <canvas id="donutChart" width="700" height="400"></canvas>
@@ -626,9 +741,8 @@
               <select
                 class="form-select"
                 id="timePeriodDropdown"
-                onchange="updateChart(this.value)"
+                onchange="updateLineChart(this.value)"
               >
-                <option value="" disabled selected>Select Time Period</option>
                 <option value="today">Today</option>
                 <option value="last_week">Last Week</option>
                 <option value="last_month">Last Month</option>
@@ -645,10 +759,32 @@
       </div>
     </div>
 
+    <script type="text/javascript" src="../src/popper.min.js"></script>
+    <script type="text/javascript" src="../src/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/bootstrap.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
+    ></script>
+
+    <script>
+      // No need for import statement for MDB UI Kit
+      // Initialization for MDB UI Kit
+      document.addEventListener("DOMContentLoaded", function () {
+        const { Dropdown, Ripple } = mdb;
+        mdb.Dropdown.init();
+        mdb.Ripple.init();
+      });
+    </script>
+    <script type="text/javascript" src="dougnut.js"></script>
+    <script type="text/javascript" src="monitoring.js"></script>
+    <script type="module" src="monitor-index-function.js"></script>
+    <script type="module" src="monitor-index-reports.js"></script>
+    <script type="module" src="monitoring-gb-account-count.js"></script>
     <script>
       var lineChart;
 
-      function updateChart(timePeriod) {
+      function updateLineChart(timePeriod) {
         // Based on the selected time period, fetch data from the server or calculate it locally
         // Here, I'll just use sample data for demonstration purposes
 
@@ -745,18 +881,8 @@
       }
 
       // Initially load the chart for today
-      updateChart("today");
+      updateLineChart("today");
     </script>
-    <script type="text/javascript" src="../src/mdb.min.js"></script>
-    <script type="text/javascript" src="../src/jquery.min.js"></script>
-
-    <script src="../src/bootstrap.min.js"></script>
-    <script src="../src/popper.min.js"></script>
-    <script type="text/javascript" src="dougnut.js"></script>
-    <script type="text/javascript" src="monitoring.js"></script>
-    <script type="module" src="monitor-index-function.js"></script>
-    <script type="module" src="monitor-index-reports.js"></script>
-    <script type="module" src="monitoring-gb-account-count.js"></script>
   </body>
   <script>
     // Check if accountId exists in session storage

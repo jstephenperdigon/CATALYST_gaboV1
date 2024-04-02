@@ -1,39 +1,49 @@
-// Get the canvas element
-var ctx = document.getElementById("donutChart").getContext("2d");
+var donutChart;
 
-// Define data for the chart
-var data = {
-  labels: ["Recyclable", "Special", "Biodegradable", "Non-Biodegradable"],
-  datasets: [
-    {
-      data: [300, 50, 100, 30],
-      backgroundColor: ["blue", "red", "green", "orange"],
+function updateDonutChart(timePeriod) {
+  // Clear previous chart instance if it exists
+  if (donutChart) {
+    donutChart.destroy();
+  }
+
+  var labels;
+  var data;
+
+  // Fetch or calculate data dynamically based on the selected time period
+  if (timePeriod === "today") {
+    // Sample data for today
+    labels = ["Recyclable", "Special", "Biodegradable", "Non-Biodegradable"];
+    data = [29, 19, 28, 22]; // Sample data percentages
+  } else if (timePeriod === "last_week") {
+    // Sample data for last week
+    labels = ["Recyclable", "Special", "Biodegradable", "Non-Biodegradable"];
+    data = [50, 10, 20, 20]; // Sample data percentages
+  } else if (timePeriod === "last_month") {
+    // Sample data for last month
+    labels = ["Recyclable", "Special", "Biodegradable", "Non-Biodegradable"];
+    data = [20, 30, 30, 20]; // Sample data percentages
+  }
+
+  // Get the canvas element
+  var ctx = document.getElementById("donutChart").getContext("2d");
+
+  // Create the donut chart
+  donutChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: ["blue", "red", "green", "orange"], // Colors for each section
+        },
+      ],
     },
-  ],
-};
+  });
+}
 
-// Define options for the chart
-var options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  cutoutPercentage: 70, // Determines the size of the hole in the middle
-  legend: {
-    display: true,
-    position: "left",
-    align: "start",
-  },
-  title: {
-    display: true,
-    text: "Donut Chart",
-  },
-};
-
-// Create the donut chart
-var myChart = new Chart(ctx, {
-  type: "doughnut",
-  data: data,
-  options: options,
-});
+// Initially load the chart for today
+updateDonutChart("today");
 
 function initMap() {
   var mapDiv = document.getElementById("roadmap");
@@ -164,7 +174,7 @@ function initMap() {
     ],
   });
   var kmlLayer = new google.maps.KmlLayer({
-    url: "https://drive.google.com/uc?export=download&id=1KQjMOA_d23W4bxydapRfoFOw1i-iOggJ",
+    url: "https://drive.google.com/uc?export=download&id=1PA1BBO1-1J9s9wdD09DelC2eWPGh4F_8",
     map: map,
   });
 
