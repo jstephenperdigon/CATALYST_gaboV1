@@ -32,6 +32,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
   }
   linkColor.forEach((l) => l.addEventListener("click", colorLink));
 
+  const linkCard = document.querySelectorAll(".nav_card .nav_link         ");
+
+  function colorLink() {
+    if (linkCard) {
+      linkCard.forEach((l) => l.classList.remove("active"));
+      this.classList.add("active");
+    }
+  }
+  linkCard.forEach((l) => l.addEventListener("click", colorLink));
+
   // Your code to run since DOM is loaded and ready
 });
 
@@ -71,6 +81,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("reports-link")
     .addEventListener("click", function () {
       showContent("reports");
+    });
+
+  document
+    .getElementById("collectors-card")
+    .addEventListener("click", function () {
+      showContent("collector");
     });
 
   document.getElementById("stats-link").addEventListener("click", function () {

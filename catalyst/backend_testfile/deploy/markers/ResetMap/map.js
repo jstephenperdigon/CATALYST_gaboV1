@@ -145,13 +145,6 @@ function removeMarkersNotMatchingSelection(selectedDistrict, selectedBarangay) {
     );
   });
 
-  // Update icon for matching markers
-  filteredMarkers.forEach((marker) => {
-    const matchingIcon =
-      "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
-    marker.setIcon(matchingIcon); // Change icon of matching markers
-  });
-
   // Remove markers that don't match the selected district and barangay
   markers.forEach((marker) => {
     if (!filteredMarkers.includes(marker)) {
@@ -381,6 +374,8 @@ function initMap() {
 
     const selectedMarkersDiv = document.getElementById("selectedMarkers");
     selectedMarkersDiv.innerHTML = "";
+
+    document.getElementById("deployButton").style.display = "none";
   });
 
   let highLatitude;
@@ -453,25 +448,38 @@ function initMap() {
 
         // Sort filtered markers by highest total quota
         filteredMarkers.sort((a, b) => {
-          const totalQuotaA =
-            a.infoWindow.content.match(/Total Quota: (\d+)/)[1];
-          const totalQuotaB =
-            b.infoWindow.content.match(/Total Quota: (\d+)/)[1];
-
+          const totalQuotaA = parseInt(
+            a.infoWindow.content.match(/Total Quota: (\d+)/)[1]
+          );
+          const totalQuotaB = parseInt(
+            b.infoWindow.content.match(/Total Quota: (\d+)/)[1]
+          );
           return totalQuotaB - totalQuotaA;
         });
 
-        // Accumulate details of matching markers
+        // Accumulate details of matching markers while considering the limit
         let selectedGCNs = [];
         let totalQuotaSum = 0;
-        filteredMarkers.forEach((marker) => {
+        for (const marker of filteredMarkers) {
           const gcn = marker.infoWindow.content.match(/GCN: (.+?)</)[1];
           const totalQuota = parseInt(
             marker.infoWindow.content.match(/Total Quota: (\d+)/)[1]
           );
-          selectedGCNs.push(gcn);
-          totalQuotaSum += totalQuota;
-        });
+
+          // Check if adding this marker will exceed the limit
+          if (totalQuotaSum + totalQuota <= 50) {
+            selectedGCNs.push(gcn);
+            totalQuotaSum += totalQuota;
+
+            // If the total quota exceeds 45, break the loop
+            if (totalQuotaSum >= 45) break;
+
+            // Change icon of the selected marker to blue dot
+            const blueDotIcon =
+              "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+            marker.setIcon(blueDotIcon);
+          }
+        }
 
         // Display accumulated details in the desired format
         console.log(`Selected GCN: ${selectedGCNs.join(", ")}`);
@@ -479,6 +487,7 @@ function initMap() {
         console.log(`Barangay: ${selectedBarangay}`);
         console.log(`Total Quota: ${totalQuotaSum}`);
 
+        // Update HTML display with the selected GCNs, district, barangay, total quota, and message
         updateSelectedMarkers(
           selectedGCNs,
           selectedDistrict,
