@@ -468,15 +468,20 @@ function initMap() {
 
           // Check if adding this marker will exceed the limit
           if (totalQuotaSum + totalQuota <= 50) {
-            selectedGCNs.push(gcn);
+            selectedGCNs.push(gcn); // Add GCN to the selectedGCNs array
             totalQuotaSum += totalQuota;
 
             // If the total quota exceeds 45, break the loop
             if (totalQuotaSum >= 45) break;
+          }
+        }
 
-            // Change icon of the selected marker to blue dot
-            const blueDotIcon =
-              "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+        // Change icon of all selected markers (GCNs)
+        const blueDotIcon =
+          "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+        for (const marker of filteredMarkers) {
+          const gcn = marker.infoWindow.content.match(/GCN: (.+?)</)[1];
+          if (selectedGCNs.includes(gcn)) {
             marker.setIcon(blueDotIcon);
           }
         }

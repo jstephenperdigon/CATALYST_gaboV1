@@ -1,0 +1,21 @@
+https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app/
+-GarbageBinControlNumber
+    -GCN001
+        -Location
+            -Latitude:
+            -Longitude:
+        -TotalQuota:
+        -Users
+            -CQYhubTm8GWuFpYr1l9ZgL7cX203 *userid
+                -district:
+                -barangay: 
+    -GCN002
+        -Location
+            -Latitude:
+            -Longitude:
+        -TotalQuota:
+        -Users
+            - *userid
+                -district:
+                -barangay: 
+etc....
