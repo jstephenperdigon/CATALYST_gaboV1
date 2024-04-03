@@ -491,6 +491,10 @@ function initMap() {
         console.log(`District: ${selectedDistrict}`);
         console.log(`Barangay: ${selectedBarangay}`);
         console.log(`Total Quota: ${totalQuotaSum}`);
+        console.log("Recyclables");
+        console.log("Biodegradable");
+        console.log("Special");
+        console.log("Non-Biodegradable");
 
         // Update HTML display with the selected GCNs, district, barangay, total quota, and message
         updateSelectedMarkers(

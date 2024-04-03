@@ -1,6 +1,12 @@
 https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app/
 -GarbageBinControlNumber
-    -GCN001
+    -GCN###
+        -FillLevel
+            - GB1FillLevel
+                - GB1Flag
+                - GB1QuotaCount:
+                - GB1QuotaFlag
+                - GB1Status
         -Location
             -Latitude:
             -Longitude:
@@ -9,13 +15,19 @@ https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app/
             -CQYhubTm8GWuFpYr1l9ZgL7cX203 *userid
                 -district:
                 -barangay: 
-    -GCN002
+    -GCN###
+        -FillLevel
+            - GB1FillLevel
+                - GB1Flag
+                - GB1QuotaCount:
+                - GB1QuotaFlag
+                - GB1Status
         -Location
             -Latitude:
             -Longitude:
         -TotalQuota:
         -Users
-            - *userid
+            -*userid
                 -district:
                 -barangay: 
 etc....
