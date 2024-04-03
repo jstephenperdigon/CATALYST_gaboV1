@@ -17,6 +17,14 @@ function displayMarkersOnMap(map) {
     for (const gcnKey in data) {
       const location = data[gcnKey]?.Location; // Get the location object
       const totalQuota = data[gcnKey]?.TotalQuota; // Get total quota
+      const gb1QuotaCount =
+        data[gcnKey]?.FillLevel?.GB1FillLevel?.GB1QuotaCount;
+      const gb2QuotaCount =
+        data[gcnKey]?.FillLevel?.GB2FillLevel?.GB2QuotaCount;
+      const gb3QuotaCount =
+        data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount;
+      const gb4QuotaCount =
+        data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount;
 
       // Check if Users object exists and has at least one user
       const users = data[gcnKey]?.Users;
@@ -45,6 +53,18 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
+              <p>Recyclables: ${
+                gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+              }</p>
+              <p>Biodegradable: ${
+                gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+              }</p>
+              <p>Special: ${
+                gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+              }</p>
+              <p>Non-Biodegradable: ${
+                gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+              }</p>
             </div>`
           );
         } else {
@@ -63,6 +83,18 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
+                        <p>Recyclables: ${
+                          gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+                        }</p>
+                        <p>Biodegradable: ${
+                          gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+                        }</p>
+                        <p>Special: ${
+                          gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+                        }</p>
+                        <p>Non-Biodegradable: ${
+                          gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+                        }</p>
                       </div>`,
           });
 
@@ -381,12 +413,15 @@ function initMap() {
   let highLatitude;
   let highLongitude;
 
-  // Function to update the selected markers in the HTML
   function updateSelectedMarkers(
     selectedGCNs,
     selectedDistrict,
     selectedBarangay,
-    totalQuotaSum
+    totalQuotaSum,
+    gb1QuotaSum,
+    gb2QuotaSum,
+    gb3QuotaSum,
+    gb4QuotaSum
   ) {
     const selectedMarkersDiv = document.getElementById("selectedMarkers");
     let message = "";
@@ -406,6 +441,10 @@ function initMap() {
     <p>District: ${selectedDistrict}</p>
     <p>Barangay: ${selectedBarangay}</p>
     <p>Total Quota: ${totalQuotaSum}</p>
+    <p>Recyclables: ${gb1QuotaSum}</p>
+    <p>Biodegradable: ${gb2QuotaSum}</p>
+    <p>Special: ${gb3QuotaSum}</p>
+    <p>Non-Biodegradable: ${gb4QuotaSum}</p>
     <p>${message}</p>
   `;
   }
@@ -460,16 +499,37 @@ function initMap() {
         // Accumulate details of matching markers while considering the limit
         let selectedGCNs = [];
         let totalQuotaSum = 0;
+        let gb1QuotaSum = 0;
+        let gb2QuotaSum = 0; // Initialize gb2QuotaSum
+        let gb3QuotaSum = 0; // Initialize gb3QuotaSum
+        let gb4QuotaSum = 0; // Initialize gb4QuotaSum
         for (const marker of filteredMarkers) {
           const gcn = marker.infoWindow.content.match(/GCN: (.+?)</)[1];
           const totalQuota = parseInt(
             marker.infoWindow.content.match(/Total Quota: (\d+)/)[1]
+          );
+          const gb1QuotaCount = parseInt(
+            marker.infoWindow.content.match(/Recyclables: (\d+)/)?.[1] || 0
+          );
+          const gb2QuotaCount = parseInt(
+            marker.infoWindow.content.match(/Biodegradable: (\d+)/)?.[1] || 0
+          );
+          const gb3QuotaCount = parseInt(
+            marker.infoWindow.content.match(/Special: (\d+)/)?.[1] || 0
+          );
+          const gb4QuotaCount = parseInt(
+            marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
+              0
           );
 
           // Check if adding this marker will exceed the limit
           if (totalQuotaSum + totalQuota <= 50) {
             selectedGCNs.push(gcn); // Add GCN to the selectedGCNs array
             totalQuotaSum += totalQuota;
+            gb1QuotaSum += gb1QuotaCount; // Accumulate gb1QuotaCount
+            gb2QuotaSum += gb2QuotaCount; // Accumulate gb2QuotaCount
+            gb3QuotaSum += gb3QuotaCount; // Accumulate gb3QuotaCount
+            gb4QuotaSum += gb4QuotaCount; // Accumulate gb4QuotaCount
 
             // If the total quota exceeds 45, break the loop
             if (totalQuotaSum >= 45) break;
@@ -491,17 +551,21 @@ function initMap() {
         console.log(`District: ${selectedDistrict}`);
         console.log(`Barangay: ${selectedBarangay}`);
         console.log(`Total Quota: ${totalQuotaSum}`);
-        console.log("Recyclables");
-        console.log("Biodegradable");
-        console.log("Special");
-        console.log("Non-Biodegradable");
+        console.log(`Recyclables: ${gb1QuotaSum}`);
+        console.log(`Biodegradable: ${gb2QuotaSum}`);
+        console.log(`Special: ${gb3QuotaSum}`);
+        console.log(`Non-Biodegradable: ${gb4QuotaSum}`);
 
         // Update HTML display with the selected GCNs, district, barangay, total quota, and message
         updateSelectedMarkers(
           selectedGCNs,
           selectedDistrict,
           selectedBarangay,
-          totalQuotaSum
+          totalQuotaSum,
+          gb1QuotaSum,
+          gb2QuotaSum,
+          gb3QuotaSum,
+          gb4QuotaSum
         );
 
         // Print latitude and longitude of GCN with the highest total quota
