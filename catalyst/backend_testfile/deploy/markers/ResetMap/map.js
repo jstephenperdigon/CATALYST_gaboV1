@@ -136,7 +136,7 @@ function toggleBarangayDropdown() {
 
   // Define the barangay options based on the selected district
   const barangayOptions = {
-    1: ["1", "3", "5", "168", "176"],
+    1: ["1", "3", "5", "168", "176", "177"],
     2: ["2", "7", "9"],
     3: ["4", "6", "8"],
   };
@@ -531,8 +531,8 @@ function initMap() {
             gb3QuotaSum += gb3QuotaCount; // Accumulate gb3QuotaCount
             gb4QuotaSum += gb4QuotaCount; // Accumulate gb4QuotaCount
 
-            // If the total quota exceeds 45, break the loop
-            if (totalQuotaSum >= 45) break;
+            // If the total quota exceeds 50, break the loop
+            if (totalQuotaSum > 50) break;
           }
         }
 
