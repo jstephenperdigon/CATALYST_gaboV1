@@ -2,8 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebas
 import {
   getDatabase,
   ref,
+  child,
   get,
-  set,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 //Alert Content
@@ -53,72 +53,76 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function handleLogin(username, password) {
-  console.log("Entered username:", username);
-  console.log("Entered password:", password);
+// Function to handle sign-in process
+document
+  .getElementById("adminSignInButton")
+  .addEventListener("click", async (event) => {
+    event.preventDefault(); // Prevent form submission
 
-  const monitoringRef = ref(db, "Accounts/Monitoring");
+    // Retrieve username and password from input fields
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("typePasswordX").value;
 
-  get(monitoringRef)
-    .then((monitoringSnapshot) => {
+    try {
+      // Get a reference to the Firebase database
+      const db = getDatabase();
+
+      // Retrieve UID from the Admin node
+      const adminSnapshot = await get(ref(db, "Accounts/Admin"));
+      if (adminSnapshot.exists()) {
+        const adminData = adminSnapshot.val();
+        const uid = adminData.uid;
+
+        // Check if username and password match
+        if (
+          adminData.username === username &&
+          adminData.password === password
+        ) {
+          // Store Admin UID in session storage
+          sessionStorage.setItem("uid", uid);
+
+          // Redirect to the appropriate page based on usertype
+          if (adminData.usertype === "Admin") {
+            window.location.href = "../admin/adminIndex.html";
+          } else if (adminData.usertype === "Monitoring") {
+            window.location.href = "../index.html";
+          } else {
+            showAlert("warning", "Invalid user type");
+          }
+          return; // Exit the loop once a match is found
+        }
+      }
+
+      // Retrieve UID from the Monitoring node
+      const monitoringSnapshot = await get(ref(db, "Accounts/Monitoring"));
       if (monitoringSnapshot.exists()) {
         const monitoringData = monitoringSnapshot.val();
+        const uid = monitoringData.uid;
 
-        // Check if the provided username and password match any in Monitoring
-        const userTypes = Object.keys(monitoringData);
+        // Check if username and password match
+        if (
+          monitoringData.username === username &&
+          monitoringData.password === password
+        ) {
+          // Store Monitoring UID in session storage
+          sessionStorage.setItem("uid", uid);
 
-        for (const userType of userTypes) {
-          const userData = monitoringData[userType];
-
-          // Exact match for username and password
-          if (
-            userData.username === username &&
-            userData.password === password
-          ) {
-            console.log("Account matched:", userData);
-
-            if (userData.status === "LoggedIn") {
-              showAlert("warning", "User is already logged in.");
-              return;
-            }
-
-            showAlert("success", "Login successful!");
-
-            // Update user status to "LoggedIn"
-            const userRef = ref(db, `Accounts/Monitoring/${userType}`);
-            set(userRef, { ...userData, status: "LoggedIn" });
-
-            // Access the user's unique ID
-            const userId = userType;
-
-            // Store the user ID in a session or a cookie
-            sessionStorage.setItem("userId", userId);
-
-            // Redirect to user/user-index.html
-            window.location.href = "index.html";
-            return;
+          // Redirect to the appropriate page based on usertype
+          if (monitoringData.usertype === "Admin") {
+            window.location.href = "../admin/adminIndex.html";
+          } else if (monitoringData.usertype === "Monitoring") {
+            window.location.href = "../index.html";
+          } else {
+            showAlert("warning", "Invalid user type");
           }
+          return; // Exit the loop once a match is found
         }
-
-        showAlert("warning", "Invalid username or password. Please try again.");
-      } else {
-        showAlert("warning", "Monitoring data not available.");
       }
-    })
-    .catch((error) => {
-      console.error("Error fetching Monitoring data:", error);
-    });
-}
 
-document.addEventListener("DOMContentLoaded", function () {
-  const usernameInput = document.getElementById("username");
-  const passwordInput = document.getElementById("typePasswordX");
-  const signInButton = document.querySelector(".btn-primary");
-
-  signInButton.addEventListener("click", function () {
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-
-    handleLogin(username, password);
+      // If no match is found
+      showAlert("warning", "Invalid username or password");
+    } catch (error) {
+      console.error("Error signing in:", error);
+      showAlert("warning", "An error occurred while signing in");
+    }
   });
-});

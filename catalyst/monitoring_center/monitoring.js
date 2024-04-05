@@ -32,6 +32,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
   }
   linkColor.forEach((l) => l.addEventListener("click", colorLink));
 
+  const linkCard = document.querySelectorAll(".nav_card .nav_link         ");
+
+  function colorLink() {
+    if (linkCard) {
+      linkCard.forEach((l) => l.classList.remove("active"));
+      this.classList.add("active");
+    }
+  }
+  linkCard.forEach((l) => l.addEventListener("click", colorLink));
+
   // Your code to run since DOM is loaded and ready
 });
 
@@ -43,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("reports-content").style.display = "none";
   document.getElementById("stats-content").style.display = "none";
   document.getElementById("bins-content").style.display = "none";
+  document.getElementById("collector-content").style.display = "none";
   // Handle clicks on navigation links
   document
     .getElementById("welcome-link")
@@ -55,6 +66,13 @@ document.addEventListener("DOMContentLoaded", function () {
     showContent("map");
   });
 
+  // Handle clicks on navigation links
+  document
+    .getElementById("collectors-link")
+    .addEventListener("click", function () {
+      showContent("collector");
+    });
+
   document.getElementById("bins-link").addEventListener("click", function () {
     showContent("bins");
   });
@@ -63,6 +81,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("reports-link")
     .addEventListener("click", function () {
       showContent("reports");
+    });
+
+  document
+    .getElementById("collectors-card")
+    .addEventListener("click", function () {
+      showContent("collector");
     });
 
   document.getElementById("stats-link").addEventListener("click", function () {
@@ -77,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("reports-content").style.display = "none";
     document.getElementById("stats-content").style.display = "none";
     document.getElementById("bins-content").style.display = "none";
-
+    document.getElementById("collector-content").style.display = "none";
     // Show the selected content
     document.getElementById(contentId + "-content").style.display = "block";
   }

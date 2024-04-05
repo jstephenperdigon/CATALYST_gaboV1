@@ -4,7 +4,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
- :root,
+:root,
 [data-bs-theme="light"] {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -5413,9 +5413,7 @@ fieldset:disabled .btn {
 .modal-backdrop.fade {
   opacity: 0;
 }
-.modal-backdrop.show {
-  opacity: var(--bs-backdrop-opacity);
-}
+
 .modal-header {
   display: flex;
   flex-shrink: 0;

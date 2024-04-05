@@ -127,7 +127,7 @@ a {
   color: #fff;
 }
 
-.nav {
+.nav1 {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -192,7 +192,25 @@ a {
     left: 0;
     padding: 1rem 1rem 0 0;
   }
-  .show {
-    width: calc(var(--nav-width) + 156px);
-  }
+}
+
+/* Custom styles for navigation pills */
+.nav-pills .nav-link {
+  /* Add your custom styling here */
+  color: #333; /* Text color */
+  background-color: #f8f9fa; /* Background color */
+  border-color: #dee2e6; /* Border color */
+  border-radius: 20px;
+  border: 1px solid #11531e;
+}
+.nav-pills:hover .nav-link:hover {
+  color: white;
+  background-color: #11531e;
+  border-color: #333;
+}
+
+.nav-pills .nav-link.active {
+  /* Styles for active pill */
+  color: #fff; /* Text color */
+  background-color: #11531e; /* Background color */
 }

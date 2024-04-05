@@ -1,0 +1,46 @@
+https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app/
+-GarbageBinControlNumber
+    -GCN032
+        -FillLevel
+            - GB1FillLevel
+                - GB1: 10 (int)
+                - GB1Flag: false (string)
+                - GB1QuotaCount: 1 (int)
+                - GB1QuotaFlag: false (boolean)
+                - GB1Status: Not Connected (string)
+            - GB2FillLevel
+                - GB2: 10 (int)
+                - GB2Flag: false (string)
+                - GB2QuotaCount: 1 (int)
+                - GB2QuotaFlag: false (boolean)
+                - GB2Status: Not Connected (string)
+            - GB1FillLevel
+                - GB3: 10 (int)
+                - GB3Flag: false (string)
+                - GB3QuotaCount: 1 (int)
+                - GB3QuotaFlag: false (boolean)
+                - GB3Status: Not Connected (string)
+            - GB4FillLevel
+                - GB4: 10 (int)
+                - GB4Flag: false (string)
+                - GB4QuotaCount: 1 (int)
+                - GB4QuotaFlag: false (boolean)
+                - GB4Status: Not Connected (string)
+        -Location
+            -Latitude:(don't change the value)
+            -Longitude:(don't change the value)
+        -TotalQuota: (don't change the value)
+        -Users
+            -*userid (don't change the value)
+                -district:(don't change the value)
+                -barangay: (don't change the value)
+    -GCN031
+        -Location
+            -Latitude:
+            -Longitude:
+        -TotalQuota: 4
+        -Users
+            -*userid
+                -district:
+                -barangay: 
+etc....
