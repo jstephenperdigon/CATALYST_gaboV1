@@ -202,185 +202,221 @@ function moveMapToCoordinates(map, lat, lng) {
   map.setCenter(newCenter);
 }
 
-const centerMap = {
-  lat: 14.766794722678402,
-  lng: 121.03637727931373,
-};
+// Function to populate Available Collector dropdown based on selected district and barangay
+function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
+  const dropdownCollector = document.getElementById("dropdownCollector");
 
-const mapOptions = {
-  center: centerMap,
-  zoom: 13,
-  disableDefaultUI: true,
-  styles: [
-    {
-      featureType: "all",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          saturation: 36,
-        },
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 40,
-        },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          visibility: "on",
-        },
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 16,
-        },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "labels.icon",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "administrative",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 20,
-        },
-      ],
-    },
-    {
-      featureType: "administrative",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
-        },
-        {
-          weight: 1.2,
-        },
-      ],
-    },
-    {
-      featureType: "landscape",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 20,
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 21,
-        },
-      ],
-    },
-    {
-      featureType: "road.highway",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
-        },
-      ],
-    },
-    {
-      featureType: "road.highway",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 29,
-        },
-        {
-          weight: 0.2,
-        },
-      ],
-    },
-    {
-      featureType: "road.arterial",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 18,
-        },
-      ],
-    },
-    {
-      featureType: "road.local",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 16,
-        },
-      ],
-    },
-    {
-      featureType: "transit",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 19,
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
-        },
-      ],
-    },
-  ],
-};
+  // Clear existing options
+  dropdownCollector.innerHTML = '<option value="" selected disabled>Select Collector</option>';
+
+  // Query Firebase Database for collectors with matching assigned area
+  const collectorsRef = ref(db, "Accounts/Collectors");
+  onValue(collectorsRef, (snapshot) => {
+    const collectors = snapshot.val();
+
+    // Iterate over collectors to find matching ones
+    for (const userId in collectors) {
+      const collector = collectors[userId];
+      const assignedArea = collector.AssignedArea;
+
+      // Check if assigned district and barangay match selected values
+      if (assignedArea && assignedArea.district == selectedDistrict && assignedArea.barangay == selectedBarangay) {
+        const gcl = collector.GCL;
+
+        // Create new option element for the dropdown
+        const option = document.createElement("option");
+        option.value = gcl;
+        option.textContent = gcl;
+
+        // Append option to dropdown
+        dropdownCollector.appendChild(option);
+      }
+    }
+  });
+}
+
+
+
 // Export the initMap function
-function initMap() {
+export function initMap() {
+  const centerMap = {
+    lat: 14.766794722678402,
+    lng: 121.03637727931373,
+  };
+
+  const mapOptions = {
+    center: centerMap,
+    zoom: 13,
+    disableDefaultUI: true,
+    styles: [
+      {
+        featureType: "all",
+        elementType: "labels.text.fill",
+        stylers: [
+          {
+            saturation: 36,
+          },
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 40,
+          },
+        ],
+      },
+      {
+        featureType: "all",
+        elementType: "labels.text.stroke",
+        stylers: [
+          {
+            visibility: "on",
+          },
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 16,
+          },
+        ],
+      },
+      {
+        featureType: "all",
+        elementType: "labels.icon",
+        stylers: [
+          {
+            visibility: "off",
+          },
+        ],
+      },
+      {
+        featureType: "administrative",
+        elementType: "geometry.fill",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 20,
+          },
+        ],
+      },
+      {
+        featureType: "administrative",
+        elementType: "geometry.stroke",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 17,
+          },
+          {
+            weight: 1.2,
+          },
+        ],
+      },
+      {
+        featureType: "landscape",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 20,
+          },
+        ],
+      },
+      {
+        featureType: "poi",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 21,
+          },
+        ],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry.fill",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 17,
+          },
+        ],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry.stroke",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 29,
+          },
+          {
+            weight: 0.2,
+          },
+        ],
+      },
+      {
+        featureType: "road.arterial",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 18,
+          },
+        ],
+      },
+      {
+        featureType: "road.local",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 16,
+          },
+        ],
+      },
+      {
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 19,
+          },
+        ],
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 17,
+          },
+        ],
+      },
+    ],
+  };
+
   const map = new google.maps.Map(document.getElementById("map"), mapOptions);
   // Call function to display markers on the map
   displayMarkersOnMap(map);
@@ -392,14 +428,22 @@ function initMap() {
 
     showAllMarkers(map);
 
-    const newLat = 14.766794722678402;
-    const newLng = 121.03637727931373;
-    moveMapToCoordinates(map, newLat, newLng);
-
     const selectedMarkersDiv = document.getElementById("selectedMarkers");
     selectedMarkersDiv.innerHTML = "";
 
+    const additionalFieldsDiv = document.getElementById("additionalFields");
+    additionalFieldsDiv.style.display = "none";
+
+    const dateInputField = document.getElementById("dateInputField");
+    dateInputField.value = '';
+
+    const timeInputField = document.getElementById("timeInputField");
+    timeInputField.value = '';
+
+    const dropdownCollector = document.getElementById("dropdownCollector");
+    dropdownCollector.selectedIndex = 0;
   });
+
 
   let highLatitude;
   let highLongitude;
@@ -437,6 +481,15 @@ function initMap() {
     <p>Non-Biodegradable: ${gb4QuotaSum}</p>
     <p>${message}</p>
   `;
+
+    const additionalFieldsDiv = document.getElementById("additionalFields");
+
+    // Toggle visibility of additional fields based on the message
+    if (message === "Valid Requirement") {
+      additionalFieldsDiv.style.display = "block"; // Show the additional fields
+    } else {
+      additionalFieldsDiv.style.display = "none"; // Hide the additional fields
+    }
   }
 
   // Function to enable/disable select button based on barangay dropdown selection
@@ -458,6 +511,8 @@ function initMap() {
       selectButton.addEventListener("click", () => {
         const selectedDistrict = districtDropdown.value;
         const selectedBarangay = barangayDropdown.value;
+
+        populateCollectorDropdown(selectedDistrict, selectedBarangay);
 
         // Filter markers based on selected district and barangay
         const filteredMarkers = markers.filter((marker) => {
@@ -536,16 +591,6 @@ function initMap() {
           }
         }
 
-        // Display accumulated details in the desired format
-        console.log(`Selected GCN: ${selectedGCNs.join(", ")}`);
-        console.log(`District: ${selectedDistrict}`);
-        console.log(`Barangay: ${selectedBarangay}`);
-        console.log(`Total Quota: ${totalQuotaSum}`);
-        console.log(`Recyclables: ${gb1QuotaSum}`);
-        console.log(`Biodegradable: ${gb2QuotaSum}`);
-        console.log(`Special: ${gb3QuotaSum}`);
-        console.log(`Non-Biodegradable: ${gb4QuotaSum}`);
-
         // Update HTML display with the selected GCNs, district, barangay, total quota, and message
         updateSelectedMarkers(
           selectedGCNs,
@@ -569,10 +614,6 @@ function initMap() {
           const highestQuotaMarkerlongitude = highestQuotaMarker
             .getPosition()
             .lng();
-
-          console.log(`GCN with highest total quota: ${gcn[1]}`);
-          console.log(`Latitude: ${highestQuotaMarkerlatitude}`);
-          console.log(`Longitude: ${highestQuotaMarkerlongitude}`);
 
           // Assign values to highLatitude and highLongitude
           highLatitude = highestQuotaMarkerlatitude;

@@ -34,6 +34,19 @@
   </div>
 
   <div id="selectedMarkers"></div>
+  <div id="additionalFields" style="display: none;">
+    <label for="date">Select Date:</label>
+    <input type="date" id="dateInputField" name="date" required>
+    <label for="time">Select Time:</label>
+    <input type="time" id="timeInputField" name="time" required>
+    <label for="dropdown">Available Collector:</label>
+    <select id="dropdownCollector" name="dropdown">
+      <option value="" selected disabled>Select Collector</option>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </select>
+  </div>
 
   <div id="map"></div>
 
