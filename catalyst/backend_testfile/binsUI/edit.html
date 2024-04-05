@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Information</title>
+</head>
+
+<body>
+    <div class="form-section">
+        <form id="data"> <!-- Corrected the form ID to match the one used in JavaScript -->
+
+            <h3>GB1FillLevel</h3>
+            <label for="GB1">GB1:</label><br>
+            <input type="text" id="GB1" name="GB1"><br>
+            <label for="GB1Flag">Flag:</label><br>
+            <input type="text" id="GB1Flag" name="GB1Flag"><br>
+            <label for="GB1QuotaFlag">Quota Flag:</label><br>
+            <input type="text" id="GB1QuotaFlag" name="GB1QuotaFlag"><br>
+            <label for="GB1Status">Status:</label><br>
+            <input type="text" id="GB1Status" name="GB1Status"><br>
+
+            <h3>GB2FillLevel</h3>
+            <label for="GB2">GB2:</label><br>
+            <input type="text" id="GB2" name="GB2"><br>
+            <label for="GB2Flag">Flag:</label><br>
+            <input type="text" id="GB2Flag" name="GB2Flag"><br>
+            <label for="GB2QuotaFlag">Quota Flag:</label><br>
+            <input type="text" id="GB2QuotaFlag" name="GB2QuotaFlag"><br>
+            <label for="GB2Status">Status:</label><br>
+            <input type="text" id="GB2Status" name="GB2Status"><br>
+
+            <h3>GB3FillLevel</h3>
+            <label for="GB3">GB3:</label><br>
+            <input type="text" id="GB3" name="GB3"><br>
+            <label for="GB3Flag">Flag:</label><br>
+            <input type="text" id="GB3Flag" name="GB3Flag"><br>
+            <label for="GB3QuotaFlag">Quota Flag:</label><br>
+            <input type="text" id="GB3QuotaFlag" name="GB3QuotaFlag"><br>
+            <label for="GB3Status">Status:</label><br>
+            <input type="text" id="GB3Status" name="GB3Status"><br>
+
+            <h3>GB4FillLevel</h3>
+            <label for="GB4">GB4:</label><br>
+            <input type="text" id="GB4" name="GB4"><br>
+            <label for="GB4Flag">Flag:</label><br>
+            <input type="text" id="GB4Flag" name="GB4Flag"><br>
+            <label for="GB4QuotaFlag">Quota Flag:</label><br>
+            <input type="text" id="GB4QuotaFlag" name="GB4QuotaFlag"><br>
+            <label for="GB4Status">Status:</label><br>
+            <input type="text" id="GB4Status" name="GB4Status"><br>
+
+
+            <h2>Password</h2>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password"><br>
+            <!-- Changed input type to password for better security -->
+
+            <h2>Users</h2>
+            <label for="addressLine1">Address Line 1:</label><br>
+            <input type="text" id="addressLine1" name="addressLine1"><br>
+
+            <label for="addressLine2">Address Line 2:</label><br>
+            <input type="text" id="addressLine2" name="addressLine2"><br>
+
+            <label for="barangay">Barangay:</label><br>
+            <input type="text" id="barangay" name="barangay"><br>
+
+            <label for="city">City:</label><br>
+            <input type="text" id="city" name="city"><br>
+
+            <label for="district">District:</label><br>
+            <input type="text" id="district" name="district"><br>
+
+            <label for="email">Email:</label><br>
+            <input type="text" id="email" name="email"><br>
+
+            <label for="firstname">First Name:</label><br>
+            <input type="text" id="firstname" name="firstname"><br>
+
+            <label for="lastname">Last Name:</label><br>
+            <input type="text" id="lastname" name="lastname"><br>
+
+            <label for="mobilenumber">Mobile Number:</label><br>
+            <input type="text" id="mobilenumber" name="mobilenumber"><br>
+
+            <label for="province">Province:</label><br>
+            <input type="text" id="province" name="province"><br>
+
+            <br>
+            <button type="submit" id="update">Update</button>
+        </form>
+        <br>
+    </div>
+
+    <script type="module" src="edit.js"></script>
+    <!-- Import Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
+    
+    <!-- Your Firebase configuration and initialization -->
+    <script>
+        const firebaseConfig = {
+            // Your Firebase config here...
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    </script>
+    
+    <!-- Update the form submission event listener -->
+    <script>
+        // Function to handle form submission for updating data
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent default form submission behavior
+
+            // Collect data from form fields
+            const updatedData = {
+                // Collect data from your form fields here...
+            };
+
+            // Call your updateDataInFirebase function to update the data in Firebase with the updatedData object
+            updateDataInFirebase(updatedData);
+        }
+
+        // Attach event listener to form submission
+        document.getElementById('data').addEventListener('submit', handleSubmit);
+    </script>
+    
+    <!-- Retrieve data from Firebase and populate the form -->
+    <script>
+        // Function to retrieve data from Firebase and populate the form
+        function populateFormFromDatabase() {
+            // Reference to the location of your data in Firebase
+            const binRef = db.ref('GarbageBinControlNumber');
+
+            binRef.once('value', (snapshot) => {
+                const binData = snapshot.val();
+                populateFormWithData(binData);
+            });
+        }
+
+        // Call the function to populate the form when the page loads
+        window.onload = populateFormFromDatabase;
+    </script>
+
+
+</body>
+
+</html>
