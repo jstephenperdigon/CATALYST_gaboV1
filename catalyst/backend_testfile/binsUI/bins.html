@@ -31,6 +31,7 @@
             align-items: center;
             margin-bottom: 20px;
         }
+
         /* Table styles */
         table {
             width: 100%;
@@ -100,7 +101,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 500px;
         }
-
     </style>
 </head>
 
@@ -118,37 +118,24 @@
             <div id="autocompleteContainer"></div>
         </div>
 
-        <!-- Modal for Viewing -->
+        <!-- Modal HTML for Editing -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeEditButton">&times;</span>
+                <h2>Edit Data</h2>
+                <label for="editPasswordInput">New Password:</label>
+                <input type="password" id="editPasswordInput" placeholder="Enter new password">
+                <button id="saveEditPasswordButton">Save</button>
+            </div>
+        </div>
+
+        <!-- Modal HTML for Viewing -->
         <div id="viewModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <div id="viewModalContent"></div>
             </div>
         </div>
-
-
-        <!-- Modal for Editing -->
-        <div id="editModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="closeEditButton">&times;</span>
-                <h2>Edit Data</h2>
-                <label for="editActionInput">New Action:</label>
-                <input type="text" id="editActionInput" placeholder="Enter new action">
-                <button id="saveEditButton">Save</button>
-            </div>
-        </div>
-
-        <!-- Modal HTML -->
-        <div id="editModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="closeEditButton">&times;</span>
-                <h2>Edit Data</h2>
-                <label for="editPasswordInput">New Password:</label>
-                <input type="text" id="editPasswordInput" placeholder="Enter new password">
-                <button id="saveEditButton">Save</button>
-            </div>
-        </div>
-
 
         <div id="reportsTable">
             <!-- Table content will be populated dynamically -->
