@@ -206,33 +206,85 @@ function moveMapToCoordinates(map, lat, lng) {
 function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
   const dropdownCollector = document.getElementById("dropdownCollector");
 
-  // Clear existing options
-  dropdownCollector.innerHTML = '<option value="" selected disabled>Select Collector</option>';
+  // Create a map to store current options by collector identifier
+  const currentOptions = new Map();
 
   // Query Firebase Database for collectors with matching assigned area
   const collectorsRef = ref(db, "Accounts/Collectors");
   onValue(collectorsRef, (snapshot) => {
     const collectors = snapshot.val();
 
-    // Iterate over collectors to find matching ones
+    // Flag to track if the selected collector is still valid
+    let selectedCollectorValid = false;
+
+    // Iterate over collectors to find matching ones and update the dropdown
     for (const userId in collectors) {
       const collector = collectors[userId];
       const assignedArea = collector.AssignedArea;
+      const gcl = collector.GCL;
 
       // Check if assigned district and barangay match selected values
       if (assignedArea && assignedArea.district == selectedDistrict && assignedArea.barangay == selectedBarangay) {
-        const gcl = collector.GCL;
+        // Check if this GCL is already in the dropdown
+        if (!currentOptions.has(gcl)) {
+          // Create new option element for the dropdown
+          const option = document.createElement("option");
+          option.value = gcl;
+          option.textContent = gcl;
 
-        // Create new option element for the dropdown
-        const option = document.createElement("option");
-        option.value = gcl;
-        option.textContent = gcl;
+          // Append option to dropdown
+          dropdownCollector.appendChild(option);
 
-        // Append option to dropdown
-        dropdownCollector.appendChild(option);
+          // Store the option in the currentOptions map
+          currentOptions.set(gcl, option);
+        }
+
+        // Check if the currently selected collector is still valid
+        if (dropdownCollector.value === gcl) {
+          selectedCollectorValid = true;
+        }
+      } else {
+        // Remove the option if GCL is no longer a match
+        if (currentOptions.has(gcl)) {
+          const optionToRemove = currentOptions.get(gcl);
+          dropdownCollector.removeChild(optionToRemove);
+          currentOptions.delete(gcl);
+        }
+
+        // Check if the currently selected collector is no longer valid
+        if (dropdownCollector.value === gcl) {
+          // Reset the dropdown to its default state
+          dropdownCollector.value = ""; // Set to the default value
+          selectedCollectorValid = false;
+        }
       }
     }
+
+    // If the selected collector is no longer valid, reset the dropdown to its default state
+    if (!selectedCollectorValid) {
+      dropdownCollector.value = "";
+      deployBtn.disabled = true; // Set to the default value
+    }
   });
+}
+
+
+
+
+// Function to check if all required fields are filled
+function checkInputsAndEnableButton() {
+  const dateInputField = document.getElementById("dateInputField");
+  const timeInputField = document.getElementById("timeInputField");
+  const dropdownCollector = document.getElementById("dropdownCollector");
+  const deployBtn = document.getElementById("deployBtn");
+
+  // Check if all fields have valid input
+  const isDateValid = dateInputField.value !== '';
+  const isTimeValid = timeInputField.value !== '';
+  const isCollectorSelected = dropdownCollector.value !== '' && dropdownCollector.value !== 'Select Collector';
+
+  // Enable the deploy button only if all conditions are met
+  deployBtn.disabled = !(isDateValid && isTimeValid && isCollectorSelected);
 }
 
 
@@ -442,7 +494,15 @@ export function initMap() {
 
     const dropdownCollector = document.getElementById("dropdownCollector");
     dropdownCollector.selectedIndex = 0;
+
+    const deployBtn = document.getElementById("deployBtn");
+    deployBtn.disabled = true;
   });
+
+  // Event listeners to check inputs and enable/disable the Deploy button
+  document.getElementById("dateInputField").addEventListener("input", checkInputsAndEnableButton);
+  document.getElementById("timeInputField").addEventListener("input", checkInputsAndEnableButton);
+  document.getElementById("dropdownCollector").addEventListener("change", checkInputsAndEnableButton);
 
 
   let highLatitude;
@@ -464,7 +524,9 @@ export function initMap() {
     if (totalQuotaSum <= 44) {
       message = "Not enough to meet the requirements";
     } else if (totalQuotaSum >= 45 && totalQuotaSum <= 50) {
-      message = "Valid Requirement";
+
+      const additionalFieldsDiv = document.getElementById("additionalFields");
+      additionalFieldsDiv.style.display = "block";
       // Show the deploy button
     } else {
       message = "Too much, invalid requirement";
@@ -482,14 +544,6 @@ export function initMap() {
     <p>${message}</p>
   `;
 
-    const additionalFieldsDiv = document.getElementById("additionalFields");
-
-    // Toggle visibility of additional fields based on the message
-    if (message === "Valid Requirement") {
-      additionalFieldsDiv.style.display = "block"; // Show the additional fields
-    } else {
-      additionalFieldsDiv.style.display = "none"; // Hide the additional fields
-    }
   }
 
   // Function to enable/disable select button based on barangay dropdown selection
