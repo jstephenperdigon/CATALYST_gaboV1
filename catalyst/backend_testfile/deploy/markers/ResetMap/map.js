@@ -53,14 +53,18 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-            }</p>
-              <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-            }</p>
-              <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-            }</p>
-              <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-            }</p>
+              <p>Recyclables: ${
+                gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+              }</p>
+              <p>Biodegradable: ${
+                gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+              }</p>
+              <p>Special: ${
+                gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+              }</p>
+              <p>Non-Biodegradable: ${
+                gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+              }</p>
             </div>`
           );
         } else {
@@ -79,14 +83,18 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-              }</p>
-                        <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-              }</p>
-                        <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-              }</p>
-                        <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-              }</p>
+                        <p>Recyclables: ${
+                          gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+                        }</p>
+                        <p>Biodegradable: ${
+                          gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+                        }</p>
+                        <p>Special: ${
+                          gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+                        }</p>
+                        <p>Non-Biodegradable: ${
+                          gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+                        }</p>
                       </div>`,
           });
 
@@ -202,20 +210,22 @@ function moveMapToCoordinates(map, lat, lng) {
   map.setCenter(newCenter);
 }
 
-// Function to populate Available Collector dropdown based on selected district and barangay
 function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
   const dropdownCollector = document.getElementById("dropdownCollector");
 
-  // Create a map to store current options by collector identifier
-  const currentOptions = new Map();
+  // Clear existing options in the dropdown
+  dropdownCollector.innerHTML = "";
 
-  // Query Firebase Database for collectors with matching assigned area
+  // Create a default option
+  const defaultOption = document.createElement("option");
+  defaultOption.value = ""; // Set value to empty string
+  defaultOption.textContent = "Select Collector";
+  dropdownCollector.appendChild(defaultOption);
+
+  // Query Firebase Database for collectors with matching assigned area and listen for real-time updates
   const collectorsRef = ref(db, "Accounts/Collectors");
   onValue(collectorsRef, (snapshot) => {
     const collectors = snapshot.val();
-
-    // Flag to track if the selected collector is still valid
-    let selectedCollectorValid = false;
 
     // Iterate over collectors to find matching ones and update the dropdown
     for (const userId in collectors) {
@@ -224,52 +234,41 @@ function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
       const gcl = collector.GCL;
 
       // Check if assigned district and barangay match selected values
-      if (assignedArea && assignedArea.district == selectedDistrict && assignedArea.barangay == selectedBarangay) {
-        // Check if this GCL is already in the dropdown
-        if (!currentOptions.has(gcl)) {
-          // Create new option element for the dropdown
-          const option = document.createElement("option");
-          option.value = gcl;
-          option.textContent = gcl;
+      if (
+        assignedArea &&
+        assignedArea.district === selectedDistrict &&
+        assignedArea.barangay === selectedBarangay
+      ) {
+        // Create new option element for the dropdown
+        const option = document.createElement("option");
+        option.value = gcl;
+        option.textContent = gcl;
 
-          // Append option to dropdown
-          dropdownCollector.appendChild(option);
-
-          // Store the option in the currentOptions map
-          currentOptions.set(gcl, option);
-        }
-
-        // Check if the currently selected collector is still valid
-        if (dropdownCollector.value === gcl) {
-          selectedCollectorValid = true;
-        }
+        // Append option to dropdown
+        dropdownCollector.appendChild(option);
       } else {
-        // Remove the option if GCL is no longer a match
-        if (currentOptions.has(gcl)) {
-          const optionToRemove = currentOptions.get(gcl);
+        // If the assigned barangay does not match the selected barangay, remove the collector from the dropdown
+        const optionToRemove = dropdownCollector.querySelector(
+          `option[value="${gcl}"]`
+        );
+        if (optionToRemove) {
           dropdownCollector.removeChild(optionToRemove);
-          currentOptions.delete(gcl);
-        }
-
-        // Check if the currently selected collector is no longer valid
-        if (dropdownCollector.value === gcl) {
-          // Reset the dropdown to its default state
-          dropdownCollector.value = ""; // Set to the default value
-          selectedCollectorValid = false;
+          defaultOption.selected = true;
         }
       }
     }
 
-    // If the selected collector is no longer valid, reset the dropdown to its default state
-    if (!selectedCollectorValid) {
-      dropdownCollector.value = "";
-      deployBtn.disabled = true; // Set to the default value
+    // Disable "Select Collector" option
+    defaultOption.disabled = true;
+  });
+
+  // Add event listener to prevent default behavior when "Select Collector" is clicked
+  dropdownCollector.addEventListener("mousedown", function (event) {
+    if (event.target === defaultOption) {
+      event.preventDefault();
     }
   });
 }
-
-
-
 
 // Function to check if all required fields are filled
 function checkInputsAndEnableButton() {
@@ -279,15 +278,15 @@ function checkInputsAndEnableButton() {
   const deployBtn = document.getElementById("deployBtn");
 
   // Check if all fields have valid input
-  const isDateValid = dateInputField.value !== '';
-  const isTimeValid = timeInputField.value !== '';
-  const isCollectorSelected = dropdownCollector.value !== '' && dropdownCollector.value !== 'Select Collector';
+  const isDateValid = dateInputField.value !== "";
+  const isTimeValid = timeInputField.value !== "";
+  const isCollectorSelected =
+    dropdownCollector.value !== "" &&
+    dropdownCollector.value !== "Select Collector";
 
   // Enable the deploy button only if all conditions are met
   deployBtn.disabled = !(isDateValid && isTimeValid && isCollectorSelected);
 }
-
-
 
 // Export the initMap function
 export function initMap() {
@@ -487,10 +486,10 @@ export function initMap() {
     additionalFieldsDiv.style.display = "none";
 
     const dateInputField = document.getElementById("dateInputField");
-    dateInputField.value = '';
+    dateInputField.value = "";
 
     const timeInputField = document.getElementById("timeInputField");
-    timeInputField.value = '';
+    timeInputField.value = "";
 
     const dropdownCollector = document.getElementById("dropdownCollector");
     dropdownCollector.selectedIndex = 0;
@@ -500,10 +499,15 @@ export function initMap() {
   });
 
   // Event listeners to check inputs and enable/disable the Deploy button
-  document.getElementById("dateInputField").addEventListener("input", checkInputsAndEnableButton);
-  document.getElementById("timeInputField").addEventListener("input", checkInputsAndEnableButton);
-  document.getElementById("dropdownCollector").addEventListener("change", checkInputsAndEnableButton);
-
+  document
+    .getElementById("dateInputField")
+    .addEventListener("input", checkInputsAndEnableButton);
+  document
+    .getElementById("timeInputField")
+    .addEventListener("input", checkInputsAndEnableButton);
+  document
+    .getElementById("dropdownCollector")
+    .addEventListener("change", checkInputsAndEnableButton);
 
   let highLatitude;
   let highLongitude;
@@ -524,7 +528,6 @@ export function initMap() {
     if (totalQuotaSum <= 44) {
       message = "Not enough to meet the requirements";
     } else if (totalQuotaSum >= 45 && totalQuotaSum <= 50) {
-
       const additionalFieldsDiv = document.getElementById("additionalFields");
       additionalFieldsDiv.style.display = "block";
       // Show the deploy button
@@ -543,8 +546,80 @@ export function initMap() {
     <p>Non-Biodegradable: ${gb4QuotaSum}</p>
     <p>${message}</p>
   `;
-
   }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch HTML elements
+    const selectedMarkers = document.getElementById("selectedMarkers");
+    const dateInputField = document.getElementById("dateInputField");
+    const timeInputField = document.getElementById("timeInputField");
+    const dropdownCollector = document.getElementById("dropdownCollector");
+
+    // Add event listener to deploy button
+    const deployBtn = document.getElementById("deployBtn");
+    deployBtn.addEventListener("click", () => {
+      // Fetch outputs from HTML elements
+      const selectedGCNOutput =
+        selectedMarkers.querySelector("p:nth-child(1)").textContent;
+      const districtOutput =
+        selectedMarkers.querySelector("p:nth-child(2)").textContent;
+      const barangayOutput =
+        selectedMarkers.querySelector("p:nth-child(3)").textContent;
+      const totalQuotaOutput =
+        selectedMarkers.querySelector("p:nth-child(4)").textContent;
+      const recyclablesOutput =
+        selectedMarkers.querySelector("p:nth-child(5)").textContent;
+      const biodegradableOutput =
+        selectedMarkers.querySelector("p:nth-child(6)").textContent;
+      const specialOutput =
+        selectedMarkers.querySelector("p:nth-child(7)").textContent;
+      const nonBiodegradableOutput =
+        selectedMarkers.querySelector("p:nth-child(8)").textContent;
+
+      // Fetch additional values
+      const dateInputValue = dateInputField.value;
+      const timeInputValue = timeInputField.value;
+      const dropdownCollectorValue = dropdownCollector.value;
+
+      // Convert time to 12-hour format
+      const time = new Date("2000-01-01T" + timeInputValue + ":00");
+      const formattedTime = time.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+
+      // Display outputs in console.log
+      console.log(
+        "Selected GCN:",
+        selectedGCNOutput.replace("Selected GCN: ", "")
+      );
+      console.log("District:", districtOutput.replace("District: ", ""));
+      console.log("Barangay:", barangayOutput.replace("Barangay: ", ""));
+      console.log(
+        "Total Quota:",
+        totalQuotaOutput.replace("Total Quota: ", "")
+      );
+      console.log(
+        "Recyclables:",
+        recyclablesOutput.replace("Recyclables: ", "")
+      );
+      console.log(
+        "Biodegradable:",
+        biodegradableOutput.replace("Biodegradable: ", "")
+      );
+      console.log("Special:", specialOutput.replace("Special: ", ""));
+      console.log(
+        "Non-Biodegradable:",
+        nonBiodegradableOutput.replace("Non-Biodegradable: ", "")
+      );
+
+      // Display additional values
+      console.log("Date Input:", dateInputValue);
+      console.log("Time Input:", formattedTime);
+      console.log("Dropdown Collector Value:", dropdownCollectorValue);
+    });
+  });
 
   // Function to enable/disable select button based on barangay dropdown selection
   function toggleSelectButton() {
@@ -618,7 +693,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-            0
+              0
           );
 
           // Check if adding this marker will exceed the limit
