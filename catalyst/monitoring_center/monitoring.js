@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   }
   linkColor.forEach((l) => l.addEventListener("click", colorLink));
 
-  const linkCard = document.querySelectorAll(".nav_card .nav_link         ");
+  const linkCard = document.querySelectorAll(".nav_card  ");
 
   function colorLink() {
     if (linkCard) {

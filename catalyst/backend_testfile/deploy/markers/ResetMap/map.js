@@ -210,185 +210,264 @@ function moveMapToCoordinates(map, lat, lng) {
   map.setCenter(newCenter);
 }
 
-const centerMap = {
-  lat: 14.766794722678402,
-  lng: 121.03637727931373,
-};
+function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
+  const dropdownCollector = document.getElementById("dropdownCollector");
 
-const mapOptions = {
-  center: centerMap,
-  zoom: 13,
-  disableDefaultUI: true,
-  styles: [
-    {
-      featureType: "all",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          saturation: 36,
-        },
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 40,
-        },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          visibility: "on",
-        },
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 16,
-        },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "labels.icon",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "administrative",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 20,
-        },
-      ],
-    },
-    {
-      featureType: "administrative",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
-        },
-        {
-          weight: 1.2,
-        },
-      ],
-    },
-    {
-      featureType: "landscape",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 20,
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 21,
-        },
-      ],
-    },
-    {
-      featureType: "road.highway",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
-        },
-      ],
-    },
-    {
-      featureType: "road.highway",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 29,
-        },
-        {
-          weight: 0.2,
-        },
-      ],
-    },
-    {
-      featureType: "road.arterial",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 18,
-        },
-      ],
-    },
-    {
-      featureType: "road.local",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 16,
-        },
-      ],
-    },
-    {
-      featureType: "transit",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 19,
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#000000",
-        },
-        {
-          lightness: 17,
-        },
-      ],
-    },
-  ],
-};
+  // Clear existing options in the dropdown
+  dropdownCollector.innerHTML = "";
+
+  // Create a default option
+  const defaultOption = document.createElement("option");
+  defaultOption.value = ""; // Set value to empty string
+  defaultOption.textContent = "Select Collector";
+  dropdownCollector.appendChild(defaultOption);
+
+  // Query Firebase Database for collectors with matching assigned area and listen for real-time updates
+  const collectorsRef = ref(db, "Accounts/Collectors");
+  onValue(collectorsRef, (snapshot) => {
+    const collectors = snapshot.val();
+
+    // Iterate over collectors to find matching ones and update the dropdown
+    for (const userId in collectors) {
+      const collector = collectors[userId];
+      const assignedArea = collector.AssignedArea;
+      const gcl = collector.GCL;
+
+      // Check if assigned district and barangay match selected values
+      if (
+        assignedArea &&
+        assignedArea.district === selectedDistrict &&
+        assignedArea.barangay === selectedBarangay
+      ) {
+        // Create new option element for the dropdown
+        const option = document.createElement("option");
+        option.value = gcl;
+        option.textContent = gcl;
+
+        // Append option to dropdown
+        dropdownCollector.appendChild(option);
+      } else {
+        // If the assigned barangay does not match the selected barangay, remove the collector from the dropdown
+        const optionToRemove = dropdownCollector.querySelector(
+          `option[value="${gcl}"]`
+        );
+        if (optionToRemove) {
+          dropdownCollector.removeChild(optionToRemove);
+          defaultOption.selected = true;
+        }
+      }
+    }
+
+    // Disable "Select Collector" option
+    defaultOption.disabled = true;
+  });
+
+  // Add event listener to prevent default behavior when "Select Collector" is clicked
+  dropdownCollector.addEventListener("mousedown", function (event) {
+    if (event.target === defaultOption) {
+      event.preventDefault();
+    }
+  });
+}
+
+// Function to check if all required fields are filled
+function checkInputsAndEnableButton() {
+  const dateInputField = document.getElementById("dateInputField");
+  const timeInputField = document.getElementById("timeInputField");
+  const dropdownCollector = document.getElementById("dropdownCollector");
+  const deployBtn = document.getElementById("deployBtn");
+
+  // Check if all fields have valid input
+  const isDateValid = dateInputField.value !== "";
+  const isTimeValid = timeInputField.value !== "";
+  const isCollectorSelected =
+    dropdownCollector.value !== "" &&
+    dropdownCollector.value !== "Select Collector";
+
+  // Enable the deploy button only if all conditions are met
+  deployBtn.disabled = !(isDateValid && isTimeValid && isCollectorSelected);
+}
+
 // Export the initMap function
-function initMap() {
+export function initMap() {
+  const centerMap = {
+    lat: 14.766794722678402,
+    lng: 121.03637727931373,
+  };
+
+  const mapOptions = {
+    center: centerMap,
+    zoom: 13,
+    disableDefaultUI: true,
+    styles: [
+      {
+        featureType: "all",
+        elementType: "labels.text.fill",
+        stylers: [
+          {
+            saturation: 36,
+          },
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 40,
+          },
+        ],
+      },
+      {
+        featureType: "all",
+        elementType: "labels.text.stroke",
+        stylers: [
+          {
+            visibility: "on",
+          },
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 16,
+          },
+        ],
+      },
+      {
+        featureType: "all",
+        elementType: "labels.icon",
+        stylers: [
+          {
+            visibility: "off",
+          },
+        ],
+      },
+      {
+        featureType: "administrative",
+        elementType: "geometry.fill",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 20,
+          },
+        ],
+      },
+      {
+        featureType: "administrative",
+        elementType: "geometry.stroke",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 17,
+          },
+          {
+            weight: 1.2,
+          },
+        ],
+      },
+      {
+        featureType: "landscape",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 20,
+          },
+        ],
+      },
+      {
+        featureType: "poi",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 21,
+          },
+        ],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry.fill",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 17,
+          },
+        ],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry.stroke",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 29,
+          },
+          {
+            weight: 0.2,
+          },
+        ],
+      },
+      {
+        featureType: "road.arterial",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 18,
+          },
+        ],
+      },
+      {
+        featureType: "road.local",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 16,
+          },
+        ],
+      },
+      {
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 19,
+          },
+        ],
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [
+          {
+            color: "#000000",
+          },
+          {
+            lightness: 17,
+          },
+        ],
+      },
+    ],
+  };
+
   const map = new google.maps.Map(document.getElementById("map"), mapOptions);
   // Call function to display markers on the map
   displayMarkersOnMap(map);
@@ -400,15 +479,35 @@ function initMap() {
 
     showAllMarkers(map);
 
-    const newLat = 14.766794722678402;
-    const newLng = 121.03637727931373;
-    moveMapToCoordinates(map, newLat, newLng);
-
     const selectedMarkersDiv = document.getElementById("selectedMarkers");
     selectedMarkersDiv.innerHTML = "";
 
-    document.getElementById("deployButton").style.display = "none";
+    const additionalFieldsDiv = document.getElementById("additionalFields");
+    additionalFieldsDiv.style.display = "none";
+
+    const dateInputField = document.getElementById("dateInputField");
+    dateInputField.value = "";
+
+    const timeInputField = document.getElementById("timeInputField");
+    timeInputField.value = "";
+
+    const dropdownCollector = document.getElementById("dropdownCollector");
+    dropdownCollector.selectedIndex = 0;
+
+    const deployBtn = document.getElementById("deployBtn");
+    deployBtn.disabled = true;
   });
+
+  // Event listeners to check inputs and enable/disable the Deploy button
+  document
+    .getElementById("dateInputField")
+    .addEventListener("input", checkInputsAndEnableButton);
+  document
+    .getElementById("timeInputField")
+    .addEventListener("input", checkInputsAndEnableButton);
+  document
+    .getElementById("dropdownCollector")
+    .addEventListener("change", checkInputsAndEnableButton);
 
   let highLatitude;
   let highLongitude;
@@ -429,9 +528,9 @@ function initMap() {
     if (totalQuotaSum <= 44) {
       message = "Not enough to meet the requirements";
     } else if (totalQuotaSum >= 45 && totalQuotaSum <= 50) {
-      message = "Valid Requirement";
+      const additionalFieldsDiv = document.getElementById("additionalFields");
+      additionalFieldsDiv.style.display = "block";
       // Show the deploy button
-      document.getElementById("deployButton").style.display = "block";
     } else {
       message = "Too much, invalid requirement";
     }
@@ -448,6 +547,79 @@ function initMap() {
     <p>${message}</p>
   `;
   }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch HTML elements
+    const selectedMarkers = document.getElementById("selectedMarkers");
+    const dateInputField = document.getElementById("dateInputField");
+    const timeInputField = document.getElementById("timeInputField");
+    const dropdownCollector = document.getElementById("dropdownCollector");
+
+    // Add event listener to deploy button
+    const deployBtn = document.getElementById("deployBtn");
+    deployBtn.addEventListener("click", () => {
+      // Fetch outputs from HTML elements
+      const selectedGCNOutput =
+        selectedMarkers.querySelector("p:nth-child(1)").textContent;
+      const districtOutput =
+        selectedMarkers.querySelector("p:nth-child(2)").textContent;
+      const barangayOutput =
+        selectedMarkers.querySelector("p:nth-child(3)").textContent;
+      const totalQuotaOutput =
+        selectedMarkers.querySelector("p:nth-child(4)").textContent;
+      const recyclablesOutput =
+        selectedMarkers.querySelector("p:nth-child(5)").textContent;
+      const biodegradableOutput =
+        selectedMarkers.querySelector("p:nth-child(6)").textContent;
+      const specialOutput =
+        selectedMarkers.querySelector("p:nth-child(7)").textContent;
+      const nonBiodegradableOutput =
+        selectedMarkers.querySelector("p:nth-child(8)").textContent;
+
+      // Fetch additional values
+      const dateInputValue = dateInputField.value;
+      const timeInputValue = timeInputField.value;
+      const dropdownCollectorValue = dropdownCollector.value;
+
+      // Convert time to 12-hour format
+      const time = new Date("2000-01-01T" + timeInputValue + ":00");
+      const formattedTime = time.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+
+      // Display outputs in console.log
+      console.log(
+        "Selected GCN:",
+        selectedGCNOutput.replace("Selected GCN: ", "")
+      );
+      console.log("District:", districtOutput.replace("District: ", ""));
+      console.log("Barangay:", barangayOutput.replace("Barangay: ", ""));
+      console.log(
+        "Total Quota:",
+        totalQuotaOutput.replace("Total Quota: ", "")
+      );
+      console.log(
+        "Recyclables:",
+        recyclablesOutput.replace("Recyclables: ", "")
+      );
+      console.log(
+        "Biodegradable:",
+        biodegradableOutput.replace("Biodegradable: ", "")
+      );
+      console.log("Special:", specialOutput.replace("Special: ", ""));
+      console.log(
+        "Non-Biodegradable:",
+        nonBiodegradableOutput.replace("Non-Biodegradable: ", "")
+      );
+
+      // Display additional values
+      console.log("Date Input:", dateInputValue);
+      console.log("Time Input:", formattedTime);
+      console.log("Dropdown Collector Value:", dropdownCollectorValue);
+    });
+  });
 
   // Function to enable/disable select button based on barangay dropdown selection
   function toggleSelectButton() {
@@ -468,6 +640,8 @@ function initMap() {
       selectButton.addEventListener("click", () => {
         const selectedDistrict = districtDropdown.value;
         const selectedBarangay = barangayDropdown.value;
+
+        populateCollectorDropdown(selectedDistrict, selectedBarangay);
 
         // Filter markers based on selected district and barangay
         const filteredMarkers = markers.filter((marker) => {
@@ -546,16 +720,6 @@ function initMap() {
           }
         }
 
-        // Display accumulated details in the desired format
-        console.log(`Selected GCN: ${selectedGCNs.join(", ")}`);
-        console.log(`District: ${selectedDistrict}`);
-        console.log(`Barangay: ${selectedBarangay}`);
-        console.log(`Total Quota: ${totalQuotaSum}`);
-        console.log(`Recyclables: ${gb1QuotaSum}`);
-        console.log(`Biodegradable: ${gb2QuotaSum}`);
-        console.log(`Special: ${gb3QuotaSum}`);
-        console.log(`Non-Biodegradable: ${gb4QuotaSum}`);
-
         // Update HTML display with the selected GCNs, district, barangay, total quota, and message
         updateSelectedMarkers(
           selectedGCNs,
@@ -579,10 +743,6 @@ function initMap() {
           const highestQuotaMarkerlongitude = highestQuotaMarker
             .getPosition()
             .lng();
-
-          console.log(`GCN with highest total quota: ${gcn[1]}`);
-          console.log(`Latitude: ${highestQuotaMarkerlatitude}`);
-          console.log(`Longitude: ${highestQuotaMarkerlongitude}`);
 
           // Assign values to highLatitude and highLongitude
           highLatitude = highestQuotaMarkerlatitude;
