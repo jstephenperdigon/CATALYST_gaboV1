@@ -23,8 +23,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let currentBinsData = null; // Define a global variable to store the bins data
-
 function generateReportHTML(bins) {
   // Check if district and barangay are present and not undefined
   let district = 'District not specified';
@@ -57,32 +55,13 @@ function generateReportHTML(bins) {
       <td class="actionButtons">
         <button class="viewButton" data-gcn="${bins.GCN}">View</button>
         <button class="editButton" data-gcn="${bins.GCN}">Edit</button>  
-        <button class="deleteButton" data-gcn="${bins.GCN}">Reset</button>
+        <button class="resetButton" data-gcn="${bins.GCN}">Reset</button>
       </td>
     </tr>
   `;
 
   // Return HTML
   return html;
-}
-
-// Function to save the edited data to Firebase database
-function saveEdit() {
-  const GCN = this.getAttribute("data-gcn");
-  const newAction = document.getElementById("editActionInput").value;
-
-  // Save the edited action to the Firebase database
-  update(ref(db, `GarbageBinControlNumber/${GCN}`), { action: newAction })
-    .then(() => {
-      console.log("Action updated successfully");
-      // Close the modal
-      document.getElementById("editModal").style.display = "none";
-      // Refresh the table
-      updateTable();
-    })
-    .catch((error) => {
-      console.error("Error updating action:", error);
-    });
 }
 
 // Add event listener to each "Edit" button
@@ -95,7 +74,6 @@ document.querySelectorAll(".editButton").forEach((button) => {
     });
   });
 });
-
 
 // Add event listener to handle edit button click
 function handleEdit(GCN) {
@@ -132,6 +110,36 @@ function addEventListenerToSearchResults() {
     });
   });
 }
+
+// Add event listener to each "Reset" button
+document.querySelectorAll(".resetButton").forEach((button) => {
+  button.addEventListener("click", function () {
+    const GCN = this.getAttribute("data-gcn");
+    resetData(GCN); // Call the function to reset data passing GCN as an argument
+    resetList(); // Call the resetList function after resetting the data
+  });
+});
+
+// Add event listener to handle reset button clicks using event delegation
+document.addEventListener("click", function(event) {
+  // Check if the clicked element is a reset button
+  if (event.target.classList.contains("resetButton")) {
+    // Get the GCN value from the data-gcn attribute of the clicked button
+    const GCN = event.target.getAttribute("data-gcn");
+
+    // Call the reset function with the GCN value
+    resetDataForGCN(GCN)
+      .then((message) => {
+        // Reset successful
+        alert(message);
+        updateTable(); // Optionally, update the table
+      })
+      .catch((error) => {
+        // Reset failed
+        alert(error.message);
+      });
+  }
+});
 
 /// Modify the searchReports function to use the filterReports function and add event listeners to search results
 window.searchReports = function() {
@@ -218,7 +226,6 @@ function displayReportsTable(reportsArray) {
   }
 }
 
-
 // Function to reset the list
 window.resetList = function () {
   // Clear the search input
@@ -242,8 +249,6 @@ document.querySelectorAll(".close").forEach((closeButton) => {
 
 // Gawing global variable
 let currentGCN = null;
-
-// Display modal function
 function displayModal(GCN, isEditModal = false) {
   currentGCN = GCN; // Set the GCN to a global variable
 
@@ -293,66 +298,61 @@ function displayModal(GCN, isEditModal = false) {
           }
         }
 
-// Add password field if it's an edit modal
-let passwordField = '';
-if (isEditModal) {
-  // Get the password data from Firebase
-  const passwordRef = ref(db, `GarbageBinControlNumber/${GCN}/Password`);
-  get(passwordRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const password = snapshot.val();
-        // Populate the password field
-        passwordField = `
-          <h4>Password</h4>
-          <label>Password</label>
-          <input type="text" id="password" class="input-field" value="${password}">
-        `;
-      } else {
-        // If the password doesn't exist, display an empty field
-        passwordField = `
-          <h4>Password</h4>
-          <label>Password</label>
-          <input type="text" id="password" class="input-field" value="">
-        `;
-      }
-      // Add the password field to the modal content
-      modalContent.innerHTML = `
-        <h4>FILL LEVEL DETAILS:</h4>
-        ${fillLevelDetails}
-        ${passwordField}
-        <h4>Users:</h4>
-        <!-- User details -->
-      `;
-      // Rest of the modal display logic...
-    })
-    .catch((error) => {
-      console.error("Error retrieving password:", error);
-      // Display an error message if there's an issue fetching the password
-      passwordField = `
-        <h4>Password</h4>
-        <p>Error retrieving password data.</p>
-      `;
-      // Add the password field to the modal content
-      modalContent.innerHTML = `
-        <h4>FILL LEVEL DETAILS:</h4>
-        ${fillLevelDetails}
-        ${passwordField}
-        <h4>Users:</h4>
-        <!-- User details -->
-      `;
-      // Rest of the modal display logic...
-    });
-} else {
-  // If it's not an edit modal, do not display the password field
-  passwordField = '';
-}
+        // Add password field if it's an edit modal
+        let passwordField = '';
+        if (isEditModal) {
+          // Get the password data from Firebase
+          const passwordRef = ref(db, `GarbageBinControlNumber/${GCN}/Password`);
+          get(passwordRef)
+            .then((snapshot) => {
+              // Check if the password exists
+              const password = snapshot.exists() ? snapshot.val() : '';
 
+              // Populate the password field
+              passwordField = `
+                <h4>Password</h4>
+                <label>Password</label>
+                <input type="text" id="password" class="input-field" value="${password}">
+              `;
+
+              // Add the password field to the modal content
+              modalContent.innerHTML = `
+                <h4>FILL LEVEL DETAILS:</h4>
+                ${fillLevelDetails}
+                ${passwordField}
+                <h4>Users:</h4>
+                <!-- User details -->
+              `;
+
+              // Rest of the modal display logic...
+            })
+            .catch((error) => {
+              console.error("Error retrieving password:", error);
+              // Display an error message if there's an issue fetching the password
+              passwordField = `
+                <h4>Password</h4>
+                <p>Error retrieving password data.</p>
+              `;
+              // Add the password field to the modal content
+              modalContent.innerHTML = `
+                <h4>FILL LEVEL DETAILS:</h4>
+                ${fillLevelDetails}
+                ${passwordField}
+                <h4>Users:</h4>
+                <!-- User details -->
+              `;
+              // Rest of the modal display logic...
+            });
+        } else {
+          // If it's not an edit modal, do not display the password field
+          passwordField = '';
+        }
 
         // Fetch user data for the specified GCN
         const usersRef = ref(db, 'GarbageBinControlNumber/' + GCN + '/Users');
         get(usersRef)
           .then((userSnapshot) => {
+            // Check if user data exists
             if (userSnapshot.exists()) {
               const usersData = userSnapshot.val();
               let usersHTML = ''; // Initialize variable to store user details HTML
@@ -417,11 +417,14 @@ if (isEditModal) {
                 ${isEditModal ? '<button id="saveBtn" class="btn">Save</button>' : ''}
               `;
               
-              // If it's an edit modal, add event listener to the save button
+              // Inside displayModal function
               if (isEditModal) {
                 const saveBtn = document.getElementById("saveBtn");
-                saveBtn.addEventListener("click", saveChanges);
+                if (saveBtn) {
+                  saveBtn.addEventListener("click", saveChanges);
+                }
               }
+
             } else {
               // If no users found, display a message
               modalContent.innerHTML = "<p>No users found.</p>";
@@ -461,10 +464,7 @@ if (isEditModal) {
     }
   };
 }
-
-
-// Update function for saving changes
-function saveChanges() {
+async function saveChanges() {
   console.log("Save button clicked"); // Debugging statement
 
   const GCN = currentGCN; // Get the current GCN
@@ -481,11 +481,11 @@ function saveChanges() {
     const fillLevelData = {}; // Initialize fill level data object
 
     // Get the fill level value and other details from the modal
-    fillLevelData[`GB${i}`] = document.getElementById(`GB${i}`).value;
-    fillLevelData[`GB${i}Flag`] = document.getElementById(`GB${i}Flag`).value || '';
-    fillLevelData[`GB${i}QuotaCount`] = document.getElementById(`GB${i}QuotaCount`).value || '';
-    fillLevelData[`GB${i}QuotaFlag`] = document.getElementById(`GB${i}QuotaFlag`).value || '';
-    fillLevelData[`GB${i}Status`] = document.getElementById(`GB${i}Status`).value || '';
+    fillLevelData[`GB${i}`] = document.getElementById(`${fillLevelKey}`).value;
+    fillLevelData[`GB${i}Flag`] = document.getElementById(`${fillLevelKey}Flag`).value || '';
+    fillLevelData[`GB${i}QuotaCount`] = document.getElementById(`${fillLevelKey}QuotaCount`).value || '';
+    fillLevelData[`GB${i}QuotaFlag`] = document.getElementById(`${fillLevelKey}QuotaFlag`).value || '';
+    fillLevelData[`GB${i}Status`] = document.getElementById(`${fillLevelKey}Status`).value || '';
 
     // Add the fill level data to the updatedData object
     updatedData[`FillLevel/${fillLevelKey}`] = fillLevelData;
@@ -493,42 +493,45 @@ function saveChanges() {
 
   // Get the password value from the modal
   const password = document.getElementById("password").value;
-  console.log("Password:", password); // Debugging statement
+
   // Add the password to the updatedData object
   updatedData["Password"] = password;
 
-  // Get all user input fields
-  const users = document.querySelectorAll(".input-field");
+  console.log("Fill Level Data:", updatedData); // Debugging statement
 
-  // Loop through each user input field
-  users.forEach((input) => {
-    const fieldId = input.id.split("_"); // Split the input field ID
-    const userId = fieldId[fieldId.length - 1]; // Get the user ID
-    const fieldType = fieldId.slice(0, -1).join('_'); // Get the field type
-
-    if (!updatedData[`Users/${userId}`]) {
-      updatedData[`Users/${userId}`] = {}; // Initialize user data object
-    }
-
-    const value = input.value.trim(); // Trim the value to remove leading and trailing spaces
-
-    // Check if value is not empty before adding to updatedData
-    if (value !== "") {
-      updatedData[`Users/${userId}`][fieldType] = value; // Set the user data
-    }
+  // Get user data from the modal
+  const usersData = {};
+  const userElements = document.querySelectorAll("[id^=addressLine1]");
+  userElements.forEach(element => {
+    const userId = element.id.split("_")[1];
+    usersData[userId] = {
+      addressLine1: document.getElementById(`addressLine1_${userId}`).value,
+      barangay: document.getElementById(`barangay_${userId}`).value,
+      city: document.getElementById(`city_${userId}`).value,
+      country: document.getElementById(`country_${userId}`).value,
+      district: document.getElementById(`district_${userId}`).value,
+      email: document.getElementById(`email_${userId}`).value,
+      firstName: document.getElementById(`firstName_${userId}`).value,
+      lastName: document.getElementById(`lastName_${userId}`).value,
+      mobileNumber: document.getElementById(`mobileNumber_${userId}`).value,
+      province: document.getElementById(`province_${userId}`).value
+    };
   });
+
+  // Add the user data to the updatedData object
+  updatedData["Users"] = usersData;
 
   console.log("Updated Data:", updatedData); // Debugging statement
 
-  // Update the data in the database
-  update(gcnRef, updatedData)
-    .then(() => {
-      alert("Changes saved successfully!"); // Show success message
-    })
-    .catch((error) => {
-      console.error("Error updating data:", error);
-      alert("Failed to save changes. Please try again."); // Show error message
-    });
+  try {
+    // Update the data in the database
+    await update(gcnRef, updatedData);
+    console.log("Changes saved successfully!"); // Debugging statement
+    alert("Changes saved successfully!"); // Show success message
+  } catch (error) {
+    console.error("Error updating data:", error);
+    alert("Failed to save changes. Please try again."); // Show error message
+  }
 }
 
 
