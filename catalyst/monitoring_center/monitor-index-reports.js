@@ -114,8 +114,7 @@ function handleMoveToArchive(ticketNumber) {
     .catch((error) => {
       console.error("Error handling move to archive action:", error);
     });
-}
-// Function to generate HTML for each collector
+} // Function to generate HTML for each collector
 function generateCollectorHTML(collector) {
   return `
         <tr>
@@ -127,13 +126,58 @@ function generateCollectorHTML(collector) {
           <td>${collector.AssignedArea.barangay}</td>
           <td>${collector.UserInfo.suffix}</td>
           <td>
-            <button type="button" class="btn btn-primary shadow-none" onclick="viewCollector('${collector.UID}')">View</button>
-            <button type="button" class="btn btn-warning shadow-none" onclick="editCollector('${collector.UID}')">Edit</button>
-            <button type="button" class="btn btn-danger shadow-none" onclick="deleteCollector('${collector.UID}')">Delete</button>
+              <button type="button" class="btn btn-primary shadow-none view-collector" data-uid="${collector.UID}"  data-mdb-toggle="modal"
+              data-mdb-target="#viewCollectorModal">
+                <i class="fas fa-eye"></i> 
+              </button>
+            <button type="button" class="btn btn-warning shadow-none" onclick="editCollector('${collector.UID}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-danger shadow-none" onclick="deleteCollector('${collector.UID}')">
+              <i class="fas fa-trash-alt"></i>
+            </button>
           </td>
         </tr>
       `;
 }
+
+// Attach event listener to "View" buttons
+document.addEventListener("click", function (event) {
+  if (event.target.classList.contains("view-collector")) {
+    let collectorUID = event.target.getAttribute("data-uid");
+    viewCollectorModal(collectorUID);
+  }
+});
+
+// Function to handle click event on "View" button and populate modal
+function viewCollectorModal(collectorUID) {
+  // Fetch collector details using AJAX or any other method
+  // For demonstration purposes, let's assume we have a function called getCollectorDetailsById
+  let collectorDetails = getCollectorDetailsById(collectorUID);
+
+  // Update modal content with collector details
+  let modalBody = $("#viewCollectorDetails");
+  modalBody.html(`
+    <p><strong>First Name:</strong> ${collectorDetails.UserInfo.firstName}</p>
+    <p><strong>Last Name:</strong> ${collectorDetails.UserInfo.lastName}</p>
+    <p><strong>Email:</strong> ${collectorDetails.UserInfo.email}</p>
+    <p><strong>Mobile Number:</strong> ${collectorDetails.UserInfo.mobileNumber}</p>
+    <p><strong>District:</strong> ${collectorDetails.AssignedArea.district}</p>
+    <p><strong>Barangay:</strong> ${collectorDetails.AssignedArea.barangay}</p>
+    <p><strong>Suffix:</strong> ${collectorDetails.UserInfo.suffix}</p>
+    <!-- Add more details as needed -->
+  `);
+
+  // Show the modal
+  $("#viewCollectorModal").modal("show");
+}
+// Attach event listener to "View" buttons
+document.addEventListener("click", function (event) {
+  if (event.target.classList.contains("view-collector")) {
+    let collectorUID = event.target.getAttribute("data-uid");
+    viewCollectorModal(collectorUID);
+  }
+});
 
 // Function to filter reports based on search input and selected sorting column
 function filterReports(searchInput, sortKey) {
