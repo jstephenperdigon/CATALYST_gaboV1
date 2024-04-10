@@ -24,6 +24,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+      .dropdown-toggle::after {
+        display: none;
+      }
+
+      /* Make dropdown menu items floating */
+      .dropdown-menu {
+        position: absolute;
+        right: 0;
+        left: auto;
+      }
       .content {
         margin-left: 70px;
         /* Same as the width of the sidebar */
@@ -170,8 +180,73 @@
               aria-label="Search"
             />
           </div>
+
+          <!-- Notification Button -->
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="notificationDropdown"
+              data-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="fas fa-bell"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
+              <!-- Notification 1 -->
+              <li>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-auto">
+                        <!-- Icon -->
+                        <i class="fas fa-envelope"></i>
+                      </div>
+                      <div class="col">
+                        <!-- Title -->
+                        <h5 class="card-title">New Message</h5>
+                        <!-- Message -->
+                        <p class="card-text">
+                          You have a new message from John Doe.
+                        </p>
+                        <!-- Time -->
+                        <p class="card-text">
+                          <small class="text-muted">1 minute ago</small>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <!-- Notification 2 -->
+              <li>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-auto">
+                        <!-- Icon -->
+                        <i class="fas fa-bell"></i>
+                      </div>
+                      <div class="col">
+                        <!-- Title -->
+                        <h5 class="card-title">New Notification</h5>
+                        <!-- Message -->
+                        <p class="card-text">You have a new notification.</p>
+                        <!-- Time -->
+                        <p class="card-text">
+                          <small class="text-muted">2 hours ago</small>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <!-- Add more notifications as needed -->
+            </ul>
+          </div>
         </div>
       </nav>
+
       <!-- <div class="container-fluid">
         <div class="row justify-content-start">
           <div class="col-md-12 text-center">
@@ -831,8 +906,9 @@
     <script type="module" src="monitor-index-reports.js"></script>
     <script type="module" src="monitoring-gb-account-count.js"></script>
     <script type="text/javascript" src="../src/jquery.min.js"></script>
-    <script type="text/javascript" src="../src/popper.min.js"></script>
     <script type="text/javascript" src="../src/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../src/popper.min.js"></script>
+
     <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
