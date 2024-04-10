@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Monitoring</title>
-    <link rel="stylesheet" href="../src/mdb.min.css" />
-    <link rel="stylesheet" href="../src/bootstrap.min.css" />
+    <link rel="stylesheet" href="src/mdb.min.css" />
+    <link rel="stylesheet" href="src/bootstrap.min.css" />
     <link rel="stylesheet" href="styling/style.css" />
     <link rel="stylesheet" href="styling/pulse.css" />
     <link
@@ -63,48 +63,11 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
 
-      /* Style for horizontal icons */
-      .horizontal-icons {
-        border: none;
-        display: flex;
-        justify-content: center;
-        /* Align icons horizontally */
-      }
-
-      hr.vertical {
-        border: 0;
-        margin: 0;
-        border-left: 1px solid grey;
-        height: 200px;
-        float: left;
-      }
-      /* Add margin between the icons */
-      .horizontal-icons button {
-        margin-right: 10px;
-        border: none;
-      }
-
-      /* Increase the size of the icons */
-      .actions-column button i {
-        color: white;
-        font-size: 20px;
-        /* Adjust the size as needed */
-      }
-
-      #reportsTable {
-        text-align: center;
-        margin-top: 20px;
-        margin-left: 20px;
-        margin-right: 20px;
-        width: 80vw;
-        /* Adjust the width to fit the screen */
-      }
-
       /* Modal styles */
       .modal {
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 1050;
         left: 0;
         top: 0;
         width: 100%;
@@ -184,132 +147,6 @@
     </div>
     <!-- NAVBAR -->
 
-    <div
-      class="modal fade"
-      id="addCollectorModal"
-      tabindex="-1"
-      aria-labelledby="addCollectorModalLabel"
-      aria-hidden="true"
-      style="z-index: 1"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="addCollectorModalLabel">
-              <i class="fas fa-user-plus"></i> ADD COLLECTOR
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-mdb-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <form id="viewForm" class="needs-validation">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input
-                        type="text"
-                        id="fName"
-                        class="form-control"
-                        required
-                      />
-                      <label class="form-label" for="fName">First Name</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input type="text" id="mName" class="form-control" />
-                      <label class="form-label" for="mName">Middle Name</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input
-                        type="text"
-                        id="lName"
-                        class="form-control"
-                        required
-                      />
-                      <label class="form-label" for="lName">Last Name</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input type="text" id="sFix" class="form-control" />
-                      <label class="form-label" for="sFix">Suffix</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-outline mb-3" data-mdb-input-init>
-                  <input
-                    type="email"
-                    id="eMail"
-                    class="form-control"
-                    required
-                  />
-                  <label class="form-label" for="eMail">Email Address</label>
-                </div>
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon1">+63</span>
-                  <input
-                    type="text"
-                    id="mobileNumber"
-                    class="form-control"
-                    placeholder="Mobile Number"
-                    aria-label="Mobile Number"
-                    aria-describedby="basic-addon1"
-                  />
-                </div>
-                <div class="row mb-5">
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <label for="districtDropdown"></label>
-                      <select
-                        class="form-select"
-                        id="districtDropdown"
-                        required
-                      >
-                        <option selected disabled>Select District</option>
-                        <option value="1">District 1</option>
-                        <option value="2">District 2</option>
-                        <option value="3">District 3</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <label for="barangayDropdown"></label>
-                      <select
-                        class="form-select"
-                        id="barangayDropdown"
-                        required
-                      >
-                        <option selected disabled>Select Barangay</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 d-flex">
-                  <input
-                    type="submit"
-                    id="submitBtn"
-                    class="btn btn-primary shadow-none"
-                    value="Submit"
-                    data-mdb-ripple-init
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Container Main start -->
     <div class="content" id="welcome-content">
       <!--<div class="container-fluid bg-dark p-3 rounded-4">
@@ -402,51 +239,61 @@
                 role="tabpanel"
                 aria-labelledby="pills-home-tab"
               >
-                <div class="container">
-                  <div class="row">
-                    <div class="col-3">
-                      <a
-                        href="#"
-                        class="nav-card nav-link"
-                        id="collectors-card"
-                      >
-                        <div class="card shadow-none p-1 border-0">
-                          <div class="card-body">
-                            <div class="float-end mt-3">
-                              <i class="fas fa-users fa-2x text-success"></i>
+                <div class="card shadow-none border-0">
+                  <div class="card-body">
+                    <div class="container">
+                      <div class="row justify-content-between">
+                        <div class="col-md-3">
+                          <a
+                            href="#"
+                            class="nav-card nav-link"
+                            id="collectors-card"
+                          >
+                            <div class="card shadow-none p-1 border-0">
+                              <div class="card-body">
+                                <div class="float-end mt-3">
+                                  <i
+                                    class="fas fa-users fa-2x text-success"
+                                  ></i>
+                                </div>
+                                <p class="fs-5">Collectors</p>
+                                <p class="fs-1 text-success" id="uidCount"></p>
+                              </div>
                             </div>
-                            <p class="fs-5">Collectors</p>
-                            <p class="fs-1 text-success" id="uidCount"></p>
-                          </div>
+                          </a>
                         </div>
-                      </a>
-                    </div>
-                    <div class="col-3">
-                      <a
-                        href="collectorsCrud/CollectorList.html"
-                        class="card-link"
-                      >
-                        <div
-                          class="card shadow-none p-1 border-0 clickable-box"
-                        >
-                          <div class="card-body">
-                            <div class="float-end mt-3">
-                              <i class="fas fa-users fa-2x text-success"></i>
+                        <div class="col-md-3">
+                          <a
+                            href="collectorsCrud/CollectorList.html"
+                            class="card-link"
+                          >
+                            <div
+                              class="card shadow-none p-1 border-0 clickable-box"
+                            >
+                              <div class="card-body">
+                                <div class="float-end mt-3">
+                                  <i
+                                    class="fas fa-users fa-2x text-success"
+                                  ></i>
+                                </div>
+                                <p class="fs-5">Household Users</p>
+                                <p class="fs-1 text-success">50</p>
+                              </div>
                             </div>
-                            <p class="fs-5">Household Users</p>
-                            <p class="fs-1 text-success">50</p>
-                          </div>
+                          </a>
                         </div>
-                      </a>
-                    </div>
-                    <div class="col-3">
-                      <div class="card shadow-none p-1 border-0">
-                        <div class="card-body">
-                          <div class="float-end mt-3">
-                            <i class="fas fa-trash-can fa-2x text-success"></i>
+                        <div class="col-md-3">
+                          <div class="card shadow-none p-1 border-0">
+                            <div class="card-body">
+                              <div class="float-end mt-3">
+                                <i
+                                  class="fas fa-trash-can fa-2x text-success"
+                                ></i>
+                              </div>
+                              <p class="fs-5">Smart Garbage Bins</p>
+                              <p class="fs-1 text-success" id="gbCount"></p>
+                            </div>
                           </div>
-                          <p class="fs-5">Smart Garbage Bins</p>
-                          <p class="fs-1 text-success" id="gbCount"></p>
                         </div>
                       </div>
                     </div>
@@ -521,27 +368,50 @@
     </div>
 
     <div class="content" id="reports-content">
-      <div class="container">
-        <label for="searchInput">Search:</label>
-        <input type="text" id="searchInput" oninput="searchReports()" />
-        <label for="sortDropdown">Sort By: </label>
-        <select id="sortDropdown">
-          <option value="ticketNumber">Ticket #</option>
-          <option value="GCN">GCN</option>
-          <option value="Name">Name</option>
-          <option value="email">Email</option>
-          <option value="mobileNumber">Mobile Number(+63)</option>
-          <option value="Issue">Issue</option>
-          <option value="Description">Description</option>
-          <option value="district">District</option>
-          <option value="barangay">Barangay</option>
-          <option value="TimeSent">Time Sent</option>
-          <option value="DateSent">Date Sent</option>
-          <option value="addressLine1">Address Line 1</option>
-          <option value="addressLine2">Address Line 2</option>
-        </select>
+      <div class="container mt-5">
+        <p class="fs-2 fw-bold">Tickets</p>
       </div>
-      <div id="reportsTable"></div>
+      <div class="container mb-5">
+        <div class="row justify-content-end">
+          <div class="col-md-3">
+            <div class="input-group">
+              <div class="form-outline" data-mdb-input-init>
+                <input type="search" id="searchInput" class="form-control" />
+                <label class="form-label" for="searchInput">Search</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="sortDropdown"
+                  >Filter By:
+                </label>
+              </div>
+              <select
+                class="custom-select form-control form-outline"
+                id="sortDropdown"
+              >
+                <option selected disabled>Select an option</option>
+                <option value="ticketNumber">Ticket #</option>
+                <option value="GCN">GCN</option>
+                <option value="Issue">Issue</option>
+                <option value="district">District</option>
+                <option value="barangay">Barangay</option>
+                <option value="TimeSent">Time Sent</option>
+                <option value="DateSent">Date Sent</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div id="reportsTable"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="content" id="bins-content">
       <h1>Bins</h1>
@@ -565,60 +435,52 @@
         </div>
       </div>
       <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="card shadow-none border-0">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <!-- Search bar -->
-                    <div class="input-group mb-3">
-                      <input
-                        type="text"
-                        id="searchInput"
-                        class="form-control"
-                        placeholder="Search..."
-                        aria-label="Search"
-                        aria-describedby="searchButton"
-                      />
-                      <button
-                        class="btn btn-outline-secondary"
-                        type="button"
-                        id="searchButton"
-                      >
-                        Search
-                      </button>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <!-- Dropdown for search category -->
-                    <div class="input-group mb-3">
-                      <select
-                        class="form-select"
-                        id="searchCategory"
-                        aria-label="Search Category"
-                      >
-                        <option selected>Choose category...</option>
-                        <option value="firstName">First Name</option>
-                        <option value="lastName">Last Name</option>
-                        <option value="email">Email</option>
-                        <option value="mobileNumber">Mobile Number</option>
-                        <option value="district">District</option>
-                        <option value="barangay">Barangay</option>
-                        <option value="suffix">Suffix</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div class="row justify-content-end">
+          <div class="col-md-3">
+            <!-- Search bar -->
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                id="searchInput"
+                class="form-control"
+                placeholder="Search..."
+                aria-label="Search"
+                aria-describedby="searchButton"
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="searchButton"
+              >
+                Search
+              </button>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <!-- Dropdown for search category -->
+            <div class="input-group mb-3">
+              <select
+                class="form-select"
+                id="searchCategory"
+                aria-label="Search Category"
+              >
+                <option selected>Select category...</option>
+                <option value="firstName">First Name</option>
+                <option value="lastName">Last Name</option>
+                <option value="email">Email</option>
+                <option value="mobileNumber">Mobile Number</option>
+                <option value="district">District</option>
+                <option value="barangay">Barangay</option>
+                <option value="suffix">Suffix</option>
+              </select>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="container mt-5">
+      <div class="container mt-3">
         <table id="collectorsTable" class="table table-striped">
-          <thead>
+          <thead class="table-dark">
             <tr>
               <th>First Name</th>
               <th>Last Name</th>
@@ -782,14 +644,168 @@
       </div>
     </div>
 
-    <script type="text/javascript" src="../src/popper.min.js"></script>
+    <div
+      class="modal fade"
+      id="modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Report Details</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="modalContent">
+            <!-- Modal content will be dynamically generated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="addCollectorModal"
+      tabindex="-1"
+      aria-labelledby="addCollectorModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCollectorModalLabel">
+              <i class="fas fa-user-plus"></i> ADD COLLECTOR
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-mdb-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <form id="viewForm" class="needs-validation">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input
+                        type="text"
+                        id="fName"
+                        class="form-control"
+                        required
+                      />
+                      <label class="form-label" for="fName">First Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input type="text" id="mName" class="form-control" />
+                      <label class="form-label" for="mName">Middle Name</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input
+                        type="text"
+                        id="lName"
+                        class="form-control"
+                        required
+                      />
+                      <label class="form-label" for="lName">Last Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input type="text" id="sFix" class="form-control" />
+                      <label class="form-label" for="sFix">Suffix</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-outline mb-3" data-mdb-input-init>
+                  <input
+                    type="email"
+                    id="eMail"
+                    class="form-control"
+                    required
+                  />
+                  <label class="form-label" for="eMail">Email Address</label>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon1">+63</span>
+                  <input
+                    type="text"
+                    id="mobileNumber"
+                    class="form-control"
+                    placeholder="Mobile Number"
+                    aria-label="Mobile Number"
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+                <div class="row mb-5">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <label for="districtDropdown"></label>
+                      <select
+                        class="form-select"
+                        id="districtDropdown"
+                        required
+                      >
+                        <option selected disabled>Select District</option>
+                        <option value="1">District 1</option>
+                        <option value="2">District 2</option>
+                        <option value="3">District 3</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-outline" data-mdb-input-init>
+                      <label for="barangayDropdown"></label>
+                      <select
+                        class="form-select"
+                        id="barangayDropdown"
+                        required
+                      >
+                        <option selected disabled>Select Barangay</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 d-flex">
+                  <input
+                    type="submit"
+                    id="submitBtn"
+                    class="btn btn-primary shadow-none"
+                    value="Submit"
+                    data-mdb-ripple-init
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="dougnut.js"></script>
+    <script type="text/javascript" src="monitoring.js"></script>
+    <script type="module" src="monitor-index-function.js"></script>
+    <script type="module" src="monitor-index-reports.js"></script>
+    <script type="module" src="monitoring-gb-account-count.js"></script>
     <script type="text/javascript" src="../src/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/popper.min.js"></script>
     <script type="text/javascript" src="../src/bootstrap.min.js"></script>
     <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
     ></script>
-
     <script>
       // No need for import statement for MDB UI Kit
       // Initialization for MDB UI Kit
@@ -799,11 +815,36 @@
         mdb.Ripple.init();
       });
     </script>
-    <script type="text/javascript" src="dougnut.js"></script>
-    <script type="text/javascript" src="monitoring.js"></script>
-    <script type="module" src="monitor-index-function.js"></script>
-    <script type="module" src="monitor-index-reports.js"></script>
-    <script type="module" src="monitoring-gb-account-count.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+      // Check if accountId exists in session storage
+      document.addEventListener("DOMContentLoaded", function () {
+        const accountId = sessionStorage.getItem("uid");
+        if (!accountId) {
+          // If accountId doesn't exist, redirect to index.html
+          window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
+        }
+      });
+
+      // Logout functionality (similar to login.js)
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if logout link exists
+        const logoutLink = document.getElementById("logout");
+        if (logoutLink) {
+          // Add click event listener to logout link
+          logoutLink.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default link behavior
+
+            // Remove accountId from session storage
+            sessionStorage.removeItem("uid");
+
+            // Redirect to index page
+            window.location.href =
+              "RevisedMonitoringCenter/monitor-indexSI.html";
+          });
+        }
+      });
+    </script>
     <script>
       var lineChart;
 
@@ -907,32 +948,4 @@
       updateLineChart("today");
     </script>
   </body>
-  <script>
-    // Check if accountId exists in session storage
-    document.addEventListener("DOMContentLoaded", function () {
-      const accountId = sessionStorage.getItem("uid");
-      if (!accountId) {
-        // If accountId doesn't exist, redirect to index.html
-        window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
-      }
-    });
-
-    // Logout functionality (similar to login.js)
-    document.addEventListener("DOMContentLoaded", function () {
-      // Check if logout link exists
-      const logoutLink = document.getElementById("logout");
-      if (logoutLink) {
-        // Add click event listener to logout link
-        logoutLink.addEventListener("click", function (event) {
-          event.preventDefault(); // Prevent default link behavior
-
-          // Remove accountId from session storage
-          sessionStorage.removeItem("uid");
-
-          // Redirect to index page
-          window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
-        });
-      }
-    });
-  </script>
 </html>

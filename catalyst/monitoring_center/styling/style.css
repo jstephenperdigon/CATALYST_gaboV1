@@ -72,7 +72,7 @@ a {
   justify-content: space-between;
   padding: 0 1rem;
   background-color: var(--white-color);
-  z-index: var(--z-fixed);
+  z-index: -1;
   transition: 0.5s;
 }
 .header_toggle {
@@ -91,7 +91,7 @@ a {
   padding: 0.5rem 1rem 0 0;
   /* ... your existing styles ... */
   transition: width 0.75s;
-  z-index: var(--z-fixed);
+  z-index: 1;
 }
 
 .l-navbar:hover {

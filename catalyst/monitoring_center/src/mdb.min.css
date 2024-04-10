@@ -4973,13 +4973,12 @@ fieldset:disabled .btn {
   outline: 0;
 }
 .modal-backdrop {
-  --mdb-backdrop-zindex: 1050;
   --mdb-backdrop-bg: #000;
   --mdb-backdrop-opacity: 0.5;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: var(--mdb-backdrop-zindex);
+
   width: 100vw;
   height: 100vh;
   background-color: var(--mdb-backdrop-bg);

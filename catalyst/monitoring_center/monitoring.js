@@ -32,16 +32,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   }
   linkColor.forEach((l) => l.addEventListener("click", colorLink));
 
-  const linkCard = document.querySelectorAll(".nav_card  ");
-
-  function colorLink() {
-    if (linkCard) {
-      linkCard.forEach((l) => l.classList.remove("active"));
-      this.classList.add("active");
-    }
-  }
-  linkCard.forEach((l) => l.addEventListener("click", colorLink));
-
   // Your code to run since DOM is loaded and ready
 });
 
