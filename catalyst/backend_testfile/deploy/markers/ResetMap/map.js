@@ -1,4 +1,4 @@
-import { db, ref, onValue, set } from "./firebaseConfig.js"; // Import Firebase database utilities
+import { db, ref, onValue, set, get, child, update } from "./firebaseConfig.js"; // Import Firebase database utilities
 
 // Define an array to store all markers
 let markers = [];
@@ -53,14 +53,18 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-            }</p>
-              <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-            }</p>
-              <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-            }</p>
-              <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-            }</p>
+              <p>Recyclables: ${
+                gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+              }</p>
+              <p>Biodegradable: ${
+                gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+              }</p>
+              <p>Special: ${
+                gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+              }</p>
+              <p>Non-Biodegradable: ${
+                gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+              }</p>
             </div>`
           );
         } else {
@@ -79,14 +83,18 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-              }</p>
-                        <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-              }</p>
-                        <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-              }</p>
-                        <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-              }</p>
+                        <p>Recyclables: ${
+                          gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+                        }</p>
+                        <p>Biodegradable: ${
+                          gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+                        }</p>
+                        <p>Special: ${
+                          gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+                        }</p>
+                        <p>Non-Biodegradable: ${
+                          gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+                        }</p>
                       </div>`,
           });
 
@@ -279,7 +287,6 @@ function checkInputsAndEnableButton() {
   // Enable the deploy button only if all conditions are met
   deployBtn.disabled = !(isDateValid && isTimeValid && isCollectorSelected);
 }
-
 document.addEventListener("DOMContentLoaded", function () {
   // Fetch HTML elements
   const selectedMarkers = document.getElementById("selectedMarkers");
@@ -291,14 +298,56 @@ document.addEventListener("DOMContentLoaded", function () {
   const deployBtn = document.getElementById("deployBtn");
   deployBtn.addEventListener("click", () => {
     // Fetch outputs from HTML elements
-    const selectedGCNOutput = selectedMarkers.querySelector("p:nth-child(1)").textContent;
-    const districtOutput = selectedMarkers.querySelector("p:nth-child(2)").textContent;
-    const barangayOutput = selectedMarkers.querySelector("p:nth-child(3)").textContent;
-    const totalQuotaOutput = selectedMarkers.querySelector("p:nth-child(4)").textContent;
-    const recyclablesOutput = selectedMarkers.querySelector("p:nth-child(5)").textContent;
-    const biodegradableOutput = selectedMarkers.querySelector("p:nth-child(6)").textContent;
-    const specialOutput = selectedMarkers.querySelector("p:nth-child(7)").textContent;
-    const nonBiodegradableOutput = selectedMarkers.querySelector("p:nth-child(8)").textContent;
+    const selectedGCNOutput =
+      selectedMarkers.querySelector("p:nth-child(1)").textContent;
+
+    // Split the selected GCNs into an array
+    const selectedGCNs = selectedGCNOutput
+      .replace("Selected GCN: ", "")
+      .split(", ");
+
+    // Function to update GCN nodes in the database
+    async function updateGCNNode(gcn) {
+      // Reference to the GCN node in the database
+      const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}`);
+
+      // Check if the GCN node exists
+      const snapshot = await get(child(gcnRef, "collectionFlag"));
+      if (!snapshot.exists()) {
+        // If the node does not exist, set collectionFlag to "true"
+        update(gcnRef, { collectionFlag: "true" })
+          .then(() => {
+            console.log(`collectionFlag added to GCN ${gcn}.`);
+          })
+          .catch((error) => {
+            console.error(`Error adding collectionFlag to GCN ${gcn}:`, error);
+          });
+      } else {
+        // If the node exists, do nothing
+        console.log(`collectionFlag already exists for GCN ${gcn}.`);
+      }
+    }
+
+    // Iterate through each selected GCN and update its node in the database
+    selectedGCNs.forEach((gcn) => {
+      updateGCNNode(gcn);
+    });
+
+    // Fetch other outputs from HTML elements
+    const districtOutput =
+      selectedMarkers.querySelector("p:nth-child(2)").textContent;
+    const barangayOutput =
+      selectedMarkers.querySelector("p:nth-child(3)").textContent;
+    const totalQuotaOutput =
+      selectedMarkers.querySelector("p:nth-child(4)").textContent;
+    const recyclablesOutput =
+      selectedMarkers.querySelector("p:nth-child(5)").textContent;
+    const biodegradableOutput =
+      selectedMarkers.querySelector("p:nth-child(6)").textContent;
+    const specialOutput =
+      selectedMarkers.querySelector("p:nth-child(7)").textContent;
+    const nonBiodegradableOutput =
+      selectedMarkers.querySelector("p:nth-child(8)").textContent;
 
     // Fetch additional values
     const dateInputValue = dateInputField.value;
@@ -313,9 +362,33 @@ document.addEventListener("DOMContentLoaded", function () {
       hour12: true,
     });
 
+    // Function to format date as MMDDYYYY
+    function formatDate(date) {
+      const [year, month, day] = date.split("-");
+      return `${month}${day}${year}`;
+    }
+
+    // Add the formatDateMMddYYYY function to your code
+    function formatDateMMddYYYY(date) {
+      const [year, month, day] = date.split("-");
+      return `${month}-${day}-${year}`;
+    }
+
+    // Function to generate random alphanumeric characters
+    function generateRandomChars(length) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
     // Generate UID
     const randomChars = generateRandomChars(4); // Generate 4 random characters
-    const uid = `${dropdownCollectorValue}${formatDate(dateInputValue)}${randomChars}`;
+    const uid = `${dropdownCollectorValue}${formatDate(
+      dateInputValue
+    )}${randomChars}`;
 
     // Prepare deployment data object
     const deploymentData = {
@@ -326,38 +399,81 @@ document.addEventListener("DOMContentLoaded", function () {
       Recyclables: recyclablesOutput.replace("Recyclables: ", ""),
       Biodegradable: biodegradableOutput.replace("Biodegradable: ", ""),
       Special: specialOutput.replace("Special: ", ""),
-      NonBiodegradable: nonBiodegradableOutput.replace("Non-Biodegradable: ", ""),
-      DateInput: dateInputValue,
+      NonBiodegradable: nonBiodegradableOutput.replace(
+        "Non-Biodegradable: ",
+        ""
+      ),
+      DateInput: formatDateMMddYYYY(dateInputValue),
       TimeInput: formattedTime,
-      SelectedGCL: dropdownCollectorValue
+      SelectedGCL: dropdownCollectorValue,
     };
 
     // Store deployment data in Firebase under DeploymentHistory with UID
     const deploymentRef = ref(db, `DeploymentHistory/${uid}`);
     set(deploymentRef, deploymentData)
       .then(() => {
-        console.log("Deployment data successfully stored in the database under UID:", uid);
+        console.log(
+          "Deployment data successfully stored in the database under UID:",
+          uid
+        );
       })
       .catch((error) => {
         console.error("Error storing deployment data:", error);
       });
+
+    // Prepare deployment data object
+    const AssignedSchedule = {
+      SelectedGCN: selectedGCNOutput.replace("Selected GCN: ", ""),
+      District: districtOutput.replace("District: ", ""),
+      Barangay: barangayOutput.replace("Barangay: ", ""),
+      TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
+      DateInput: formatDateMMddYYYY(dateInputValue),
+      TimeInput: formattedTime,
+      SelectedGCL: dropdownCollectorValue,
+    };
+
+    // Reference to the collectors node
+    const collectorsRef = ref(db, `Accounts/Collectors`);
+
+    // Retrieve all collectors
+    get(collectorsRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          snapshot.forEach((childSnapshot) => {
+            const collectorData = childSnapshot.val();
+            if (collectorData.GCL === dropdownCollectorValue) {
+              const collectorUID = childSnapshot.key;
+
+              // Reference to the collector's AssignedSchedule
+              const assignedScheduleRef = ref(
+                db,
+                `Accounts/Collectors/${collectorUID}/AssignedSchedule/${uid}`
+              );
+
+              // Set the deployment data under AssignedSchedule for the collector
+              set(assignedScheduleRef, AssignedSchedule)
+                .then(() => {
+                  console.log(
+                    "Deployment data successfully stored in the AssignedSchedule node under collector UID:",
+                    collectorUID
+                  );
+                })
+                .catch((error) => {
+                  console.error(
+                    "Error storing deployment data in AssignedSchedule:",
+                    error
+                  );
+                });
+            }
+          });
+        } else {
+          console.error("No collectors found in the database.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving collectors:", error);
+      });
   });
-
-  // Function to format date as MMDDYYYY
-  function formatDate(date) {
-    const [year, month, day] = date.split("-");
-    return `${month}${day}${year}`;
-  }
-
-  // Function to generate random alphanumeric characters
-  function generateRandomChars(length) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let result = "";
-    for (let i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  }
 });
 
 // Export the initMap function
@@ -620,9 +736,6 @@ export function initMap() {
   `;
   }
 
-
-
-
   // Function to enable/disable select button based on barangay dropdown selection
   function toggleSelectButton() {
     const districtDropdown = document.getElementById("district");
@@ -695,7 +808,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-            0
+              0
           );
 
           // Check if adding this marker will exceed the limit

@@ -6,6 +6,9 @@ import {
   onValue,
   off,
   set,
+  get,
+  child,
+  update,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
@@ -24,4 +27,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-export { app, db, ref, onValue, off, set };
+export { app, db, ref, onValue, off, set, get, child, update };
