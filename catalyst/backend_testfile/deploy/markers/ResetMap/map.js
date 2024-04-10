@@ -1,4 +1,4 @@
-import { db, ref, onValue } from "./firebaseConfig.js"; // Import Firebase database utilities
+import { db, ref, onValue, set } from "./firebaseConfig.js"; // Import Firebase database utilities
 
 // Define an array to store all markers
 let markers = [];
@@ -53,18 +53,14 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${
-                gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-              }</p>
-              <p>Biodegradable: ${
-                gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-              }</p>
-              <p>Special: ${
-                gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-              }</p>
-              <p>Non-Biodegradable: ${
-                gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-              }</p>
+              <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+            }</p>
+              <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+            }</p>
+              <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+            }</p>
+              <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+            }</p>
             </div>`
           );
         } else {
@@ -83,18 +79,14 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${
-                          gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-                        }</p>
-                        <p>Biodegradable: ${
-                          gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-                        }</p>
-                        <p>Special: ${
-                          gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-                        }</p>
-                        <p>Non-Biodegradable: ${
-                          gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-                        }</p>
+                        <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+              }</p>
+                        <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+              }</p>
+                        <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+              }</p>
+                        <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+              }</p>
                       </div>`,
           });
 
@@ -136,7 +128,7 @@ function toggleBarangayDropdown() {
 
   // Define the barangay options based on the selected district
   const barangayOptions = {
-    1: ["1", "3", "5", "168", "176", "177"],
+    1: ["1", "3", "5", , "82", "168", "176", "177"],
     2: ["2", "7", "9"],
     3: ["4", "6", "8"],
   };
@@ -287,6 +279,86 @@ function checkInputsAndEnableButton() {
   // Enable the deploy button only if all conditions are met
   deployBtn.disabled = !(isDateValid && isTimeValid && isCollectorSelected);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Fetch HTML elements
+  const selectedMarkers = document.getElementById("selectedMarkers");
+  const dateInputField = document.getElementById("dateInputField");
+  const timeInputField = document.getElementById("timeInputField");
+  const dropdownCollector = document.getElementById("dropdownCollector");
+
+  // Add event listener to deploy button
+  const deployBtn = document.getElementById("deployBtn");
+  deployBtn.addEventListener("click", () => {
+    // Fetch outputs from HTML elements
+    const selectedGCNOutput = selectedMarkers.querySelector("p:nth-child(1)").textContent;
+    const districtOutput = selectedMarkers.querySelector("p:nth-child(2)").textContent;
+    const barangayOutput = selectedMarkers.querySelector("p:nth-child(3)").textContent;
+    const totalQuotaOutput = selectedMarkers.querySelector("p:nth-child(4)").textContent;
+    const recyclablesOutput = selectedMarkers.querySelector("p:nth-child(5)").textContent;
+    const biodegradableOutput = selectedMarkers.querySelector("p:nth-child(6)").textContent;
+    const specialOutput = selectedMarkers.querySelector("p:nth-child(7)").textContent;
+    const nonBiodegradableOutput = selectedMarkers.querySelector("p:nth-child(8)").textContent;
+
+    // Fetch additional values
+    const dateInputValue = dateInputField.value;
+    const timeInputValue = timeInputField.value;
+    const dropdownCollectorValue = dropdownCollector.value;
+
+    // Convert time to 12-hour format
+    const time = new Date("2000-01-01T" + timeInputValue + ":00");
+    const formattedTime = time.toLocaleString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+
+    // Generate UID
+    const randomChars = generateRandomChars(4); // Generate 4 random characters
+    const uid = `${dropdownCollectorValue}${formatDate(dateInputValue)}${randomChars}`;
+
+    // Prepare deployment data object
+    const deploymentData = {
+      SelectedGCN: selectedGCNOutput.replace("Selected GCN: ", ""),
+      District: districtOutput.replace("District: ", ""),
+      Barangay: barangayOutput.replace("Barangay: ", ""),
+      TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
+      Recyclables: recyclablesOutput.replace("Recyclables: ", ""),
+      Biodegradable: biodegradableOutput.replace("Biodegradable: ", ""),
+      Special: specialOutput.replace("Special: ", ""),
+      NonBiodegradable: nonBiodegradableOutput.replace("Non-Biodegradable: ", ""),
+      DateInput: dateInputValue,
+      TimeInput: formattedTime,
+      SelectedGCL: dropdownCollectorValue
+    };
+
+    // Store deployment data in Firebase under DeploymentHistory with UID
+    const deploymentRef = ref(db, `DeploymentHistory/${uid}`);
+    set(deploymentRef, deploymentData)
+      .then(() => {
+        console.log("Deployment data successfully stored in the database under UID:", uid);
+      })
+      .catch((error) => {
+        console.error("Error storing deployment data:", error);
+      });
+  });
+
+  // Function to format date as MMDDYYYY
+  function formatDate(date) {
+    const [year, month, day] = date.split("-");
+    return `${month}${day}${year}`;
+  }
+
+  // Function to generate random alphanumeric characters
+  function generateRandomChars(length) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+});
 
 // Export the initMap function
 export function initMap() {
@@ -548,78 +620,8 @@ export function initMap() {
   `;
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    // Fetch HTML elements
-    const selectedMarkers = document.getElementById("selectedMarkers");
-    const dateInputField = document.getElementById("dateInputField");
-    const timeInputField = document.getElementById("timeInputField");
-    const dropdownCollector = document.getElementById("dropdownCollector");
 
-    // Add event listener to deploy button
-    const deployBtn = document.getElementById("deployBtn");
-    deployBtn.addEventListener("click", () => {
-      // Fetch outputs from HTML elements
-      const selectedGCNOutput =
-        selectedMarkers.querySelector("p:nth-child(1)").textContent;
-      const districtOutput =
-        selectedMarkers.querySelector("p:nth-child(2)").textContent;
-      const barangayOutput =
-        selectedMarkers.querySelector("p:nth-child(3)").textContent;
-      const totalQuotaOutput =
-        selectedMarkers.querySelector("p:nth-child(4)").textContent;
-      const recyclablesOutput =
-        selectedMarkers.querySelector("p:nth-child(5)").textContent;
-      const biodegradableOutput =
-        selectedMarkers.querySelector("p:nth-child(6)").textContent;
-      const specialOutput =
-        selectedMarkers.querySelector("p:nth-child(7)").textContent;
-      const nonBiodegradableOutput =
-        selectedMarkers.querySelector("p:nth-child(8)").textContent;
 
-      // Fetch additional values
-      const dateInputValue = dateInputField.value;
-      const timeInputValue = timeInputField.value;
-      const dropdownCollectorValue = dropdownCollector.value;
-
-      // Convert time to 12-hour format
-      const time = new Date("2000-01-01T" + timeInputValue + ":00");
-      const formattedTime = time.toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      });
-
-      // Display outputs in console.log
-      console.log(
-        "Selected GCN:",
-        selectedGCNOutput.replace("Selected GCN: ", "")
-      );
-      console.log("District:", districtOutput.replace("District: ", ""));
-      console.log("Barangay:", barangayOutput.replace("Barangay: ", ""));
-      console.log(
-        "Total Quota:",
-        totalQuotaOutput.replace("Total Quota: ", "")
-      );
-      console.log(
-        "Recyclables:",
-        recyclablesOutput.replace("Recyclables: ", "")
-      );
-      console.log(
-        "Biodegradable:",
-        biodegradableOutput.replace("Biodegradable: ", "")
-      );
-      console.log("Special:", specialOutput.replace("Special: ", ""));
-      console.log(
-        "Non-Biodegradable:",
-        nonBiodegradableOutput.replace("Non-Biodegradable: ", "")
-      );
-
-      // Display additional values
-      console.log("Date Input:", dateInputValue);
-      console.log("Time Input:", formattedTime);
-      console.log("Dropdown Collector Value:", dropdownCollectorValue);
-    });
-  });
 
   // Function to enable/disable select button based on barangay dropdown selection
   function toggleSelectButton() {
@@ -693,7 +695,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-              0
+            0
           );
 
           // Check if adding this marker will exceed the limit
