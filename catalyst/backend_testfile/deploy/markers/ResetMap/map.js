@@ -8,6 +8,7 @@ function displayMarkersOnMap(map) {
   // Reference to the GarbageBinControlNumber node in the database
   const garbageBinRef = ref(db, "GarbageBinControlNumber");
   const defaultIcon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+  const greenIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"; // Green marker icon
 
   // Fetch data from Firebase in real-time
   onValue(garbageBinRef, (snapshot) => {
@@ -36,6 +37,9 @@ function displayMarkersOnMap(map) {
       const districtNumeric = district ? district.match(/\d+/) : null;
       const barangayNumeric = barangay ? barangay.match(/\d+/) : null;
 
+      // Check if the GCN has collectionFlag set to "true"
+      const collectionFlag = data[gcnKey]?.collectionFlag === "true";
+
       // Condition to display markers only if totalQuota is 4 or above
       if (location && totalQuota >= 4) {
         const latitude = location.Latitude;
@@ -44,9 +48,13 @@ function displayMarkersOnMap(map) {
         // Check if marker already exists
         let existingMarker = markers.find((marker) => marker.title === gcnKey);
 
+        // Determine the marker icon based on collectionFlag
+        const icon = collectionFlag ? greenIcon : defaultIcon;
+
         if (existingMarker) {
-          // If marker exists, update its position and info window content
+          // If marker exists, update its position, icon, and info window content
           existingMarker.setPosition({ lat: latitude, lng: longitude });
+          existingMarker.setIcon(icon); // Set the icon
           existingMarker.infoWindow.setContent(
             `<div>
               <h2>GCN: ${gcnKey}</h2>
@@ -73,7 +81,7 @@ function displayMarkersOnMap(map) {
             position: { lat: latitude, lng: longitude },
             map: map,
             title: gcnKey,
-            icon: defaultIcon,
+            icon: icon, // Set the icon
           });
 
           // Create info window for the new marker
@@ -124,8 +132,31 @@ function displayMarkersOnMap(map) {
 function showAllMarkers(map) {
   markers.forEach((marker) => {
     const defaultIcon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-    marker.setIcon(defaultIcon);
-    marker.setMap(map);
+    const greenIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"; // Green marker icon
+
+    // Get the GCN key associated with the marker
+    const gcnKey = marker.title;
+
+    // Reference to the corresponding node in the database
+    const garbageBinRef = ref(db, `GarbageBinControlNumber/${gcnKey}`);
+
+    // Fetch data from Firebase for the specific GCN
+    get(garbageBinRef)
+      .then((snapshot) => {
+        const data = snapshot.val();
+
+        // Check if collectionFlag is "true" for the GCN
+        const collectionFlag = data?.collectionFlag === "true";
+
+        // Determine the marker icon based on collectionFlag
+        const icon = collectionFlag ? greenIcon : defaultIcon;
+
+        marker.setIcon(icon);
+        marker.setMap(map);
+      })
+      .catch((error) => {
+        console.error("Error getting document:", error);
+      });
   });
 }
 
@@ -136,7 +167,7 @@ function toggleBarangayDropdown() {
 
   // Define the barangay options based on the selected district
   const barangayOptions = {
-    1: ["1", "3", "5", , "82", "168", "176", "177"],
+    1: ["1", "3", "5", , "82", "168", "176", "177", "165"],
     2: ["2", "7", "9"],
     3: ["4", "6", "8"],
   };
@@ -444,25 +475,45 @@ document.addEventListener("DOMContentLoaded", function () {
             if (collectorData.GCL === dropdownCollectorValue) {
               const collectorUID = childSnapshot.key;
 
-              // Reference to the collector's AssignedSchedule
-              const assignedScheduleRef = ref(
+              // Reference to the collector's node
+              const collectorNodeRef = ref(
                 db,
-                `Accounts/Collectors/${collectorUID}/AssignedSchedule/${uid}`
+                `Accounts/Collectors/${collectorUID}`
               );
 
-              // Set the deployment data under AssignedSchedule for the collector
-              set(assignedScheduleRef, AssignedSchedule)
+              // Set the collectionFlag for the collector
+              update(collectorNodeRef, {
+                collectionFlag: true,
+              })
                 .then(() => {
                   console.log(
-                    "Deployment data successfully stored in the AssignedSchedule node under collector UID:",
+                    "collectionFlag set to true for collector with UID:",
                     collectorUID
                   );
+
+                  // Reference to the collector's AssignedSchedule
+                  const assignedScheduleRef = ref(
+                    db,
+                    `Accounts/Collectors/${collectorUID}/AssignedSchedule/${uid}`
+                  );
+
+                  // Set the deployment data under AssignedSchedule for the collector
+                  set(assignedScheduleRef, AssignedSchedule)
+                    .then(() => {
+                      console.log(
+                        "Deployment data successfully stored in the AssignedSchedule node under collector UID:",
+                        collectorUID
+                      );
+                    })
+                    .catch((error) => {
+                      console.error(
+                        "Error storing deployment data in AssignedSchedule:",
+                        error
+                      );
+                    });
                 })
                 .catch((error) => {
-                  console.error(
-                    "Error storing deployment data in AssignedSchedule:",
-                    error
-                  );
+                  console.error("Error setting collectionFlag:", error);
                 });
             }
           });
@@ -684,6 +735,10 @@ export function initMap() {
 
     const deployBtn = document.getElementById("deployBtn");
     deployBtn.disabled = true;
+
+    const newLat = 14.766794722678402;
+    const newLng = 121.03637727931373;
+    moveMapToCoordinates(map, newLat, newLng);
   });
 
   // Event listeners to check inputs and enable/disable the Deploy button
