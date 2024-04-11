@@ -502,6 +502,11 @@ function initMap() {
       delete markers[garbageBinControlNumber];
     }
   });
+
+  var kmlLayer = new google.maps.KmlLayer({
+    url: "https://drive.google.com/uc?export=download&id=1PA1BBO1-1J9s9wdD09DelC2eWPGh4F_8",
+    map: map,
+  });
 }
 
 // Your existing event listener

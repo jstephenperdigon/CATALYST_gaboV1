@@ -524,6 +524,67 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => {
         console.error("Error retrieving collectors:", error);
       });
+
+    emailjs.init("tQkpQMaGNn8vjfM3D");
+
+    // Code to retrieve and log emails based on the selected GCN
+    selectedGCNs.forEach((selectedGCN) => {
+      // Reference to the Users node under the selected GCN
+      const gcnUsersRef = ref(
+        db,
+        `GarbageBinControlNumber/${selectedGCN}/Users`
+      );
+
+      // Retrieve and log emails for the selected GCN
+      get(gcnUsersRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            // Iterate through each user under the selected GCN and send emails
+            snapshot.forEach((userSnapshot) => {
+              // Retrieve the user email from the snapshot
+              const userEmail = userSnapshot.val().email;
+
+              // Check if the userEmail exists
+              if (userEmail) {
+                // Construct the email data object
+                const emailData = {
+                  to_email: userEmail,
+                  message: "Garbage Bin Collection Test Message",
+                  // Add other dynamic fields required by your template here
+                };
+
+                // Send email using EmailJS
+                emailjs
+                  .send("service_6z6sj8l", "template_ug7hrug", emailData)
+                  .then(() => {
+                    console.log(
+                      `Email sent to ${userEmail} for GCN ${selectedGCN}.`
+                    );
+                  })
+                  .catch((error) => {
+                    console.error(
+                      `Error sending email to ${userEmail}:`,
+                      error
+                    );
+                  });
+              } else {
+                // Log a message if the email doesn't exist
+                console.log(
+                  `Skipping user with no email under GCN ${selectedGCN}.`
+                );
+              }
+            });
+          } else {
+            console.log(`No users found under GCN ${selectedGCN}.`);
+          }
+        })
+        .catch((error) => {
+          console.error(
+            `Error retrieving emails for GCN ${selectedGCN}:`,
+            error
+          );
+        });
+    });
   });
 });
 
@@ -755,7 +816,28 @@ export function initMap() {
   let highLatitude;
   let highLongitude;
 
-  function updateSelectedMarkers(
+  function validateGCNCollectionFlag(gcn) {
+    // Reference to the GCN node in the database
+    const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}`);
+
+    // Fetch the data for the specified GCN
+    return get(gcnRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          return data.collectionFlag === "true";
+        } else {
+          console.log(`GCN ${gcn} not found in the database.`);
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data for GCN:", error);
+        return false;
+      });
+  }
+
+  async function updateSelectedMarkers(
     selectedGCNs,
     selectedDistrict,
     selectedBarangay,
@@ -766,6 +848,15 @@ export function initMap() {
     gb4QuotaSum
   ) {
     const selectedMarkersDiv = document.getElementById("selectedMarkers");
+
+    if (selectedGCNs.length === 0) {
+      // If no GCNs are selected, display the message
+      selectedMarkersDiv.innerHTML = `
+      <p>No markers are available or already been selected for collecting.</p>
+    `;
+      return; // Exit the function since there are no selected GCNs
+    }
+
     let message = "";
 
     if (totalQuotaSum <= 44) {
@@ -791,8 +882,7 @@ export function initMap() {
   `;
   }
 
-  // Function to enable/disable select button based on barangay dropdown selection
-  function toggleSelectButton() {
+  async function toggleSelectButton() {
     const districtDropdown = document.getElementById("district");
     const barangayDropdown = document.getElementById("barangay");
     const selectButton = document.getElementById("selectButton");
@@ -807,7 +897,7 @@ export function initMap() {
     // Add event listener to select button only if it's not added before
     if (!selectButton.hasEventListener) {
       selectButton.hasEventListener = true; // Mark the button to indicate the event listener is added
-      selectButton.addEventListener("click", () => {
+      selectButton.addEventListener("click", async () => {
         const selectedDistrict = districtDropdown.value;
         const selectedBarangay = barangayDropdown.value;
 
@@ -847,8 +937,18 @@ export function initMap() {
         let gb2QuotaSum = 0; // Initialize gb2QuotaSum
         let gb3QuotaSum = 0; // Initialize gb3QuotaSum
         let gb4QuotaSum = 0; // Initialize gb4QuotaSum
+
         for (const marker of filteredMarkers) {
           const gcn = marker.infoWindow.content.match(/GCN: (.+?)</)[1];
+
+          // Validate the GCN's collectionFlag
+          const collectionFlag = await validateGCNCollectionFlag(gcn);
+
+          if (collectionFlag) {
+            // If collectionFlag is true, skip this GCN
+            continue;
+          }
+
           const totalQuota = parseInt(
             marker.infoWindow.content.match(/Total Quota: (\d+)/)[1]
           );

@@ -24,6 +24,19 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+      .card1 {
+        border: 0px solid #11531e;
+      }
+      /* Drop Down Icon */
+      .dropdown-iconbtn {
+        background-color: #11531e;
+        color: #fff;
+      }
+      .dropdown-iconbtn:hover {
+        border: solid 2px #11531e;
+        color: #11531e;
+        background-color: transparent;
+      }
       .dropdown-toggle::after {
         display: none;
       }
@@ -164,88 +177,99 @@
           <i class="fas fa-user-check text-white"></i>
         </div> 
       </div>-->
-      <nav class="navbar navbar-light bg-light shadow-none bg-transparent mb-4">
-        <div class="container-fluid">
-          <div class="col-md-3">
-            <a class="navbar-brand header-color fs-5 fw-bolder" href="#">
-              Monitoring Center
-            </a>
-          </div>
+      <div class="container">
+        <nav
+          class="navbar navbar-light bg-light shadow-none bg-transparent mb-4"
+        >
+          <div class="container-fluid">
+            <div class="col-md-3">
+              <a class="navbar-brand header-color fs-5 fw-bolder" href="#">
+                Monitoring Center
+              </a>
+            </div>
 
-          <div class="col-md-2 d-flex">
-            <input
+            <div class="col-md-auto d-flex">
+              <!-- <input
               class="form-control me-2"
               type="search"
               placeholder="Search"
               aria-label="Search"
-            />
-          </div>
-
-          <!-- Notification Button -->
-          <div class="dropdown">
-            <button
-              class="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="notificationDropdown"
-              data-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i class="fas fa-bell"></i>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
-              <!-- Notification 1 -->
-              <li>
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-auto">
-                        <!-- Icon -->
-                        <i class="fas fa-envelope"></i>
-                      </div>
-                      <div class="col">
-                        <!-- Title -->
-                        <h5 class="card-title">New Message</h5>
-                        <!-- Message -->
-                        <p class="card-text">
-                          You have a new message from John Doe.
-                        </p>
-                        <!-- Time -->
-                        <p class="card-text">
-                          <small class="text-muted">1 minute ago</small>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <!-- Notification 2 -->
-              <li>
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-auto">
-                        <!-- Icon -->
-                        <i class="fas fa-bell"></i>
-                      </div>
-                      <div class="col">
-                        <!-- Title -->
-                        <h5 class="card-title">New Notification</h5>
-                        <!-- Message -->
-                        <p class="card-text">You have a new notification.</p>
-                        <!-- Time -->
-                        <p class="card-text">
-                          <small class="text-muted">2 hours ago</small>
-                        </p>
+            /> 
+            -->
+              <!-- Notification Button -->
+              <div class="dropdown">
+                <button
+                  class="btn dropdown-toggle dropdown-iconbtn shadow-none"
+                  type="button"
+                  id="notificationDropdown"
+                  data-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-bell"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-menu-end mt-3 p-4 shadow-none border-0"
+                  aria-labelledby="notificationDropdown"
+                >
+                  <!-- Notification 1 -->
+                  <li>
+                    <div class="card shadow-none border-0" style="width: 300px">
+                      <!-- Set width here -->
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-auto">
+                            <!-- Icon -->
+                            <i class="fas fa-envelope"></i>
+                          </div>
+                          <div class="col">
+                            <!-- Title -->
+                            <h5 class="card-title">New Message</h5>
+                            <!-- Message -->
+                            <p class="card-text">
+                              You have a new message from John Doe.
+                            </p>
+                            <!-- Time -->
+                            <p class="card-text">
+                              <small class="text-muted">1 minute ago</small>
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-              <!-- Add more notifications as needed -->
-            </ul>
+                  </li>
+                  <!-- Notification 2 -->
+                  <li>
+                    <div class="card shadow-none border-0" style="width: 300px">
+                      <!-- Set width here -->
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-auto">
+                            <!-- Icon -->
+                            <i class="fas fa-bell"></i>
+                          </div>
+                          <div class="col">
+                            <!-- Title -->
+                            <h5 class="card-title">New Notification</h5>
+                            <!-- Message -->
+                            <p class="card-text">
+                              You have a new notification.
+                            </p>
+                            <!-- Time -->
+                            <p class="card-text">
+                              <small class="text-muted">2 hours ago</small>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- Add more notifications as needed -->
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       <!-- <div class="container-fluid">
         <div class="row justify-content-start">
@@ -258,14 +282,14 @@
           </div>
         </div>
       </div> -->
-      <div class="container-fluid">
-        <div class="row justify-content-center">
-          <div class="col-md-8">
+      <div class="container">
+        <div class="row">
+          <div class="col-9">
             <div class="container">
               <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                   <button
-                    class="nav-link active"
+                    class="nav-link active fw-bold"
                     id="pills-home-tab"
                     data-mdb-toggle="pill"
                     data-mdb-target="#pills-home"
@@ -279,7 +303,7 @@
                 </li>
                 <li class="nav-item" role="presentation">
                   <button
-                    class="nav-link"
+                    class="nav-link fw-bold"
                     id="pills-profile-tab"
                     data-mdb-toggle="pill"
                     data-mdb-target="#pills-profile"
@@ -293,7 +317,7 @@
                 </li>
                 <li class="nav-item" role="presentation">
                   <button
-                    class="nav-link"
+                    class="nav-link fw-bold"
                     id="pills-contact-tab"
                     data-mdb-toggle="pill"
                     data-mdb-target="#pills-contact"
@@ -314,11 +338,12 @@
                 role="tabpanel"
                 aria-labelledby="pills-home-tab"
               >
-                <div class="card shadow-none border-0">
-                  <div class="card-body">
+                <!-- Cards -->
+                <div class="card shadow-none rounded-4 card1">
+                  <div class="card-body text-center">
                     <div class="container">
                       <div class="row justify-content-between">
-                        <div class="col-md-3">
+                        <div class="col-3 col-sm-6">
                           <a
                             href="#"
                             class="nav-card nav-link"
@@ -326,47 +351,62 @@
                           >
                             <div class="card shadow-none p-1 border-0">
                               <div class="card-body">
-                                <div class="float-end mt-3">
-                                  <i
-                                    class="fas fa-users fa-2x text-success"
-                                  ></i>
+                                <div class="row">
+                                  <div class="col-5">
+                                    <p
+                                      class="fs-1 text-success fw-bold"
+                                      id="uidCount"
+                                    ></p>
+                                  </div>
+                                  <div class="col">
+                                    <p class="fs-5 text-muted">
+                                      Garbage Collectors
+                                    </p>
+                                  </div>
                                 </div>
-                                <p class="fs-5">Collectors</p>
-                                <p class="fs-1 text-success" id="uidCount"></p>
                               </div>
                             </div>
                           </a>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-3 col-sm-6">
                           <a
                             href="collectorsCrud/CollectorList.html"
                             class="card-link"
                           >
-                            <div
-                              class="card shadow-none p-1 border-0 clickable-box"
-                            >
+                            <div class="card shadow-none p-1 border-0">
                               <div class="card-body">
-                                <div class="float-end mt-3">
-                                  <i
-                                    class="fas fa-users fa-2x text-success"
-                                  ></i>
+                                <div class="row">
+                                  <div class="col-5">
+                                    <p class="fs-1 text-success fw-bold">50</p>
+                                  </div>
+                                  <div class="col">
+                                    <p class="fs-5 text-muted">
+                                      Household Users
+                                    </p>
+                                  </div>
                                 </div>
-                                <p class="fs-5">Household Users</p>
-                                <p class="fs-1 text-success">50</p>
                               </div>
                             </div>
                           </a>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-3 col-sm-6">
                           <div class="card shadow-none p-1 border-0">
-                            <div class="card-body">
-                              <div class="float-end mt-3">
-                                <i
-                                  class="fas fa-trash-can fa-2x text-success"
-                                ></i>
+                            <div class="card shadow-none p-1 border-0">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-5">
+                                    <p
+                                      class="fs-1 text-success fw-bold"
+                                      id="gbCount"
+                                    ></p>
+                                  </div>
+                                  <div class="col">
+                                    <p class="fs-5 text-muted">
+                                      Smart Garbage Bins
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
-                              <p class="fs-5">Smart Garbage Bins</p>
-                              <p class="fs-1 text-success" id="gbCount"></p>
                             </div>
                           </div>
                         </div>
@@ -374,6 +414,8 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Cards -->
               </div>
               <div
                 class="tab-pane fade"
@@ -388,13 +430,59 @@
                 aria-labelledby="pills-contact-tab"
               ></div>
             </div>
+            <div class="container mt-5">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="card shadow-none border-0">
+                    <div class="card-header">
+                      <h1>Activities</h1>
+                    </div>
+                    <div class="card-body"></div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="card shadow-none border-0">
+                    <div class="card-header">
+                      <h1>Collections</h1>
+                    </div>
+                    <div class="card-body"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4 mt-5">
-            <div
-              class="card shadow-none border-0"
-              style="width: 500px; height: 400px"
-            >
-              <div class="card-body"></div>
+          <div class="col-3 justify-content-center" style="margin-top: 80px">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="card shadow-none border-0 position-relative">
+                  <div class="row mt-1 p-3">
+                    <div class="col-9">
+                      <p class="fs-3 fw-bold text-muted">
+                        Total Garbage Collected
+                      </p>
+                    </div>
+                    <div class="col-2">
+                      <button
+                        type="button"
+                        class="btn bg-transparent shadow-none btn-sm m-2 text-muted"
+                        style="text-transform: none"
+                      >
+                        <i class="fas fa-2x fa-chevron-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- See More Button -->
+
+                  <div class="row text-start text-center">
+                    <p class="fs-1 fw-bolder text-success">50 TONS</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <div class="card shadow-none border-0 bg-success">
+                  <div class="card-body text-center"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -407,33 +495,7 @@
       style="position: relative; height: 850px"
     >
       <!-- The container for the map -->
-      <div id="map" style="height: 100%; width: 100%; float: left"></div>
-
-      <!-- Notifications content on the right side -->
-      <div
-        class="container mt-3"
-        style="
-          position: absolute;
-          top: 0;
-          right: -100px;
-          width: 30%;
-          height: 100%;
-          padding: 10px;
-          box-sizing: border-box;
-          display: none;
-
-          overflow-y: auto;
-        "
-      >
-        <p class="fs-2 fw-bold">Notifications</p>
-
-        <!-- Container for reports -->
-
-        <div id="notificationContainer mb-3">
-          <!-- Container for the scrollable content -->
-          <div id="notificationContent"></div>
-        </div>
-      </div>
+      <div id="map" style="height: 100%; width: 100%"></div>
     </div>
 
     <div class="container">
@@ -893,6 +955,7 @@
     </div>
 
     <script type="text/javascript" src="dougnut.js"></script>
+    <script type="text/javascript" src="components/calendar.js"></script>
     <script type="text/javascript" src="monitoring.js"></script>
     <script type="module" src="monitor-index-function.js"></script>
     <script type="module" src="monitor-index-reports.js"></script>

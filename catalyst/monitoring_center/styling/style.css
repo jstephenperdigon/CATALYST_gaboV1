@@ -86,7 +86,7 @@ a {
   top: 0;
   left: -30%;
   width: var(--nav-width);
-  height: 100vh;
+  height: 100%;
   background-color: var(--first-color);
   padding: 0.5rem 1rem 0 0;
   /* ... your existing styles ... */
@@ -95,15 +95,12 @@ a {
 }
 
 .l-navbar:hover {
-  width: 250px; /* Adjust the width as needed */
+  width: 250px;
+  /* Adjust the width as needed */
 }
 
 .body-pd .content {
   transition: margin-left 0.75s;
-}
-
-.l-navbar:hover ~ .content {
-  margin-left: 250px; /* Adjust the margin-left to match the width of the sidebar */
 }
 
 @media screen and (max-width: 768px) {
