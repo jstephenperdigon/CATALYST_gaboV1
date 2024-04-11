@@ -26,7 +26,7 @@ const db = getDatabase(app);
 // Initialize EmailJS with your User ID
 emailjs.init("TN6jayxVlZMzQ3Ljt");
 // Reference to the collectors node
-const collectorsRef = ref(db, "Accounts/Collectors");
+const collectorsRef = ref(db, `Accounts/Collectors`);
 
 // Function to generate the HTML for a single report
 function generateReportHTML(report) {
@@ -117,33 +117,104 @@ function handleMoveToArchive(ticketNumber) {
 } 
 
 // Function to generate HTML for each collector
-function generateCollectorHTML(collector) {
+function generateCollectorHTML(collectorUID, collectors) {
   return `
     <tr>
-      <td>${collector.UserInfo.firstName}</td>
-      <td>${collector.UserInfo.lastName}</td>
-      <td>${collector.UserInfo.email}</td>
-      <td>${collector.UserInfo.mobileNumber}</td>
-      <td>${collector.AssignedArea.district}</td>
-      <td>${collector.AssignedArea.barangay}</td>
-      <td>${collector.UserInfo.suffix}</td>
+      <td>${collectors.UserInfo.firstName}</td>
+      <td>${collectors.UserInfo.lastName}</td>
+      <td>${collectors.UserInfo.email}</td>
+      <td>${collectors.UserInfo.mobileNumber}</td>
+      <td>${collectors.AssignedArea.district}</td>
+      <td>${collectors.AssignedArea.barangay}</td>
+      <td>${collectors.UserInfo.suffix}</td>
       <td>
-        <button type="button" class="btn btn-primary shadow-none view-collector" data-uid="${collector.UID}" data-mdb-toggle="modal" data-mdb-target="#viewCollectorModal">
+        <button class="btn btn-primary shadow-none view-collector"
+                data-uid="${collectorUID}"
+                data-mdb-toggle="modal"
+                data-mdb-target="#viewCollectorModal">
           <i class="fas fa-eye"></i> View
         </button>
-        <button type="button" class="btn btn-warning shadow-none" onclick="editCollector('${collector.UID}')">
+        <button class="btn btn-warning shadow-none" 
+                onclick="editCollector('${collectorUID}')">
           <i class="fas fa-edit"></i> Edit
         </button>
-        <button type="button" class="btn btn-danger shadow-none" onclick="deleteCollector('${collector.UID}')">
+        <button class="btn btn-danger shadow-none" 
+                onclick="deleteCollector('${collectorUID}')">
           <i class="fas fa-trash-alt"></i> Delete
         </button>
-      </td>
     </tr>
   `;
 }
 
+// Event listener for handling button clicks
+document.addEventListener('click', async function(e) {
+  if (e.target.matches('.view-collector')) {
+    const UID = e.target.getAttribute('data-uid');
+    
+    try {
+      // Retrieve collector data based on UID
+      const collectorRef = ref(db, `Accounts/Collectors/${UID}`);
+      const snapshot = await get(collectorRef);
+      const collectorData = snapshot.val();
 
+      if (collectorData) {
+        // Prepare collector information
+        const collectorInfo = `
+          <p><strong>GCL Number:</strong> ${collectorData.GCL}</p>
+          <p><strong>Name:</strong> ${collectorData.UserInfo.firstName} ${collectorData.UserInfo.middleName} ${collectorData.UserInfo.lastName}</p>
+          <p><strong>Email:</strong> ${collectorData.UserInfo.email}</p>
+          <p><strong>Mobile Number:</strong> ${collectorData.UserInfo.mobileNumber}</p>
+          <p><strong>District:</strong> ${collectorData.AssignedArea.district}</p>
+          <p><strong>Barangay:</strong> ${collectorData.AssignedArea.barangay}</p>
+          <p><strong>Suffix:</strong> ${collectorData.UserInfo.suffix}</p>
+          <p><strong>Password:</strong> ${collectorData.password}</p>
+        `;
 
+        // Set collector information inside the modal
+        const viewCollectorDetails = document.getElementById('viewCollectorDetails');
+        viewCollectorDetails.innerHTML = collectorInfo;
+
+        // Show the modal using MDBootstrap
+        const viewCollectorModal = new mdb.Modal(document.getElementById('viewCollectorModal'));
+        viewCollectorModal.show();
+      } else {
+        console.log(`Collector with UID ${UID} not found.`);
+      }
+    } catch (error) {
+      console.error('Error fetching collector data:', error);
+    }
+  }
+});
+
+// COLLECTORS SEARCH FUNCTION
+// Function to filter collectors based on search input and selected category
+function filterCollectors(searchInput, category) {
+  const collectorsArray = document.querySelectorAll("#collectorsTable tbody tr");
+  collectorsArray.forEach(collector => {
+    const columnValue = collector
+      .querySelector(`td[data-category="${category}"]`)
+      .textContent.toLowerCase();
+    const displayStyle = columnValue.includes(searchInput) ? "" : "none";
+    collector.style.display = displayStyle;
+  });
+}
+
+// Modify the searchCollectors function to use the filterCollectors function
+window.searchCollectors = function () {
+  const searchInput = document
+    .getElementById("searchCollector")
+    .value.toLowerCase();
+  const category = document.getElementById("searchCategory").value;
+
+  filterCollectors(searchInput, category);
+};
+
+// Function to handle live search while typing
+document.getElementById("searchCollector").addEventListener("input", function () {
+  window.searchCollectors();
+});
+
+// TICKETS SEARCH FUNCTION
 // Function to filter reports based on search input and selected sorting column
 function filterReports(searchInput, sortKey) {
   const reportsArray = document.querySelectorAll("#reportsTable tbody tr");
@@ -191,12 +262,10 @@ function displayCollectors() {
   onValue(collectorsRef, (snapshot) => {
     const collectorsData = snapshot.val();
     if (collectorsData) {
-      const collectorsTableBody = document.querySelector(
-        "#collectorsTable tbody"
-      );
+      const collectorsTableBody = document.querySelector("#collectorsTable tbody");
       let tableHTML = "";
-      Object.values(collectorsData).forEach((uid) => {
-        tableHTML += generateCollectorHTML(uid);
+      Object.entries(collectorsData).forEach(([collectorUID, collector]) => {
+        tableHTML += generateCollectorHTML(collectorUID, collector);
       });
       collectorsTableBody.innerHTML = tableHTML;
     } else {
