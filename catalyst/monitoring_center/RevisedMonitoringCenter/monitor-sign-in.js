@@ -53,35 +53,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Function to handle sign-in process
-document
-  .getElementById("adminSignInButton")
-  .addEventListener("click", async (event) => {
-    event.preventDefault(); // Prevent form submission
+document.addEventListener("DOMContentLoaded", () => {
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("typePasswordX");
 
-    // Retrieve username and password from input fields
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("typePasswordX").value;
+  const signIn = async () => {
+    const username = usernameInput.value;
+    const password = passwordInput.value;
 
     try {
-      // Get a reference to the Firebase database
       const db = getDatabase();
 
-      // Retrieve UID from the Admin node
       const adminSnapshot = await get(ref(db, "Accounts/Admin"));
       if (adminSnapshot.exists()) {
         const adminData = adminSnapshot.val();
         const uid = adminData.uid;
 
-        // Check if username and password match
-        if (
-          adminData.username === username &&
-          adminData.password === password
-        ) {
-          // Store Admin UID in session storage
+        if (adminData.username === username && adminData.password === password) {
           sessionStorage.setItem("uid", uid);
 
-          // Redirect to the appropriate page based on usertype
           if (adminData.usertype === "Admin") {
             window.location.href = "../admin/adminIndex.html";
           } else if (adminData.usertype === "Monitoring") {
@@ -89,25 +79,18 @@ document
           } else {
             showAlert("warning", "Invalid user type");
           }
-          return; // Exit the loop once a match is found
+          return;
         }
       }
 
-      // Retrieve UID from the Monitoring node
       const monitoringSnapshot = await get(ref(db, "Accounts/Monitoring"));
       if (monitoringSnapshot.exists()) {
         const monitoringData = monitoringSnapshot.val();
         const uid = monitoringData.uid;
 
-        // Check if username and password match
-        if (
-          monitoringData.username === username &&
-          monitoringData.password === password
-        ) {
-          // Store Monitoring UID in session storage
+        if (monitoringData.username === username && monitoringData.password === password) {
           sessionStorage.setItem("uid", uid);
 
-          // Redirect to the appropriate page based on usertype
           if (monitoringData.usertype === "Admin") {
             window.location.href = "../admin/adminIndex.html";
           } else if (monitoringData.usertype === "Monitoring") {
@@ -115,14 +98,30 @@ document
           } else {
             showAlert("warning", "Invalid user type");
           }
-          return; // Exit the loop once a match is found
+          return;
         }
       }
 
-      // If no match is found
       showAlert("warning", "Invalid username or password");
     } catch (error) {
       console.error("Error signing in:", error);
       showAlert("warning", "An error occurred while signing in");
     }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      signIn();
+    }
+  };
+
+  usernameInput.addEventListener("keypress", handleKeyPress);
+  passwordInput.addEventListener("keypress", handleKeyPress);
+
+  const signInButton = document.getElementById("adminSignInButton");
+  signInButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    signIn();
   });
+});
