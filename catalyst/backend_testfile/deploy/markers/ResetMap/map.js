@@ -61,18 +61,14 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${
-                gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-              }</p>
-              <p>Biodegradable: ${
-                gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-              }</p>
-              <p>Special: ${
-                gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-              }</p>
-              <p>Non-Biodegradable: ${
-                gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-              }</p>
+              <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+            }</p>
+              <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+            }</p>
+              <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+            }</p>
+              <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+            }</p>
             </div>`
           );
         } else {
@@ -91,18 +87,14 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${
-                          gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-                        }</p>
-                        <p>Biodegradable: ${
-                          gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-                        }</p>
-                        <p>Special: ${
-                          gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-                        }</p>
-                        <p>Non-Biodegradable: ${
-                          gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-                        }</p>
+                        <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+              }</p>
+                        <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+              }</p>
+                        <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+              }</p>
+                        <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+              }</p>
                       </div>`,
           });
 
@@ -549,10 +541,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Construct the email data object
                 const emailData = {
                   to_email: userEmail,
-                  message: "Garbage Bin Collection Test Message",
-                  // Add other dynamic fields required by your template here
-                };
+                  message: `Hello,
 
+                This is to inform you that our designated garbage collector (ID: ${dropdownCollectorValue}) will be collecting your garbage bins on ${formatDateMMddYYYY(dateInputValue)} at ${formattedTime}.
+
+                Thank you for your cooperation.
+
+                Best regards,
+                GABO-CATALYST`
+                };
                 // Send email using EmailJS
                 emailjs
                   .send("service_6z6sj8l", "template_ug7hrug", emailData)
@@ -963,7 +960,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-              0
+            0
           );
 
           // Check if adding this marker will exceed the limit
