@@ -61,18 +61,14 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${
-                gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-              }</p>
-              <p>Biodegradable: ${
-                gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-              }</p>
-              <p>Special: ${
-                gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-              }</p>
-              <p>Non-Biodegradable: ${
-                gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-              }</p>
+              <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+            }</p>
+              <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+            }</p>
+              <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+            }</p>
+              <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+            }</p>
             </div>`
           );
         } else {
@@ -91,18 +87,14 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${
-                          gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-                        }</p>
-                        <p>Biodegradable: ${
-                          gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-                        }</p>
-                        <p>Special: ${
-                          gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-                        }</p>
-                        <p>Non-Biodegradable: ${
-                          gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-                        }</p>
+                        <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+              }</p>
+                        <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+              }</p>
+                        <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+              }</p>
+                        <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+              }</p>
                       </div>`,
           });
 
@@ -318,214 +310,36 @@ function checkInputsAndEnableButton() {
   // Enable the deploy button only if all conditions are met
   deployBtn.disabled = !(isDateValid && isTimeValid && isCollectorSelected);
 }
-document.addEventListener("DOMContentLoaded", function () {
-  // Fetch HTML elements
-  const selectedMarkers = document.getElementById("selectedMarkers");
+
+
+function resetMapAndUI(map) {
+  resetMapSelection();
+
+  showAllMarkers(map);
+
+  const selectedMarkersDiv = document.getElementById("selectedMarkers");
+  selectedMarkersDiv.innerHTML = "";
+
+  const additionalFieldsDiv = document.getElementById("additionalFields");
+  additionalFieldsDiv.style.display = "none";
+
   const dateInputField = document.getElementById("dateInputField");
+  dateInputField.value = "";
+
   const timeInputField = document.getElementById("timeInputField");
+  timeInputField.value = "";
+
   const dropdownCollector = document.getElementById("dropdownCollector");
+  dropdownCollector.selectedIndex = 0;
 
-  // Add event listener to deploy button
   const deployBtn = document.getElementById("deployBtn");
-  deployBtn.addEventListener("click", () => {
-    // Fetch outputs from HTML elements
-    const selectedGCNOutput =
-      selectedMarkers.querySelector("p:nth-child(1)").textContent;
+  deployBtn.disabled = true;
 
-    // Split the selected GCNs into an array
-    const selectedGCNs = selectedGCNOutput
-      .replace("Selected GCN: ", "")
-      .split(", ");
+  const newLat = 14.766794722678402;
+  const newLng = 121.03637727931373;
+  moveMapToCoordinates(map, newLat, newLng);
+}
 
-    // Function to update GCN nodes in the database
-    async function updateGCNNode(gcn) {
-      // Reference to the GCN node in the database
-      const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}`);
-
-      // Check if the GCN node exists
-      const snapshot = await get(child(gcnRef, "collectionFlag"));
-      if (!snapshot.exists()) {
-        // If the node does not exist, set collectionFlag to "true"
-        update(gcnRef, { collectionFlag: "true" })
-          .then(() => {
-            console.log(`collectionFlag added to GCN ${gcn}.`);
-          })
-          .catch((error) => {
-            console.error(`Error adding collectionFlag to GCN ${gcn}:`, error);
-          });
-      } else {
-        // If the node exists, do nothing
-        console.log(`collectionFlag already exists for GCN ${gcn}.`);
-      }
-    }
-
-    // Iterate through each selected GCN and update its node in the database
-    selectedGCNs.forEach((gcn) => {
-      updateGCNNode(gcn);
-    });
-
-    // Fetch other outputs from HTML elements
-    const districtOutput =
-      selectedMarkers.querySelector("p:nth-child(2)").textContent;
-    const barangayOutput =
-      selectedMarkers.querySelector("p:nth-child(3)").textContent;
-    const totalQuotaOutput =
-      selectedMarkers.querySelector("p:nth-child(4)").textContent;
-    const recyclablesOutput =
-      selectedMarkers.querySelector("p:nth-child(5)").textContent;
-    const biodegradableOutput =
-      selectedMarkers.querySelector("p:nth-child(6)").textContent;
-    const specialOutput =
-      selectedMarkers.querySelector("p:nth-child(7)").textContent;
-    const nonBiodegradableOutput =
-      selectedMarkers.querySelector("p:nth-child(8)").textContent;
-
-    // Fetch additional values
-    const dateInputValue = dateInputField.value;
-    const timeInputValue = timeInputField.value;
-    const dropdownCollectorValue = dropdownCollector.value;
-
-    // Convert time to 12-hour format
-    const time = new Date("2000-01-01T" + timeInputValue + ":00");
-    const formattedTime = time.toLocaleString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
-
-    // Function to format date as MMDDYYYY
-    function formatDate(date) {
-      const [year, month, day] = date.split("-");
-      return `${month}${day}${year}`;
-    }
-
-    // Add the formatDateMMddYYYY function to your code
-    function formatDateMMddYYYY(date) {
-      const [year, month, day] = date.split("-");
-      return `${month}-${day}-${year}`;
-    }
-
-    // Function to generate random alphanumeric characters
-    function generateRandomChars(length) {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let result = "";
-      for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return result;
-    }
-
-    // Generate UID
-    const randomChars = generateRandomChars(4); // Generate 4 random characters
-    const uid = `${dropdownCollectorValue}${formatDate(
-      dateInputValue
-    )}${randomChars}`;
-
-    // Prepare deployment data object
-    const deploymentData = {
-      SelectedGCN: selectedGCNOutput.replace("Selected GCN: ", ""),
-      District: districtOutput.replace("District: ", ""),
-      Barangay: barangayOutput.replace("Barangay: ", ""),
-      TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
-      Recyclables: recyclablesOutput.replace("Recyclables: ", ""),
-      Biodegradable: biodegradableOutput.replace("Biodegradable: ", ""),
-      Special: specialOutput.replace("Special: ", ""),
-      NonBiodegradable: nonBiodegradableOutput.replace(
-        "Non-Biodegradable: ",
-        ""
-      ),
-      DateInput: formatDateMMddYYYY(dateInputValue),
-      TimeInput: formattedTime,
-      SelectedGCL: dropdownCollectorValue,
-    };
-
-    // Store deployment data in Firebase under DeploymentHistory with UID
-    const deploymentRef = ref(db, `DeploymentHistory/${uid}`);
-    set(deploymentRef, deploymentData)
-      .then(() => {
-        console.log(
-          "Deployment data successfully stored in the database under UID:",
-          uid
-        );
-      })
-      .catch((error) => {
-        console.error("Error storing deployment data:", error);
-      });
-
-    // Prepare deployment data object
-    const AssignedSchedule = {
-      SelectedGCN: selectedGCNOutput.replace("Selected GCN: ", ""),
-      District: districtOutput.replace("District: ", ""),
-      Barangay: barangayOutput.replace("Barangay: ", ""),
-      TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
-      DateInput: formatDateMMddYYYY(dateInputValue),
-      TimeInput: formattedTime,
-      SelectedGCL: dropdownCollectorValue,
-    };
-
-    // Reference to the collectors node
-    const collectorsRef = ref(db, `Accounts/Collectors`);
-
-    // Retrieve all collectors
-    get(collectorsRef)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          snapshot.forEach((childSnapshot) => {
-            const collectorData = childSnapshot.val();
-            if (collectorData.GCL === dropdownCollectorValue) {
-              const collectorUID = childSnapshot.key;
-
-              // Reference to the collector's node
-              const collectorNodeRef = ref(
-                db,
-                `Accounts/Collectors/${collectorUID}`
-              );
-
-              // Set the collectionFlag for the collector
-              update(collectorNodeRef, {
-                collectionFlag: true,
-              })
-                .then(() => {
-                  console.log(
-                    "collectionFlag set to true for collector with UID:",
-                    collectorUID
-                  );
-
-                  // Reference to the collector's AssignedSchedule
-                  const assignedScheduleRef = ref(
-                    db,
-                    `Accounts/Collectors/${collectorUID}/AssignedSchedule/${uid}`
-                  );
-
-                  // Set the deployment data under AssignedSchedule for the collector
-                  set(assignedScheduleRef, AssignedSchedule)
-                    .then(() => {
-                      console.log(
-                        "Deployment data successfully stored in the AssignedSchedule node under collector UID:",
-                        collectorUID
-                      );
-                    })
-                    .catch((error) => {
-                      console.error(
-                        "Error storing deployment data in AssignedSchedule:",
-                        error
-                      );
-                    });
-                })
-                .catch((error) => {
-                  console.error("Error setting collectionFlag:", error);
-                });
-            }
-          });
-        } else {
-          console.error("No collectors found in the database.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error retrieving collectors:", error);
-      });
-  });
-});
 
 // Export the initMap function
 export function initMap() {
@@ -755,7 +569,28 @@ export function initMap() {
   let highLatitude;
   let highLongitude;
 
-  function updateSelectedMarkers(
+  function validateGCNCollectionFlag(gcn) {
+    // Reference to the GCN node in the database
+    const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}`);
+
+    // Fetch the data for the specified GCN
+    return get(gcnRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          return data.collectionFlag === "true";
+        } else {
+          console.log(`GCN ${gcn} not found in the database.`);
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data for GCN:", error);
+        return false;
+      });
+  }
+
+  async function updateSelectedMarkers(
     selectedGCNs,
     selectedDistrict,
     selectedBarangay,
@@ -766,6 +601,15 @@ export function initMap() {
     gb4QuotaSum
   ) {
     const selectedMarkersDiv = document.getElementById("selectedMarkers");
+
+    if (selectedGCNs.length === 0) {
+      // If no GCNs are selected, display the message
+      selectedMarkersDiv.innerHTML = `
+      <p>No markers are available or already been selected for collecting.</p>
+    `;
+      return; // Exit the function since there are no selected GCNs
+    }
+
     let message = "";
 
     if (totalQuotaSum <= 44) {
@@ -791,8 +635,7 @@ export function initMap() {
   `;
   }
 
-  // Function to enable/disable select button based on barangay dropdown selection
-  function toggleSelectButton() {
+  async function toggleSelectButton() {
     const districtDropdown = document.getElementById("district");
     const barangayDropdown = document.getElementById("barangay");
     const selectButton = document.getElementById("selectButton");
@@ -807,7 +650,7 @@ export function initMap() {
     // Add event listener to select button only if it's not added before
     if (!selectButton.hasEventListener) {
       selectButton.hasEventListener = true; // Mark the button to indicate the event listener is added
-      selectButton.addEventListener("click", () => {
+      selectButton.addEventListener("click", async () => {
         const selectedDistrict = districtDropdown.value;
         const selectedBarangay = barangayDropdown.value;
 
@@ -847,8 +690,18 @@ export function initMap() {
         let gb2QuotaSum = 0; // Initialize gb2QuotaSum
         let gb3QuotaSum = 0; // Initialize gb3QuotaSum
         let gb4QuotaSum = 0; // Initialize gb4QuotaSum
+
         for (const marker of filteredMarkers) {
           const gcn = marker.infoWindow.content.match(/GCN: (.+?)</)[1];
+
+          // Validate the GCN's collectionFlag
+          const collectionFlag = await validateGCNCollectionFlag(gcn);
+
+          if (collectionFlag) {
+            // If collectionFlag is true, skip this GCN
+            continue;
+          }
+
           const totalQuota = parseInt(
             marker.infoWindow.content.match(/Total Quota: (\d+)/)[1]
           );
@@ -863,7 +716,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-              0
+            0
           );
 
           // Check if adding this marker will exceed the limit
@@ -947,6 +800,284 @@ export function initMap() {
   document
     .getElementById("barangay")
     .addEventListener("change", toggleSelectButton);
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch HTML elements
+    const selectedMarkers = document.getElementById("selectedMarkers");
+    const dateInputField = document.getElementById("dateInputField");
+    const timeInputField = document.getElementById("timeInputField");
+    const dropdownCollector = document.getElementById("dropdownCollector");
+
+    // Add event listener to deploy button
+    const deployBtn = document.getElementById("deployBtn");
+    deployBtn.addEventListener("click", () => {
+      // Fetch outputs from HTML elements
+      const selectedGCNOutput =
+        selectedMarkers.querySelector("p:nth-child(1)").textContent;
+
+      // Split the selected GCNs into an array
+      const selectedGCNs = selectedGCNOutput
+        .replace("Selected GCN: ", "")
+        .split(", ");
+
+      // Function to update GCN nodes in the database
+      async function updateGCNNode(gcn) {
+        // Reference to the GCN node in the database
+        const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}`);
+
+        // Check if the GCN node exists
+        const snapshot = await get(child(gcnRef, "collectionFlag"));
+        if (!snapshot.exists()) {
+          // If the node does not exist, set collectionFlag to "true"
+          update(gcnRef, { collectionFlag: "true" })
+            .then(() => {
+              console.log(`collectionFlag added to GCN ${gcn}.`);
+            })
+            .catch((error) => {
+              console.error(`Error adding collectionFlag to GCN ${gcn}:`, error);
+            });
+        } else {
+          // If the node exists, do nothing
+          console.log(`collectionFlag already exists for GCN ${gcn}.`);
+        }
+      }
+
+      // Iterate through each selected GCN and update its node in the database
+      selectedGCNs.forEach((gcn) => {
+        updateGCNNode(gcn);
+      });
+
+      // Fetch other outputs from HTML elements
+      const districtOutput =
+        selectedMarkers.querySelector("p:nth-child(2)").textContent;
+      const barangayOutput =
+        selectedMarkers.querySelector("p:nth-child(3)").textContent;
+      const totalQuotaOutput =
+        selectedMarkers.querySelector("p:nth-child(4)").textContent;
+      const recyclablesOutput =
+        selectedMarkers.querySelector("p:nth-child(5)").textContent;
+      const biodegradableOutput =
+        selectedMarkers.querySelector("p:nth-child(6)").textContent;
+      const specialOutput =
+        selectedMarkers.querySelector("p:nth-child(7)").textContent;
+      const nonBiodegradableOutput =
+        selectedMarkers.querySelector("p:nth-child(8)").textContent;
+
+      // Fetch additional values
+      const dateInputValue = dateInputField.value;
+      const timeInputValue = timeInputField.value;
+      const dropdownCollectorValue = dropdownCollector.value;
+
+      // Convert time to 12-hour format
+      const time = new Date("2000-01-01T" + timeInputValue + ":00");
+      const formattedTime = time.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+
+      // Function to format date as MMDDYYYY
+      function formatDate(date) {
+        const [year, month, day] = date.split("-");
+        return `${month}${day}${year}`;
+      }
+
+      // Add the formatDateMMddYYYY function to your code
+      function formatDateMMddYYYY(date) {
+        const [year, month, day] = date.split("-");
+        return `${month}-${day}-${year}`;
+      }
+
+      // Function to generate random alphanumeric characters
+      function generateRandomChars(length) {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let result = "";
+        for (let i = 0; i < length; i++) {
+          result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+      }
+
+      // Generate UID
+      const randomChars = generateRandomChars(4); // Generate 4 random characters
+      const uid = `${dropdownCollectorValue}${formatDate(
+        dateInputValue
+      )}${randomChars}`;
+
+      // Prepare deployment data object
+      const deploymentData = {
+        SelectedGCN: selectedGCNOutput.replace("Selected GCN: ", ""),
+        District: districtOutput.replace("District: ", ""),
+        Barangay: barangayOutput.replace("Barangay: ", ""),
+        TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
+        Recyclables: recyclablesOutput.replace("Recyclables: ", ""),
+        Biodegradable: biodegradableOutput.replace("Biodegradable: ", ""),
+        Special: specialOutput.replace("Special: ", ""),
+        NonBiodegradable: nonBiodegradableOutput.replace(
+          "Non-Biodegradable: ",
+          ""
+        ),
+        DateInput: formatDateMMddYYYY(dateInputValue),
+        TimeInput: formattedTime,
+        SelectedGCL: dropdownCollectorValue,
+      };
+
+      // Store deployment data in Firebase under DeploymentHistory with UID
+      const deploymentRef = ref(db, `DeploymentHistory/${uid}`);
+      set(deploymentRef, deploymentData)
+        .then(() => {
+          console.log(
+            "Deployment data successfully stored in the database under UID:",
+            uid
+          );
+        })
+        .catch((error) => {
+          console.error("Error storing deployment data:", error);
+        });
+
+      // Prepare deployment data object
+      const AssignedSchedule = {
+        SelectedGCN: selectedGCNOutput.replace("Selected GCN: ", ""),
+        District: districtOutput.replace("District: ", ""),
+        Barangay: barangayOutput.replace("Barangay: ", ""),
+        TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
+        DateInput: formatDateMMddYYYY(dateInputValue),
+        TimeInput: formattedTime,
+        SelectedGCL: dropdownCollectorValue,
+      };
+
+      // Reference to the collectors node
+      const collectorsRef = ref(db, `Accounts/Collectors`);
+
+      // Retrieve all collectors
+      get(collectorsRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+              const collectorData = childSnapshot.val();
+              if (collectorData.GCL === dropdownCollectorValue) {
+                const collectorUID = childSnapshot.key;
+
+                // Reference to the collector's node
+                const collectorNodeRef = ref(
+                  db,
+                  `Accounts/Collectors/${collectorUID}`
+                );
+
+                // Set the collectionFlag for the collector
+                update(collectorNodeRef, {
+                  collectionFlag: true,
+                })
+                  .then(() => {
+                    console.log(
+                      "collectionFlag set to true for collector with UID:",
+                      collectorUID
+                    );
+
+                    // Reference to the collector's AssignedSchedule
+                    const assignedScheduleRef = ref(
+                      db,
+                      `Accounts/Collectors/${collectorUID}/AssignedSchedule/${uid}`
+                    );
+
+                    // Set the deployment data under AssignedSchedule for the collector
+                    set(assignedScheduleRef, AssignedSchedule)
+                      .then(() => {
+                        console.log(
+                          "Deployment data successfully stored in the AssignedSchedule node under collector UID:",
+                          collectorUID
+                        );
+                      })
+                      .catch((error) => {
+                        console.error(
+                          "Error storing deployment data in AssignedSchedule:",
+                          error
+                        );
+                      });
+                  })
+                  .catch((error) => {
+                    console.error("Error setting collectionFlag:", error);
+                  });
+              }
+            });
+          } else {
+            console.error("No collectors found in the database.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error retrieving collectors:", error);
+        });
+
+      emailjs.init("tQkpQMaGNn8vjfM3D");
+
+      // Code to retrieve and log emails based on the selected GCN
+      selectedGCNs.forEach((selectedGCN) => {
+        // Reference to the Users node under the selected GCN
+        const gcnUsersRef = ref(
+          db,
+          `GarbageBinControlNumber/${selectedGCN}/Users`
+        );
+
+        // Retrieve and log emails for the selected GCN
+        get(gcnUsersRef)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              // Iterate through each user under the selected GCN and send emails
+              snapshot.forEach((userSnapshot) => {
+                // Retrieve the user email from the snapshot
+                const userEmail = userSnapshot.val().email;
+
+                // Check if the userEmail exists
+                if (userEmail) {
+                  // Construct the email data object
+                  const emailData = {
+                    to_email: userEmail,
+                    message: `Hello,
+
+                This is to inform you that our designated garbage collector (ID: ${dropdownCollectorValue}) will be collecting your garbage bins on ${formatDateMMddYYYY(dateInputValue)} at ${formattedTime}.
+
+                Thank you for your cooperation.
+
+                Best regards,
+                GABO-CATALYST`
+                  };
+                  // Send email using EmailJS
+                  emailjs
+                    .send("service_6z6sj8l", "template_ug7hrug", emailData)
+                    .then(() => {
+                      console.log(
+                        `Email sent to ${userEmail} for GCN ${selectedGCN}.`
+                      );
+                    })
+                    .catch((error) => {
+                      console.error(
+                        `Error sending email to ${userEmail}:`,
+                        error
+                      );
+                    });
+
+                  resetMapAndUI(map);
+                } else {
+                  // Log a message if the email doesn't exist
+                  console.log(
+                    `Skipping user with no email under GCN ${selectedGCN}.`
+                  );
+                }
+              });
+            } else {
+              console.log(`No users found under GCN ${selectedGCN}.`);
+            }
+          })
+          .catch((error) => {
+            console.error(
+              `Error retrieving emails for GCN ${selectedGCN}:`,
+              error
+            );
+          });
+      });
+    });
+  });
 }
 
 // Make initMap accessible in the global scope
