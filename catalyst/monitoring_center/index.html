@@ -283,61 +283,62 @@
         </div>
       </div> -->
       <div class="container">
-        <div class="row">
-          <div class="col-9">
-            <div class="container">
-              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link active fw-bold"
-                    id="pills-home-tab"
-                    data-mdb-toggle="pill"
-                    data-mdb-target="#pills-home"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-home"
-                    aria-selected="true"
-                  >
-                    Dashboard
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link fw-bold"
-                    id="pills-profile-tab"
-                    data-mdb-toggle="pill"
-                    data-mdb-target="#pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-profile"
-                    aria-selected="false"
-                  >
-                    Scheduling
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link fw-bold"
-                    id="pills-contact-tab"
-                    data-mdb-toggle="pill"
-                    data-mdb-target="#pills-contact"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-contact"
-                    aria-selected="false"
-                  >
-                    Schedules
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div class="tab-content" id="pills-tabContent">
-              <div
-                class="tab-pane fade show active container-fluid"
-                id="pills-home"
-                role="tabpanel"
-                aria-labelledby="pills-home-tab"
+        <div class="container">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active fw-bold"
+                id="pills-home-tab"
+                data-mdb-toggle="pill"
+                data-mdb-target="#pills-home"
+                type="button"
+                role="tab"
+                aria-controls="pills-home"
+                aria-selected="true"
               >
+                Dashboard
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link fw-bold"
+                id="pills-profile-tab"
+                data-mdb-toggle="pill"
+                data-mdb-target="#pills-profile"
+                type="button"
+                role="tab"
+                aria-controls="pills-profile"
+                aria-selected="false"
+              >
+                Scheduling
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link fw-bold"
+                id="pills-contact-tab"
+                data-mdb-toggle="pill"
+                data-mdb-target="#pills-contact"
+                type="button"
+                role="tab"
+                aria-controls="pills-contact"
+                aria-selected="false"
+              >
+                Schedules
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tab-content" id="pills-tabContent">
+          <div
+            class="tab-pane fade show active container-fluid"
+            id="pills-home"
+            role="tabpanel"
+            aria-labelledby="pills-home-tab"
+          >
+            <div class="row">
+              <div class="col-9">
                 <!-- Cards -->
                 <div class="card shadow-none rounded-4 card1">
                   <div class="card-body text-center">
@@ -417,71 +418,175 @@
 
                 <!-- Cards -->
               </div>
-              <div
-                class="tab-pane fade"
-                id="pills-profile"
-                role="tabpanel"
-                aria-labelledby="pills-profile-tab"
-              ></div>
-              <div
-                class="tab-pane fade"
-                id="pills-contact"
-                role="tabpanel"
-                aria-labelledby="pills-contact-tab"
-              ></div>
-            </div>
-            <div class="container mt-5">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="card shadow-none border-0">
-                    <div class="card-header">
-                      <h1>Activities</h1>
+              <div class="col-3">
+                <div class="container">
+                  <div class="row">
+                    <div
+                      class="card rounded-4 shadow-none border-0 position-relative p-2"
+                    >
+                      <div class="row mt-1 p-3">
+                        <div class="col-9">
+                          <p class="fs-3 fw-bold text-muted">
+                            Total Garbage Collected
+                          </p>
+                        </div>
+                        <div class="col-2">
+                          <button
+                            type="button"
+                            class="btn bg-transparent shadow-none btn-sm m-2 text-muted"
+                            style="text-transform: none"
+                          >
+                            <i class="fas fa-2x fa-chevron-right"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <!-- See More Button -->
+
+                      <div class="row text-start text-center">
+                        <p class="fs-1 fw-bolder text-success">50 TONS</p>
+                      </div>
                     </div>
-                    <div class="card-body"></div>
                   </div>
-                </div>
-                <div class="col-md-8">
-                  <div class="card shadow-none border-0">
-                    <div class="card-header">
-                      <h1>Collections</h1>
+                  <div class="row mt-4">
+                    <div class="card shadow-none border-0 bg-success">
+                      <div class="card-body text-center"></div>
                     </div>
-                    <div class="card-body"></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-3 justify-content-center" style="margin-top: 80px">
-            <div class="container-fluid">
+          <div
+            class="tab-pane fade"
+            id="pills-profile"
+            role="tabpanel"
+            aria-labelledby="pills-profile-tab"
+          >
+            <div class="container">
               <div class="row">
-                <div class="card shadow-none border-0 position-relative">
-                  <div class="row mt-1 p-3">
-                    <div class="col-9">
-                      <p class="fs-3 fw-bold text-muted">
-                        Total Garbage Collected
-                      </p>
-                    </div>
-                    <div class="col-2">
-                      <button
-                        type="button"
-                        class="btn bg-transparent shadow-none btn-sm m-2 text-muted"
-                        style="text-transform: none"
-                      >
-                        <i class="fas fa-2x fa-chevron-right"></i>
-                      </button>
+                <div class="col">
+                  <div class="card p-4 shadow-none border-0">
+                    <div class="container">
+                      <div class="md-form">
+                        <label class="form-label" for="districtSelect"
+                          >District</label
+                        >
+                        <select class="form-select" id="districtSelect">
+                          <option value="" disabled selected>
+                            Select District
+                          </option>
+                          <option value="District1">District 1</option>
+                          <option value="District2">District 2</option>
+                          <option value="District3">District 3</option>
+                        </select>
+                      </div>
+                      <div class="md-form mt-2">
+                        <label class="form-label" for="barangaySelect"
+                          >Barangay</label
+                        >
+                        <select class="form-select" id="barangaySelect">
+                          <option value="" disabled selected>
+                            Select Barangay
+                          </option>
+                        </select>
+                      </div>
                     </div>
                   </div>
-                  <!-- See More Button -->
-
-                  <div class="row text-start text-center">
-                    <p class="fs-1 fw-bolder text-success">50 TONS</p>
+                </div>
+                <div class="col">
+                  <!-- The container for the map -->
+                  <div class="card shadow-none">
+                    <div id="map" style="height: 280px"></div>
                   </div>
                 </div>
               </div>
-              <div class="row mt-4">
-                <div class="card shadow-none border-0 bg-success">
-                  <div class="card-body text-center"></div>
+            </div>
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="pills-contact"
+            role="tabpanel"
+            aria-labelledby="pills-contact-tab"
+          ></div>
+        </div>
+
+        <div class="container mt-5">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card shadow-none border-0 text-start bg-transparent">
+                <div class="card-body">
+                  <p class="fs-4 fw-bold">Activities</p>
                 </div>
+              </div>
+              <div class="card p-2 card-activity shadow-none border-0">
+                <div class="card-body" style="height: 250px; overflow-y: auto">
+                  <div class="container top-0">
+                    <div
+                      class="card rounded-5 border-0 p-3 shadow-none position-relative"
+                    >
+                      <div class="d-flex align-items-center">
+                        <div class="bg-secondary rounded-4 p-3 me-3">
+                          <i class="fas fa-calendar-alt fa-2x text-light"></i>
+                        </div>
+                        <div>
+                          <p class="fw-bold fs-6 mb-0">
+                            Scheduled for collection
+                          </p>
+                          <p class="fw-light text-muted mb-0">
+                            GCL 002 has set to collect on Barangay 178.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container top-0">
+                    <div
+                      class="card rounded-5 border-0 p-3 shadow-none position-relative"
+                    >
+                      <div class="d-flex align-items-center">
+                        <div class="bg-secondary rounded-4 p-3 me-3">
+                          <i class="fas fa-calendar-alt fa-2x text-light"></i>
+                        </div>
+                        <div>
+                          <p class="fw-bold fs-6 mb-0">
+                            Scheduled for collection
+                          </p>
+                          <p class="fw-light text-muted mb-0">
+                            GCL 002 has set to collect on Barangay 178.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container top-0">
+                    <div
+                      class="card rounded-5 border-0 p-3 shadow-none position-relative"
+                    >
+                      <div class="d-flex align-items-center">
+                        <div class="bg-secondary rounded-4 p-3 me-3">
+                          <i class="fas fa-calendar-alt fa-2x text-light"></i>
+                        </div>
+                        <div>
+                          <p class="fw-bold fs-6 mb-0">
+                            Scheduled for collection
+                          </p>
+                          <p class="fw-light text-muted mb-0">
+                            GCL 002 has set to collect on Barangay 178.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="card shadow-none border-0">
+                <div class="card-header">
+                  <h1>Collections</h1>
+                </div>
+                <div class="card-body"></div>
               </div>
             </div>
           </div>
@@ -955,12 +1060,11 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body" id="viewCollectorDetails">
-          </div>
+          <div class="modal-body" id="viewCollectorDetails"></div>
         </div>
       </div>
     </div>
-
+    <script type="text/javascript" src="components/dropDown.js"></script>
     <script type="text/javascript" src="dougnut.js"></script>
     <script type="text/javascript" src="components/calendar.js"></script>
     <script type="text/javascript" src="monitoring.js"></script>

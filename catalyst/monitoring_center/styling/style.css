@@ -61,6 +61,50 @@ a {
   background-color: var(--white-color);
 }
 
+/* Define scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+/* Track styles */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+/* Handle styles */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+  border-radius: 5px; /* Rounded corners */
+}
+
+/* Padding for the scrollbar */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Change color on hover */
+}
+
+/* Define scrollbar styles for the card body */
+.card-activity {
+  height: 250px; /* Set the height of the card body */
+  overflow-y: auto; /* Enable vertical scrollbar */
+  padding-right: 10px; /* Add padding to the right to accommodate the scrollbar */
+}
+
+/* Track styles */
+.card-activity::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+/* Handle styles */
+.card-activity::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+  border-radius: 5px; /* Rounded corners */
+}
+
+/* Padding for the scrollbar */
+.card-activity::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Change color on hover */
+}
+
 .header {
   width: 100%;
   height: var(--header-height);
