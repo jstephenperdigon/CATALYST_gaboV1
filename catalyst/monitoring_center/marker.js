@@ -251,7 +251,7 @@ function formatTimestamp(timestamp) {
 
 // Function to initialize the map
 function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  map = new google.maps.Map(document.getElementById("map1"), mapOptions);
 
   const infowindow = new google.maps.InfoWindow();
 

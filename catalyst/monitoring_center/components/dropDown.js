@@ -217,7 +217,4 @@ document.addEventListener("DOMContentLoaded", function () {
       barangayDropdown.appendChild(option);
     });
   }
-
-  // Attach an event listener to the District dropdown
-  districtDropdown.addEventListener("change", updateBarangayDropdown);
 });
