@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   function colorLink() {
     if (linkColor) {
-      linkColor.forEach((l) => l.classList.remove("active"));
-      this.classList.add("active");
+      linkColor.forEach((l) => l.classList.remove("active1"));
+      this.classList.add("active1");
     }
   }
   linkColor.forEach((l) => l.addEventListener("click", colorLink));

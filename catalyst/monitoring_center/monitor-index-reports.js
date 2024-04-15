@@ -114,7 +114,7 @@ function handleMoveToArchive(ticketNumber) {
     .catch((error) => {
       console.error("Error handling move to archive action:", error);
     });
-} 
+}
 
 // Function to generate HTML for each collector
 function generateCollectorHTML(collectorUID, collectors) {
@@ -128,29 +128,22 @@ function generateCollectorHTML(collectorUID, collectors) {
       <td>${collectors.AssignedArea.barangay}</td>
       <td>${collectors.UserInfo.suffix}</td>
       <td>
-        <button class="btn btn-primary shadow-none view-collector"
+        <button class="btn btn-secondary shadow-none view-collector"
                 data-uid="${collectorUID}"
                 data-mdb-toggle="modal"
                 data-mdb-target="#viewCollectorModal">
-          <i class="fas fa-eye"></i> View
+          <i class="fas fa-eye"></i>
         </button>
-        <button class="btn btn-warning shadow-none" 
-                onclick="editCollector('${collectorUID}')">
-          <i class="fas fa-edit"></i> Edit
-        </button>
-        <button class="btn btn-danger shadow-none" 
-                onclick="deleteCollector('${collectorUID}')">
-          <i class="fas fa-trash-alt"></i> Delete
-        </button>
+       
     </tr>
   `;
 }
 
 // Event listener for handling button clicks
-document.addEventListener('click', async function(e) {
-  if (e.target.matches('.view-collector')) {
-    const UID = e.target.getAttribute('data-uid');
-    
+document.addEventListener("click", async function (e) {
+  if (e.target.matches(".view-collector")) {
+    const UID = e.target.getAttribute("data-uid");
+
     try {
       // Retrieve collector data based on UID
       const collectorRef = ref(db, `Accounts/Collectors/${UID}`);
@@ -160,28 +153,74 @@ document.addEventListener('click', async function(e) {
       if (collectorData) {
         // Prepare collector information
         const collectorInfo = `
-          <p><strong>GCL Number:</strong> ${collectorData.GCL}</p>
-          <p><strong>Name:</strong> ${collectorData.UserInfo.firstName} ${collectorData.UserInfo.middleName} ${collectorData.UserInfo.lastName}</p>
-          <p><strong>Email:</strong> ${collectorData.UserInfo.email}</p>
-          <p><strong>Mobile Number:</strong> ${collectorData.UserInfo.mobileNumber}</p>
-          <p><strong>District:</strong> ${collectorData.AssignedArea.district}</p>
-          <p><strong>Barangay:</strong> ${collectorData.AssignedArea.barangay}</p>
-          <p><strong>Suffix:</strong> ${collectorData.UserInfo.suffix}</p>
-          <p><strong>Password:</strong> ${collectorData.password}</p>
+              <div class="container">
+                <div class="row">
+    <div class="col-xl-12 d-flex align-items-center justify-content-between">
+      <p class="fs-5 fw-bold ">Account Details</p>
+      <button class="btn btn-secondary shadow-none" onclick="toggleInputs()">
+         <i class="fas fa-edit"></i> Edit
+      </button>
+    </div>
+  </div>
+        <div class="row">
+    
+          <div class="col-xl-6"> 
+            <p class="text-muted"><strong>Control Number:</strong> <input type="text" class="form-control" id="controlNumber" value="${collectorData.GCL}" disabled></p>
+          </div>
+          <div class="col-xl-6"> 
+            <p class="text-muted"><strong>Account Password:</strong> <input type="password" class="form-control" id="password" value="${collectorData.password}" disabled></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-6">
+            <p class="fs-5 fw-bold">Personal Details</p>
+            <p class="text-muted"><strong>First Name:</strong> <input type="text" class="form-control" id="firstName" value="${collectorData.UserInfo.firstName}" disabled></p>
+            <p class="text-muted"><strong>Surname:</strong> <input type="text" class="form-control" id="lastName" value="${collectorData.UserInfo.lastName}" disabled></p>
+          </div>
+          <div class="col-xl-6">
+            <p>&nbsp;</p> <!-- Empty space to align with the other column -->
+            <p class="text-muted"><strong>Middle Name:</strong> <input type="text" class="form-control" id="middleName" value="${collectorData.UserInfo.middleName}" disabled></p>
+            <p class="text-muted"><strong>Suffix:</strong> <input type="text" class="form-control" id="suffix" value="${collectorData.UserInfo.suffix}" disabled></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-12">
+            <p class="fs-5 fw-bold">Contact Details</p>
+            <p class="text-muted"><strong>Email:</strong> <input type="email" class="form-control" id="email" value="${collectorData.UserInfo.email}" disabled></p>
+            <p class="text-muted"><strong>Mobile Number:</strong> <input type="tel" class="form-control" id="mobileNumber" value="${collectorData.UserInfo.mobileNumber}" disabled></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-6">
+            <p class="fs-5 fw-bold">Assigned Area</p>
+            <p class="text-muted"><strong>District:</strong> <input type="text" class="form-control" id="district" value="${collectorData.AssignedArea.district}" disabled></p>
+          </div>
+          <div class="col-xl-6">
+            <p>&nbsp;</p> <!-- Empty space to align with the other column -->
+            <p class="text-muted"><strong>Barangay:</strong> <input type="text" class="form-control" id="barangay" value="${collectorData.AssignedArea.barangay}" disabled></p>
+          </div>
+        </div>
+       
+      </div>
+
         `;
 
         // Set collector information inside the modal
-        const viewCollectorDetails = document.getElementById('viewCollectorDetails');
+        const viewCollectorDetails = document.getElementById(
+          "viewCollectorDetails"
+        );
         viewCollectorDetails.innerHTML = collectorInfo;
 
         // Show the modal using MDBootstrap
-        const viewCollectorModal = new mdb.Modal(document.getElementById('viewCollectorModal'));
+        const viewCollectorModal = new mdb.Modal(
+          document.getElementById("viewCollectorModal")
+        );
         viewCollectorModal.show();
       } else {
         console.log(`Collector with UID ${UID} not found.`);
       }
     } catch (error) {
-      console.error('Error fetching collector data:', error);
+      console.error("Error fetching collector data:", error);
     }
   }
 });
@@ -189,8 +228,10 @@ document.addEventListener('click', async function(e) {
 // COLLECTORS SEARCH FUNCTION
 // Function to filter collectors based on search input and selected category
 function filterCollectors(searchInput, category) {
-  const collectorsArray = document.querySelectorAll("#collectorsTable tbody tr");
-  collectorsArray.forEach(collector => {
+  const collectorsArray = document.querySelectorAll(
+    "#collectorsTable tbody tr"
+  );
+  collectorsArray.forEach((collector) => {
     const columnValue = collector
       .querySelector(`td[data-category="${category}"]`)
       .textContent.toLowerCase();
@@ -210,9 +251,11 @@ window.searchCollectors = function () {
 };
 
 // Function to handle live search while typing
-document.getElementById("searchCollector").addEventListener("input", function () {
-  window.searchCollectors();
-});
+document
+  .getElementById("searchCollector")
+  .addEventListener("input", function () {
+    window.searchCollectors();
+  });
 
 // TICKETS SEARCH FUNCTION
 // Function to filter reports based on search input and selected sorting column
@@ -262,7 +305,9 @@ function displayCollectors() {
   onValue(collectorsRef, (snapshot) => {
     const collectorsData = snapshot.val();
     if (collectorsData) {
-      const collectorsTableBody = document.querySelector("#collectorsTable tbody");
+      const collectorsTableBody = document.querySelector(
+        "#collectorsTable tbody"
+      );
       let tableHTML = "";
       Object.entries(collectorsData).forEach(([collectorUID, collector]) => {
         tableHTML += generateCollectorHTML(collectorUID, collector);

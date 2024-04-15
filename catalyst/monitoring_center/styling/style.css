@@ -214,10 +214,10 @@ a {
 .body-pd {
   padding-left: calc(var(--nav-width) + 1rem);
 }
-.active {
+.active1 {
   color: var(--white-color);
 }
-.active::before {
+.active1::before {
   content: "";
   position: absolute;
   left: 0;

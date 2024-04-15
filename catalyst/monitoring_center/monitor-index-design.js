@@ -18,8 +18,8 @@ $(document).ready(function () {
   $("#collectors-card").click(function (e) {
     e.preventDefault();
     // Remove "active" class from all nav links
-    $(".nav_link").removeClass("active");
+    $(".nav_link").removeClass("active1");
     // Add "active" class to collectors link
-    $("#collectors-link").addClass("active");
+    $("#collectors-link").addClass("active1");
   });
 });
