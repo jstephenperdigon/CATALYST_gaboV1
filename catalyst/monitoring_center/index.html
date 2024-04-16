@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Monitoring</title>
-    <link rel="stylesheet" href="../src/mdb.min.css" />
-    <link rel="stylesheet" href="../src/bootstrap.min.css" />
+    <link rel="stylesheet" href="src/mdb.min.css" />
+    <link rel="stylesheet" href="src/bootstrap.min.css" />
     <link rel="stylesheet" href="styling/style.css" />
     <link rel="stylesheet" href="styling/pulse.css" />
     <link
@@ -17,13 +17,32 @@
       rel="stylesheet"
     />
 
-    <script
-      defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
-    ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+      .card1 {
+        border: 0px solid #11531e;
+      }
+      /* Drop Down Icon */
+      .dropdown-iconbtn {
+        background-color: #11531e;
+        color: #fff;
+      }
+      .dropdown-iconbtn:hover {
+        border: solid 2px #11531e;
+        color: #11531e;
+        background-color: transparent;
+      }
+      .dropdown-toggle::after {
+        display: none;
+      }
+
+      /* Make dropdown menu items floating */
+      .dropdown-menu {
+        position: absolute;
+        right: 0;
+        left: auto;
+      }
       .content {
         margin-left: 70px;
         /* Same as the width of the sidebar */
@@ -63,48 +82,11 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
 
-      /* Style for horizontal icons */
-      .horizontal-icons {
-        border: none;
-        display: flex;
-        justify-content: center;
-        /* Align icons horizontally */
-      }
-
-      hr.vertical {
-        border: 0;
-        margin: 0;
-        border-left: 1px solid grey;
-        height: 200px;
-        float: left;
-      }
-      /* Add margin between the icons */
-      .horizontal-icons button {
-        margin-right: 10px;
-        border: none;
-      }
-
-      /* Increase the size of the icons */
-      .actions-column button i {
-        color: white;
-        font-size: 20px;
-        /* Adjust the size as needed */
-      }
-
-      #reportsTable {
-        text-align: center;
-        margin-top: 20px;
-        margin-left: 20px;
-        margin-right: 20px;
-        width: 80vw;
-        /* Adjust the width to fit the screen */
-      }
-
       /* Modal styles */
       .modal {
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 1050;
         left: 0;
         top: 0;
         width: 100%;
@@ -116,10 +98,10 @@
 
       .modal-content {
         background-color: #fefefe;
-        margin: 15% auto;
+
+        margin-bottom: 15%;
         padding: 20px;
         border: 1px solid #888;
-        width: 80%;
       }
 
       .close {
@@ -150,7 +132,7 @@
             <span class="nav_logo-name">Monitoring Center</span>
           </a>
           <div class="nav_list">
-            <a href="#" class="nav_link active" id="welcome-link">
+            <a href="#" class="nav_link active1" id="welcome-link">
               <i class="bx bx-home-alt-2 nav_icon"></i>
               <span class="nav_name">Home</span>
             </a>
@@ -184,13 +166,878 @@
     </div>
     <!-- NAVBAR -->
 
+    <!-- Container Main start -->
+    <div class="content" id="welcome-content">
+      <!--<div class="container-fluid bg-dark p-3 rounded-4">
+       <div class="d-flex container flex-row-reverse">
+          <i class="fas fa-user-check text-white"></i>
+        </div> 
+      </div>-->
+      <div class="container">
+        <nav
+          class="navbar navbar-light bg-light shadow-none bg-transparent mb-4"
+        >
+          <div class="container-fluid">
+            <div class="col-md-3">
+              <a class="navbar-brand header-color fs-5 fw-bolder" href="#">
+                Monitoring Center
+              </a>
+            </div>
+
+            <div class="col-md-auto d-flex">
+              <!-- <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            /> 
+            -->
+              <!-- Notification Button -->
+              <div class="dropdown">
+                <button
+                  class="btn dropdown-toggle dropdown-iconbtn shadow-none"
+                  type="button"
+                  id="notificationDropdown"
+                  data-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-bell"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-menu-end mt-3 p-4 shadow-none border-0"
+                  aria-labelledby="notificationDropdown"
+                >
+                  <!-- Notification 1 -->
+                  <li>
+                    <div class="card shadow-none border-0" style="width: 300px">
+                      <!-- Set width here -->
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-auto">
+                            <!-- Icon -->
+                            <i class="fas fa-envelope"></i>
+                          </div>
+                          <div class="col">
+                            <!-- Title -->
+                            <h5 class="card-title">New Message</h5>
+                            <!-- Message -->
+                            <p class="card-text">
+                              You have a new message from John Doe.
+                            </p>
+                            <!-- Time -->
+                            <p class="card-text">
+                              <small class="text-muted">1 minute ago</small>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- Notification 2 -->
+                  <li>
+                    <div class="card shadow-none border-0" style="width: 300px">
+                      <!-- Set width here -->
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-auto">
+                            <!-- Icon -->
+                            <i class="fas fa-bell"></i>
+                          </div>
+                          <div class="col">
+                            <!-- Title -->
+                            <h5 class="card-title">New Notification</h5>
+                            <!-- Message -->
+                            <p class="card-text">
+                              You have a new notification.
+                            </p>
+                            <!-- Time -->
+                            <p class="card-text">
+                              <small class="text-muted">2 hours ago</small>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- Add more notifications as needed -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- <div class="container-fluid">
+        <div class="row justify-content-start">
+          <div class="col-md-12 text-center">
+            <div class="card shadow-none border-0 bg-gradient-1">
+              <div class="card-body">
+                <h1 id="welcome-message">Welcome,</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="container">
+        <div class="container">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active fw-bold"
+                id="pills-home-tab"
+                data-mdb-toggle="pill"
+                data-mdb-target="#pills-home"
+                type="button"
+                role="tab"
+                aria-controls="pills-home"
+                aria-selected="true"
+              >
+                <i class="fas fa-chart-line me-2"></i> Dashboard
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link fw-bold"
+                id="pills-profile-tab"
+                data-mdb-toggle="pill"
+                data-mdb-target="#pills-profile"
+                type="button"
+                role="tab"
+                aria-controls="pills-profile"
+                aria-selected="false"
+              >
+                <i class="fas fa-calendar-alt me-2"></i> Scheduling
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link fw-bold"
+                id="pills-contact-tab"
+                data-mdb-toggle="pill"
+                data-mdb-target="#pills-contact"
+                type="button"
+                role="tab"
+                aria-controls="pills-contact"
+                aria-selected="false"
+              >
+                <i class="fas fa-calendar-check me-2"></i> Schedules
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tab-content" id="pills-tabContent">
+          <div
+            class="tab-pane fade show active container-fluid"
+            id="pills-home"
+            role="tabpanel"
+            aria-labelledby="pills-home-tab"
+          >
+            <div class="row">
+              <div class="col-9">
+                <!-- Cards -->
+                <div class="card shadow-none rounded-4 card1">
+                  <div class="card-body text-center">
+                    <div class="container">
+                      <div class="row justify-content-between">
+                        <div class="col-3 col-sm-6">
+                          <a
+                            href="#"
+                            class="nav-card nav-link"
+                            id="collectors-card"
+                          >
+                            <div class="card shadow-none p-1 border-0">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-5">
+                                    <p
+                                      class="fs-1 text-success fw-bold"
+                                      id="uidCount"
+                                    ></p>
+                                  </div>
+                                  <div class="col">
+                                    <p class="fs-5 text-muted">
+                                      Garbage Collectors
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
+                        <div class="col-3 col-sm-6">
+                          <a
+                            href="collectorsCrud/CollectorList.html"
+                            class="card-link"
+                          >
+                            <div class="card shadow-none p-1 border-0">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-5">
+                                    <p class="fs-1 text-success fw-bold">50</p>
+                                  </div>
+                                  <div class="col">
+                                    <p class="fs-5 text-muted">
+                                      Household Users
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
+                        <div class="col-3 col-sm-6">
+                          <div class="card shadow-none p-1 border-0">
+                            <div class="card shadow-none p-1 border-0">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-5">
+                                    <p
+                                      class="fs-1 text-success fw-bold"
+                                      id="gbCount"
+                                    ></p>
+                                  </div>
+                                  <div class="col">
+                                    <p class="fs-5 text-muted">
+                                      Smart Garbage Bins
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cards -->
+              </div>
+              <div class="col-3">
+                <div class="container">
+                  <div class="row">
+                    <div
+                      class="card rounded-4 shadow-none border-0 position-relative p-2"
+                    >
+                      <div class="row mt-1 p-3">
+                        <div class="col-9">
+                          <p class="fs-3 fw-bold text-muted">
+                            Total Garbage Collected
+                          </p>
+                        </div>
+                        <div class="col-2">
+                          <button
+                            type="button"
+                            class="btn bg-transparent shadow-none btn-sm m-2 text-muted"
+                            style="text-transform: none"
+                          >
+                            <i class="fas fa-2x fa-chevron-right"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <!-- See More Button -->
+
+                      <div class="row text-start text-center">
+                        <p class="fs-1 fw-bolder text-success">50 TONS</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-4">
+                    <div class="card shadow-none border-0 bg-success">
+                      <div class="card-body text-center"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="container mt-5">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div
+                        class="card shadow-none border-0 text-start bg-transparent"
+                      >
+                        <div class="card-body">
+                          <p class="fs-4 fw-bold">Activities</p>
+                        </div>
+                      </div>
+                      <div class="card p-2 card-activity shadow-none border-0">
+                        <div
+                          class="card-body"
+                          style="height: 250px; overflow-y: auto"
+                        >
+                          <div class="container top-0">
+                            <div
+                              class="card rounded-5 border-0 p-3 shadow-none position-relative"
+                            >
+                              <div class="d-flex align-items-center">
+                                <div class="bg-secondary rounded-4 p-3 me-3">
+                                  <i
+                                    class="fas fa-calendar-alt fa-2x text-light"
+                                  ></i>
+                                </div>
+                                <div>
+                                  <p class="fw-bold fs-6 mb-0">
+                                    Scheduled for collection
+                                  </p>
+                                  <p class="fw-light text-muted mb-0">
+                                    GCL 002 has set to collect on Barangay 178.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="container top-0">
+                            <div
+                              class="card rounded-5 border-0 p-3 shadow-none position-relative"
+                            >
+                              <div class="d-flex align-items-center">
+                                <div class="bg-secondary rounded-4 p-3 me-3">
+                                  <i
+                                    class="fas fa-calendar-alt fa-2x text-light"
+                                  ></i>
+                                </div>
+                                <div>
+                                  <p class="fw-bold fs-6 mb-0">
+                                    Scheduled for collection
+                                  </p>
+                                  <p class="fw-light text-muted mb-0">
+                                    GCL 002 has set to collect on Barangay 178.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="container top-0">
+                            <div
+                              class="card rounded-5 border-0 p-3 shadow-none position-relative"
+                            >
+                              <div class="d-flex align-items-center">
+                                <div class="bg-secondary rounded-4 p-3 me-3">
+                                  <i
+                                    class="fas fa-calendar-alt fa-2x text-light"
+                                  ></i>
+                                </div>
+                                <div>
+                                  <p class="fw-bold fs-6 mb-0">
+                                    Scheduled for collection
+                                  </p>
+                                  <p class="fw-light text-muted mb-0">
+                                    GCL 002 has set to collect on Barangay 178.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card shadow-none border-0">
+                        <div class="card-header">
+                          <h1>Collections</h1>
+                        </div>
+                        <div class="card-body"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="pills-profile"
+            role="tabpanel"
+            aria-labelledby="pills-profile-tab"
+          >
+            <div class="container">
+              <div class="row">
+                <div class="col-4">
+                  <div class="card p-4 shadow-none border-0">
+                    <div class="container">
+                      <div class="md-form">
+                        <label class="form-label" for="districtSelect"
+                          >District</label
+                        >
+                        <select class="form-select" id="district">
+                          <option value="" disabled selected>
+                            Select District
+                          </option>
+                          <option value="1">District 1</option>
+                          <option value="2">District 2</option>
+                          <option value="3">District 3</option>
+                        </select>
+                      </div>
+                      <div class="md-form mt-2">
+                        <label class="form-label" for="barangaySelect"
+                          >Barangay</label
+                        >
+                        <select class="form-select" id="barangay" disabled>
+                          <option value="" disabled selected>
+                            Select Barangay
+                          </option>
+                        </select>
+                      </div>
+                      <div class="md-form mt-4 text-center">
+                        <button
+                          class="btn btn-primary shadow-none"
+                          id="selectButton"
+                          disabled
+                        >
+                          Select
+                        </button>
+                        <button
+                          class="btn btn-danger shadow-none"
+                          id="cancelButton"
+                          disabled
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <!-- The container for the map -->
+                  <div class="card shadow-none">
+                    <div id="map" style="height: 258px; width: 100%"></div>
+                    <!--<div id="map" style="height: 280px"></div> -->
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-5">
+                <div class="col">
+                  <p class="fs-3 fw-bold text-muted">Collection Details</p>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col">
+                  <div class="card rounded-4 border-0 p-5 shadow-none">
+                    <div class="container">
+                      <div id="selectedMarkers"></div>
+                    </div>
+                    <div
+                      class="container"
+                      id="additionalFields"
+                      style="display: none"
+                    >
+                      <div class="row">
+                        <div class="col">
+                          <label for="date" class="form-label"
+                            >Select Date:</label
+                          >
+                          <input
+                            type="date"
+                            id="dateInputField"
+                            name="date"
+                            class="form-control"
+                            required
+                          />
+                        </div>
+                        <div class="col">
+                          <label for="time" class="form-label"
+                            >Select Time:</label
+                          >
+                          <input
+                            type="time"
+                            id="timeInputField"
+                            name="time"
+                            class="form-control"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <label for="dropdown" class="form-label"
+                        >Available Collector:</label
+                      >
+                      <select
+                        id="dropdownCollector"
+                        name="dropdown"
+                        class="form-select"
+                      >
+                        <option value="" selected disabled>
+                          Select Collector
+                        </option>
+                        <!-- Add options for available collectors here -->
+                      </select>
+                      <div class="row text-center">
+                        <div class="col-12">
+                          <button
+                            id="deployBtn"
+                            class="btn btn-primary shadow-none mt-3"
+                            disabled
+                          >
+                            <i class="fas fa-calendar-plus"></i> Schedule
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="pills-contact"
+            role="tabpanel"
+            aria-labelledby="pills-contact-tab"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content" id="map-content">
+      <!-- The container for the map -->
+      <div class="container mt-5">
+        <p class="fs-2 fw-bold text-muted">Monitoring Map</p>
+      </div>
+
+      <div class="container mt-5">
+        <!-- Geospatial Visualization-->
+        <div class="row">
+          <div class="col-md-9">
+            <div class="card shadow-none border-0">
+              <div id="roadmap" style="height: 430px"></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card shadow-none border-0" style="height: 430px">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <p class="fs-5 fw-bolder text-muted">
+                      High - Traffic Collection Zones
+                    </p>
+                  </div>
+                  <div class="col-md-6 justify-content-end text-end">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#reportModal"
+                    >
+                      See Report <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="fw-bold">Brgy. 176</p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="progress">
+                      <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        style="width: 80%"
+                        aria-valuenow="10"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="fw-bold">Brgy. 1</p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="progress">
+                      <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        style="width: 80%"
+                        aria-valuenow="10"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="fw-bold">Brgy. 175</p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="progress">
+                      <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        style="width: 80%"
+                        aria-valuenow="10"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 
+              <div class="row">
+                <div class="col">
+                  <p class="fs-5 text-muted fw-bold">Marker Legends</p>
+                </div>
+              </div>
+              <div class="container top-0">
+                <div
+                  class="card rounded-5 border-0 p-3 shadow-none position-relative"
+                >
+                  <div class="d-flex align-items-center">
+                    <div class="bg-info rounded-4 p-3 me-3">
+                      <i class="fas fa-map-marker-alt fa-2x text-light"></i>
+                    </div>
+                    <div>
+                      <p class="fw-bold fs-6 mb-0">Collector Marker</p>
+                      <p class="fw-light text-muted mb-0">
+                        Represents the location of garbage collectors.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="container top-0 mt-3">
+                <div
+                  class="card rounded-5 border-0 p-3 shadow-none position-relative"
+                >
+                  <div class="d-flex align-items-center">
+                    <div class="bg-primary rounded-4 p-3 me-3">
+                      <i class="fas fa-trash fa-2x text-light"></i>
+                    </div>
+                    <div>
+                      <p class="fw-bold fs-6 mb-0">Bin Marker</p>
+                      <p class="fw-light text-muted mb-0">
+                        Represents the location of garbage bins.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              -->
+          </div>
+        </div>
+      </div>
+      <div class="container mt-4">
+        <div class="row">
+          <div class="col-4"></div>
+          <div class="col-4"></div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col"></div>
+        </div>
+      </div>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card shadow-none border-0">
+              <div class="card-body">
+                <h1 class="header-color fw-bold p-1">
+                  Waste Composition Summary
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-4">
+        <div class="row">
+          <div class="col-md-12">
+            <p class="fw-bolder fs-4 text-muted">Total Garbage Collected</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="dropdown">
+              <select
+                class="form-select"
+                id="timePeriodDropdown"
+                onchange="updateLineChart(this.value)"
+              >
+                <option value="today">Today</option>
+                <option value="last_week">Last Week</option>
+                <option value="last_month">Last Month</option>
+                <!-- Add more time period options as needed -->
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt-5">
+        <div class="row"></div>
+      </div>
+      <div class="container mt-5"></div>
+    </div>
+
+    <div class="content" id="reports-content">
+      <div class="container mt-5">
+        <p class="fs-2 fw-bold">Tickets</p>
+      </div>
+      <div class="container mb-5">
+        <div class="row justify-content-end">
+          <div class="col-md-3">
+            <div class="input-group">
+              <div class="form-outline" data-mdb-input-init>
+                <input type="search" id="searchInput" class="form-control" />
+                <label class="form-label" for="searchInput">Search</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="sortDropdown"
+                  >Filter By:
+                </label>
+              </div>
+              <select
+                class="custom-select form-control form-outline"
+                id="sortDropdown"
+              >
+                <option selected disabled>Select an option</option>
+                <option value="ticketNumber">Ticket #</option>
+                <option value="GCN">GCN</option>
+                <option value="Issue">Issue</option>
+                <option value="district">District</option>
+                <option value="barangay">Barangay</option>
+                <option value="TimeSent">Time Sent</option>
+                <option value="DateSent">Date Sent</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div id="reportsTable"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content" id="bins-content">
+      <h1>Bins</h1>
+    </div>
+    <div class="content" id="collector-content">
+      <div class="container mb-5 mt-5">
+        <div class="row">
+          <div class="col-md-6">
+            <h2>Collectors</h2>
+          </div>
+          <div class="col-md-6 d-flex justify-content-end">
+            <button
+              class="btn btn-primary shadow-none"
+              id="AddUserButton"
+              data-mdb-toggle="modal"
+              data-mdb-target="#addCollectorModal"
+            >
+              Add Collector
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-end">
+          <div class="col-md-3">
+            <!-- Search bar -->
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                id="searchCollector"
+                class="form-control"
+                placeholder="Search..."
+                aria-label="Search"
+                aria-describedby="searchButton"
+              />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <!-- Dropdown for search category -->
+            <div class="input-group mb-3">
+              <select
+                class="form-select"
+                id="searchCollector"
+                aria-label="Search Category"
+              >
+                <option selected>Select category...</option>
+                <option value="firstName">First Name</option>
+                <option value="lastName">Last Name</option>
+                <option value="email">Email</option>
+                <option value="mobileNumber">Mobile Number</option>
+                <option value="district">District</option>
+                <option value="barangay">Barangay</option>
+                <option value="suffix">Suffix</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt-3">
+        <table id="collectorsTable" class="table table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th>District</th>
+              <th>Barangay</th>
+              <th>Suffix</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table body will be populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="content" id="stats-content"></div>
+
+    <div
+      class="modal fade"
+      id="modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Report Details</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="modalContent">
+            <!-- Modal content will be dynamically generated here -->
+          </div>
+        </div>
+      </div>
+    </div>
     <div
       class="modal fade"
       id="addCollectorModal"
       tabindex="-1"
       aria-labelledby="addCollectorModalLabel"
       aria-hidden="true"
-      style="z-index: 1"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -259,7 +1106,7 @@
                   <span class="input-group-text" id="basic-addon1">+63</span>
                   <input
                     type="text"
-                    id="mobileNumber"
+                    id="mobileNumber1"
                     class="form-control"
                     placeholder="Mobile Number"
                     aria-label="Mobile Number"
@@ -310,629 +1157,102 @@
         </div>
       </div>
     </div>
-    <!-- Container Main start -->
-    <div class="content" id="welcome-content">
-      <!--<div class="container-fluid bg-dark p-3 rounded-4">
-       <div class="d-flex container flex-row-reverse">
-          <i class="fas fa-user-check text-white"></i>
-        </div> 
-      </div>-->
-      <nav class="navbar navbar-light bg-light shadow-none bg-transparent mb-4">
-        <div class="container-fluid">
-          <div class="col-md-3">
-            <a class="navbar-brand header-color fs-5 fw-bolder" href="#">
-              Monitoring Center
-            </a>
-          </div>
 
-          <div class="col-md-2 d-flex">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-          </div>
-        </div>
-      </nav>
-      <!-- <div class="container-fluid">
-        <div class="row justify-content-start">
-          <div class="col-md-12 text-center">
-            <div class="card shadow-none border-0 bg-gradient-1">
-              <div class="card-body">
-                <h1 id="welcome-message">Welcome,</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <div class="container-fluid">
-        <div class="row justify-content-center">
-          <div class="col-md-8">
-            <div class="container">
-              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link active"
-                    id="pills-home-tab"
-                    data-mdb-toggle="pill"
-                    data-mdb-target="#pills-home"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-home"
-                    aria-selected="true"
-                  >
-                    Dashboard
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-profile-tab"
-                    data-mdb-toggle="pill"
-                    data-mdb-target="#pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-profile"
-                    aria-selected="false"
-                  >
-                    Scheduling
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-contact-tab"
-                    data-mdb-toggle="pill"
-                    data-mdb-target="#pills-contact"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-contact"
-                    aria-selected="false"
-                  >
-                    Schedules
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div class="tab-content" id="pills-tabContent">
-              <div
-                class="tab-pane fade show active container-fluid"
-                id="pills-home"
-                role="tabpanel"
-                aria-labelledby="pills-home-tab"
-              >
-                <div class="container">
-                  <div class="row">
-                    <div class="col-3">
-                      <a
-                        href="#"
-                        class="nav-card nav-link"
-                        id="collectors-card"
-                      >
-                        <div class="card shadow-none p-1 border-0">
-                          <div class="card-body">
-                            <div class="float-end mt-3">
-                              <i class="fas fa-users fa-2x text-success"></i>
-                            </div>
-                            <p class="fs-5">Collectors</p>
-                            <p class="fs-1 text-success" id="uidCount"></p>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                    <div class="col-3">
-                      <a
-                        href="collectorsCrud/CollectorList.html"
-                        class="card-link"
-                      >
-                        <div
-                          class="card shadow-none p-1 border-0 clickable-box"
-                        >
-                          <div class="card-body">
-                            <div class="float-end mt-3">
-                              <i class="fas fa-users fa-2x text-success"></i>
-                            </div>
-                            <p class="fs-5">Household Users</p>
-                            <p class="fs-1 text-success">50</p>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                    <div class="col-3">
-                      <div class="card shadow-none p-1 border-0">
-                        <div class="card-body">
-                          <div class="float-end mt-3">
-                            <i class="fas fa-trash-can fa-2x text-success"></i>
-                          </div>
-                          <p class="fs-5">Smart Garbage Bins</p>
-                          <p class="fs-1 text-success" id="gbCount"></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="tab-pane fade"
-                id="pills-profile"
-                role="tabpanel"
-                aria-labelledby="pills-profile-tab"
-              ></div>
-              <div
-                class="tab-pane fade"
-                id="pills-contact"
-                role="tabpanel"
-                aria-labelledby="pills-contact-tab"
-              ></div>
-            </div>
-          </div>
-          <div class="col-md-4 mt-5">
-            <div
-              class="card shadow-none border-0"
-              style="width: 500px; height: 400px"
-            >
-              <div class="card-body"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <!-- HTML for modal using MDBootstrap -->
     <div
-      class="content"
-      id="map-content"
-      style="position: relative; height: 850px"
+      class="modal fade"
+      id="viewCollectorModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="viewCollectorModalLabel"
+      aria-hidden="true"
     >
-      <!-- The container for the map -->
-      <div id="map" style="height: 100%; width: 100%; float: left"></div>
-
-      <!-- Notifications content on the right side -->
-      <div
-        class="container mt-3"
-        style="
-          position: absolute;
-          top: 0;
-          right: -100px;
-          width: 30%;
-          height: 100%;
-          padding: 10px;
-          box-sizing: border-box;
-          display: none;
-
-          overflow-y: auto;
-        "
-      >
-        <p class="fs-2 fw-bold">Notifications</p>
-
-        <!-- Container for reports -->
-
-        <div id="notificationContainer mb-3">
-          <!-- Container for the scrollable content -->
-          <div id="notificationContent"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row">
-        <div class="col"></div>
-      </div>
-    </div>
-
-    <div class="content" id="reports-content">
-      <div class="container">
-        <label for="searchInput">Search:</label>
-        <input type="text" id="searchInput" oninput="searchReports()" />
-        <label for="sortDropdown">Sort By: </label>
-        <select id="sortDropdown">
-          <option value="ticketNumber">Ticket #</option>
-          <option value="GCN">GCN</option>
-          <option value="Name">Name</option>
-          <option value="email">Email</option>
-          <option value="mobileNumber">Mobile Number(+63)</option>
-          <option value="Issue">Issue</option>
-          <option value="Description">Description</option>
-          <option value="district">District</option>
-          <option value="barangay">Barangay</option>
-          <option value="TimeSent">Time Sent</option>
-          <option value="DateSent">Date Sent</option>
-          <option value="addressLine1">Address Line 1</option>
-          <option value="addressLine2">Address Line 2</option>
-        </select>
-      </div>
-      <div id="reportsTable"></div>
-    </div>
-    <div class="content" id="bins-content">
-      <h1>Bins</h1>
-    </div>
-    <div class="content" id="collector-content">
-      <div class="container mb-5 mt-5">
-        <div class="row">
-          <div class="col-md-6">
-            <h2>Collectors</h2>
-          </div>
-          <div class="col-md-6 d-flex justify-content-end">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewCollectorModalLabel">
+              Collector Details
+            </h5>
             <button
-              class="btn btn-primary shadow-none"
-              id="AddUserButton"
-              data-mdb-toggle="modal"
-              data-mdb-target="#addCollectorModal"
+              type="button"
+              class="btn close shadow-none"
+              data-mdb-dismiss="modal"
+              aria-label="Close"
             >
-              Add Collector
+              <span aria-hidden="true">&times;</span>
             </button>
           </div>
-        </div>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="card shadow-none border-0">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <!-- Search bar -->
-                    <div class="input-group mb-3">
-                      <input
-                        type="text"
-                        id="searchInput"
-                        class="form-control"
-                        placeholder="Search..."
-                        aria-label="Search"
-                        aria-describedby="searchButton"
-                      />
-                      <button
-                        class="btn btn-outline-secondary"
-                        type="button"
-                        id="searchButton"
-                      >
-                        Search
-                      </button>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <!-- Dropdown for search category -->
-                    <div class="input-group mb-3">
-                      <select
-                        class="form-select"
-                        id="searchCategory"
-                        aria-label="Search Category"
-                      >
-                        <option selected>Choose category...</option>
-                        <option value="firstName">First Name</option>
-                        <option value="lastName">Last Name</option>
-                        <option value="email">Email</option>
-                        <option value="mobileNumber">Mobile Number</option>
-                        <option value="district">District</option>
-                        <option value="barangay">Barangay</option>
-                        <option value="suffix">Suffix</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container mt-5">
-        <table id="collectorsTable" class="table table-striped">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Mobile Number</th>
-              <th>District</th>
-              <th>Barangay</th>
-              <th>Suffix</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Table body will be populated dynamically -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="content" id="stats-content">
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card shadow-none border-0">
-              <div class="card-body">
-                <h1 class="header-color fw-bold p-1">
-                  Waste Composition Report
-                </h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3"></div>
-        </div>
-      </div>
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-3">
-            <p class="fs-5">Garbage Composition</p>
-            <div class="dropdown mb-2">
-              <select
-                class="form-select"
-                id="timePeriodDropdown"
-                onchange="updateDonutChart(this.value)"
-              >
-                <option value="today">Today</option>
-                <option value="last_week">Last Week</option>
-                <option value="last_month">Last Month</option>
-                <!-- Add more time period options as needed -->
-              </select>
-            </div>
-            <div class="card shadow-none border-0">
-              <div class="card-body">
-                <canvas id="donutChart" width="700" height="400"></canvas>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <!-- Geospatial Visualization-->
-            <div class="card shadow-none border-0">
-              <div id="roadmap" style="height: 430px"></div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card shadow-none border-0" style="height: 430px">
-              <div class="card-body">
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <p class="fs-5 fw-bolder">
-                      High - Traffic Collection Zones
-                    </p>
-                  </div>
-                  <div class="col-md-6 justify-content-end text-end">
-                    <p class="fw-normal text-primary">See Report</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <p class="fw-bold">Brgy. 176</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="progress">
-                      <div
-                        class="progress-bar bg-danger"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="10"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <p class="fw-bold">Brgy. 1</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="progress">
-                      <div
-                        class="progress-bar bg-danger"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="10"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <p class="fw-bold">Brgy. 175</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="progress">
-                      <div
-                        class="progress-bar bg-danger"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="10"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-12">
-            <p class="fw-bolder fs-4">Total Garbage Collected</p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3">
-            <div class="dropdown">
-              <select
-                class="form-select"
-                id="timePeriodDropdown"
-                onchange="updateLineChart(this.value)"
-              >
-                <option value="today">Today</option>
-                <option value="last_week">Last Week</option>
-                <option value="last_month">Last Month</option>
-                <!-- Add more time period options as needed -->
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-md-6">
-            <canvas id="lineChart"></canvas>
-          </div>
+          <div class="modal-body" id="viewCollectorDetails"></div>
         </div>
       </div>
     </div>
 
-    <script type="text/javascript" src="../src/popper.min.js"></script>
+    <script src="map.js" type="module" defer></script>
+    <script type="text/javascript" src="mapIndex.js"></script>
+    <script type="text/javascript" src="components/lineChart.js"></script>
+    <script type="text/javascript" src="components/session.js"></script>
+    <script type="text/javascript" src="components/dropDown.js"></script>
+    <script type="text/javascript" src="dougnut.js"></script>
+    <script type="text/javascript" src="monitoring.js"></script>
+
+    <script type="module" src="monitor-index-reports.js"></script>
+    <script type="module" src="monitoring-gb-account-count.js"></script>
     <script type="text/javascript" src="../src/jquery.min.js"></script>
     <script type="text/javascript" src="../src/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../src/popper.min.js"></script>
+    <!-- <script
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
+    ></script> -->
+    <script
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMaps"
+    ></script>
     <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
     ></script>
-
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-      // No need for import statement for MDB UI Kit
-      // Initialization for MDB UI Kit
-      document.addEventListener("DOMContentLoaded", function () {
-        const { Dropdown, Ripple } = mdb;
-        mdb.Dropdown.init();
-        mdb.Ripple.init();
-      });
+        function toggleInputs() {
+            var inputs = document.querySelectorAll('#firstName, #middleName, #lastName, #controlNumber, #barangay, #district, #suffix, #email, #mobileNumber, #password');
+            var editButton = document.getElementById('editButton');
+
+            inputs.forEach(function (input) {
+              input.disabled = !input.disabled;
+            });
+
+            if (editButton.innerText.trim() === "Save") {
+              editButton.classList.remove('btn-secondary');
+              editButton.classList.add('btn-primary');
+            } else {
+              editButton.innerHTML = '<i class="fas fa-save"></i> Save';
+              editButton.classList.remove('btn-primary');
+              editButton.classList.add('btn-secondary');
+            }
+
+            // Call enableSaveButton after toggling inputs to update button state
+            enableSaveButton();
+          }
+
+          function enableSaveButton() {
+              var inputs = document.querySelectorAll('input[id="firstName"], input[id="middleName"], input[id="lastName"], input[id="controlNumber"], input[id="barangay"], input[id="district"], input[id="suffix"], input[id="email"], input[id="mobileNumber"], input[id="password"]');
+              var editButton = document.getElementById('editButton');
+
+              function handleInputChange() {
+                var hasChanges = Array.from(inputs).some(function (input) {
+                  return input.value !== input.defaultValue;
+                });
+                editButton.disabled = !hasChanges || editButton.innerText.trim() === "Save";
+              }
+
+              inputs.forEach(function (input) {
+                input.addEventListener('input', handleInputChange);
+              });
+
+              handleInputChange();
+            }
     </script>
-    <script type="text/javascript" src="dougnut.js"></script>
-    <script type="text/javascript" src="monitoring.js"></script>
-    <script type="module" src="monitor-index-function.js"></script>
-    <script type="module" src="monitor-index-reports.js"></script>
-    <script type="module" src="monitoring-gb-account-count.js"></script>
-    <script>
-      var lineChart;
-
-      function updateLineChart(timePeriod) {
-        // Based on the selected time period, fetch data from the server or calculate it locally
-        // Here, I'll just use sample data for demonstration purposes
-
-        var labels;
-        var recyclableData;
-        var specialData;
-        var biodegradableData;
-        var nonBiodegradableData;
-
-        if (timePeriod === "today") {
-          // Sample data for today
-          labels = [
-            "00:00",
-            "03:00",
-            "06:00",
-            "09:00",
-            "12:00",
-            "15:00",
-            "18:00",
-            "21:00",
-          ];
-          recyclableData = [10, 20, 30, 100, 50, 60, 70, 80];
-          specialData = [5, 10, 15, 20, 25, 30, 35, 40];
-          biodegradableData = [15, 25, 35, 45, 55, 65, 75, 85];
-          nonBiodegradableData = [8, 15, 22, 30, 37, 44, 51, 58];
-        } else if (timePeriod === "last_week") {
-          // Sample data for last week
-          labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-          recyclableData = [50, 60, 70, 80, 90, 100, 110];
-          specialData = [30, 40, 50, 60, 70, 80, 90];
-          biodegradableData = [40, 50, 60, 70, 80, 90, 100];
-          nonBiodegradableData = [25, 35, 45, 55, 65, 75, 85];
-        } else if (timePeriod === "last_month") {
-          // Sample data for last month
-          labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
-          recyclableData = [100, 200, 140, 160];
-          specialData = [60, 80, 150, 120];
-          biodegradableData = [200, 100, 120, 140];
-          nonBiodegradableData = [50, 70, 180, 110];
-        }
-
-        // Update the chart with the fetched data
-        var data = {
-          labels: labels,
-          datasets: [
-            {
-              label: "Recyclable",
-              data: recyclableData,
-              borderColor: "blue",
-              fill: false,
-            },
-            {
-              label: "Special",
-              data: specialData,
-              borderColor: "red",
-              fill: false,
-            },
-            {
-              label: "Biodegradable",
-              data: biodegradableData,
-              borderColor: "green",
-              fill: false,
-            },
-            {
-              label: "Non-Biodegradable",
-              data: nonBiodegradableData,
-              borderColor: "orange",
-              fill: false,
-            },
-          ],
-        };
-
-        if (lineChart) {
-          lineChart.destroy(); // Destroy previous chart instance if exists
-        }
-
-        // Get the canvas element
-        var ctx = document.getElementById("lineChart").getContext("2d");
-
-        // Create the line chart
-        lineChart = new Chart(ctx, {
-          type: "line",
-          data: data,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-
-      // Initially load the chart for today
-      updateLineChart("today");
-    </script>
+    <script></script>
   </body>
-  <script>
-    // Check if accountId exists in session storage
-    document.addEventListener("DOMContentLoaded", function () {
-      const accountId = sessionStorage.getItem("uid");
-      if (!accountId) {
-        // If accountId doesn't exist, redirect to index.html
-        window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
-      }
-    });
-
-    // Logout functionality (similar to login.js)
-    document.addEventListener("DOMContentLoaded", function () {
-      // Check if logout link exists
-      const logoutLink = document.getElementById("logout");
-      if (logoutLink) {
-        // Add click event listener to logout link
-        logoutLink.addEventListener("click", function (event) {
-          event.preventDefault(); // Prevent default link behavior
-
-          // Remove accountId from session storage
-          sessionStorage.removeItem("uid");
-
-          // Redirect to index page
-          window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
-        });
-      }
-    });
-  </script>
 </html>

@@ -185,7 +185,6 @@ function displayReportsTable(reportsArray) {
     });
   });
 }
-
 // Function to update the table when data changes
 function updateTable() {
   const reportsRef = ref(db, "Reports");
@@ -247,7 +246,7 @@ function displayModal(ticketNumber) {
           <p>Date Sent: ${report.DateSent}</p>
           <p>Address Line 1: ${report.addressLine1}</p>
           <p>Address Line 2: ${report.addressLine2}</p>
-          <button id="respondButton">Send Respond</button>
+        
         `;
         // Add event listener to the button inside the modal
         const respondButton = document.getElementById("respondButton");

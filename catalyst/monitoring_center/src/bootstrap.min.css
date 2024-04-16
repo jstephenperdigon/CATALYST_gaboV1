@@ -5390,6 +5390,7 @@ fieldset:disabled .btn {
   display: flex;
   flex-direction: column;
   width: 100%;
+  z-index: 1050;
   color: var(--bs-modal-color);
   pointer-events: auto;
   background-color: var(--bs-modal-bg);
@@ -5399,13 +5400,12 @@ fieldset:disabled .btn {
   outline: 0;
 }
 .modal-backdrop {
-  --bs-backdrop-zindex: 1050;
   --bs-backdrop-bg: #000;
   --bs-backdrop-opacity: 0.5;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: var(--bs-backdrop-zindex);
+  z-index: 0;
   width: 100vw;
   height: 100vh;
   background-color: var(--bs-backdrop-bg);
@@ -5413,9 +5413,7 @@ fieldset:disabled .btn {
 .modal-backdrop.fade {
   opacity: 0;
 }
-.modal-backdrop.show {
-  opacity: var(--bs-backdrop-opacity);
-}
+
 .modal-header {
   display: flex;
   flex-shrink: 0;

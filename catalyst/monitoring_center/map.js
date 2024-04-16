@@ -253,40 +253,45 @@ function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
   defaultOption.textContent = "Select Collector";
   dropdownCollector.appendChild(defaultOption);
 
-  // Query Firebase Database for collectors with matching assigned area
+  // Query Firebase Database for collectors with matching assigned area and listen for real-time updates
   const collectorsRef = ref(db, "Accounts/Collectors");
-  get(collectorsRef)
-    .then((snapshot) => {
-      const collectors = snapshot.val();
+  onValue(collectorsRef, (snapshot) => {
+    const collectors = snapshot.val();
 
-      // Iterate over collectors to find matching ones and update the dropdown
-      for (const userId in collectors) {
-        const collector = collectors[userId];
-        const assignedArea = collector.AssignedArea;
-        const gcl = collector.GCL;
+    // Iterate over collectors to find matching ones and update the dropdown
+    for (const userId in collectors) {
+      const collector = collectors[userId];
+      const assignedArea = collector.AssignedArea;
+      const gcl = collector.GCL;
 
-        // Check if assigned district and barangay match selected values
-        if (
-          assignedArea &&
-          assignedArea.district === selectedDistrict &&
-          assignedArea.barangay === selectedBarangay
-        ) {
-          // Create new option element for the dropdown
-          const option = document.createElement("option");
-          option.value = gcl;
-          option.textContent = gcl;
+      // Check if assigned district and barangay match selected values
+      if (
+        assignedArea &&
+        assignedArea.district === selectedDistrict &&
+        assignedArea.barangay === selectedBarangay
+      ) {
+        // Create new option element for the dropdown
+        const option = document.createElement("option");
+        option.value = gcl;
+        option.textContent = gcl;
 
-          // Append option to dropdown
-          dropdownCollector.appendChild(option);
+        // Append option to dropdown
+        dropdownCollector.appendChild(option);
+      } else {
+        // If the assigned barangay does not match the selected barangay, remove the collector from the dropdown
+        const optionToRemove = dropdownCollector.querySelector(
+          `option[value="${gcl}"]`
+        );
+        if (optionToRemove) {
+          dropdownCollector.removeChild(optionToRemove);
+          defaultOption.selected = true;
         }
       }
+    }
 
-      // Disable "Select Collector" option
-      defaultOption.disabled = true;
-    })
-    .catch((error) => {
-      console.error("Error fetching collectors data:", error);
-    });
+    // Disable "Select Collector" option
+    defaultOption.disabled = true;
+  });
 
   // Add event listener to prevent default behavior when "Select Collector" is clicked
   dropdownCollector.addEventListener("mousedown", function (event) {
@@ -606,7 +611,7 @@ export function initMap() {
     if (selectedGCNs.length === 0) {
       // If no GCNs are selected, display the message
       selectedMarkersDiv.innerHTML = `
-      <p>No markers are available or already been selected for collecting.</p>
+      <p class="fs-2 fw-bold text-center text-muted">No markers are available or already been selected for collecting.</p>
     `;
       return; // Exit the function since there are no selected GCNs
     }
@@ -615,25 +620,99 @@ export function initMap() {
 
     if (totalQuotaSum <= 44) {
       message = "Not enough to meet the requirements";
-    } else if (totalQuotaSum >= 45 && totalQuotaSum <= 50) {
+    } else if (totalQuotaSum >= 45 && totalQuotaSum <= 96) {
       const additionalFieldsDiv = document.getElementById("additionalFields");
       additionalFieldsDiv.style.display = "block";
       // Show the deploy button
     } else {
       message = "Too much, invalid requirement";
     }
-
     selectedMarkersDiv.innerHTML = `
-    <p>Selected GCN: ${selectedGCNs.join(", ")}</p>
-    <p>District: ${selectedDistrict}</p>
-    <p>Barangay: ${selectedBarangay}</p>
-    <p>Total Quota: ${totalQuotaSum}</p>
-    <p>Recyclables: ${gb1QuotaSum}</p>
-    <p>Biodegradable: ${gb2QuotaSum}</p>
-    <p>Special: ${gb3QuotaSum}</p>
-    <p>Non-Biodegradable: ${gb4QuotaSum}</p>
-    <p>${message}</p>
-  `;
+    <div class="container mt-2">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-outline mb-4">
+                <label class="form-label" for="controlNumbers">Control Numbers:</label>
+                <p id="controlNumbers" class="form-control">${selectedGCNs.join(
+                  ", "
+                )}</p>
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="district">District:</label>
+                <p id="district" class="form-control">${selectedDistrict}</p>
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="barangay">Barangay:</label>
+                <p id="barangay" class="form-control">${selectedBarangay}</p>
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="garbageBags">Garbage Bags:</label>
+                <p id="garbageBags" class="form-control">${totalQuotaSum}</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+        <p class="fs-4 fw-bold text-muted"> Waste Composition </p>
+            <div class="container top-0">
+                <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary rounded-4 p-3 me-3">
+                            <i class="fas fa-recycle fa-1x text-light"></i>
+                        </div>
+                        <div>
+                            <p class="fw-bold fs-6 mb-0">Recyclables</p>
+                            <p class="fw-light text-muted mb-0">${gb1QuotaSum}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container top-0">
+                <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success rounded-4 p-3 me-3">
+                            <i class="fas fa-seedling fa-1x text-light"></i>
+                        </div>
+                        <div>
+                            <p class="fw-bold fs-6 mb-0">Biodegradable</p>
+                            <p class="fw-light text-muted mb-0">${gb2QuotaSum}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container top-0">
+                <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning rounded-4 p-3 me-3">
+                            <i class="fas fa-flask fa-1x text-light"></i>
+                        </div>
+                        <div>
+                            <p class="fw-bold fs-6 mb-0">Special</p>
+                            <p class="fw-light text-muted mb-0">${gb3QuotaSum}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container top-0">
+                <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-dark rounded-4 p-3 me-3">
+                            <i class="fas fa-trash fa-1x text-light"></i>
+                        </div>
+                        <div>
+                            <p class="fw-bold fs-6 mb-0">Non-Biodegradable</p>
+                            <p class="fw-light text-muted mb-0">${gb4QuotaSum}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12 text-center">
+            <p class="fs-3 text-muted fw-bold">${message}</p>
+        </div>
+    </div>
+</div>
+`;
   }
 
   async function toggleSelectButton() {

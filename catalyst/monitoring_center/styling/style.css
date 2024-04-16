@@ -61,6 +61,50 @@ a {
   background-color: var(--white-color);
 }
 
+/* Define scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+/* Track styles */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+/* Handle styles */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+  border-radius: 5px; /* Rounded corners */
+}
+
+/* Padding for the scrollbar */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Change color on hover */
+}
+
+/* Define scrollbar styles for the card body */
+.card-activity {
+  height: 250px; /* Set the height of the card body */
+  overflow-y: auto; /* Enable vertical scrollbar */
+  padding-right: 10px; /* Add padding to the right to accommodate the scrollbar */
+}
+
+/* Track styles */
+.card-activity::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+/* Handle styles */
+.card-activity::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+  border-radius: 5px; /* Rounded corners */
+}
+
+/* Padding for the scrollbar */
+.card-activity::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Change color on hover */
+}
+
 .header {
   width: 100%;
   height: var(--header-height);
@@ -72,7 +116,7 @@ a {
   justify-content: space-between;
   padding: 0 1rem;
   background-color: var(--white-color);
-  z-index: var(--z-fixed);
+  z-index: -1;
   transition: 0.5s;
 }
 .header_toggle {
@@ -86,24 +130,21 @@ a {
   top: 0;
   left: -30%;
   width: var(--nav-width);
-  height: 100vh;
+  height: 100%;
   background-color: var(--first-color);
   padding: 0.5rem 1rem 0 0;
   /* ... your existing styles ... */
   transition: width 0.75s;
-  z-index: var(--z-fixed);
+  z-index: 1;
 }
 
 .l-navbar:hover {
-  width: 250px; /* Adjust the width as needed */
+  width: 250px;
+  /* Adjust the width as needed */
 }
 
 .body-pd .content {
   transition: margin-left 0.75s;
-}
-
-.l-navbar:hover ~ .content {
-  margin-left: 250px; /* Adjust the margin-left to match the width of the sidebar */
 }
 
 @media screen and (max-width: 768px) {
@@ -173,10 +214,10 @@ a {
 .body-pd {
   padding-left: calc(var(--nav-width) + 1rem);
 }
-.active {
+.active1 {
   color: var(--white-color);
 }
-.active::before {
+.active1::before {
   content: "";
   position: absolute;
   left: 0;
