@@ -253,45 +253,40 @@ function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
   defaultOption.textContent = "Select Collector";
   dropdownCollector.appendChild(defaultOption);
 
-  // Query Firebase Database for collectors with matching assigned area and listen for real-time updates
+  // Query Firebase Database for collectors with matching assigned area
   const collectorsRef = ref(db, "Accounts/Collectors");
-  onValue(collectorsRef, (snapshot) => {
-    const collectors = snapshot.val();
+  get(collectorsRef)
+    .then((snapshot) => {
+      const collectors = snapshot.val();
 
-    // Iterate over collectors to find matching ones and update the dropdown
-    for (const userId in collectors) {
-      const collector = collectors[userId];
-      const assignedArea = collector.AssignedArea;
-      const gcl = collector.GCL;
+      // Iterate over collectors to find matching ones and update the dropdown
+      for (const userId in collectors) {
+        const collector = collectors[userId];
+        const assignedArea = collector.AssignedArea;
+        const gcl = collector.GCL;
 
-      // Check if assigned district and barangay match selected values
-      if (
-        assignedArea &&
-        assignedArea.district === selectedDistrict &&
-        assignedArea.barangay === selectedBarangay
-      ) {
-        // Create new option element for the dropdown
-        const option = document.createElement("option");
-        option.value = gcl;
-        option.textContent = gcl;
+        // Check if assigned district and barangay match selected values
+        if (
+          assignedArea &&
+          assignedArea.district === selectedDistrict &&
+          assignedArea.barangay === selectedBarangay
+        ) {
+          // Create new option element for the dropdown
+          const option = document.createElement("option");
+          option.value = gcl;
+          option.textContent = gcl;
 
-        // Append option to dropdown
-        dropdownCollector.appendChild(option);
-      } else {
-        // If the assigned barangay does not match the selected barangay, remove the collector from the dropdown
-        const optionToRemove = dropdownCollector.querySelector(
-          `option[value="${gcl}"]`
-        );
-        if (optionToRemove) {
-          dropdownCollector.removeChild(optionToRemove);
-          defaultOption.selected = true;
+          // Append option to dropdown
+          dropdownCollector.appendChild(option);
         }
       }
-    }
 
-    // Disable "Select Collector" option
-    defaultOption.disabled = true;
-  });
+      // Disable "Select Collector" option
+      defaultOption.disabled = true;
+    })
+    .catch((error) => {
+      console.error("Error fetching collectors data:", error);
+    });
 
   // Add event listener to prevent default behavior when "Select Collector" is clicked
   dropdownCollector.addEventListener("mousedown", function (event) {
@@ -301,6 +296,37 @@ function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
   });
 }
 
+/// Function to check collector availability based on selected time
+function checkCollectorAvailability(selectedTime, collectorUID, collectorName) {
+  // Assuming you have Firebase initialized and authenticated already
+  const dbRef = firebase
+    .database()
+    .ref(`Accounts/Collectors/${collectorUID}/AssignedSchedule`);
+
+  // Fetch the schedule data for the selected collector
+  dbRef.once("value", (snapshot) => {
+    const schedule = snapshot.val();
+
+    // Check if the collector has any assigned schedule
+    if (schedule) {
+      // Iterate through the assigned schedule to check for time conflicts
+      Object.values(schedule).forEach((assignment) => {
+        const timeInput = assignment.TimeInput;
+        // Check if the selected time matches any of the collector's assigned schedules
+        if (timeInput === selectedTime) {
+          // If there's a match, disable the corresponding option in the dropdown
+          const option = document.querySelector(
+            `option[value="${collectorUID}"]`
+          );
+          if (option) {
+            option.disabled = true;
+            option.style.color = "red"; // Indicate unavailability by changing color
+          }
+        }
+      });
+    }
+  });
+}
 // Function to check if all required fields are filled
 function checkInputsAndEnableButton() {
   const dateInputField = document.getElementById("dateInputField");
@@ -611,7 +637,7 @@ export function initMap() {
     if (selectedGCNs.length === 0) {
       // If no GCNs are selected, display the message
       selectedMarkersDiv.innerHTML = `
-      <p class="fs-2 fw-bold text-center text-muted">No markers are available or already been selected for collecting.</p>
+      <p class="text-center fw-bold text-muted fs-3">No markers are available or already been selected for collecting.</p>
     `;
       return; // Exit the function since there are no selected GCNs
     }
@@ -620,34 +646,35 @@ export function initMap() {
 
     if (totalQuotaSum <= 44) {
       message = "Not enough to meet the requirements";
-    } else if (totalQuotaSum >= 45 && totalQuotaSum <= 96) {
+    } else if (totalQuotaSum >= 45 && totalQuotaSum <= 50) {
       const additionalFieldsDiv = document.getElementById("additionalFields");
       additionalFieldsDiv.style.display = "block";
       // Show the deploy button
     } else {
       message = "Too much, invalid requirement";
     }
+
     selectedMarkersDiv.innerHTML = `
     <div class="container mt-2">
     <div class="row">
         <div class="col-md-6">
             <div class="form-outline mb-4">
                 <label class="form-label" for="controlNumbers">Control Numbers:</label>
-                <p id="controlNumbers" class="form-control">${selectedGCNs.join(
+                <p id="controlNumbers" class="form-control selected-gcn">${selectedGCNs.join(
                   ", "
                 )}</p>
             </div>
             <div class="form-outline mb-4">
                 <label class="form-label" for="district">District:</label>
-                <p id="district" class="form-control">${selectedDistrict}</p>
+                <p id="district" class="form-control district">${selectedDistrict}</p>
             </div>
             <div class="form-outline mb-4">
                 <label class="form-label" for="barangay">Barangay:</label>
-                <p id="barangay" class="form-control">${selectedBarangay}</p>
+                <p id="barangay" class="form-control barangay">${selectedBarangay}</p>
             </div>
             <div class="form-outline mb-4">
                 <label class="form-label" for="garbageBags">Garbage Bags:</label>
-                <p id="garbageBags" class="form-control">${totalQuotaSum}</p>
+                <p id="garbageBags" class="form-control total-quota">${totalQuotaSum}</p>
             </div>
         </div>
         <div class="col-md-6">
@@ -660,7 +687,7 @@ export function initMap() {
                         </div>
                         <div>
                             <p class="fw-bold fs-6 mb-0">Recyclables</p>
-                            <p class="fw-light text-muted mb-0">${gb1QuotaSum}</p>
+                            <p class="fw-light text-muted mb-0 recyclables">${gb1QuotaSum}</p>
                         </div>
                     </div>
                 </div>
@@ -673,7 +700,7 @@ export function initMap() {
                         </div>
                         <div>
                             <p class="fw-bold fs-6 mb-0">Biodegradable</p>
-                            <p class="fw-light text-muted mb-0">${gb2QuotaSum}</p>
+                            <p class="fw-light text-muted mb-0 biodegradable">${gb2QuotaSum}</p>
                         </div>
                     </div>
                 </div>
@@ -686,7 +713,7 @@ export function initMap() {
                         </div>
                         <div>
                             <p class="fw-bold fs-6 mb-0">Special</p>
-                            <p class="fw-light text-muted mb-0">${gb3QuotaSum}</p>
+                            <p class="fw-light text-muted mb-0 special">${gb3QuotaSum}</p>
                         </div>
                     </div>
                 </div>
@@ -699,7 +726,7 @@ export function initMap() {
                         </div>
                         <div>
                             <p class="fw-bold fs-6 mb-0">Non-Biodegradable</p>
-                            <p class="fw-light text-muted mb-0">${gb4QuotaSum}</p>
+                            <p class="fw-light text-muted mb-0 non-biodegradable">${gb4QuotaSum}</p>
                         </div>
                     </div>
                 </div>
@@ -893,7 +920,7 @@ export function initMap() {
     deployBtn.addEventListener("click", () => {
       // Fetch outputs from HTML elements
       const selectedGCNOutput =
-        selectedMarkers.querySelector("p:nth-child(1)").textContent;
+        selectedMarkers.querySelector(".selected-gcn").textContent;
 
       // Split the selected GCNs into an array
       const selectedGCNs = selectedGCNOutput
@@ -932,19 +959,19 @@ export function initMap() {
 
       // Fetch other outputs from HTML elements
       const districtOutput =
-        selectedMarkers.querySelector("p:nth-child(2)").textContent;
+        selectedMarkers.querySelector(".district").textContent;
       const barangayOutput =
-        selectedMarkers.querySelector("p:nth-child(3)").textContent;
+        selectedMarkers.querySelector(".barangay").textContent;
       const totalQuotaOutput =
-        selectedMarkers.querySelector("p:nth-child(4)").textContent;
+        selectedMarkers.querySelector(".total-quota").textContent;
       const recyclablesOutput =
-        selectedMarkers.querySelector("p:nth-child(5)").textContent;
+        selectedMarkers.querySelector(".recyclables").textContent;
       const biodegradableOutput =
-        selectedMarkers.querySelector("p:nth-child(6)").textContent;
+        selectedMarkers.querySelector(".biodegradable").textContent;
       const specialOutput =
-        selectedMarkers.querySelector("p:nth-child(7)").textContent;
+        selectedMarkers.querySelector(".special").textContent;
       const nonBiodegradableOutput =
-        selectedMarkers.querySelector("p:nth-child(8)").textContent;
+        selectedMarkers.querySelector(".non-biodegradable").textContent;
 
       // Fetch additional values
       const dateInputValue = dateInputField.value;
@@ -952,12 +979,12 @@ export function initMap() {
       const dropdownCollectorValue = dropdownCollector.value;
 
       // Convert time to 12-hour format
-      const time = new Date("2000-01-01T" + timeInputValue + ":00");
-      const formattedTime = time.toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      });
+      //const time = new Date("2000-01-01T" + timeInputValue + ":00");
+      //const formattedTime = time.toLocaleString("en-US", {
+      //hour: "numeric",
+      //minute: "numeric",
+      //hour12: true,
+      //});
 
       // Function to format date as MMDDYYYY
       function formatDate(date) {
@@ -1001,7 +1028,7 @@ export function initMap() {
           ""
         ),
         DateInput: formatDateMMddYYYY(dateInputValue),
-        TimeInput: formattedTime,
+        TimeInput: timeInputValue,
         SelectedGCL: dropdownCollectorValue,
       };
 
@@ -1013,6 +1040,7 @@ export function initMap() {
             "Deployment data successfully stored in the database under UID:",
             uid
           );
+          resetMapAndUI(map);
         })
         .catch((error) => {
           console.error("Error storing deployment data:", error);
@@ -1025,7 +1053,7 @@ export function initMap() {
         Barangay: barangayOutput.replace("Barangay: ", ""),
         TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
         DateInput: formatDateMMddYYYY(dateInputValue),
-        TimeInput: formattedTime,
+        TimeInput: timeInputValue,
         SelectedGCL: dropdownCollectorValue,
       };
 
@@ -1119,7 +1147,7 @@ export function initMap() {
 
                 This is to inform you that our designated garbage collector (ID: ${dropdownCollectorValue}) will be collecting your garbage bins on ${formatDateMMddYYYY(
                       dateInputValue
-                    )} at ${formattedTime}.
+                    )} at ${timeInputValue}.
 
                 Thank you for your cooperation.
 

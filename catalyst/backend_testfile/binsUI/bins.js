@@ -63,7 +63,6 @@ function generateReportHTML(bins) {
   // Return HTML
   return html;
 }
-
 // Add event listener to each "Edit" button
 document.querySelectorAll(".editButton").forEach((button) => {
   button.addEventListener("click", function () {
@@ -82,14 +81,11 @@ function handleEdit(GCN) {
 }
 
 // Modify the filterReports function to filter reports based on search input
-function filterReports(searchInput, sortKey) {
+function filterReports(searchInput, filter) {
   const reportsArray = document.querySelectorAll("#reportsTable tbody tr");
   reportsArray.forEach((bins) => {
-    const GCN = bins.querySelector("td:nth-child(1)").textContent; // Assuming GCN is in the first column
-    const columnValue = bins
-      .querySelector(`td:nth-child(${getIndex(sortKey)})`)
-      .textContent.toLowerCase();
-    const displayStyle = columnValue.includes(searchInput) ? "" : "none";
+    const value = bins.querySelector(`td:nth-child(${getIndex(filter)})`).textContent.toLowerCase(); // Assuming GCN is in the first column
+    const displayStyle = value.includes(searchInput.toLowerCase()) ? "" : "none";
     bins.style.display = displayStyle;
   });
 }
@@ -100,25 +96,53 @@ function displayModalForGCN(GCN) {
   displayModal(GCN, true);
 }
 
-// Add event listener to each search result item (GCN) to show modal when clicked
-function addEventListenerToSearchResults() {
-  const searchResultItems = document.querySelectorAll("#reportsTable tbody tr");
-  searchResultItems.forEach((bins) => {
-    const GCN = bins.querySelector("td:nth-child(1)").textContent;
-    bins.addEventListener("click", function() {
-      displayModalForGCN(GCN);
-    });
-  });
-}
-
 // Add event listener to each "Reset" button
 document.querySelectorAll(".resetButton").forEach((button) => {
-  button.addEventListener("click", function () {
+  button.addEventListener("click", async function () {
     const GCN = this.getAttribute("data-gcn");
-    resetData(GCN); // Call the function to reset data passing GCN as an argument
-    resetList(); // Call the resetList function after resetting the data
+
+    // Show confirmation modal
+    const confirmed = await showConfirmationModal();
+    
+    // If user confirms reset
+    if (confirmed) {
+      try {
+        const message = await resetDataForGCN(GCN);
+        alert(message); // Display success message
+        // Optionally, you can update the table here if needed
+        updateTable();
+      } catch (error) {
+        console.error("Error resetting fill levels for GCN:", GCN, error.message); // Debugging statement
+        alert(error.message); // Display error message
+      }
+    }
   });
 });
+
+
+// Function to show confirmation modal
+async function showConfirmationModal() {
+  return new Promise((resolve) => {
+    const modal = document.getElementById("confirmationModal");
+    const yesButton = modal.querySelector("#confirmYes");
+    const noButton = modal.querySelector("#confirmNo");
+
+    // Add event listener to "Yes" button
+    yesButton.addEventListener("click", () => {
+      modal.style.display = "none";
+      resolve(true); // Resolve promise with true (user confirmed)
+    });
+
+    // Add event listener to "No" button
+    noButton.addEventListener("click", () => {
+      modal.style.display = "none";
+      resolve(false); // Resolve promise with false (user canceled)
+    });
+
+    // Display the modal
+    modal.style.display = "block";
+  });
+}
 
 // Add event listener to handle reset button clicks using event delegation
 document.addEventListener("click", function(event) {
@@ -141,19 +165,26 @@ document.addEventListener("click", function(event) {
   }
 });
 
-/// Modify the searchReports function to use the filterReports function and add event listeners to search results
+// Modify the searchReports function to use the filterReports function and trigger filtering on input change
 window.searchReports = function() {
   const searchInput = document.getElementById("searchInput").value.toLowerCase();
-  const sortKey = document.getElementById("sortDropdown").value;
+  const filter = document.getElementById("filterDropdown").value;
 
-  filterReports(searchInput, sortKey);
-  addEventListenerToSearchResults(); // Add event listeners to search results after filtering
+  filterReports(searchInput, filter);
 };
 
-// Function to handle live search while typing
-document.getElementById("searchInput").addEventListener("input", function () {
+// Add event listener to the search input to trigger search on input change
+document.getElementById("searchInput").addEventListener("input", function() {
   window.searchReports();
 });
+
+
+// Add event listener to the search button to trigger search
+document.getElementById("searchButton").addEventListener("click", function() {
+  window.searchReports();
+});
+
+// Function to handle live search while typing - Remove this function
 
 // Function to get the index of the selected column
 function getIndex(key) {
@@ -246,6 +277,72 @@ document.querySelectorAll(".close").forEach((closeButton) => {
   });
 });
 
+// Function to fetch GCN numbers from Firebase and populate the autocomplete list
+async function populateAutocompleteList() {
+  const reportsRef = ref(db, "GarbageBinControlNumber");
+  try {
+    const snapshot = await get(reportsRef);
+    const reportsData = snapshot.val();
+    const gcnList = [];
+
+    if (reportsData) {
+      Object.keys(reportsData).forEach((gcn) => {
+        gcnList.push(gcn);
+      });
+    }
+
+    // Initialize the autocomplete functionality
+    autocomplete(document.getElementById("searchInput"), gcnList);
+  } catch (error) {
+    console.error("Error fetching GCN numbers:", error);
+  }
+}
+
+// Autocomplete function
+function autocomplete(input, arr) {
+  let currentFocus;
+  input.addEventListener("input", function(e) {
+    let val = this.value;
+    closeAllLists();
+    if (!val) { return false;}
+    currentFocus = -1;
+    let matches = arr.filter((item) => {
+      return item.toLowerCase().includes(val.toLowerCase());
+    });
+    let autocompleteList = document.createElement("div");
+    autocompleteList.setAttribute("id", this.id + "autocomplete-list");
+    autocompleteList.setAttribute("class", "autocomplete-items");
+    this.parentNode.appendChild(autocompleteList);
+    for (let i = 0; i < matches.length; i++) {
+      let autocompleteOption = document.createElement("div");
+      autocompleteOption.innerHTML = "<strong>" + matches[i].substr(0, val.length) + "</strong>";
+      autocompleteOption.innerHTML += matches[i].substr(val.length);
+      autocompleteOption.innerHTML += "<input type='hidden' value='" + matches[i] + "'>";
+      autocompleteOption.addEventListener("click", function(e) {
+        input.value = this.getElementsByTagName("input")[0].value;
+        closeAllLists();
+      });
+      autocompleteList.appendChild(autocompleteOption);
+    }
+  });
+  function closeAllLists(elmnt) {
+    let autocompleteItems = document.getElementsByClassName("autocomplete-items");
+    for (let i = 0; i < autocompleteItems.length; i++) {
+      if (elmnt != autocompleteItems[i] && elmnt != input) {
+        autocompleteItems[i].parentNode.removeChild(autocompleteItems[i]);
+      }
+    }
+  }
+  document.addEventListener("click", function (e) {
+    closeAllLists(e.target);
+  });
+}
+
+// Call the function to populate the autocomplete list on window load
+window.onload = function() {
+  populateAutocompleteList();
+};
+
 
 // Gawing global variable
 let currentGCN = null;
@@ -256,12 +353,12 @@ function displayModal(GCN, isEditModal = false) {
   const reportRef = ref(db, 'GarbageBinControlNumber/' + GCN + '/FillLevel'); // Correct path to FillLevel data
   get(reportRef)
     .then((snapshot) => {
-      if (snapshot.exists()) {
-        const fillLevelData = snapshot.val();
+      const fillLevelData = snapshot.exists() ? snapshot.val() : null;
 
-        // Initialize an empty string to store the fill level details
-        let fillLevelDetails = '';
+      // Initialize an empty string to store the fill level details
+      let fillLevelDetails = '';
 
+      if (fillLevelData) {
         // Iterate over each fill level (GB1FillLevel to GB4FillLevel)
         for (let i = 1; i <= 4; i++) {
           const fillLevelKey = `GB${i}FillLevel`;
@@ -297,147 +394,77 @@ function displayModal(GCN, isEditModal = false) {
             `;
           }
         }
+      } else {
+        // Display "No Fill Level Found" message
+        fillLevelDetails = "<p>No Fill Level Found</p>";
+      }
 
-        // Add password field if it's an edit modal
-        let passwordField = '';
-        if (isEditModal) {
-          // Get the password data from Firebase
-          const passwordRef = ref(db, `GarbageBinControlNumber/${GCN}/Password`);
-          get(passwordRef)
-            .then((snapshot) => {
-              // Check if the password exists
-              const password = snapshot.exists() ? snapshot.val() : '';
+      // Add password field if it's an edit modal
+      let passwordField = '';
+      if (isEditModal) {
+        // Get the password data from Firebase
+        const passwordRef = ref(db, `GarbageBinControlNumber/${GCN}/Password`);
+        get(passwordRef)
+          .then((snapshot) => {
+            // Check if the password exists
+            const password = snapshot.exists() ? snapshot.val() : '';
 
-              // Populate the password field
-              passwordField = `
-                <h4>Password</h4>
-                <label>Password</label>
-                <input type="text" id="password" class="input-field" value="${password}">
-              `;
+            // Populate the password field
+            passwordField = `
+              <h4>Password</h4>
+              <label>Password</label>
+              <input type="text" id="password" class="input-field" value="${password}">
+            `;
 
-              // Add the password field to the modal content
-              modalContent.innerHTML = `
-                <h4>FILL LEVEL DETAILS:</h4>
-                ${fillLevelDetails}
-                ${passwordField}
-                <h4>Users:</h4>
-                <!-- User details -->
-              `;
+            // Get the Total Quota data from Firebase
+            const totalQuotaRef = ref(db, `GarbageBinControlNumber/${GCN}/TotalQuota`);
+            get(totalQuotaRef)
+              .then((totalQuotaSnapshot) => {
+                // Check if the Total Quota exists
+                const totalQuota = totalQuotaSnapshot.exists() ? totalQuotaSnapshot.val() : '';
 
-              // Rest of the modal display logic...
-            })
-            .catch((error) => {
-              console.error("Error retrieving password:", error);
-              // Display an error message if there's an issue fetching the password
-              passwordField = `
-                <h4>Password</h4>
-                <p>Error retrieving password data.</p>
-              `;
-              // Add the password field to the modal content
-              modalContent.innerHTML = `
-                <h4>FILL LEVEL DETAILS:</h4>
-                ${fillLevelDetails}
-                ${passwordField}
-                <h4>Users:</h4>
-                <!-- User details -->
-              `;
-              // Rest of the modal display logic...
-            });
-        } else {
-          // If it's not an edit modal, do not display the password field
-          passwordField = '';
-        }
-
-        // Fetch user data for the specified GCN
-        const usersRef = ref(db, 'GarbageBinControlNumber/' + GCN + '/Users');
-        get(usersRef)
-          .then((userSnapshot) => {
-            // Check if user data exists
-            if (userSnapshot.exists()) {
-              const usersData = userSnapshot.val();
-              let usersHTML = ''; // Initialize variable to store user details HTML
-
-              // Iterate over each user and construct the HTML
-              Object.keys(usersData).forEach(userId => {
-                const user = usersData[userId];
-                usersHTML += `
-                  <h4>User Details:</h4>
-                  ${isEditModal ? `
-                    <label for="addressLine1_${userId}">Address Line 1</label>
-                    <input type="text" id="addressLine1_${userId}" class="input-field" value="${user.addressLine1 || ''}">
-                    <br>
-                    <label for="barangay_${userId}">Barangay</label>
-                    <input type="text" id="barangay_${userId}" class="input-field" value="${user.barangay || ''}">
-                    <br>
-                    <label for="city_${userId}">City</label>
-                    <input type="text" id="city_${userId}" class="input-field" value="${user.city || ''}">
-                    <br>
-                    <label for="country_${userId}">Country</label>
-                    <input type="text" id="country_${userId}" class="input-field" value="${user.country || ''}">
-                    <br>
-                    <label for="district_${userId}">District</label>
-                    <input type="text" id="district_${userId}" class="input-field" value="${user.district || ''}">
-                    <br>
-                    <label for="email_${userId}">Email</label>
-                    <input type="email" id="email_${userId}" class="input-field" value="${user.email || ''}">
-                    <br>
-                    <label for="firstName_${userId}">First Name</label>
-                    <input type="text" id="firstName_${userId}" class="input-field" value="${user.firstName || ''}">
-                    <br>
-                    <label for="lastName_${userId}">Last Name</label>
-                    <input type="text" id="lastName_${userId}" class="input-field" value="${user.lastName || ''}">
-                    <br>
-                    <label for="mobileNumber_${userId}">Mobile Number</label>
-                    <input type="tel" id="mobileNumber_${userId}" class="input-field" value="${user.mobileNumber || ''}">
-                    <br>
-                    <label for="province_${userId}">Province</label>
-                    <input type="text" id="province_${userId}" class="input-field" value="${user.province || ''}">                
-                    <br>
-                  ` : `
-                  <p>Address Line 1: ${user.addressLine1}</p>
-                  <p>Barangay: ${user.barangay}</p>
-                  <p>City: ${user.city}</p>
-                  <p>Country: ${user.country}</p>
-                  <p>District: ${user.district}</p>
-                  <p>Email: ${user.email}</p>
-                  <p>First Name: ${user.firstName}</p>
-                  <p>Last Name: ${user.lastName}</p>
-                  <p>Mobile Number: ${user.mobileNumber}</p>
-                  <p>Province: ${user.province}</p>
-                  `}
+                // Populate the Total Quota field
+                const totalQuotaField = `
+                  <h4>Total Quota</h4>
+                  <label>Total Quota</label>
+                  <input type="text" id="totalQuota" class="input-field" value="${totalQuota}">
                 `;
+
+                // Fetch and display user details
+                displayUserDetails(isEditModal);
+
+                // Add the Total Quota details to the modal content
+                modalContent.innerHTML = `
+                  <h4>FILL LEVEL DETAILS:</h4>
+                  ${fillLevelDetails}
+                  ${passwordField}
+                  ${totalQuotaField}
+                `;
+              })
+              .catch((error) => {
+                console.error("Error retrieving Total Quota data:", error);
+                // Display an error message if there's an issue fetching the Total Quota data
+                modalContent.innerHTML = "<h4>Total Quota Details:</h4><p>Error retrieving Total Quota data.</p>";
               });
-
-              // Add user details HTML to the modal content
-              modalContent.innerHTML = `
-                <h4>FILL LEVEL DETAILS:</h4>
-                ${fillLevelDetails}
-                ${passwordField}
-                ${usersHTML} <!-- Add user details HTML here -->
-                ${isEditModal ? '<button id="saveBtn" class="btn">Save</button>' : ''}
-              `;
-              
-              // Inside displayModal function
-              if (isEditModal) {
-                const saveBtn = document.getElementById("saveBtn");
-                if (saveBtn) {
-                  saveBtn.addEventListener("click", saveChanges);
-                }
-              }
-
-            } else {
-              // If no users found, display a message
-              modalContent.innerHTML = "<p>No users found.</p>";
-            }
           })
           .catch((error) => {
-            console.error("Error retrieving user data:", error);
-            // Display an error message if there's an issue fetching the user data
-            modalContent.innerHTML = "<p>Error retrieving user data.</p>";
+            console.error("Error retrieving password:", error);
+            // Display an error message if there's an issue fetching the password
+            passwordField = `
+              <h4>Password</h4>
+              <p>Error retrieving password data.</p>
+            `;
           });
       } else {
-        // If the report doesn't exist, display a message
-        modalContent.innerHTML = "<p>Report not found.</p>";
+        // Fetch and display user details
+        displayUserDetails(isEditModal);
+
+        // Add the fill level details, password field, and user details to the modal content
+        modalContent.innerHTML = `
+          <h4>FILL LEVEL DETAILS:</h4>
+          ${fillLevelDetails}
+          ${passwordField}
+        `;
       }
 
       // Display the modal
@@ -446,7 +473,7 @@ function displayModal(GCN, isEditModal = false) {
     .catch((error) => {
       console.error("Error retrieving report:", error);
       // Display an error message if there's an issue fetching the report
-      modalContent.innerHTML = "<p>Error retrieving report data.</p>";
+      modalContent.innerHTML = "<p>No Fill Level Found</p><p>Error retrieving report data.</p>";
       // Display the modal
       modal.style.display = "block";
     });
@@ -464,6 +491,91 @@ function displayModal(GCN, isEditModal = false) {
     }
   };
 }
+
+// Function to fetch and display user details
+function displayUserDetails(isEditModal) {
+  // Fetch user data for the specified GCN
+  const usersRef = ref(db, 'GarbageBinControlNumber/' + currentGCN + '/Users');
+  get(usersRef)
+    .then((userSnapshot) => {
+      // Check if user data exists
+      if (userSnapshot.exists()) {
+        const usersData = userSnapshot.val();
+        let usersHTML = ''; // Initialize variable to store user details HTML
+
+        // Iterate over each user and construct the HTML
+        Object.keys(usersData).forEach(userId => {
+          const user = usersData[userId];
+          usersHTML += `
+            <h4>User Details:</h4>
+            ${isEditModal ? `
+              <label for="addressLine1_${userId}">Address Line 1</label>
+              <input type="text" id="addressLine1_${userId}" class="input-field" value="${user.addressLine1 || ''}">
+              <br>
+              <label for="barangay_${userId}">Barangay</label>
+              <input type="text" id="barangay_${userId}" class="input-field" value="${user.barangay || ''}">
+              <br>
+              <label for="city_${userId}">City</label>
+              <input type="text" id="city_${userId}" class="input-field" value="${user.city || ''}">
+              <br>
+              <label for="country_${userId}">Country</label>
+              <input type="text" id="country_${userId}" class="input-field" value="${user.country || ''}">
+              <br>
+              <label for="district_${userId}">District</label>
+              <input type="text" id="district_${userId}" class="input-field" value="${user.district || ''}">
+              <br>
+              <label for="email_${userId}">Email</label>
+              <input type="email" id="email_${userId}" class="input-field" value="${user.email || ''}">
+              <br>
+              <label for="firstName_${userId}">First Name</label>
+              <input type="text" id="firstName_${userId}" class="input-field" value="${user.firstName || ''}">
+              <br>
+              <label for="lastName_${userId}">Last Name</label>
+              <input type="text" id="lastName_${userId}" class="input-field" value="${user.lastName || ''}">
+              <br>
+              <label for="mobileNumber_${userId}">Mobile Number</label>
+              <input type="tel" id="mobileNumber_${userId}" class="input-field" value="${user.mobileNumber || ''}">
+              <br>
+              <label for="province_${userId}">Province</label>
+              <input type="text" id="province_${userId}" class="input-field" value="${user.province || ''}">                
+              <br>
+            ` : `
+            <p>Address Line 1: ${user.addressLine1}</p>
+            <p>Barangay: ${user.barangay}</p>
+            <p>City: ${user.city}</p>
+            <p>Country: ${user.country}</p>
+            <p>District: ${user.district}</p>
+            <p>Email: ${user.email}</p>
+            <p>First Name: ${user.firstName}</p>
+            <p>Last Name: ${user.lastName}</p>
+            <p>Mobile Number: ${user.mobileNumber}</p>
+            <p>Province: ${user.province}</p>
+            `}
+          `;
+        });
+
+        // Add user details HTML to the modal content
+        modalContent.innerHTML += usersHTML;
+
+      } else {
+        // If no users found, display a message
+        modalContent.innerHTML += "<h4>User Details:</h4><p>No User Found</p>";
+      }
+
+      // Add save button if it's an edit modal
+      if (isEditModal) {
+        modalContent.innerHTML += '<button id="saveBtn" class="btn">Save</button>';
+        const saveBtn = modalContent.querySelector("#saveBtn"); // Use modalContent to query the save button
+        saveBtn.addEventListener("click", saveChanges);
+      }
+    })
+    .catch((error) => {
+      console.error("Error retrieving user data:", error);
+      // Display an error message if there's an issue fetching the user data
+      modalContent.innerHTML += "<h4>User Details:</h4><p>Error retrieving user data.</p>";
+    });
+}
+
 async function saveChanges() {
   console.log("Save button clicked"); // Debugging statement
 
@@ -497,14 +609,18 @@ async function saveChanges() {
   // Add the password to the updatedData object
   updatedData["Password"] = password;
 
-  console.log("Fill Level Data:", updatedData); // Debugging statement
+  // Get the total quota value from the modal
+  const totalQuota = document.getElementById("totalQuota").value;
+
+  // Add the total quota to the updatedData object
+  updatedData["TotalQuota"] = totalQuota;
 
   // Get user data from the modal
   const usersData = {};
   const userElements = document.querySelectorAll("[id^=addressLine1]");
   userElements.forEach(element => {
     const userId = element.id.split("_")[1];
-    usersData[userId] = {
+    const user = {
       addressLine1: document.getElementById(`addressLine1_${userId}`).value,
       barangay: document.getElementById(`barangay_${userId}`).value,
       city: document.getElementById(`city_${userId}`).value,
@@ -516,6 +632,14 @@ async function saveChanges() {
       mobileNumber: document.getElementById(`mobileNumber_${userId}`).value,
       province: document.getElementById(`province_${userId}`).value
     };
+
+    // Check if level field exists
+    const levelField = document.getElementById(`level_${userId}`);
+    if (levelField) {
+      user.level = levelField.value;
+    }
+
+    usersData[userId] = user;
   });
 
   // Add the user data to the updatedData object
@@ -532,6 +656,76 @@ async function saveChanges() {
     console.error("Error updating data:", error);
     alert("Failed to save changes. Please try again."); // Show error message
   }
+}
+
+async function resetDataForGCN(GCN) {
+  // Display confirmation dialog before resetting
+  const confirmed = await showResetConfirmationDialog();
+
+  // If user confirms reset
+  if (confirmed) {
+    const defaultFillLevel = "10"; // Set your default fill level value here
+    const defaultQuotaCount = "0";
+
+    try {
+      // Construct the reference to the GCN node
+      const gcnRef = ref(db, `GarbageBinControlNumber/${GCN}`);
+
+      // Reset fill levels for the specified GCN
+      await update(gcnRef, {
+        FillLevel: {
+          GB1FillLevel: {
+            GB1: defaultFillLevel,
+            GB1Flag: "false",
+            GB1QuotaCount: defaultQuotaCount,
+            GB1QuotaFlag: "false",
+            GB1Status: "Not Connected",
+          },
+          GB2FillLevel: {
+            GB2: defaultFillLevel,
+            GB2Flag: "false",
+            GB2QuotaCount: defaultQuotaCount,
+            GB2QuotaFlag: "false",
+            GB2Status: "Not Connected",
+          },
+          GB3FillLevel: {
+            GB3: defaultFillLevel,
+            GB3Flag: "false",
+            GB3QuotaCount: defaultQuotaCount,
+            GB3QuotaFlag: "false",
+            GB3Status: "Not Connected",
+          },
+          GB4FillLevel: {
+            GB4: defaultFillLevel,
+            GB4Flag: "false",
+            GB4QuotaCount: defaultQuotaCount,
+            GB4QuotaFlag: "false",
+            GB4Status: "Not Connected",
+          },
+        },
+        TotalQuota: "0", // Reset TotalQuota to zero
+        Location: null, // Remove Reports data
+        reports: null, // Remove Location data
+        Users: null, // Remove Users data
+      });
+
+      // Return a success message
+      return "Reset successfully!";
+    } catch (error) {
+      // Return an error message
+      throw new Error("Reset failed. Please try again.");
+    }
+  } else {
+    throw new Error("Reset canceled"); // Throw error message if reset is canceled by user
+  }
+}
+
+// Function to display the confirmation dialog before reset
+async function showResetConfirmationDialog() {
+  return new Promise((resolve) => {
+    const confirmation = confirm("Are you sure you want to reset?"); // Display browser's built-in confirmation dialog
+    resolve(confirmation); // Resolve the promise with user's confirmation choice
+  });
 }
 
 
