@@ -292,7 +292,7 @@
                 aria-controls="pills-home"
                 aria-selected="true"
               >
-                <i class="fas fa-chart-line me-2"></i> Dashboard
+                <i class="fas fa-chart-line me-2"></i> Overview
               </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -455,6 +455,14 @@
               <div class="col">
                 <div class="container mt-5">
                   <div class="row">
+                    <div class="col-md-8">
+                      <div class="card shadow-none border-0">
+                        <div class="card-header">
+                          <h1>Collections</h1>
+                        </div>
+                        <div class="card-body"></div>
+                      </div>
+                    </div>
                     <div class="col-md-4">
                       <div
                         class="card shadow-none border-0 text-start bg-transparent"
@@ -534,14 +542,6 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-8">
-                      <div class="card shadow-none border-0">
-                        <div class="card-header">
-                          <h1>Collections</h1>
-                        </div>
-                        <div class="card-body"></div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -555,6 +555,13 @@
           >
             <div class="container">
               <div class="row">
+                <div class="col">
+                  <!-- The container for the map -->
+                  <div class="card shadow-none">
+                    <div id="map" style="height: 300px; width: 100%"></div>
+                    <!--<div id="map" style="height: 280px"></div> -->
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="card p-4 shadow-none border-0">
                     <div class="container">
@@ -600,14 +607,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="col">
-                  <!-- The container for the map -->
-                  <div class="card shadow-none">
-                    <div id="map" style="height: 258px; width: 100%"></div>
-                    <!--<div id="map" style="height: 280px"></div> -->
-                  </div>
-                </div>
               </div>
+
               <div class="row mt-5">
                 <div class="col">
                   <p class="fs-3 fw-bold text-muted">Collection Details</p>
@@ -626,6 +627,23 @@
                     >
                       <div class="row">
                         <div class="col">
+                          <label for="dropdown" class="form-label"
+                            >Available Collector:</label
+                          >
+                          <select
+                            id="dropdownCollector"
+                            name="dropdown"
+                            class="form-select"
+                          >
+                            <option value="" selected disabled>
+                              Select Collector
+                            </option>
+                            <!-- Add options for available collectors here -->
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
                           <label for="date" class="form-label"
                             >Select Date:</label
                           >
@@ -641,29 +659,26 @@
                           <label for="time" class="form-label"
                             >Select Time:</label
                           >
-                          <input
-                            type="time"
-                            id="timeInputField"
-                            name="time"
-                            class="form-control"
-                            required
-                          />
+                          <div class="position-relative">
+                            <select
+                              id="timeInputField"
+                              class="mdb-select form-control"
+                            >
+                              <option value="" disabled selected>
+                                Select Time
+                              </option>
+                              <!-- Add your time range options here -->
+
+                              <!-- Add more options as needed -->
+                            </select>
+                            <i
+                              class="fa-regular fa-clock icon-select position-absolute"
+                              style="top: 10px; right: 10px"
+                            ></i>
+                          </div>
                         </div>
                       </div>
 
-                      <label for="dropdown" class="form-label"
-                        >Available Collector:</label
-                      >
-                      <select
-                        id="dropdownCollector"
-                        name="dropdown"
-                        class="form-select"
-                      >
-                        <option value="" selected disabled>
-                          Select Collector
-                        </option>
-                        <!-- Add options for available collectors here -->
-                      </select>
                       <div class="row text-center">
                         <div class="col-12">
                           <button
@@ -716,14 +731,17 @@
                     </p>
                   </div>
                   <div class="col-md-6 justify-content-end text-end">
-                    <button
+                    <a
                       type="button"
-                      class="btn btn-primary"
-                      data-bs-toggle="modal"
-                      data-bs-target="#reportModal"
+                      class="bg-transparent shadow-none btn-sm fw-bold text-muted"
+                      data-mdb-toggle="modal"
+                      data-mdb-target="#reportModal"
                     >
-                      See Report <i class="fas fa-chevron-right"></i>
-                    </button>
+                      <span>See More</span>
+                      <span class="icon"
+                        ><i class="fas fa-chevron-right"></i
+                      ></span>
+                    </a>
                   </div>
                 </div>
                 <div class="row">
@@ -1186,20 +1204,58 @@
         </div>
       </div>
     </div>
+    <div
+      class="modal fade"
+      id="reportModal"
+      tabindex="-1"
+      aria-labelledby="reportModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="reportModalLabel">
+              High Traffic Collection Zones
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Insert your report content here -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-mdb-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
+    ></script>
+    <script type="module" src="monitor-index-reports.js"></script>
+    <script type="module" src="monitoring-gb-account-count.js"></script>
 
+    <script type="text/javascript" src="../src/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../src/popper.min.js"></script>
     <script src="map.js" type="module" defer></script>
     <script type="text/javascript" src="mapIndex.js"></script>
     <script type="text/javascript" src="components/lineChart.js"></script>
     <script type="text/javascript" src="components/session.js"></script>
     <script type="text/javascript" src="components/dropDown.js"></script>
-    <script type="text/javascript" src="dougnut.js"></script>
     <script type="text/javascript" src="monitoring.js"></script>
 
-    <script type="module" src="monitor-index-reports.js"></script>
-    <script type="module" src="monitoring-gb-account-count.js"></script>
-    <script type="text/javascript" src="../src/jquery.min.js"></script>
-    <script type="text/javascript" src="../src/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../src/popper.min.js"></script>
     <!-- <script
       defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
@@ -1208,50 +1264,174 @@
       defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMaps"
     ></script>
+
+    <script>
+      function toggleInputs() {
+        var inputs = document.querySelectorAll(
+          'input[type="text"], input[type="email"], input[type="tel"], input[type="password"]'
+        );
+        inputs.forEach(function (input) {
+          input.disabled = !input.disabled;
+        });
+      }
+
+      // Get the time select element
+      const timeSelect = document.getElementById("timeInputField");
+
+      // Function to generate time options with prefix
+      function generateTimeOptions() {
+        const startTime = 8; // Start time in 24-hour format
+        const endTime = 17; // End time in 24-hour format
+
+        // Loop to generate time ranges with prefix
+        for (let hour = startTime; hour <= endTime; hour++) {
+          const time12hr = hour % 12 || 12; // Convert to 12-hour format
+          const suffix = hour < 12 ? "AM" : "PM"; // Determine AM/PM suffix
+          const timeRange = `${time12hr}:00 ${suffix} - ${
+            (time12hr + 1) % 12 || 12
+          }:00 ${suffix}`;
+
+          // Create an option element
+          const option = document.createElement("option");
+          option.value = timeRange; // Set value
+          option.textContent = timeRange; // Set display text
+          timeSelect.appendChild(option); // Append option to select element
+        }
+
+        // Initialize MDB select component
+        mdbSelect.init(timeSelect);
+      }
+
+      // Call the function to generate time options
+      generateTimeOptions();
+
+      // Global variable to store original option colors
+      const originalOptionColors = {};
+
+      // Function to reset options to their original state
+      function resetOptions() {
+        const dropdownCollector = document.getElementById("dropdownCollector");
+        const options = dropdownCollector.options;
+        for (let i = 0; i < options.length; i++) {
+          options[i].disabled = false;
+          if (originalOptionColors[options[i].value]) {
+            options[i].style.color = originalOptionColors[options[i].value];
+          }
+        }
+      }
+
+      // Function to check collector availability based on selected time
+      function checkCollectorAvailability(selectedTime, collectorUID) {
+        // Assuming you have Firebase initialized and authenticated already
+        const dbRef = firebase
+          .database()
+          .ref(`Accounts/Collectors/${collectorUID}/AssignedSchedule`);
+
+        // Fetch the schedule data for the selected collector
+        dbRef.once("value", (snapshot) => {
+          const schedule = snapshot.val();
+
+          // Check if the collector has any assigned schedule
+          if (schedule) {
+            let isAvailable = false; // Flag to check if any schedule matches the selected time
+            // Iterate through the assigned schedule to check for time conflicts
+            Object.values(schedule).forEach((assignment) => {
+              const timeInput = assignment.TimeInput;
+              // Check if the selected time matches any of the collector's assigned schedules
+              if (timeInput === selectedTime) {
+                isAvailable = true;
+                return; // Exit the loop if a match is found
+              }
+            });
+
+            // If the selected time is not available for the collector, revert the selection
+            if (!isAvailable) {
+              resetOptions();
+            } else {
+              // If there's a match, disable the collector option and mark it as unavailable
+              const dropdownCollector =
+                document.getElementById("dropdownCollector");
+              const options = dropdownCollector.options;
+              for (let i = 0; i < options.length; i++) {
+                if (options[i].value === collectorUID) {
+                  options[i].disabled = true;
+                  originalOptionColors[collectorUID] = options[i].style.color; // Store original color
+                  options[i].style.color = "green"; // Change color to green to indicate availability
+                  break;
+                }
+              }
+            }
+          } else {
+            // If there's no schedule for the collector, reset the options
+            resetOptions();
+          }
+        });
+      }
+
+      // Event listener for when a time is selected
+      document
+        .getElementById("timeInputField")
+        .addEventListener("change", (event) => {
+          const selectedTime = event.target.value;
+          const selectedCollectorUID =
+            document.getElementById("dropdownCollector").value;
+
+          // Check availability for the selected time and collector
+          if (selectedTime && selectedCollectorUID) {
+            checkCollectorAvailability(selectedTime, selectedCollectorUID);
+          }
+        });
+    </script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
     ></script>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-        function toggleInputs() {
-            var inputs = document.querySelectorAll('#firstName, #middleName, #lastName, #controlNumber, #barangay, #district, #suffix, #email, #mobileNumber, #password');
-            var editButton = document.getElementById('editButton');
+      function toggleInputs() {
+        var inputs = document.querySelectorAll(
+          "#firstName, #middleName, #lastName, #controlNumber, #barangay, #district, #suffix, #email, #mobileNumber, #password"
+        );
+        var editButton = document.getElementById("editButton");
 
-            inputs.forEach(function (input) {
-              input.disabled = !input.disabled;
-            });
+        inputs.forEach(function (input) {
+          input.disabled = !input.disabled;
+        });
 
-            if (editButton.innerText.trim() === "Save") {
-              editButton.classList.remove('btn-secondary');
-              editButton.classList.add('btn-primary');
-            } else {
-              editButton.innerHTML = '<i class="fas fa-save"></i> Save';
-              editButton.classList.remove('btn-primary');
-              editButton.classList.add('btn-secondary');
-            }
+        if (editButton.innerText.trim() === "Save") {
+          editButton.classList.remove("btn-secondary");
+          editButton.classList.add("btn-primary");
+        } else {
+          editButton.innerHTML = '<i class="fas fa-save"></i> Save';
+          editButton.classList.remove("btn-primary");
+          editButton.classList.add("btn-secondary");
+        }
 
-            // Call enableSaveButton after toggling inputs to update button state
-            enableSaveButton();
-          }
+        // Call enableSaveButton after toggling inputs to update button state
+        enableSaveButton();
+      }
 
-          function enableSaveButton() {
-              var inputs = document.querySelectorAll('input[id="firstName"], input[id="middleName"], input[id="lastName"], input[id="controlNumber"], input[id="barangay"], input[id="district"], input[id="suffix"], input[id="email"], input[id="mobileNumber"], input[id="password"]');
-              var editButton = document.getElementById('editButton');
+      function enableSaveButton() {
+        var inputs = document.querySelectorAll(
+          'input[id="firstName"], input[id="middleName"], input[id="lastName"], input[id="controlNumber"], input[id="barangay"], input[id="district"], input[id="suffix"], input[id="email"], input[id="mobileNumber"], input[id="password"]'
+        );
+        var editButton = document.getElementById("editButton");
 
-              function handleInputChange() {
-                var hasChanges = Array.from(inputs).some(function (input) {
-                  return input.value !== input.defaultValue;
-                });
-                editButton.disabled = !hasChanges || editButton.innerText.trim() === "Save";
-              }
+        function handleInputChange() {
+          var hasChanges = Array.from(inputs).some(function (input) {
+            return input.value !== input.defaultValue;
+          });
+          editButton.disabled =
+            !hasChanges || editButton.innerText.trim() === "Save";
+        }
 
-              inputs.forEach(function (input) {
-                input.addEventListener('input', handleInputChange);
-              });
+        inputs.forEach(function (input) {
+          input.addEventListener("input", handleInputChange);
+        });
 
-              handleInputChange();
-            }
+        handleInputChange();
+      }
     </script>
     <script></script>
   </body>
