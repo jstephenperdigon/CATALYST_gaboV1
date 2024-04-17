@@ -1417,9 +1417,17 @@
     ></script>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
+<<<<<<< HEAD
         function toggleInputs() {
             var inputs = document.querySelectorAll('.first-name, .middle-name, .last-name, .control-number, .collector-barangay, .collector-district, .collector-suffix, .collector-email, .mobile-number, .collector-password');
             var editButton = document.getElementById('editButton');
+=======
+      function toggleInputs() {
+        var inputs = document.querySelectorAll(
+          "#firstName, #middleName, #lastName, #controlNumber, #barangay, #district, #suffix, #email, #mobileNumber, #password"
+        );
+        var editButton = document.getElementById("editButton");
+>>>>>>> 02009a166692fde5a5dd3b4aa876a5ed78c91561
 
         inputs.forEach(function (input) {
           input.disabled = !input.disabled;
@@ -1438,9 +1446,17 @@
         enableSaveButton();
       }
 
+<<<<<<< HEAD
           function enableSaveButton() {
               var inputs = document.querySelectorAll('.first-name, .middle-name, .last-name, .control-number, .collector-barangay, .collector-district, .collector-suffix, .collector-email, .mobile-number, .collector-password');
               var editButton = document.getElementById('editButton');
+=======
+      function enableSaveButton() {
+        var inputs = document.querySelectorAll(
+          'input[id="firstName"], input[id="middleName"], input[id="lastName"], input[id="controlNumber"], input[id="barangay"], input[id="district"], input[id="suffix"], input[id="email"], input[id="mobileNumber"], input[id="password"]'
+        );
+        var editButton = document.getElementById("editButton");
+>>>>>>> 02009a166692fde5a5dd3b4aa876a5ed78c91561
 
         function handleInputChange() {
           var hasChanges = Array.from(inputs).some(function (input) {
