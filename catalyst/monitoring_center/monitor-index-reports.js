@@ -139,6 +139,8 @@ function generateCollectorHTML(collectorUID, collectors) {
   `;
 }
 
+
+
 // Function to update user data in the database
 async function updateUser(uid) {
     try {
@@ -209,39 +211,39 @@ document.addEventListener("click", async function (e) {
                         </div>
                         <div class="row">
                             <div class="col-xl-6"> 
-                                <p class="text-muted"><strong>Control Number:</strong> <input type="text" class="form-control" id="controlNumber" value="${collectorData.GCL}" disabled></p>
+                                <p class="text-muted"><strong>Control Number:</strong> <input type="text" class="form-control control-number" id="controlNumber" value="${collectorData.GCL}" disabled></p>
                             </div>
                             <div class="col-xl-6"> 
-                                <p class="text-muted"><strong>Account Password:</strong> <input type="password" class="form-control" id="password" value="${collectorData.password}" disabled></p>
+                                <p class="text-muted"><strong>Account Password:</strong> <input type="password" class="form-control collector-password" id="password" value="${collectorData.password}" disabled></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-6">
                                 <p class="fs-5 fw-bold">Personal Details</p>
-                                <p class="text-muted"><strong>First Name:</strong> <input type="text" class="form-control" id="firstName" value="${collectorData.UserInfo.firstName}" disabled></p>
-                                <p class="text-muted"><strong>Surname:</strong> <input type="text" class="form-control" id="lastName" value="${collectorData.UserInfo.lastName}" disabled></p>
+                                <p class="text-muted"><strong>First Name:</strong> <input type="text" class="form-control first-name" id="firstName" value="${collectorData.UserInfo.firstName}" disabled></p>
+                                <p class="text-muted"><strong>Surname:</strong> <input type="text" class="form-control last-name" id="lastName" value="${collectorData.UserInfo.lastName}" disabled></p>
                             </div>
                             <div class="col-xl-6">
                                 <p>&nbsp;</p> <!-- Empty space to align with the other column -->
-                                <p class="text-muted"><strong>Middle Name:</strong> <input type="text" class="form-control" id="middleName" value="${collectorData.UserInfo.middleName}" disabled></p>
-                                <p class="text-muted"><strong>Suffix:</strong> <input type="text" class="form-control" id="suffix" value="${collectorData.UserInfo.suffix}" disabled></p>
+                                <p class="text-muted"><strong>Middle Name:</strong> <input type="text" class="form-control middle-name" id="middleName" value="${collectorData.UserInfo.middleName}" disabled></p>
+                                <p class="text-muted"><strong>Suffix:</strong> <input type="text" class="form-control collector-suffix" id="suffix" value="${collectorData.UserInfo.suffix}" disabled></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-12">
                                 <p class="fs-5 fw-bold">Contact Details</p>
-                                <p class="text-muted"><strong>Email:</strong> <input type="email" class="form-control" id="email" value="${collectorData.UserInfo.email}" disabled></p>
-                                <p class="text-muted"><strong>Mobile Number:</strong> <input type="tel" class="form-control" id="mobileNumber" value="${collectorData.UserInfo.mobileNumber}" disabled></p>
+                                <p class="text-muted"><strong>Email:</strong> <input type="email" class="form-control collector-email" id="email" value="${collectorData.UserInfo.email}" disabled></p>
+                                <p class="text-muted"><strong>Mobile Number:</strong> <input type="tel" class="form-control mobile-number" id="mobileNumber" value="${collectorData.UserInfo.mobileNumber}" disabled></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-6">
                                 <p class="fs-5 fw-bold">Assigned Area</p>
-                                <p class="text-muted"><strong>District:</strong> <input type="text" class="form-control" id="district" value="${collectorData.AssignedArea.district}" disabled></p>
+                                <p class="text-muted"><strong>District:</strong> <input type="text" class="form-control collector-district" id="district" value="${collectorData.AssignedArea.district}" disabled></p>
                             </div>
                             <div class="col-xl-6">
                                 <p>&nbsp;</p> <!-- Empty space to align with the other column -->
-                                <p class="text-muted"><strong>Barangay:</strong> <input type="text" class="form-control" id="barangay" value="${collectorData.AssignedArea.barangay}" disabled></p>
+                                <p class="text-muted"><strong>Barangay:</strong> <input type="text" class="form-control collector-barangay" id="barangay" value="${collectorData.AssignedArea.barangay}" disabled></p>
                             </div>
                         </div>
                     </div>
@@ -272,10 +274,6 @@ document.addEventListener("click", async function (e) {
         }
     }
 });
-
-
-// COLLECTORS SEARCH FUNCTION
-
 
 // TICKETS SEARCH FUNCTION
 // Function to filter reports based on search input and selected sorting column
@@ -319,6 +317,43 @@ function getIndex(key) {
   ];
   return headers.indexOf(key) + 1;
 }
+
+// Function to perform search based on input and category
+function performSearch() {
+  const searchText = document.getElementById('searchCollector').value.trim().toLowerCase();
+  const searchCategory = document.getElementById('searchCategory').value;
+  const rows = document.querySelectorAll('#collectorsTable tbody tr');
+
+  rows.forEach(row => {
+    const cell = row.querySelector(`td:nth-child(${getIndexA(searchCategory)})`);
+    if (cell) {
+      const cellText = cell.textContent.trim().toLowerCase();
+      // Check if the cell text contains the search text
+      const isMatch = cellText.includes(searchText);
+      row.style.display = isMatch ? '' : 'none'; // Show or hide the row based on match
+    } else {
+      row.style.display = 'none'; // Hide the row if the specified search category is not found in the row
+    }
+  });
+}
+
+// Function to get the index of the selected column
+function getIndexA(keyA) {
+  const headers = [
+    "firstName",
+    "lastName",
+    "email",
+    "mobileNumber",
+    "district",
+    "barangay",
+    "suffix",
+  ];
+  return headers.indexOf(keyA) + 1; // Use indexOf to find the index of keyA in headers array
+}
+
+// Add event listener to handle live search while typing
+document.getElementById('searchCollector').addEventListener('input', performSearch);
+document.getElementById('searchCategory').addEventListener('change', performSearch);
 
 // Function to display collectors in the table
 function displayCollectors() {

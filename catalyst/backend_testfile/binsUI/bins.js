@@ -98,12 +98,51 @@ function displayModalForGCN(GCN) {
 
 // Add event listener to each "Reset" button
 document.querySelectorAll(".resetButton").forEach((button) => {
-  button.addEventListener("click", function () {
+  button.addEventListener("click", async function () {
     const GCN = this.getAttribute("data-gcn");
-    resetData(GCN); // Call the function to reset data passing GCN as an argument
-    resetList(); // Call the resetList function after resetting the data
+
+    // Show confirmation modal
+    const confirmed = await showConfirmationModal();
+    
+    // If user confirms reset
+    if (confirmed) {
+      try {
+        const message = await resetDataForGCN(GCN);
+        alert(message); // Display success message
+        // Optionally, you can update the table here if needed
+        updateTable();
+      } catch (error) {
+        console.error("Error resetting fill levels for GCN:", GCN, error.message); // Debugging statement
+        alert(error.message); // Display error message
+      }
+    }
   });
 });
+
+
+// Function to show confirmation modal
+async function showConfirmationModal() {
+  return new Promise((resolve) => {
+    const modal = document.getElementById("confirmationModal");
+    const yesButton = modal.querySelector("#confirmYes");
+    const noButton = modal.querySelector("#confirmNo");
+
+    // Add event listener to "Yes" button
+    yesButton.addEventListener("click", () => {
+      modal.style.display = "none";
+      resolve(true); // Resolve promise with true (user confirmed)
+    });
+
+    // Add event listener to "No" button
+    noButton.addEventListener("click", () => {
+      modal.style.display = "none";
+      resolve(false); // Resolve promise with false (user canceled)
+    });
+
+    // Display the modal
+    modal.style.display = "block";
+  });
+}
 
 // Add event listener to handle reset button clicks using event delegation
 document.addEventListener("click", function(event) {
@@ -126,14 +165,19 @@ document.addEventListener("click", function(event) {
   }
 });
 
-// Modify the searchReports function to use the filterReports function and add event listeners to search results
+// Modify the searchReports function to use the filterReports function and trigger filtering on input change
 window.searchReports = function() {
   const searchInput = document.getElementById("searchInput").value.toLowerCase();
   const filter = document.getElementById("filterDropdown").value;
 
   filterReports(searchInput, filter);
-  // Remove the call to addEventListenerToSearchResults() here
 };
+
+// Add event listener to the search input to trigger search on input change
+document.getElementById("searchInput").addEventListener("input", function() {
+  window.searchReports();
+});
+
 
 // Add event listener to the search button to trigger search
 document.getElementById("searchButton").addEventListener("click", function() {
@@ -615,78 +659,75 @@ async function saveChanges() {
 }
 
 async function resetDataForGCN(GCN) {
-  const defaultFillLevel = "10"; // Set your default fill level value here
-  const defaultQuotaCount = "0";
+  // Display confirmation dialog before resetting
+  const confirmed = await showResetConfirmationDialog();
 
-  try {
-    // Construct the reference to the GCN node
-    const gcnRef = ref(db, `GarbageBinControlNumber/${GCN}`);
+  // If user confirms reset
+  if (confirmed) {
+    const defaultFillLevel = "10"; // Set your default fill level value here
+    const defaultQuotaCount = "0";
 
-    // Reset fill levels for the specified GCN
-    await update(gcnRef, {
-      FillLevel: {
-        GB1FillLevel: {
-          GB1: defaultFillLevel,
-          GB1Flag: "false",
-          GB1QuotaCount: defaultQuotaCount,
-          GB1QuotaFlag: "false",
-          GB1Status: "Not Connected"
-        },
-        GB2FillLevel: {
-          GB2: defaultFillLevel,
-          GB2Flag: "false",
-          GB2QuotaCount: defaultQuotaCount,
-          GB2QuotaFlag: "false",
-          GB2Status: "Not Connected"
-        },
-        GB3FillLevel: {
-          GB3: defaultFillLevel,
-          GB3Flag: "false",
-          GB3QuotaCount: defaultQuotaCount,
-          GB3QuotaFlag: "false",
-          GB3Status: "Not Connected"
-        },
-        GB4FillLevel: {
-          GB4: defaultFillLevel,
-          GB4Flag: "false",
-          GB4QuotaCount: defaultQuotaCount,
-          GB4QuotaFlag: "false",
-          GB4Status: "Not Connected"
-        }
-      },
-      TotalQuota: "0", // Reset TotalQuota to zero
-      Location: null, // Remove Reports data
-      reports: null, // Remove Location data
-      Users: null // Remove Users data
-    });
+    try {
+      // Construct the reference to the GCN node
+      const gcnRef = ref(db, `GarbageBinControlNumber/${GCN}`);
 
-    // Return a success message
-    return "Reset successfully!";
-  } catch (error) {
-    // Return an error message
-    throw new Error("Reset failed. Please try again.");
+      // Reset fill levels for the specified GCN
+      await update(gcnRef, {
+        FillLevel: {
+          GB1FillLevel: {
+            GB1: defaultFillLevel,
+            GB1Flag: "false",
+            GB1QuotaCount: defaultQuotaCount,
+            GB1QuotaFlag: "false",
+            GB1Status: "Not Connected",
+          },
+          GB2FillLevel: {
+            GB2: defaultFillLevel,
+            GB2Flag: "false",
+            GB2QuotaCount: defaultQuotaCount,
+            GB2QuotaFlag: "false",
+            GB2Status: "Not Connected",
+          },
+          GB3FillLevel: {
+            GB3: defaultFillLevel,
+            GB3Flag: "false",
+            GB3QuotaCount: defaultQuotaCount,
+            GB3QuotaFlag: "false",
+            GB3Status: "Not Connected",
+          },
+          GB4FillLevel: {
+            GB4: defaultFillLevel,
+            GB4Flag: "false",
+            GB4QuotaCount: defaultQuotaCount,
+            GB4QuotaFlag: "false",
+            GB4Status: "Not Connected",
+          },
+        },
+        TotalQuota: "0", // Reset TotalQuota to zero
+        Location: null, // Remove Reports data
+        reports: null, // Remove Location data
+        Users: null, // Remove Users data
+      });
+
+      // Return a success message
+      return "Reset successfully!";
+    } catch (error) {
+      // Return an error message
+      throw new Error("Reset failed. Please try again.");
+    }
+  } else {
+    throw new Error("Reset canceled"); // Throw error message if reset is canceled by user
   }
 }
 
-// Modify the event listener for the reset button to call the new reset function
-document.querySelectorAll(".resetButton").forEach((button) => {
-  button.addEventListener("click", async function () {
-    console.log("Reset button clicked"); // Debugging statement
-    const GCN = this.getAttribute("data-gcn");
-
-    try {
-      console.log("Resetting data for GCN:", GCN); // Debugging statement
-      const message = await resetDataForGCN(GCN);
-      console.log("Reset successful:", message); // Debugging statement
-      alert(message); // Display success message
-      // Optionally, you can update the table here if needed
-      updateTable();
-    } catch (error) {
-      console.error("Error resetting fill levels for GCN:", GCN, error.message); // Debugging statement
-      alert(error.message); // Display error message
-    }
+// Function to display the confirmation dialog before reset
+async function showResetConfirmationDialog() {
+  return new Promise((resolve) => {
+    const confirmation = confirm("Are you sure you want to reset?"); // Display browser's built-in confirmation dialog
+    resolve(confirmation); // Resolve the promise with user's confirmation choice
   });
-});
+}
+
 
 // Itakda ang mga event listeners sa labas ng function na displayModal
 window.onload = function () {
