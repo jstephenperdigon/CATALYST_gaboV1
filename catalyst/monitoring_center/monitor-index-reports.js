@@ -140,7 +140,6 @@ function generateCollectorHTML(collectorUID, collectors) {
 }
 
 
-
 // Function to update user data in the database
 async function updateUser(uid) {
     try {
@@ -252,10 +251,6 @@ document.addEventListener("click", async function (e) {
                 // Set collector information inside the modal
                 const viewCollectorDetails = document.getElementById("viewCollectorDetails");
                 viewCollectorDetails.innerHTML = collectorInfo;
-
-                // Show the modal using MDBootstrap
-                const viewCollectorModal = new mdb.Modal(document.getElementById("viewCollectorModal"));
-                viewCollectorModal.show();
                 
                 // Event listener for the "Save" button inside the modal
                 const editButton = document.getElementById('editButton');
