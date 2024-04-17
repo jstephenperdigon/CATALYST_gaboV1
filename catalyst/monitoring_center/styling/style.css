@@ -139,21 +139,21 @@ a {
 }
 
 .l-navbar:hover {
-  width: 250px;
+  width: 220px;
   /* Adjust the width as needed */
 }
 
 .body-pd .content {
   transition: margin-left 0.75s;
 }
-
+/*
 @media screen and (max-width: 768px) {
   .l-navbar:hover,
   .l-navbar:hover ~ .content {
     width: var(--nav-width);
     margin-left: 0;
   }
-}
+} */
 
 .bg-gradient-1 {
   background: linear-gradient(
