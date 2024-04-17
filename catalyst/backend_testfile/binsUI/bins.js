@@ -173,14 +173,11 @@ window.searchReports = function() {
   filterReports(searchInput, filter);
 };
 
+// Add event listener to the filter dropdown
+document.getElementById("filterDropdown").addEventListener("change", searchReports);
+
 // Add event listener to the search input to trigger search on input change
 document.getElementById("searchInput").addEventListener("input", function() {
-  window.searchReports();
-});
-
-
-// Add event listener to the search button to trigger search
-document.getElementById("searchButton").addEventListener("click", function() {
   window.searchReports();
 });
 
