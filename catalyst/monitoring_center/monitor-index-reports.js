@@ -139,6 +139,51 @@ function generateCollectorHTML(collectorUID, collectors) {
   `;
 }
 
+// Function to update user data in the database
+async function updateUser(uid) {
+    try {
+        const collectorRef = ref(db, `Accounts/Collectors/${uid}`);
+        const snapshot = await get(collectorRef);
+        const collectorData = snapshot.val();
+
+        if (collectorData) {
+            const firstName = document.getElementById('firstName').value;
+            const middleName = document.getElementById('middleName').value;
+            const lastName = document.getElementById('lastName').value;
+            const barangay = document.getElementById('barangay').value;
+            const district = document.getElementById('district').value;
+            const suffix = document.getElementById('suffix').value;
+            const email = document.getElementById('email').value;
+            const mobileNumber = document.getElementById('mobileNumber').value;
+
+            const updatedUserData = {
+                ...collectorData,
+                UserInfo: {
+                    ...collectorData.UserInfo,
+                    firstName,
+                    middleName,
+                    lastName,
+                    suffix,
+                    email,
+                    mobileNumber
+                },
+                AssignedArea: {
+                    ...collectorData.AssignedArea,
+                    barangay,
+                    district
+                }
+            };
+
+            await set(collectorRef, updatedUserData);
+            console.log("User data updated successfully.");
+        } else {
+            console.error(`Collector with UID ${uid} not found.`);
+        }
+    } catch (error) {
+        console.error("Error updating user data:", error);
+    }
+}
+
 // Event listener for handling button clicks
 document.addEventListener("click", async function (e) {
   if (e.target.matches(".view-collector")) {
@@ -151,111 +196,86 @@ document.addEventListener("click", async function (e) {
       const collectorData = snapshot.val();
 
       if (collectorData) {
-        // Prepare collector information
-        const collectorInfo = `
-              <div class="container">
-                <div class="row">
-    <div class="col-xl-12 d-flex align-items-center justify-content-between">
-      <p class="fs-5 fw-bold ">Account Details</p>
-      <button class="btn btn-secondary shadow-none" onclick="toggleInputs()">
-         <i class="fas fa-edit"></i> Edit
-      </button>
-    </div>
-  </div>
-        <div class="row">
-    
-          <div class="col-xl-6"> 
-            <p class="text-muted"><strong>Control Number:</strong> <input type="text" class="form-control" id="controlNumber" value="${collectorData.GCL}" disabled></p>
-          </div>
-          <div class="col-xl-6"> 
-            <p class="text-muted"><strong>Account Password:</strong> <input type="password" class="form-control" id="password" value="${collectorData.password}" disabled></p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xl-6">
-            <p class="fs-5 fw-bold">Personal Details</p>
-            <p class="text-muted"><strong>First Name:</strong> <input type="text" class="form-control" id="firstName" value="${collectorData.UserInfo.firstName}" disabled></p>
-            <p class="text-muted"><strong>Surname:</strong> <input type="text" class="form-control" id="lastName" value="${collectorData.UserInfo.lastName}" disabled></p>
-          </div>
-          <div class="col-xl-6">
-            <p>&nbsp;</p> <!-- Empty space to align with the other column -->
-            <p class="text-muted"><strong>Middle Name:</strong> <input type="text" class="form-control" id="middleName" value="${collectorData.UserInfo.middleName}" disabled></p>
-            <p class="text-muted"><strong>Suffix:</strong> <input type="text" class="form-control" id="suffix" value="${collectorData.UserInfo.suffix}" disabled></p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xl-12">
-            <p class="fs-5 fw-bold">Contact Details</p>
-            <p class="text-muted"><strong>Email:</strong> <input type="email" class="form-control" id="email" value="${collectorData.UserInfo.email}" disabled></p>
-            <p class="text-muted"><strong>Mobile Number:</strong> <input type="tel" class="form-control" id="mobileNumber" value="${collectorData.UserInfo.mobileNumber}" disabled></p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xl-6">
-            <p class="fs-5 fw-bold">Assigned Area</p>
-            <p class="text-muted"><strong>District:</strong> <input type="text" class="form-control" id="district" value="${collectorData.AssignedArea.district}" disabled></p>
-          </div>
-          <div class="col-xl-6">
-            <p>&nbsp;</p> <!-- Empty space to align with the other column -->
-            <p class="text-muted"><strong>Barangay:</strong> <input type="text" class="form-control" id="barangay" value="${collectorData.AssignedArea.barangay}" disabled></p>
-          </div>
-        </div>
-       
-      </div>
+                // Prepare collector information
+                const collectorInfo = `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-12 d-flex align-items-center justify-content-between">
+                                <p class="fs-5 fw-bold">Account Details</p>
+                                <button id="editButton" class="btn btn-secondary shadow-none" onclick="toggleInputs()">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6"> 
+                                <p class="text-muted"><strong>Control Number:</strong> <input type="text" class="form-control" id="controlNumber" value="${collectorData.GCL}" disabled></p>
+                            </div>
+                            <div class="col-xl-6"> 
+                                <p class="text-muted"><strong>Account Password:</strong> <input type="password" class="form-control" id="password" value="${collectorData.password}" disabled></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <p class="fs-5 fw-bold">Personal Details</p>
+                                <p class="text-muted"><strong>First Name:</strong> <input type="text" class="form-control" id="firstName" value="${collectorData.UserInfo.firstName}" disabled></p>
+                                <p class="text-muted"><strong>Surname:</strong> <input type="text" class="form-control" id="lastName" value="${collectorData.UserInfo.lastName}" disabled></p>
+                            </div>
+                            <div class="col-xl-6">
+                                <p>&nbsp;</p> <!-- Empty space to align with the other column -->
+                                <p class="text-muted"><strong>Middle Name:</strong> <input type="text" class="form-control" id="middleName" value="${collectorData.UserInfo.middleName}" disabled></p>
+                                <p class="text-muted"><strong>Suffix:</strong> <input type="text" class="form-control" id="suffix" value="${collectorData.UserInfo.suffix}" disabled></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <p class="fs-5 fw-bold">Contact Details</p>
+                                <p class="text-muted"><strong>Email:</strong> <input type="email" class="form-control" id="email" value="${collectorData.UserInfo.email}" disabled></p>
+                                <p class="text-muted"><strong>Mobile Number:</strong> <input type="tel" class="form-control" id="mobileNumber" value="${collectorData.UserInfo.mobileNumber}" disabled></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <p class="fs-5 fw-bold">Assigned Area</p>
+                                <p class="text-muted"><strong>District:</strong> <input type="text" class="form-control" id="district" value="${collectorData.AssignedArea.district}" disabled></p>
+                            </div>
+                            <div class="col-xl-6">
+                                <p>&nbsp;</p> <!-- Empty space to align with the other column -->
+                                <p class="text-muted"><strong>Barangay:</strong> <input type="text" class="form-control" id="barangay" value="${collectorData.AssignedArea.barangay}" disabled></p>
+                            </div>
+                        </div>
+                    </div>
+                `;
 
-        `;
+                // Set collector information inside the modal
+                const viewCollectorDetails = document.getElementById("viewCollectorDetails");
+                viewCollectorDetails.innerHTML = collectorInfo;
 
-        // Set collector information inside the modal
-        const viewCollectorDetails = document.getElementById(
-          "viewCollectorDetails"
-        );
-        viewCollectorDetails.innerHTML = collectorInfo;
-
-        // Show the modal using MDBootstrap
-        const viewCollectorModal = new mdb.Modal(
-          document.getElementById("viewCollectorModal")
-        );
-        viewCollectorModal.show();
-      } else {
-        console.log(`Collector with UID ${UID} not found.`);
-      }
-    } catch (error) {
-      console.error("Error fetching collector data:", error);
+                // Show the modal using MDBootstrap
+                const viewCollectorModal = new mdb.Modal(document.getElementById("viewCollectorModal"));
+                viewCollectorModal.show();
+                
+                // Event listener for the "Save" button inside the modal
+                const editButton = document.getElementById('editButton');
+                editButton.addEventListener('click', async function () {
+                    if (editButton.innerText.trim() === "Save" && !editButton.disabled) {
+                        // If in "Save" mode and button is not disabled, update user data and close the modal
+                        await updateUser(UID); // Update user data in the database
+                        viewCollectorModal.hide(); // Close the modal
+                    }
+                });
+            } else {
+                console.log(`Collector with UID ${UID} not found.`);
+            }
+        } catch (error) {
+            console.error("Error fetching collector data:", error);
+        }
     }
-  }
 });
 
+
 // COLLECTORS SEARCH FUNCTION
-// Function to filter collectors based on search input and selected category
-function filterCollectors(searchInput, category) {
-  const collectorsArray = document.querySelectorAll(
-    "#collectorsTable tbody tr"
-  );
-  collectorsArray.forEach((collector) => {
-    const columnValue = collector
-      .querySelector(`td[data-category="${category}"]`)
-      .textContent.toLowerCase();
-    const displayStyle = columnValue.includes(searchInput) ? "" : "none";
-    collector.style.display = displayStyle;
-  });
-}
 
-// Modify the searchCollectors function to use the filterCollectors function
-window.searchCollectors = function () {
-  const searchInput = document
-    .getElementById("searchCollector")
-    .value.toLowerCase();
-  const category = document.getElementById("searchCategory").value;
-
-  filterCollectors(searchInput, category);
-};
-
-// Function to handle live search while typing
-document
-  .getElementById("searchCollector")
-  .addEventListener("input", function () {
-    window.searchCollectors();
-  });
 
 // TICKETS SEARCH FUNCTION
 // Function to filter reports based on search input and selected sorting column

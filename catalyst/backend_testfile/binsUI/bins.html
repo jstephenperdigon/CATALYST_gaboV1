@@ -101,10 +101,12 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 500px;
         }
+        
     </style>
 </head>
 
 <body>
+
     <div id="container">
         <div id="modal" class="modal">
             <div class="modal-content">
@@ -113,10 +115,20 @@
             </div>
         </div>
 
-        <div id="searchContainer">
-            <input type="text" id="searchInput" placeholder="Search...">
-            <div id="autocompleteContainer"></div>
-        </div>
+    <div id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button id="searchButton">Search</button>
+        <label for="filterDropdown">Filtered by:</label>
+        <select id="filterDropdown">
+            <option value="">None</option>
+            <option value="GCN">GCN Unit</option>
+            <option value="status">Status</option>
+            <option value="district">District</option>
+            <option value="barangay">Barangay</option>
+        </select>
+        <div id="autocompleteContainer"></div>
+    </div>
+
 
         <!-- Modal HTML for Editing -->
         <div id="editModal" class="modal">
