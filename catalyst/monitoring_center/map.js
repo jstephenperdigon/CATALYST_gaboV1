@@ -296,37 +296,6 @@ function populateCollectorDropdown(selectedDistrict, selectedBarangay) {
   });
 }
 
-/// Function to check collector availability based on selected time
-function checkCollectorAvailability(selectedTime, collectorUID, collectorName) {
-  // Assuming you have Firebase initialized and authenticated already
-  const dbRef = firebase
-    .database()
-    .ref(`Accounts/Collectors/${collectorUID}/AssignedSchedule`);
-
-  // Fetch the schedule data for the selected collector
-  dbRef.once("value", (snapshot) => {
-    const schedule = snapshot.val();
-
-    // Check if the collector has any assigned schedule
-    if (schedule) {
-      // Iterate through the assigned schedule to check for time conflicts
-      Object.values(schedule).forEach((assignment) => {
-        const timeInput = assignment.TimeInput;
-        // Check if the selected time matches any of the collector's assigned schedules
-        if (timeInput === selectedTime) {
-          // If there's a match, disable the corresponding option in the dropdown
-          const option = document.querySelector(
-            `option[value="${collectorUID}"]`
-          );
-          if (option) {
-            option.disabled = true;
-            option.style.color = "red"; // Indicate unavailability by changing color
-          }
-        }
-      });
-    }
-  });
-}
 // Function to check if all required fields are filled
 function checkInputsAndEnableButton() {
   const dateInputField = document.getElementById("dateInputField");
@@ -336,7 +305,7 @@ function checkInputsAndEnableButton() {
 
   // Check if all fields have valid input
   const isDateValid = dateInputField.value !== "";
-  const isTimeValid = timeInputField.value !== "";
+  const isTimeValid = timeInputField !== "" && timeInputField !== "Select Time";
   const isCollectorSelected =
     dropdownCollector.value !== "" &&
     dropdownCollector.value !== "Select Collector";
@@ -572,9 +541,11 @@ export function initMap() {
 
     const dateInputField = document.getElementById("dateInputField");
     dateInputField.value = "";
+    dateInputField.disabled = true;
 
     const timeInputField = document.getElementById("timeInputField");
-    timeInputField.value = "";
+    timeInputField.value = "Select Time";
+    timeInputField.disabled = true;
 
     const dropdownCollector = document.getElementById("dropdownCollector");
     dropdownCollector.selectedIndex = 0;
@@ -914,9 +885,135 @@ export function initMap() {
     const dateInputField = document.getElementById("dateInputField");
     const timeInputField = document.getElementById("timeInputField");
     const dropdownCollector = document.getElementById("dropdownCollector");
-
-    // Add event listener to deploy button
     const deployBtn = document.getElementById("deployBtn");
+
+    // Disable dateInputField and timeInputField initially
+    dateInputField.disabled = true;
+    timeInputField.disabled = true;
+
+    // Create and populate the time slot dropdown when DOM content is loaded
+    createTimeSlotOptions();
+
+    function createTimeSlotOptions() {
+      const timeSlots = [
+        "Select Time",
+        "8:00 AM - 9:00 AM",
+        "9:00 AM - 10:00 AM",
+        "10:00 AM - 11:00 AM",
+        "11:00 AM - 12:00 PM",
+        "12:00 PM - 1:00 PM",
+        "1:00 PM - 2:00 PM",
+        "2:00 PM - 3:00 PM",
+        "3:00 PM - 4:00 PM",
+        "4:00 PM - 5:00 PM",
+        "5:00 PM - 6:00 PM",
+      ];
+      // Clear existing options
+      timeInputField.innerHTML = "";
+
+      // Create and add new options
+      timeSlots.forEach((timeSlot) => {
+        const option = document.createElement("option");
+        option.value = timeSlot;
+        option.textContent = timeSlot;
+        timeInputField.appendChild(option);
+      });
+
+      // Set the default selected option to "Select Time" and disable it
+      timeInputField.value = "Select Time";
+      timeInputField.options[0].disabled = true;
+    }
+
+    function displayAssignedSchedule() {
+      // Get the selected collector value from dropdown
+      const selectedCollectorValue = dropdownCollector.value;
+      // Function to format date from yyyy-mm-dd to mm-dd-yyyy
+      function formatDate(dateString) {
+        const [year, month, day] = dateString.split("-");
+        return `${month}-${day}-${year}`;
+      }
+
+      // Get the value of the dateInputField
+      const selectedDate = formatDate(dateInputField.value);
+
+      // Enable/disable timeInputField based on dateInputField validity
+      if (selectedDate) {
+        timeInputField.disabled = false;
+      } else {
+        timeInputField.disabled = true;
+      }
+
+      // Reference to the collectors node in Firebase
+      const collectorsRef = ref(db, "Accounts/Collectors");
+
+      // Retrieve all collectors
+      get(collectorsRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            // Loop through each collector
+            snapshot.forEach((childSnapshot) => {
+              const collectorData = childSnapshot.val();
+              if (collectorData.GCL === selectedCollectorValue) {
+                const collectorUID = childSnapshot.key;
+
+                // Reference to the assigned schedule node for this collector
+                const assignedScheduleRef = ref(
+                  db,
+                  `Accounts/Collectors/${collectorUID}/AssignedSchedule`
+                );
+
+                // Retrieve the assigned schedules for this collector
+                get(assignedScheduleRef)
+                  .then((scheduleSnapshot) => {
+                    if (scheduleSnapshot.exists()) {
+                      scheduleSnapshot.forEach((scheduleChildSnapshot) => {
+                        const scheduleUID = scheduleChildSnapshot.key;
+                        const scheduleData = scheduleChildSnapshot.val();
+
+                        if (scheduleData.DateInput === selectedDate) {
+                          console.log(`Schedule UID: ${scheduleUID}`);
+                          console.log("Schedule Data:", scheduleData);
+                        }
+                      });
+                    } else {
+                      console.log(
+                        "No assigned schedules found for this collector."
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.error(
+                      "Error retrieving assigned schedules:",
+                      error
+                    );
+                  });
+              }
+            });
+          } else {
+            console.error("No collectors found in the database.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error retrieving collectors:", error);
+        });
+    }
+
+    // Event listener for dropdownCollector change
+    dropdownCollector.addEventListener("change", () => {
+      // Enable dateInputField only if a valid collector is selected
+      if (
+        dropdownCollector.value &&
+        dropdownCollector.value !== "Select Collector"
+      ) {
+        dateInputField.disabled = false;
+      } else {
+        dateInputField.disabled = true;
+      }
+    });
+
+    // Event listener for dateInputField change
+    dateInputField.addEventListener("change", displayAssignedSchedule);
+
     deployBtn.addEventListener("click", () => {
       // Fetch outputs from HTML elements
       const selectedGCNOutput =
@@ -977,14 +1074,6 @@ export function initMap() {
       const dateInputValue = dateInputField.value;
       const timeInputValue = timeInputField.value;
       const dropdownCollectorValue = dropdownCollector.value;
-
-      // Convert time to 12-hour format
-      //const time = new Date("2000-01-01T" + timeInputValue + ":00");
-      //const formattedTime = time.toLocaleString("en-US", {
-      //hour: "numeric",
-      //minute: "numeric",
-      //hour12: true,
-      //});
 
       // Function to format date as MMDDYYYY
       function formatDate(date) {
