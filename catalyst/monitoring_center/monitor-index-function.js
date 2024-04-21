@@ -3,9 +3,6 @@ import {
   getDatabase,
   ref,
   get,
-  set,
-  onValue,
-  onChildRemoved,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
