@@ -61,18 +61,14 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${
-                gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-              }</p>
-              <p>Biodegradable: ${
-                gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-              }</p>
-              <p>Special: ${
-                gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-              }</p>
-              <p>Non-Biodegradable: ${
-                gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-              }</p>
+              <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+            }</p>
+              <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+            }</p>
+              <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+            }</p>
+              <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+            }</p>
             </div>`
           );
         } else {
@@ -91,18 +87,14 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${
-                          gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-                        }</p>
-                        <p>Biodegradable: ${
-                          gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-                        }</p>
-                        <p>Special: ${
-                          gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-                        }</p>
-                        <p>Non-Biodegradable: ${
-                          gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-                        }</p>
+                        <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+              }</p>
+                        <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+              }</p>
+                        <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+              }</p>
+                        <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+              }</p>
                       </div>`,
           });
 
@@ -632,8 +624,8 @@ export function initMap() {
             <div class="form-outline mb-4">
                 <label class="form-label" for="controlNumbers">Control Numbers:</label>
                 <p id="controlNumbers" class="form-control selected-gcn">${selectedGCNs.join(
-                  ", "
-                )}</p>
+      ", "
+    )}</p>
             </div>
             <div class="form-outline mb-4">
                 <label class="form-label" for="district">District:</label>
@@ -794,7 +786,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-              0
+            0
           );
 
           // Check if adding this marker will exceed the limit
@@ -892,22 +884,22 @@ export function initMap() {
     timeInputField.disabled = true;
 
     // Create and populate the time slot dropdown when DOM content is loaded
+    const timeSlots = [
+      "Select Time",
+      "8:00 AM - 9:00 AM",
+      "9:00 AM - 10:00 AM",
+      "10:00 AM - 11:00 AM",
+      "11:00 AM - 12:00 PM",
+      "12:00 PM - 1:00 PM",
+      "1:00 PM - 2:00 PM",
+      "2:00 PM - 3:00 PM",
+      "3:00 PM - 4:00 PM",
+      "4:00 PM - 5:00 PM",
+      "5:00 PM - 6:00 PM",
+    ];
     createTimeSlotOptions();
 
     function createTimeSlotOptions() {
-      const timeSlots = [
-        "Select Time",
-        "8:00 AM - 9:00 AM",
-        "9:00 AM - 10:00 AM",
-        "10:00 AM - 11:00 AM",
-        "11:00 AM - 12:00 PM",
-        "12:00 PM - 1:00 PM",
-        "1:00 PM - 2:00 PM",
-        "2:00 PM - 3:00 PM",
-        "3:00 PM - 4:00 PM",
-        "4:00 PM - 5:00 PM",
-        "5:00 PM - 6:00 PM",
-      ];
       // Clear existing options
       timeInputField.innerHTML = "";
 
@@ -950,6 +942,9 @@ export function initMap() {
       get(collectorsRef)
         .then((snapshot) => {
           if (snapshot.exists()) {
+            // Array to collect assigned times for the selected date and collector
+            const assignedTimes = [];
+
             // Loop through each collector
             snapshot.forEach((childSnapshot) => {
               const collectorData = childSnapshot.val();
@@ -967,14 +962,21 @@ export function initMap() {
                   .then((scheduleSnapshot) => {
                     if (scheduleSnapshot.exists()) {
                       scheduleSnapshot.forEach((scheduleChildSnapshot) => {
-                        const scheduleUID = scheduleChildSnapshot.key;
                         const scheduleData = scheduleChildSnapshot.val();
 
+                        // Check if the schedule matches the selected date
                         if (scheduleData.DateInput === selectedDate) {
-                          console.log(`Schedule UID: ${scheduleUID}`);
-                          console.log("Schedule Data:", scheduleData);
+                          assignedTimes.push(scheduleData.TimeInput);
                         }
                       });
+
+                      // Filter out assigned times from timeSlots array
+                      const updatedTimeSlots = timeSlots.filter(
+                        (slot) => !assignedTimes.includes(slot)
+                      );
+
+                      // Update timeInputField options
+                      updateTimeOptions(updatedTimeSlots);
                     } else {
                       console.log(
                         "No assigned schedules found for this collector."
@@ -996,6 +998,23 @@ export function initMap() {
         .catch((error) => {
           console.error("Error retrieving collectors:", error);
         });
+    }
+
+    function updateTimeOptions(updatedTimeSlots) {
+      // Clear existing options
+      timeInputField.innerHTML = "";
+
+      // Create and add updated options
+      updatedTimeSlots.forEach((timeSlot) => {
+        const option = document.createElement("option");
+        option.value = timeSlot;
+        option.textContent = timeSlot;
+        timeInputField.appendChild(option);
+      });
+
+      // Set the default selected option to "Select Time" and disable it
+      timeInputField.value = "Select Time";
+      timeInputField.options[0].disabled = true;
     }
 
     // Event listener for dropdownCollector change
