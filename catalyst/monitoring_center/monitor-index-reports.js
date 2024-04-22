@@ -139,50 +139,49 @@ function generateCollectorHTML(collectorUID, collectors) {
   `;
 }
 
-
 // Function to update user data in the database
 async function updateUser(uid) {
-    try {
-        const collectorRef = ref(db, `Accounts/Collectors/${uid}`);
-        const snapshot = await get(collectorRef);
-        const collectorData = snapshot.val();
+  try {
+    const collectorRef = ref(db, `Accounts/Collectors/${uid}`);
+    const snapshot = await get(collectorRef);
+    const collectorData = snapshot.val();
 
-        if (collectorData) {
-            const firstName = document.getElementById('firstName').value;
-            const middleName = document.getElementById('middleName').value;
-            const lastName = document.getElementById('lastName').value;
-            const barangay = document.getElementById('barangay').value;
-            const district = document.getElementById('district').value;
-            const suffix = document.getElementById('suffix').value;
-            const email = document.getElementById('email').value;
-            const mobileNumber = document.getElementById('mobileNumber').value;
+    if (collectorData) {
+      const firstName = document.getElementById("firstName").value;
+      const middleName = document.getElementById("middleName").value;
+      const lastName = document.getElementById("lastName").value;
+      const barangay = document.getElementById("barangay").value;
+      const district = document.getElementById("district").value;
+      const suffix = document.getElementById("suffix").value;
+      const email = document.getElementById("email").value;
+      const mobileNumber = document.getElementById("mobileNumber").value;
 
-            const updatedUserData = {
-                ...collectorData,
-                UserInfo: {
-                    ...collectorData.UserInfo,
-                    firstName,
-                    middleName,
-                    lastName,
-                    suffix,
-                    email,
-                    mobileNumber
-                },
-                AssignedArea: {
-                    ...collectorData.AssignedArea,
-                    barangay,
-                    district
-                }
-            };
+      const updatedUserData = {
+        ...collectorData,
+        UserInfo: {
+          ...collectorData.UserInfo,
+          firstName,
+          middleName,
+          lastName,
+          suffix,
+          email,
+          mobileNumber,
+        },
+        AssignedArea: {
+          ...collectorData.AssignedArea,
+          barangay,
+          district,
+        },
+      };
 
-            await set(collectorRef, updatedUserData);
-            console.log("User data updated successfully.");
-        } else {
-            console.error(`Collector with UID ${uid} not found.`);
-        }
-    } catch (error) {
-        console.error("Error updating user data:", error);
+      await set(collectorRef, updatedUserData);
+      console.log("User data updated successfully.");
+    } else {
+      console.error(`Collector with UID ${uid} not found.`);
     }
+  } catch (error) {
+    console.error("Error updating user data:", error);
+  }
 }
 
 // Event listener for handling button clicks
@@ -197,8 +196,8 @@ document.addEventListener("click", async function (e) {
       const collectorData = snapshot.val();
 
       if (collectorData) {
-                // Prepare collector information
-                const collectorInfo = `
+        // Prepare collector information
+        const collectorInfo = `
                     <div class="container">
                         <div class="row">
                             <div class="col-xl-12 d-flex align-items-center justify-content-between">
@@ -248,26 +247,28 @@ document.addEventListener("click", async function (e) {
                     </div>
                 `;
 
-                // Set collector information inside the modal
-                const viewCollectorDetails = document.getElementById("viewCollectorDetails");
-                viewCollectorDetails.innerHTML = collectorInfo;
-                
-                // Event listener for the "Save" button inside the modal
-                const editButton = document.getElementById('editButton');
-                editButton.addEventListener('click', async function () {
-                    if (editButton.innerText.trim() === "Save" && !editButton.disabled) {
-                        // If in "Save" mode and button is not disabled, update user data and close the modal
-                        await updateUser(UID); // Update user data in the database
-                        viewCollectorModal.hide(); // Close the modal
-                    }
-                });
-            } else {
-                console.log(`Collector with UID ${UID} not found.`);
-            }
-        } catch (error) {
-            console.error("Error fetching collector data:", error);
-        }
+        // Set collector information inside the modal
+        const viewCollectorDetails = document.getElementById(
+          "viewCollectorDetails"
+        );
+        viewCollectorDetails.innerHTML = collectorInfo;
+
+        // Event listener for the "Save" button inside the modal
+        const editButton = document.getElementById("editButton");
+        editButton.addEventListener("click", async function () {
+          if (editButton.innerText.trim() === "Save" && !editButton.disabled) {
+            // If in "Save" mode and button is not disabled, update user data and close the modal
+            await updateUser(UID); // Update user data in the database
+            viewCollectorModal.hide(); // Close the modal
+          }
+        });
+      } else {
+        console.log(`Collector with UID ${UID} not found.`);
+      }
+    } catch (error) {
+      console.error("Error fetching collector data:", error);
     }
+  }
 });
 
 // TICKETS SEARCH FUNCTION
@@ -315,19 +316,24 @@ function getIndex(key) {
 
 // Function to perform search based on input and category
 function performSearch() {
-  const searchText = document.getElementById('searchCollector').value.trim().toLowerCase();
-  const searchCategory = document.getElementById('searchCategory').value;
-  const rows = document.querySelectorAll('#collectorsTable tbody tr');
+  const searchText = document
+    .getElementById("searchCollector")
+    .value.trim()
+    .toLowerCase();
+  const searchCategory = document.getElementById("searchCategory").value;
+  const rows = document.querySelectorAll("#collectorsTable tbody tr");
 
-  rows.forEach(row => {
-    const cell = row.querySelector(`td:nth-child(${getIndexA(searchCategory)})`);
+  rows.forEach((row) => {
+    const cell = row.querySelector(
+      `td:nth-child(${getIndexA(searchCategory)})`
+    );
     if (cell) {
       const cellText = cell.textContent.trim().toLowerCase();
       // Check if the cell text contains the search text
       const isMatch = cellText.includes(searchText);
-      row.style.display = isMatch ? '' : 'none'; // Show or hide the row based on match
+      row.style.display = isMatch ? "" : "none"; // Show or hide the row based on match
     } else {
-      row.style.display = 'none'; // Hide the row if the specified search category is not found in the row
+      row.style.display = "none"; // Hide the row if the specified search category is not found in the row
     }
   });
 }
@@ -347,8 +353,12 @@ function getIndexA(keyA) {
 }
 
 // Add event listener to handle live search while typing
-document.getElementById('searchCollector').addEventListener('input', performSearch);
-document.getElementById('searchCategory').addEventListener('change', performSearch);
+document
+  .getElementById("searchCollector")
+  .addEventListener("input", performSearch);
+document
+  .getElementById("searchCategory")
+  .addEventListener("change", performSearch);
 
 // Function to display collectors in the table
 function displayCollectors() {

@@ -664,9 +664,14 @@
                             >Select Time:</label
                           >
                           <div class="position-relative">
-                        <select id="timeInputField" class="mdb-select form-control">
-                          <option value="" disabled selected>Select Time</option>
-                        </select>
+                            <select
+                              id="timeInputField"
+                              class="mdb-select form-control"
+                            >
+                              <option value="" disabled selected>
+                                Select Time
+                              </option>
+                            </select>
 
                             <i
                               class="fa-regular fa-clock icon-select position-absolute"
@@ -956,20 +961,76 @@
           </tbody>
         </table>
       </div>
-      </div>
-      <div class="content" id="reports-content"></div>
+    </div>
+    <div class="content" id="reports-content"></div>
 
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-12">
-            <div id="reportsTable"></div>
-          </div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <div id="reportsTable"></div>
         </div>
       </div>
     </div>
+
     <div class="content" id="bins-content">
-      <h1>Bins</h1>
+      <div class="container mb-5 mt-5">
+        <div class="row">
+          <div class="col">
+            <h1>Bins</h1>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                id="searchCollector"
+                class="form-control pl-5"
+                placeholder="Search..."
+                aria-label="Search"
+                aria-describedby="searchButton"
+              />
+            </div>
+          </div>
+          <div class="col-md-3 d-flex">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="sortDropdown"
+                  >Filter By:
+                </label>
+              </div>
+              <select class="form-control form-outline" id="sortDropdown">
+                <option selected disabled>Select an option</option>
+                <option value="ticketNumber">Ticket #</option>
+                <option value="GCN">GCN</option>
+                <option value="Issue">Issue</option>
+                <option value="district">District</option>
+                <option value="barangay">Barangay</option>
+                <option value="TimeSent">Time Sent</option>
+                <option value="DateSent">Date Sent</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="binsTable">
+          <!-- Table content will be populated dynamically -->
+          <table class="table table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>GCN Unit</th>
+                <th>Status</th>
+                <th>District</th>
+                <th>Barangay</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+
     <div class="content" id="collector-content">
       <div class="container mb-5 mt-5">
         <div class="row">
@@ -1009,7 +1070,8 @@
               <select
                 class="form-select"
                 id="searchCategory"
-                aria-label="Search Category">
+                aria-label="Search Category"
+              >
                 <option selected disabled>Select category...</option>
                 <option value="firstName">First Name</option>
                 <option value="lastName">Last Name</option>
@@ -1302,9 +1364,11 @@
     ></script>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-        function toggleInputs() {
-            var inputs = document.querySelectorAll('.first-name, .middle-name, .last-name, .control-number, .collector-barangay, .collector-district, .collector-suffix, .collector-email, .mobile-number, .collector-password');
-            var editButton = document.getElementById('editButton');
+      function toggleInputs() {
+        var inputs = document.querySelectorAll(
+          ".first-name, .middle-name, .last-name, .control-number, .collector-barangay, .collector-district, .collector-suffix, .collector-email, .mobile-number, .collector-password"
+        );
+        var editButton = document.getElementById("editButton");
 
         inputs.forEach(function (input) {
           input.disabled = !input.disabled;
@@ -1323,9 +1387,11 @@
         enableSaveButton();
       }
 
-          function enableSaveButton() {
-              var inputs = document.querySelectorAll('.first-name, .middle-name, .last-name, .control-number, .collector-barangay, .collector-district, .collector-suffix, .collector-email, .mobile-number, .collector-password');
-              var editButton = document.getElementById('editButton');
+      function enableSaveButton() {
+        var inputs = document.querySelectorAll(
+          ".first-name, .middle-name, .last-name, .control-number, .collector-barangay, .collector-district, .collector-suffix, .collector-email, .mobile-number, .collector-password"
+        );
+        var editButton = document.getElementById("editButton");
 
         function handleInputChange() {
           var hasChanges = Array.from(inputs).some(function (input) {
