@@ -22,29 +22,6 @@ const db = getDatabase(app);
 // Retrieve userId from sessionStorage
 const accountId = sessionStorage.getItem("uid");
 
-// Reference to the user's data in the database
-const userRef = ref(db, `Accounts/${accountId}`);
-
-// Retrieve user data from the database
-get(userRef)
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-      // Extract username from user data
-      const userData = snapshot.val();
-      const username = userData.username;
-
-      // Update the welcome message with the username
-      document.getElementById(
-        "welcome-message"
-      ).innerText = `Welcome, ${username}!`;
-    } else {
-      console.error("User data not found");
-    }
-  })
-  .catch((error) => {
-    console.error("Error retrieving user data:", error);
-  });
-
 // Logout function
 function logout() {
   // Remove the UID from session storage

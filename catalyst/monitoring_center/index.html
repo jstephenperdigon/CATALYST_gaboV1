@@ -1347,16 +1347,7 @@
       defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMaps"
     ></script>
-
     <script>
-      function toggleInputs() {
-        var inputs = document.querySelectorAll(
-          'input[type="text"], input[type="email"], input[type="tel"], input[type="password"]'
-        );
-        inputs.forEach(function (input) {
-          input.disabled = !input.disabled;
-        });
-      }
     </script>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script
@@ -1365,49 +1356,7 @@
     ></script>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-      function toggleInputs() {
-        var inputs = document.querySelectorAll(
-          ".first-name, .middle-name, .last-name, .control-number, .collector-barangay, .collector-district, .collector-suffix, .collector-email, .mobile-number, .collector-password"
-        );
-        var editButton = document.getElementById("editButton");
-
-        inputs.forEach(function (input) {
-          input.disabled = !input.disabled;
-        });
-
-        if (editButton.innerText.trim() === "Save") {
-          editButton.classList.remove("btn-secondary");
-          editButton.classList.add("btn-primary");
-        } else {
-          editButton.innerHTML = '<i class="fas fa-save"></i> Save';
-          editButton.classList.remove("btn-primary");
-          editButton.classList.add("btn-secondary");
-        }
-
-        // Call enableSaveButton after toggling inputs to update button state
-        enableSaveButton();
-      }
-
-      function enableSaveButton() {
-        var inputs = document.querySelectorAll(
-          ".first-name, .middle-name, .last-name, .control-number, .collector-barangay, .collector-district, .collector-suffix, .collector-email, .mobile-number, .collector-password"
-        );
-        var editButton = document.getElementById("editButton");
-
-        function handleInputChange() {
-          var hasChanges = Array.from(inputs).some(function (input) {
-            return input.value !== input.defaultValue;
-          });
-          editButton.disabled =
-            !hasChanges || editButton.innerText.trim() === "Save";
-        }
-
-        inputs.forEach(function (input) {
-          input.addEventListener("input", handleInputChange);
-        });
-
-        handleInputChange();
-      }
+      
     </script>
     <script></script>
   </body>
