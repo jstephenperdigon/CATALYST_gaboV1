@@ -445,6 +445,97 @@ function displayCollectors() {
   });
 }
 
+// Function to generate the HTML for a single report
+function generateReportRespondedHTML(report) {
+  // Calculate the time difference
+  const timeSent = new Date(report.DateSent + " " + report.TimeSent);
+  const currentTime = new Date();
+  const timeDifference = Math.abs(currentTime - timeSent); // Difference in milliseconds
+
+  let timeAgo;
+  // Convert milliseconds to appropriate time units
+  if (timeDifference < 60000) {
+    // Less than a minute
+    timeAgo = Math.round(timeDifference / 1000) + " seconds ago";
+  } else if (timeDifference < 3600000) {
+    // Less than an hour
+    timeAgo = Math.round(timeDifference / 60000) + " minutes ago";
+  } else if (timeDifference < 86400000) {
+    // Less than a day
+    timeAgo = Math.round(timeDifference / 3600000) + " hours ago";
+  } else {
+    // More than a day
+    timeAgo = Math.round(timeDifference / 86400000) + " days ago";
+  }
+  return `
+              <tr>
+                  <td>${report.ticketNumber}</td>
+                  <td>${report.GCN}</td>
+                  <td>${report.Issue}</td>
+                  <td>${report.district.split(" ")[1]}</td>
+                  <td>${report.barangay.split(" ")[1]}</td>
+                  <td>${timeAgo}</td>
+                  <td>${report.DateSent}</td>
+              </tr>
+          `;
+}
+
+// Function to display the reports table
+function displayReportsResponded(reportsArray) {
+  // Sort the reports based on TimeSent and DateSent in ascending order (oldest to newest)
+  reportsArray.sort((a, b) => {
+    const timeSentA = new Date(`${a.DateSent} ${a.TimeSent}`).getTime();
+    const timeSentB = new Date(`${b.DateSent} ${b.TimeSent}`).getTime();
+    return timeSentA - timeSentB;
+  });
+
+  const reportsresponded = document.getElementById("reports-responded");
+  const tableHTML = `
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Ticket #</th>
+                <th scope="col">GCN</th>
+                <th scope="col">Issue</th>
+                <th scope="col">District</th>
+                <th scope="col">Barangay</th>
+                <th scope="col">Time Sent</th>
+                <th scope="col">Date Sent</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${reportsArray.map(generateReportRespondedHTML).join("")}
+        </tbody>
+    </table>
+`;
+  reportsresponded.innerHTML = tableHTML;
+}
+
+// Function to update the table when data changes
+function updateRespondedTable() {
+  const reportsRef = ref(db, "ReportsResponded");
+  onValue(reportsRef, (snapshot) => {
+    const reportsData = snapshot.val();
+    if (reportsData) {
+      const reportsArray = Object.entries(reportsData).map(
+        ([ticketNumber, report]) => ({
+          ticketNumber,
+          ...report,
+        })
+      );
+      displayReportsResponded(reportsArray);
+    } else {
+      displayReportsResponded([]);
+    }
+  });
+}
+
+// Function to reset the list
+window.resetList = function () {
+  // Retrieve the initial data and update the table
+  updateRespondedTable();
+};
+
 // Function to display the reports table
 function displayReportsTable(reportsArray) {
   // Sort the reports based on TimeSent and DateSent in ascending order (oldest to newest)
