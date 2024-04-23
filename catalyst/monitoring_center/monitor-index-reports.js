@@ -209,13 +209,13 @@ document.addEventListener("click", async function (e) {
                         <div class="row">
                             <div class="col-xl-6">
                                 <p class="fs-5 fw-bold">Assigned Area</p>
-                                <p class="text-muted"><strong>District:</strong> <input type="text" class="form-control collector-district" id="district" value="${
+                                <p class="text-muted"><strong>District:</strong> <input type="text" class="form-control collector-district" id="collector-district" value="${
                                   collectorData.AssignedArea.district
                                 }" disabled></p>
                             </div>
                             <div class="col-xl-6">
                                 <p>&nbsp;</p> <!-- Empty space to align with the other column -->
-                                <p class="text-muted"><strong>Barangay:</strong> <input type="text" class="form-control collector-barangay" id="barangay" value="${
+                                <p class="text-muted"><strong>Barangay:</strong> <input type="text" class="form-control collector-barangay" id="collector-barangay" value="${
                                   collectorData.AssignedArea.barangay
                                 }" disabled></p>
                             </div>
@@ -237,23 +237,43 @@ document.addEventListener("click", async function (e) {
           // Change button text to "Save"
           editButton.innerText = "Save";
           editButton.classList.remove("btn-secondary");
-          editButton.classList.add("btn-primary");
+          editButton.classList.add("btn-secondary");
 
           // Enable input fields for editing
           const inputs = document.querySelectorAll(
-            ".collector-password, .first-name, .middle-name, .last-name, .collector-suffix, .collector-email, .mobile-number, .collector-district, .collector-barangay"
+            ".first-name, .middle-name, .last-name, .collector-suffix, .collector-email, .mobile-number, .collector-district, .collector-barangay"
           );
           inputs.forEach((input) => {
             input.disabled = false;
+            // Add event listener to track changes in input fields
+            input.addEventListener("input", handleInputChange);
           });
 
           // Replace editButton click listener with saveUserData
           editButton.removeEventListener("click", enableEditMode);
           editButton.addEventListener("click", saveUserData);
+          // Check if any input field has changed initially
+          editButton.disabled = true;
+          checkForChanges();
         }
 
         // Event listener to enable editing mode on edit button click
         editButton.addEventListener("click", enableEditMode);
+
+        // Function to handle input changes and enable the save button
+        function handleInputChange() {
+          editButton.disabled = false; // Enable save button on any change
+        }
+
+        // Function to check for changes in the input fields
+        function checkForChanges() {
+          const inputs = document.querySelectorAll(".field-to-track");
+          inputs.forEach((input) => {
+            input.addEventListener("input", () => {
+              editButton.disabled = false; // Enable save button on change
+            });
+          });
+        }
 
         // Function to save updated user data
         async function saveUserData() {
@@ -268,11 +288,10 @@ document.addEventListener("click", async function (e) {
             const updatedMobileNumber =
               document.getElementById("mobileNumber").value;
 
-            const updatedDistrict = document.getElementById("district").value;
-            const updatedBarangay = document.getElementById("barangay").value;
-
-            console.log("Updated District:", updatedDistrict);
-            console.log("Updated Barangay:", updatedBarangay);
+            const updatedDistrict =
+              document.getElementById("collector-district").value;
+            const updatedBarangay =
+              document.getElementById("collector-barangay").value;
 
             if (collectorData) {
               // Prepare updated user data
@@ -308,19 +327,7 @@ document.addEventListener("click", async function (e) {
         // Cleanup when modal is closed
         const viewCollectorModal =
           document.getElementById("viewCollectorModal");
-        viewCollectorModal.addEventListener("hidden.bs.modal", () => {
-          // Restore original button state and disable input fields
-          editButton.innerText = "Edit";
-          editButton.classList.remove("btn-primary");
-          editButton.classList.add("btn-secondary");
-
-          const inputs = document.querySelectorAll(
-            ".collector-password, .first-name, .middle-name, .last-name, .collector-suffix, .collector-email, .mobile-number, .collector-district, .collector-barangay"
-          );
-          inputs.forEach((input) => {
-            input.disabled = true;
-          });
-        });
+        viewCollectorModal.addEventListener("hidden.bs.modal", () => {});
       } else {
         console.log(`Collector with UID ${UID} not found.`);
       }
