@@ -1,10 +1,11 @@
+// Import the necessary Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
 import {
   getDatabase,
   ref,
   get,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
-
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
   authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
@@ -16,30 +17,15 @@ const firebaseConfig = {
   appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
-// Retrieve userId from sessionStorage
-const accountId = sessionStorage.getItem("uid");
-
-// Logout function
-function logout() {
-  // Remove the UID from session storage
-  sessionStorage.removeItem("uid");
-
-  // Redirect to the sign-in page
-  window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
-}
-
-// Attach the logout function to the click event of the "SignOut" link
-document.getElementById("signOut").addEventListener("click", logout);
 
 // Reference to the 'DeploymentHistory' node in Firebase
 const deploymentHistoryRef = ref(db, 'DeploymentHistory');
 
-// Function to handle data retrieval and display within the Schedules tab
 function displayDeploymentHistory() {
-  const schedulesTabContent = document.getElementById('pills-contact');
+  const activitiesTabContent = document.querySelector('.card-activity .card-body');
 
   // Fetch DeploymentHistory data
   get(deploymentHistoryRef)
@@ -48,7 +34,7 @@ function displayDeploymentHistory() {
         const historyData = snapshot.val();
 
         // Clear existing content
-        schedulesTabContent.innerHTML = '';
+        activitiesTabContent.innerHTML = '';
 
         // Iterate through each entry in historyData
         Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
@@ -71,12 +57,12 @@ function displayDeploymentHistory() {
             </div>
           `;
 
-          // Append the card to the schedulesTabContent
-          schedulesTabContent.appendChild(cardElement);
+          // Append the card to the activitiesTabContent
+          activitiesTabContent.appendChild(cardElement);
         });
       } else {
         // Handle case where there's no deployment history
-        schedulesTabContent.innerHTML = `
+        activitiesTabContent.innerHTML = `
           <div class="container">
             <p>No deployment history available.</p>
           </div>
@@ -86,13 +72,14 @@ function displayDeploymentHistory() {
     .catch((error) => {
       console.error('Error fetching DeploymentHistory:', error);
       // Handle error case
-      schedulesTabContent.innerHTML = `
+      activitiesTabContent.innerHTML = `
         <div class="container">
           <p>Error fetching deployment history.</p>
         </div>
       `;
     });
 }
+
 
 // Call the function to display deployment history when the DOM content is loaded
 document.addEventListener('DOMContentLoaded', displayDeploymentHistory);

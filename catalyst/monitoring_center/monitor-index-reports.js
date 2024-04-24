@@ -267,7 +267,7 @@ document.addEventListener("click", async function (e) {
 
         // Function to check for changes in the input fields
         function checkForChanges() {
-          const inputs = document.querySelectorAll(".field-to-track");
+          const inputs = document.querySelectorAll(".first-name, .middle-name, .last-name, .collector-suffix, .collector-email, .mobile-number, .collector-district, .collector-barangay");
           inputs.forEach((input) => {
             input.addEventListener("input", () => {
               editButton.disabled = false; // Enable save button on change
@@ -380,28 +380,30 @@ function getIndex(key) {
   return headers.indexOf(key) + 1;
 }
 
-// Function to perform search based on input and category
 function performSearch() {
-  const searchText = document
-    .getElementById("searchCollector")
-    .value.trim()
-    .toLowerCase();
+  const searchCollector = document.getElementById("searchCollector").value.trim().toLowerCase();
   const searchCategory = document.getElementById("searchCategory").value;
   const rows = document.querySelectorAll("#collectorsTable tbody tr");
 
   rows.forEach((row) => {
-    const cell = row.querySelector(
-      `td:nth-child(${getIndexA(searchCategory)})`
-    );
+    const cell = row.querySelector(`td:nth-child(${getIndexA(searchCategory)})`);
     if (cell) {
       const cellText = cell.textContent.trim().toLowerCase();
-      // Check if the cell text contains the search text
-      const isMatch = cellText.includes(searchText);
-      row.style.display = isMatch ? "" : "none"; // Show or hide the row based on match
+      const isMatch = cellText.includes(searchCollector);
+      // Show or hide the row based on match
+      row.style.display = isMatch ? "" : "none";
     } else {
-      row.style.display = "none"; // Hide the row if the specified search category is not found in the row
+      // Hide the row if the specified search category is not found in the row
+      row.style.display = "none";
     }
   });
+
+  // Check if the search term is empty to display all rows
+  if (searchCollector === "") {
+    rows.forEach((row) => {
+      row.style.display = "";
+    });
+  }
 }
 
 // Function to get the index of the selected column
@@ -445,96 +447,101 @@ function displayCollectors() {
   });
 }
 
-// Function to generate the HTML for a single report
-function generateReportRespondedHTML(report) {
-  // Calculate the time difference
-  const timeSent = new Date(report.DateSent + " " + report.TimeSent);
-  const currentTime = new Date();
-  const timeDifference = Math.abs(currentTime - timeSent); // Difference in milliseconds
+// Reference to the 'reports-responded' table body
+const tableBody = document.querySelector('#reports-responded tbody');
 
-  let timeAgo;
-  // Convert milliseconds to appropriate time units
-  if (timeDifference < 60000) {
-    // Less than a minute
-    timeAgo = Math.round(timeDifference / 1000) + " seconds ago";
-  } else if (timeDifference < 3600000) {
-    // Less than an hour
-    timeAgo = Math.round(timeDifference / 60000) + " minutes ago";
-  } else if (timeDifference < 86400000) {
-    // Less than a day
-    timeAgo = Math.round(timeDifference / 3600000) + " hours ago";
-  } else {
-    // More than a day
-    timeAgo = Math.round(timeDifference / 86400000) + " days ago";
-  }
-  return `
-              <tr>
-                  <td>${report.ticketNumber}</td>
-                  <td>${report.GCN}</td>
-                  <td>${report.Issue}</td>
-                  <td>${report.district.split(" ")[1]}</td>
-                  <td>${report.barangay.split(" ")[1]}</td>
-                  <td>${timeAgo}</td>
-                  <td>${report.DateSent}</td>
-              </tr>
-          `;
-}
-
-// Function to display the reports table
-function displayReportsResponded(reportsArray) {
-  // Sort the reports based on TimeSent and DateSent in ascending order (oldest to newest)
-  reportsArray.sort((a, b) => {
-    const timeSentA = new Date(`${a.DateSent} ${a.TimeSent}`).getTime();
-    const timeSentB = new Date(`${b.DateSent} ${b.TimeSent}`).getTime();
-    return timeSentA - timeSentB;
+// Function to render data into the table
+function renderTable(reports) {
+  // Clear existing table rows
+  tableBody.innerHTML = '';
+  
+  // Loop through each report key (ticketNumber) and value (report object)
+  Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${ticketNumber}</td>
+      <td>${reportResponded.GCN}</td>
+      <td>${reportResponded.Issue}</td>
+      <td>${reportResponded.district}</td>
+      <td>${reportResponded.barangay}</td>
+      <td>${reportResponded.TimeSent}</td>
+      <td>${reportResponded.DateSent}</td>
+    `;
+    tableBody.appendChild(row);
   });
-
-  const reportsresponded = document.getElementById("reports-responded");
-  const tableHTML = `
-    <table class="table">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">Ticket #</th>
-                <th scope="col">GCN</th>
-                <th scope="col">Issue</th>
-                <th scope="col">District</th>
-                <th scope="col">Barangay</th>
-                <th scope="col">Time Sent</th>
-                <th scope="col">Date Sent</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${reportsArray.map(generateReportRespondedHTML).join("")}
-        </tbody>
-    </table>
-`;
-  reportsresponded.innerHTML = tableHTML;
 }
 
-// Function to update the table when data changes
-function updateRespondedTable() {
-  const reportsRef = ref(db, "ReportsResponded");
+// Function to fetch and display reports from Firebase
+function displayReports() {
+  const reportsRef = ref(db, 'ReportsResponded');
+
+  // Listen for changes in the reports data
   onValue(reportsRef, (snapshot) => {
     const reportsData = snapshot.val();
+
     if (reportsData) {
-      const reportsArray = Object.entries(reportsData).map(
-        ([ticketNumber, report]) => ({
-          ticketNumber,
-          ...report,
-        })
-      );
-      displayReportsResponded(reportsArray);
+      // Render the reports into the table
+      renderTable(reportsData);
     } else {
-      displayReportsResponded([]);
+      // No reports found, display a message or handle accordingly
+      tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
     }
+  }, (error) => {
+    console.error('Error fetching reports:', error.message);
+    tableBody.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
   });
 }
 
-// Function to reset the list
-window.resetList = function () {
-  // Retrieve the initial data and update the table
-  updateRespondedTable();
-};
+// Call the displayReports function to initially populate the table
+displayReports();
+
+// Reference to the 'reports-responded' table body
+const tableBodyArchive = document.querySelector('#reports-archive tbody');
+
+// Function to render data into the table
+function renderTableArchive(reports) {
+  // Clear existing table rows
+  tableBodyArchive.innerHTML = '';
+  
+  // Loop through each report key (ticketNumber) and value (report object)
+  Object.entries(reports).forEach(([ticketNumber, reportArchive]) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${ticketNumber}</td>
+      <td>${reportArchive.GCN}</td>
+      <td>${reportArchive.Issue}</td>
+      <td>${reportArchive.district}</td>
+      <td>${reportArchive.barangay}</td>
+      <td>${reportArchive.TimeSent}</td>
+      <td>${reportArchive.DateSent}</td>
+    `;
+    tableBodyArchive.appendChild(row);
+  });
+}
+
+// Function to fetch and display reports from Firebase
+function displayReportsArchive() {
+  const reportsRef = ref(db, 'ReportsArchive');
+
+  // Listen for changes in the reports data
+  onValue(reportsRef, (snapshot) => {
+    const reportsData = snapshot.val();
+
+    if (reportsData) {
+      // Render the reports into the table
+      renderTableArchive(reportsData);
+    } else {
+      // No reports found, display a message or handle accordingly
+      tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
+    }
+  }, (error) => {
+    console.error('Error fetching reports:', error.message);
+    tableBody.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
+  });
+}
+
+// Call the displayReports function to initially populate the table
+displayReportsArchive();
 
 // Function to display the reports table
 function displayReportsTable(reportsArray) {
