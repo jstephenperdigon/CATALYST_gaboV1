@@ -68,6 +68,7 @@ function generateReportHTML(report) {
               </tr>
           `;
 }
+
 function handleMoveToArchive(ticketNumber) {
   const reportRef = ref(db, `Reports/${ticketNumber}`);
   const archiveRef = ref(db, `ReportsArchive/${ticketNumber}`);
@@ -447,53 +448,15 @@ function displayCollectors() {
   });
 }
 
-// Reference to the 'reports-responded' table body
-const tableBody = document.querySelector('#reports-responded tbody');
 
-// Function to render data into the table
-function renderTable(reports) {
-  // Clear existing table rows
-  tableBody.innerHTML = '';
-  
-  // Loop through each report key (ticketNumber) and value (report object)
-  Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${ticketNumber}</td>
-      <td>${reportResponded.GCN}</td>
-      <td>${reportResponded.Issue}</td>
-      <td>${reportResponded.district}</td>
-      <td>${reportResponded.barangay}</td>
-      <td>${reportResponded.TimeSent}</td>
-      <td>${reportResponded.DateSent}</td>
-    `;
-    tableBody.appendChild(row);
-  });
-}
 
-// Function to fetch and display reports from Firebase
-function displayReports() {
-  const reportsRef = ref(db, 'ReportsResponded');
 
-  // Listen for changes in the reports data
-  onValue(reportsRef, (snapshot) => {
-    const reportsData = snapshot.val();
 
-    if (reportsData) {
-      // Render the reports into the table
-      renderTable(reportsData);
-    } else {
-      // No reports found, display a message or handle accordingly
-      tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
-    }
-  }, (error) => {
-    console.error('Error fetching reports:', error.message);
-    tableBody.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
-  });
-}
 
-// Call the displayReports function to initially populate the table
-displayReports();
+
+
+
+
 
 // Reference to the 'reports-responded' table body
 const tableBodyArchive = document.querySelector('#reports-archive tbody');
@@ -514,6 +477,8 @@ function renderTableArchive(reports) {
       <td>${reportArchive.barangay}</td>
       <td>${reportArchive.TimeSent}</td>
       <td>${reportArchive.DateSent}</td>
+      <td class="viewButtonArchive">
+      <button class="viewArchive btn btn-primary shadow-none ">View</button>
     `;
     tableBodyArchive.appendChild(row);
   });
@@ -542,6 +507,17 @@ function displayReportsArchive() {
 
 // Call the displayReports function to initially populate the table
 displayReportsArchive();
+
+
+
+
+
+
+
+
+
+
+
 
 // Function to display the reports table
 function displayReportsTable(reportsArray) {
@@ -689,9 +665,6 @@ function displayModal(ticketNumber) {
               
                 <p><span class="fw-bold">Address Line 1:</span> ${
                   report.addressLine1
-                }</p>
-                <p><span class="fw-bold">Address Line 2:</span> ${
-                  report.addressLine2
                 }</p>
           <div class="modal-footer justify-content-center">
             <button class="btn btn-primary shadow-none" id="respondButton">Send Respond</button>
