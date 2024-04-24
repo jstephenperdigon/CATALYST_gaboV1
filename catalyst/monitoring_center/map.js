@@ -1286,6 +1286,20 @@ export function initMap() {
         updateGCNNode(gcn);
       });
 
+      function formatTimeSent(timestamp) {
+        const date = new Date(timestamp);
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "PM" : "AM";
+
+        hours = hours % 12;
+        hours = hours ? hours : 12; // Handle midnight (0 hours)
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+
+        const formattedTime = hours + ":" + minutes + " " + ampm;
+        return formattedTime;
+      }
+
       // Fetch other outputs from HTML elements
       const districtOutput =
         selectedMarkers.querySelector(".district").textContent;
@@ -1351,6 +1365,7 @@ export function initMap() {
         DateInput: formatDateMMddYYYY(dateInputValue),
         TimeInput: timeInputValue,
         SelectedGCL: dropdownCollectorValue,
+        timeSent: formatTimeSent(new Date()),
       };
 
       // Store deployment data in Firebase under DeploymentHistory with UID
@@ -1376,6 +1391,7 @@ export function initMap() {
         DateInput: formatDateMMddYYYY(dateInputValue),
         TimeInput: timeInputValue,
         SelectedGCL: dropdownCollectorValue,
+        timeSent: formatTimeSent(new Date()),
       };
 
       // Reference to the collectors node
