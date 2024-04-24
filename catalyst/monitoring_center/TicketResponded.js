@@ -41,14 +41,8 @@ function generateReportResponded(reportsResponded) {
 
 // Function to display the reports table
 function displayReportsResponded(reportsRespondedArray) {
-  // Sort the reports based on TimeSent and DateSent in ascending order (oldest to newest)
-  reportsRespondedArray.sort((a, b) => {
-    const timeSentA = new Date(`${a.DateSent} ${a.TimeSent}`).getTime();
-    const timeSentB = new Date(`${b.DateSent} ${b.TimeSent}`).getTime();
-    return timeSentA - timeSentB;
-  });
 
-  const reportsTableResponded = document.getElementById("reports-responded");
+  const reportsresponded = document.getElementById("reportsresponded");
   const tableHTML = `
     <table class="table">
         <thead class="table-dark">
@@ -68,7 +62,7 @@ function displayReportsResponded(reportsRespondedArray) {
         </tbody>
     </table>
 `;
-  reportsTableResponded.innerHTML = tableHTML;
+  reportsresponded.innerHTML = tableHTML;
 
   // Add event listener to "View" buttons
   document.querySelectorAll(".viewResponded").forEach((button) => {
@@ -85,10 +79,10 @@ function updateRespondedTable() {
   onValue(reportsRef, (snapshot) => {
     const reportsData = snapshot.val();
     if (reportsData) {
-      const reportsArray = Object.entries(reportsData).map(
+      const reportsRespondedArray = Object.entries(reportsData).map(
         ([ticketNumber, reportrespond]) => ({ ticketNumber, ...reportrespond })
       );
-      displayReportsResponded(reportsArray);
+      displayReportsResponded(reportsRespondedArray);
     } else {
       displayReportsResponded([]);
     }
@@ -108,8 +102,8 @@ function displayModalResponded(ticketNumber) {
         const barangayNumber = reportsResponded.barangay.split(" ")[1];
 
         // Populate modal content with report details
-        const modalResponded = document.getElementById("modalResponded");
-        modalResponded.innerHTML = `
+        const respondContent = document.getElementById("respondContent");
+        respondContent.innerHTML = `
         <div class="container">
         
           <div class="row">
@@ -174,26 +168,26 @@ function displayModalResponded(ticketNumber) {
 `;
 
         // Show the modal
-        const modal = new bootstrap.Modal(document.getElementById("modalRespond"));
+        const modal = new bootstrap.Modal(document.getElementById("modalResponded"));
         modal.show();
       } else {
         // If the report doesn't exist, display a message
-        const modalResponded = document.getElementById("modalResponded");
-        modalResponded.innerHTML = "<p>Report not found.</p>";
+        const respondContent = document.getElementById("respondContent");
+        respondContent.innerHTML = "<p>Report not found.</p>";
 
         // Show the modal
-        const modal = new bootstrap.Modal(document.getElementById("modalRespond"));
+        const modal = new bootstrap.Modal(document.getElementById("modalResponded"));
         modal.show();
       }
     })
     .catch((error) => {
       console.error("Error retrieving report:", error);
       // Display an error message if there's an issue fetching the report
-      const modalResponded = document.getElementById("modalResponded");
-      modalResponded.innerHTML = "<p>Error retrieving report data.</p>";
+      const respondContent = document.getElementById("respondContent");
+      respondContent.innerHTML = "<p>Error retrieving report data.</p>";
 
       // Show the modal
-      const modal = new bootstrap.Modal(document.getElementById("modalRespond"));
+      const modal = new bootstrap.Modal(document.getElementById("modalResponded"));
       modal.show();
     });
 }

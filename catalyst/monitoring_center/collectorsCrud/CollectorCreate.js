@@ -35,11 +35,11 @@ async function addUser(event) {
   document.getElementById("submitBtn").disabled = true;
 
   // Get form values
-  const firstName = document.getElementById("fName").value;
-  const middleName = document.getElementById("mName").value;
-  const lastName = document.getElementById("lName").value;
-  const suffix = document.getElementById("sFix").value;
-  const email = document.getElementById("eMail").value;
+  const firstName = document.getElementById("firstName").value;
+  const middleName = document.getElementById("middleName").value;
+  const lastName = document.getElementById("lastName").value;
+  const suffix = document.getElementById("suffix").value;
+  const email = document.getElementById("email").value;
   const mobileNumber = document.getElementById("mobileNumber").value;
   const district = document.getElementById("districtDropdown").value;
   const barangay = document.getElementById("barangayDropdown").value;

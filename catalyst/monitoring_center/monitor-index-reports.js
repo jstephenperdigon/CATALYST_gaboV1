@@ -135,7 +135,6 @@ function generateCollectorHTML(collectorUID, collectors) {
                 data-mdb-target="#viewCollectorModal">
           <i class="fas fa-eye"></i>
         </button>
-       
     </tr>
   `;
 }
@@ -459,7 +458,7 @@ function displayCollectors() {
 
 
 // Reference to the 'reports-responded' table body
-const tableBodyArchive = document.querySelector('#reports-archive tbody');
+const tableBodyArchive = document.querySelector('#reportsarchive tbody');
 
 // Function to render data into the table
 function renderTableArchive(reports) {
