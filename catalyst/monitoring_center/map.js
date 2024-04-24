@@ -1264,23 +1264,20 @@ export function initMap() {
         // Reference to the GCN node in the database
         const gcnRef = ref(db, `GarbageBinControlNumber/${gcn}`);
 
-        // Check if the GCN node exists
-        const snapshot = await get(child(gcnRef, "collectionFlag"));
-        if (!snapshot.exists()) {
-          // If the node does not exist, set collectionFlag to "true"
-          update(gcnRef, { collectionFlag: "true" })
-            .then(() => {
-              console.log(`collectionFlag added to GCN ${gcn}.`);
-            })
-            .catch((error) => {
-              console.error(
-                `Error adding collectionFlag to GCN ${gcn}:`,
-                error
-              );
-            });
-        } else {
-          // If the node exists, do nothing
-          console.log(`collectionFlag already exists for GCN ${gcn}.`);
+        try {
+          // Get the current snapshot of the node
+          const snapshot = await get(gcnRef);
+
+          if (!snapshot.exists() || snapshot.val().collectionFlag === "false") {
+            // If the node does not exist or collectionFlag is "false", update it
+            await update(gcnRef, { collectionFlag: "true" });
+            console.log(`collectionFlag updated to "true" for GCN ${gcn}.`);
+          } else if (snapshot.val().collectionFlag === "true") {
+            // If collectionFlag is already "true", log a message
+            console.log(`collectionFlag already set to "true" for GCN ${gcn}.`);
+          }
+        } catch (error) {
+          console.error(`Error updating collectionFlag for GCN ${gcn}:`, error);
         }
       }
 
