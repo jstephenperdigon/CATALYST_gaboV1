@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebas
 import {
   getDatabase,
   ref,
-  get,
+  onValue,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -27,59 +27,56 @@ const deploymentHistoryRef = ref(db, 'DeploymentHistory');
 function displayDeploymentHistory() {
   const activitiesTabContent = document.querySelector('.card-activity .card-body');
 
-  // Fetch DeploymentHistory data
-  get(deploymentHistoryRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const historyData = snapshot.val();
+  // Set up listener for 'DeploymentHistory' changes
+  onValue(deploymentHistoryRef, (snapshot) => {
+    const historyData = snapshot.val();
 
-        // Clear existing content
-        activitiesTabContent.innerHTML = '';
+    // Clear existing content
+    activitiesTabContent.innerHTML = '';
 
-        // Iterate through each entry in historyData
-        Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
-          // Create card element for each schedule
-          const cardElement = document.createElement('div');
-          cardElement.classList.add('container', 'top-0');
-          cardElement.innerHTML = `
-            <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
-              <div class="d-flex align-items-center">
-                <div class="bg-secondary rounded-4 p-3 me-3">
-                  <i class="fas fa-calendar-alt fa-2x text-light"></i>
-                </div>
-                <div>
-                  <p class="fw-bold fs-6 mb-0">Scheduled for collection</p>
-                  <p class="fw-light text-muted mb-0">
-                    ${scheduleInfo.SelectedGCL} has set to collect on Barangay ${scheduleInfo.Barangay}.
-                  </p>
-                </div>
+    if (historyData) {
+      // Iterate through each entry in historyData
+      Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
+        // Create card element for each schedule
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('container', 'top-0');
+        cardElement.innerHTML = `
+          <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
+            <div class="d-flex align-items-center">
+              <div class="bg-secondary rounded-4 p-3 me-3">
+                <i class="fas fa-calendar-alt fa-2x text-light"></i>
+              </div>
+              <div>
+                <p class="fw-bold fs-6 mb-0">Scheduled for collection</p>
+                <p class="fw-light text-muted mb-0">
+                  ${scheduleInfo.SelectedGCL} has set to collect on Barangay ${scheduleInfo.Barangay}.
+                </p>
               </div>
             </div>
-          `;
-
-          // Append the card to the activitiesTabContent
-          activitiesTabContent.appendChild(cardElement);
-        });
-      } else {
-        // Handle case where there's no deployment history
-        activitiesTabContent.innerHTML = `
-          <div class="container">
-            <p>No deployment history available.</p>
           </div>
         `;
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching DeploymentHistory:', error);
-      // Handle error case
+
+        // Append the card to the activitiesTabContent
+        activitiesTabContent.appendChild(cardElement);
+      });
+    } else {
+      // Handle case where there's no deployment history
       activitiesTabContent.innerHTML = `
         <div class="container">
-          <p>Error fetching deployment history.</p>
+          <p>No deployment history available.</p>
         </div>
       `;
-    });
+    }
+  }, (error) => {
+    console.error('Error fetching DeploymentHistory:', error);
+    // Handle error case
+    activitiesTabContent.innerHTML = `
+      <div class="container">
+        <p>Error fetching deployment history.</p>
+      </div>
+    `;
+  });
 }
-
 
 // Call the function to display deployment history when the DOM content is loaded
 document.addEventListener('DOMContentLoaded', displayDeploymentHistory);

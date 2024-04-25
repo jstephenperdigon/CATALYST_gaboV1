@@ -88,6 +88,39 @@ const deploymentHistoryRef = ref(db, 'DeploymentHistory');
 // Get the <p> element for displaying the total bags
 const totalBagsElement = document.getElementById("TotalBags");
 
+// Function to convert TotalQuota values from string to integer in the database
+function convertTotalQuotaToNumber() {
+  // Get the data snapshot of DeploymentHistory
+  get(deploymentHistoryRef).then((snapshot) => {
+    const deploymentHistory = snapshot.val();
+
+    if (!deploymentHistory) {
+      console.log("DeploymentHistory is empty.");
+      return;
+    }
+
+    // Iterate through each entry in DeploymentHistory
+    Object.entries(deploymentHistory).forEach(([key, entry]) => {
+      // Check if entry has status "complete" and TotalQuota is a string
+      if (entry.status === "complete" && typeof entry.TotalQuota === 'string') {
+        // Convert TotalQuota from string to integer
+        const totalQuotaNumber = parseInt(entry.TotalQuota, 10); // Parse string to integer
+
+        // Update the TotalQuota value in the database to be a number
+        update(ref(deploymentHistoryRef, key), { TotalQuota: totalQuotaNumber })
+          .then(() => {
+            console.log(`Converted TotalQuota to number for entry with key: ${key}`);
+          })
+          .catch((error) => {
+            console.error(`Error converting TotalQuota to number for entry with key ${key}:`, error);
+          });
+      }
+    });
+  }).catch((error) => {
+    console.error("Error retrieving DeploymentHistory data:", error);
+  });
+}
+
 // Function to calculate and display the total sum of TotalQuota for entries with status "complete"
 function calculateAndDisplayTotalQuota(snapshot) {
   const deploymentHistory = snapshot.val();
@@ -102,11 +135,14 @@ function calculateAndDisplayTotalQuota(snapshot) {
   // Loop through each entry in DeploymentHistory
   Object.values(deploymentHistory).forEach(entry => {
     // Check if entry has status "complete" and TotalQuota is defined
-    if (entry.status === "complete" && entry.TotalQuota !== undefined) {
-      // Add the TotalQuota value to the sum
-      totalQuotaSum += entry.TotalQuota;
+    if (entry.status === "complete" && typeof entry.TotalQuota === 'number') {
+      // Convert TotalQuota to integer and add to the sum
+      totalQuotaSum += parseInt(entry.TotalQuota); // or totalQuotaSum += +entry.TotalQuota;
     }
   });
+
+  // Log the total sum of TotalQuota to the console
+  console.log("Total sum of TotalQuota:", totalQuotaSum);
 
   // Format the total bags display string
   const totalBagsDisplay = `${totalQuotaSum} Bags`;
