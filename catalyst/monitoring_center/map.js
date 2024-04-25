@@ -40,8 +40,8 @@ function displayMarkersOnMap(map) {
       // Check if the GCN has collectionFlag set to "true"
       const collectionFlag = data[gcnKey]?.collectionFlag === "true";
 
-      // Condition to display markers only if totalQuota is 4 or above
-      if (location && totalQuota >= 4) {
+      // Condition to display markers only if totalQuota is 3 or above
+      if (location && totalQuota >= 3) {
         const latitude = location.Latitude;
         const longitude = location.Longitude;
 
@@ -61,18 +61,14 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${
-                gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-              }</p>
-              <p>Biodegradable: ${
-                gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-              }</p>
-              <p>Special: ${
-                gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-              }</p>
-              <p>Non-Biodegradable: ${
-                gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-              }</p>
+              <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+            }</p>
+              <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+            }</p>
+              <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+            }</p>
+              <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+            }</p>
             </div>`
           );
         } else {
@@ -91,18 +87,14 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${
-                          gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-                        }</p>
-                        <p>Biodegradable: ${
-                          gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-                        }</p>
-                        <p>Special: ${
-                          gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-                        }</p>
-                        <p>Non-Biodegradable: ${
-                          gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-                        }</p>
+                        <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
+              }</p>
+                        <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
+              }</p>
+                        <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
+              }</p>
+                        <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
+              }</p>
                       </div>`,
           });
 
@@ -817,9 +809,9 @@ export function initMap() {
 
     let message = "";
 
-    if (totalQuotaSum <= 44) {
+    if (totalQuotaSum <= 84) {
       message = "Not enough to meet the requirements";
-    } else if (totalQuotaSum >= 45 && totalQuotaSum <= 50) {
+    } else if (totalQuotaSum >= 85 && totalQuotaSum <= 90) {
       const additionalFieldsDiv = document.getElementById("additionalFields");
       additionalFieldsDiv.style.display = "block";
       // Show the deploy button
@@ -834,8 +826,8 @@ export function initMap() {
             <div class="form-outline mb-4">
                 <label class="form-label" for="controlNumbers">Control Numbers:</label>
                 <p id="controlNumbers" class="form-control selected-gcn">${selectedGCNs.join(
-                  ", "
-                )}</p>
+      ", "
+    )}</p>
             </div>
             <div class="form-outline mb-4">
                 <label class="form-label" for="district">District:</label>
@@ -996,11 +988,11 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-              0
+            0
           );
 
           // Check if adding this marker will exceed the limit
-          if (totalQuotaSum + totalQuota <= 50) {
+          if (totalQuotaSum + totalQuota <= 90) {
             selectedGCNs.push(gcn); // Add GCN to the selectedGCNs array
             totalQuotaSum += totalQuota;
             gb1QuotaSum += gb1QuotaCount; // Accumulate gb1QuotaCount
@@ -1008,8 +1000,8 @@ export function initMap() {
             gb3QuotaSum += gb3QuotaCount; // Accumulate gb3QuotaCount
             gb4QuotaSum += gb4QuotaCount; // Accumulate gb4QuotaCount
 
-            // If the total quota exceeds 50, break the loop
-            if (totalQuotaSum > 50) break;
+            // If the total quota exceeds 90, break the loop
+            if (totalQuotaSum > 90) break;
           }
         }
 
