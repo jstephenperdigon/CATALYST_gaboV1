@@ -453,15 +453,39 @@ function displayCollectors() {
   });
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TICKET RESPONDED
 // Reference to the 'reports-responded' table body
 const tableBodyResponded = document.querySelector(
   "#reportstableresponded tbody"
 );
 
-// Function to render data into the table
 function renderTableResponded(reports) {
   // Clear existing table rows
   tableBodyResponded.innerHTML = "";
+
+  // Define handleButtonClick function
+  function handleButtonClick(ticketNumber) {
+    // Handle button click action here, e.g., show details, perform an action, etc.
+    console.log(`Button clicked for ticket number: ${ticketNumber}`);
+  }
 
   // Loop through each report key (ticketNumber) and value (report object)
   Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
@@ -474,8 +498,17 @@ function renderTableResponded(reports) {
       <td>${reportResponded.barangay}</td>
       <td>${reportResponded.TimeSent}</td>
       <td>${reportResponded.DateSent}</td>
+      <td><button class="btn btn-primary viewTicketResponded" data-ticketresponded="${ticketNumber}">View</button></td>
     `;
     tableBodyResponded.appendChild(row);
+  });
+
+  // Attach event listener to the table body (using event delegation)
+  tableBodyResponded.addEventListener("click", (event) => {
+    if (event.target.classList.contains("button")) {
+      const ticketNumber = event.target.dataset.ticket;
+      handleButtonClick(ticketNumber);
+    }
   });
 }
 
@@ -508,6 +541,24 @@ function displayReportsResponded() {
 // Call the displayReports function to initially populate the table
 displayReportsResponded();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TICKET ARCHIVES
 // Reference to the 'reports-responded' table body
 const tableBodyArchive = document.querySelector("#reportstablearchive tbody");
 
@@ -560,6 +611,30 @@ function displayReportsArchive() {
 
 // Call the displayReports function to initially populate the table
 displayReportsArchive();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Function to display the reports tables
 function displayReportsTable(reportsArray) {

@@ -582,7 +582,7 @@
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <div id="modalContent">
+                    <div id="modalScheduleContent">
                       <!-- Details will be dynamically populated here -->
                     </div>
                   </div>
@@ -851,6 +851,15 @@
           </tbody>
         </table>
       </div>
+      <div id="reports-content"></div>
+      
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div id="reportsTable"></div>
+          </div>
+        </div>
+      </div>
     
 <!-- END OF TICKETS -->
 
@@ -882,6 +891,7 @@
                 <th>Barangay</th>
                 <th>Time Sent</th>
                 <th>Date Sent</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -920,6 +930,7 @@
                 <th>Barangay</th>
                 <th>Time Sent</th>
                 <th>Date Sent</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -1020,20 +1031,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="modal fade" id="modalResponded" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Report Details</h5>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body" id="respondContent">
-           Modal content will be dynamically generated here
-          </div>
-        </div>
-      </div>
-    </div> -->
     
     <div
       class="modal fade"

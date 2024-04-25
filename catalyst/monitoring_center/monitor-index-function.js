@@ -76,7 +76,7 @@ function displayDeploymentHistory() {
           const details = historyData[clickedScheduleUID];
 
           // Update modal content with details
-          const modalContent = document.querySelector("#modalContent");
+          const modalContent = document.querySelector("#modalScheduleContent");
           modalContent.innerHTML = `
             <div class="row">
               <div class="col-md-6">
