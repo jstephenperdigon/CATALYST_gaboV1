@@ -35,11 +35,11 @@ function logout() {
 document.getElementById("signOut").addEventListener("click", logout);
 
 // Reference to the 'DeploymentHistory' node in Firebase
-const deploymentHistoryRef = ref(db, 'DeploymentHistory');
+const deploymentHistoryRef = ref(db, "DeploymentHistory");
 
 // Function to handle data retrieval and display within the Schedules tab
 function displayDeploymentHistory() {
-  const schedulesTabContent = document.getElementById('pills-contact');
+  const schedulesTabContent = document.getElementById("pills-contact");
 
   // Fetch DeploymentHistory data
   get(deploymentHistoryRef)
@@ -48,13 +48,13 @@ function displayDeploymentHistory() {
         const historyData = snapshot.val();
 
         // Clear existing content
-        schedulesTabContent.innerHTML = '';
+        schedulesTabContent.innerHTML = "";
 
         // Iterate through each entry in historyData
         Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
           // Create card element for each schedule
-          const cardElement = document.createElement('div');
-          cardElement.classList.add('container', 'top-0');
+          const cardElement = document.createElement("div");
+          cardElement.classList.add("container", "top-0");
           cardElement.innerHTML = `
             <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
               <div class="d-flex align-items-center">
@@ -84,7 +84,7 @@ function displayDeploymentHistory() {
       }
     })
     .catch((error) => {
-      console.error('Error fetching DeploymentHistory:', error);
+      console.error("Error fetching DeploymentHistory:", error);
       // Handle error case
       schedulesTabContent.innerHTML = `
         <div class="container">
@@ -95,4 +95,4 @@ function displayDeploymentHistory() {
 }
 
 // Call the function to display deployment history when the DOM content is loaded
-document.addEventListener('DOMContentLoaded', displayDeploymentHistory);
+document.addEventListener("DOMContentLoaded", displayDeploymentHistory);
