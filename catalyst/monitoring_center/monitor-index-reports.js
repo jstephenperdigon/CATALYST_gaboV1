@@ -121,13 +121,12 @@ function handleMoveToArchive(ticketNumber) {
 function generateCollectorHTML(collectorUID, collectors) {
   return `
     <tr>
-      <td>${collectors.UserInfo.firstName}</td>
-      <td>${collectors.UserInfo.lastName}</td>
+      <td>${collectors.GCL}</td>
+      <td>${collectors.UserInfo.lastName} ${collectors.UserInfo.firstName}</td>
       <td>${collectors.UserInfo.email}</td>
       <td>${collectors.UserInfo.mobileNumber}</td>
       <td>${collectors.AssignedArea.district}</td>
       <td>${collectors.AssignedArea.barangay}</td>
-      <td>${collectors.UserInfo.suffix}</td>
       <td>
         <button class="btn btn-secondary shadow-none view-collector"
                 data-uid="${collectorUID}"
@@ -267,7 +266,9 @@ document.addEventListener("click", async function (e) {
 
         // Function to check for changes in the input fields
         function checkForChanges() {
-          const inputs = document.querySelectorAll(".first-name, .middle-name, .last-name, .collector-suffix, .collector-email, .mobile-number, .collector-district, .collector-barangay");
+          const inputs = document.querySelectorAll(
+            ".first-name, .middle-name, .last-name, .collector-suffix, .collector-email, .mobile-number, .collector-district, .collector-barangay"
+          );
           inputs.forEach((input) => {
             input.addEventListener("input", () => {
               editButton.disabled = false; // Enable save button on change
@@ -381,12 +382,17 @@ function getIndex(key) {
 }
 
 function performSearch() {
-  const searchCollector = document.getElementById("searchCollector").value.trim().toLowerCase();
+  const searchCollector = document
+    .getElementById("searchCollector")
+    .value.trim()
+    .toLowerCase();
   const searchCategory = document.getElementById("searchCategory").value;
   const rows = document.querySelectorAll("#collectorsTable tbody tr");
 
   rows.forEach((row) => {
-    const cell = row.querySelector(`td:nth-child(${getIndexA(searchCategory)})`);
+    const cell = row.querySelector(
+      `td:nth-child(${getIndexA(searchCategory)})`
+    );
     if (cell) {
       const cellText = cell.textContent.trim().toLowerCase();
       const isMatch = cellText.includes(searchCollector);
@@ -448,16 +454,18 @@ function displayCollectors() {
 }
 
 // Reference to the 'reports-responded' table body
-const tableBodyResponded = document.querySelector('#reportstableresponded tbody');
+const tableBodyResponded = document.querySelector(
+  "#reportstableresponded tbody"
+);
 
 // Function to render data into the table
 function renderTableResponded(reports) {
   // Clear existing table rows
-  tableBodyResponded.innerHTML = '';
-  
+  tableBodyResponded.innerHTML = "";
+
   // Loop through each report key (ticketNumber) and value (report object)
   Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
-    const row = document.createElement('tr');
+    const row = document.createElement("tr");
     row.innerHTML = `
       <td>${ticketNumber}</td>
       <td>${reportResponded.GCN}</td>
@@ -473,39 +481,44 @@ function renderTableResponded(reports) {
 
 // Function to fetch and display reports from Firebase
 function displayReportsResponded() {
-  const reportsRef = ref(db, 'ReportsResponded');
+  const reportsRef = ref(db, "ReportsResponded");
 
   // Listen for changes in the reports data
-  onValue(reportsRef, (snapshot) => {
-    const reportsData = snapshot.val();
+  onValue(
+    reportsRef,
+    (snapshot) => {
+      const reportsData = snapshot.val();
 
-    if (reportsData) {
-      // Render the reports into the table
-      renderTableResponded(reportsData);
-    } else {
-      // No reports found, display a message or handle accordingly
-      tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
+      if (reportsData) {
+        // Render the reports into the table
+        renderTableResponded(reportsData);
+      } else {
+        // No reports found, display a message or handle accordingly
+        tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
+      }
+    },
+    (error) => {
+      console.error("Error fetching reports:", error.message);
+      tableBody.innerHTML =
+        '<tr><td colspan="7">Error fetching reports.</td></tr>';
     }
-  }, (error) => {
-    console.error('Error fetching reports:', error.message);
-    tableBody.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
-  });
+  );
 }
 
 // Call the displayReports function to initially populate the table
 displayReportsResponded();
 
 // Reference to the 'reports-responded' table body
-const tableBodyArchive = document.querySelector('#reportstablearchive tbody');
+const tableBodyArchive = document.querySelector("#reportstablearchive tbody");
 
 // Function to render data into the table
 function renderTableArchive(reports) {
   // Clear existing table rows
-  tableBodyArchive.innerHTML = '';
-  
+  tableBodyArchive.innerHTML = "";
+
   // Loop through each report key (ticketNumber) and value (report object)
   Object.entries(reports).forEach(([ticketNumber, reportArchive]) => {
-    const row = document.createElement('tr');
+    const row = document.createElement("tr");
     row.innerHTML = `
       <td>${ticketNumber}</td>
       <td>${reportArchive.GCN}</td>
@@ -521,23 +534,28 @@ function renderTableArchive(reports) {
 
 // Function to fetch and display reports from Firebase
 function displayReportsArchive() {
-  const reportsRef = ref(db, 'ReportsArchive');
+  const reportsRef = ref(db, "ReportsArchive");
 
   // Listen for changes in the reports data
-  onValue(reportsRef, (snapshot) => {
-    const reportsData = snapshot.val();
+  onValue(
+    reportsRef,
+    (snapshot) => {
+      const reportsData = snapshot.val();
 
-    if (reportsData) {
-      // Render the reports into the table
-      renderTableArchive(reportsData);
-    } else {
-      // No reports found, display a message or handle accordingly
-      tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
+      if (reportsData) {
+        // Render the reports into the table
+        renderTableArchive(reportsData);
+      } else {
+        // No reports found, display a message or handle accordingly
+        tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
+      }
+    },
+    (error) => {
+      console.error("Error fetching reports:", error.message);
+      tableBody.innerHTML =
+        '<tr><td colspan="7">Error fetching reports.</td></tr>';
     }
-  }, (error) => {
-    console.error('Error fetching reports:', error.message);
-    tableBody.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
-  });
+  );
 }
 
 // Call the displayReports function to initially populate the table
