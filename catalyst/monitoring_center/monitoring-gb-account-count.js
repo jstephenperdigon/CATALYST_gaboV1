@@ -36,7 +36,7 @@ onValue(uidRef, (snapshot) => {
     const uidCount = Object.keys(data).length;
     uidCountContainer.textContent = `${uidCount}`;
   } else {
-    uidCountContainer.textContent = "No UIDs found.";
+    uidCountContainer.textContent = "No Users found.";
   }
 });
 
@@ -56,5 +56,24 @@ onValue(gbRef, (snapshot) => {
     gbCountContainer.textContent = `${gbCount}`;
   } else {
     gbCountContainer.textContent = "No Garbage Bins found.";
+  }
+});
+
+// Reference to the UID node
+const hsRef = ref(db, "Accounts/HouseHoldUsers");
+
+// Get the container element for UID count
+const hsCountContainer = document.getElementById("hsCount");
+
+// Listen for changes in the database and update the UID count
+onValue(hsRef, (snapshot) => {
+  const hsdata = snapshot.val();
+  console.log("Received data:", hsdata);
+
+  if (hsdata) {
+    const hsCount = Object.keys(hsdata).length;
+    hsCountContainer.textContent = `${hsCount}`;
+  } else {
+    hsCountContainer.textContent = "No Users found.";
   }
 });
