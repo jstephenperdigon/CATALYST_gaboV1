@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Input Example</title>
+</head>
+
+<body>
+
+    <h2>Select a Date (Today onwards)</h2>
+
+    <form>
+        <label for="date">Choose a date:</label>
+        <input type="date" id="date" name="date" required>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the date input field element
+            const dateInputField = document.getElementById('date');
+
+            // Create a new Date object adjusted for Philippine Standard Time (UTC+8:00)
+            const now = new Date();
+            const philippineNow = new Date(now.getTime() + (8 * 60 * 60 * 1000)); // Adding 8 hours for UTC+8:00
+
+            const year = philippineNow.getFullYear();
+            const month = String(philippineNow.getMonth() + 1).padStart(2, '0'); // January is 0
+            const day = String(philippineNow.getDate()).padStart(2, '0');
+
+            // Construct the date string in YYYY-MM-DD format
+            const today = `${year}-${month}-${day}`;
+
+            // Set the 'min' attribute of the date input field to today's date in Philippine Standard Time
+            dateInputField.setAttribute('min', today);
+        });
+    </script>
+
+</body>
+
+</html>

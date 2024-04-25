@@ -17,15 +17,13 @@ function displayMarkersOnMap(map) {
     // Loop through each garbage bin in the data
     for (const gcnKey in data) {
       const location = data[gcnKey]?.Location; // Get the location object
-      const totalQuota = data[gcnKey]?.TotalQuota; // Get total quota
-      const gb1QuotaCount =
-        data[gcnKey]?.FillLevel?.GB1FillLevel?.GB1QuotaCount;
-      const gb2QuotaCount =
-        data[gcnKey]?.FillLevel?.GB2FillLevel?.GB2QuotaCount;
-      const gb3QuotaCount =
-        data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount;
-      const gb4QuotaCount =
-        data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount;
+      const gb1QuotaCount = data[gcnKey]?.FillLevel?.GB1FillLevel?.GB1QuotaCount || 0;
+      const gb2QuotaCount = data[gcnKey]?.FillLevel?.GB2FillLevel?.GB2QuotaCount || 0;
+      const gb3QuotaCount = data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount || 0;
+      const gb4QuotaCount = data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount || 0;
+
+      // Calculate total quota by summing up individual quota counts
+      const totalQuota = gb1QuotaCount + gb2QuotaCount + gb3QuotaCount + gb4QuotaCount;
 
       // Check if Users object exists and has at least one user
       const users = data[gcnKey]?.Users;
@@ -61,14 +59,10 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-            }</p>
-              <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-            }</p>
-              <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-            }</p>
-              <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-            }</p>
+              <p>Recyclables: ${gb1QuotaCount !== 0 ? gb1QuotaCount : "none"}</p>
+              <p>Biodegradable: ${gb2QuotaCount !== 0 ? gb2QuotaCount : "none"}</p>
+              <p>Special: ${gb3QuotaCount !== 0 ? gb3QuotaCount : "none"}</p>
+              <p>Non-Biodegradable: ${gb4QuotaCount !== 0 ? gb4QuotaCount : "none"}</p>
             </div>`
           );
         } else {
@@ -87,14 +81,10 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${gb1QuotaCount !== undefined ? gb1QuotaCount : "none"
-              }</p>
-                        <p>Biodegradable: ${gb2QuotaCount !== undefined ? gb2QuotaCount : "none"
-              }</p>
-                        <p>Special: ${gb3QuotaCount !== undefined ? gb3QuotaCount : "none"
-              }</p>
-                        <p>Non-Biodegradable: ${gb4QuotaCount !== undefined ? gb4QuotaCount : "none"
-              }</p>
+                        <p>Recyclables: ${gb1QuotaCount !== 0 ? gb1QuotaCount : "none"}</p>
+                        <p>Biodegradable: ${gb2QuotaCount !== 0 ? gb2QuotaCount : "none"}</p>
+                        <p>Special: ${gb3QuotaCount !== 0 ? gb3QuotaCount : "none"}</p>
+                        <p>Non-Biodegradable: ${gb4QuotaCount !== 0 ? gb4QuotaCount : "none"}</p>
                       </div>`,
           });
 
@@ -108,9 +98,7 @@ function displayMarkersOnMap(map) {
         }
       } else {
         // If marker exists but doesn't meet the condition, remove it from the map
-        let existingMarkerIndex = markers.findIndex(
-          (marker) => marker.title === gcnKey
-        );
+        let existingMarkerIndex = markers.findIndex((marker) => marker.title === gcnKey);
         if (existingMarkerIndex !== -1) {
           markers[existingMarkerIndex].setMap(null);
           markers.splice(existingMarkerIndex, 1);
@@ -119,6 +107,7 @@ function displayMarkersOnMap(map) {
     }
   });
 }
+
 
 // Function to display all markers on the map
 function showAllMarkers(map) {
@@ -499,7 +488,7 @@ function checkInputsAndEnableButton() {
 
   // Check if all fields have valid input
   const isDateValid = dateInputField.value !== "";
-  const isTimeValid = timeInputField !== "" && timeInputField !== "Select Time";
+  const isTimeValid = timeInputField.value !== "" && timeInputField.value !== "Select Time";
   const isCollectorSelected =
     dropdownCollector.value !== "" &&
     dropdownCollector.value !== "Select Collector";
@@ -809,9 +798,9 @@ export function initMap() {
 
     let message = "";
 
-    if (totalQuotaSum <= 84) {
+    if (totalQuotaSum <= 89) {
       message = "Not enough to meet the requirements";
-    } else if (totalQuotaSum >= 85 && totalQuotaSum <= 90) {
+    } else if (totalQuotaSum >= 90 && totalQuotaSum <= 96) {
       const additionalFieldsDiv = document.getElementById("additionalFields");
       additionalFieldsDiv.style.display = "block";
       // Show the deploy button
@@ -944,14 +933,32 @@ export function initMap() {
         // Remove markers not matching the selected district and barangay
         removeMarkersNotMatchingSelection(selectedDistrict, selectedBarangay);
 
+        // Calculate totalQuota by summing up gb1QuotaCount, gb2QuotaCount, gb3QuotaCount, and gb4QuotaCount
+        for (const marker of filteredMarkers) {
+          const gb1QuotaCount = parseInt(
+            marker.infoWindow.content.match(/Recyclables: (\d+)/)?.[1] || 0
+          );
+          const gb2QuotaCount = parseInt(
+            marker.infoWindow.content.match(/Biodegradable: (\d+)/)?.[1] || 0
+          );
+          const gb3QuotaCount = parseInt(
+            marker.infoWindow.content.match(/Special: (\d+)/)?.[1] || 0
+          );
+          const gb4QuotaCount = parseInt(
+            marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
+            0
+          );
+
+          const totalQuota =
+            gb1QuotaCount + gb2QuotaCount + gb3QuotaCount + gb4QuotaCount;
+
+          marker.totalQuota = totalQuota; // Store the totalQuota on the marker object
+        }
+
         // Sort filtered markers by highest total quota
         filteredMarkers.sort((a, b) => {
-          const totalQuotaA = parseInt(
-            a.infoWindow.content.match(/Total Quota: (\d+)/)[1]
-          );
-          const totalQuotaB = parseInt(
-            b.infoWindow.content.match(/Total Quota: (\d+)/)[1]
-          );
+          const totalQuotaA = a.totalQuota;
+          const totalQuotaB = b.totalQuota;
           return totalQuotaB - totalQuotaA;
         });
 
@@ -959,9 +966,9 @@ export function initMap() {
         let selectedGCNs = [];
         let totalQuotaSum = 0;
         let gb1QuotaSum = 0;
-        let gb2QuotaSum = 0; // Initialize gb2QuotaSum
-        let gb3QuotaSum = 0; // Initialize gb3QuotaSum
-        let gb4QuotaSum = 0; // Initialize gb4QuotaSum
+        let gb2QuotaSum = 0;
+        let gb3QuotaSum = 0;
+        let gb4QuotaSum = 0;
 
         for (const marker of filteredMarkers) {
           const gcn = marker.infoWindow.content.match(/GCN: (.+?)</)[1];
@@ -974,9 +981,7 @@ export function initMap() {
             continue;
           }
 
-          const totalQuota = parseInt(
-            marker.infoWindow.content.match(/Total Quota: (\d+)/)[1]
-          );
+          const totalQuota = marker.totalQuota;
           const gb1QuotaCount = parseInt(
             marker.infoWindow.content.match(/Recyclables: (\d+)/)?.[1] || 0
           );
@@ -1006,8 +1011,7 @@ export function initMap() {
         }
 
         // Change icon of all selected markers (GCNs)
-        const blueDotIcon =
-          "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+        const blueDotIcon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
         for (const marker of filteredMarkers) {
           const gcn = marker.infoWindow.content.match(/GCN: (.+?)</)[1];
           if (selectedGCNs.includes(gcn)) {
@@ -1030,14 +1034,9 @@ export function initMap() {
         // Print latitude and longitude of GCN with the highest total quota
         if (filteredMarkers.length > 0) {
           const highestQuotaMarker = filteredMarkers[0]; // Get the marker with the highest total quota
-          const gcn =
-            highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
-          const highestQuotaMarkerlatitude = highestQuotaMarker
-            .getPosition()
-            .lat();
-          const highestQuotaMarkerlongitude = highestQuotaMarker
-            .getPosition()
-            .lng();
+          const gcn = highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
+          const highestQuotaMarkerlatitude = highestQuotaMarker.getPosition().lat();
+          const highestQuotaMarkerlongitude = highestQuotaMarker.getPosition().lng();
 
           // Assign values to highLatitude and highLongitude
           highLatitude = highestQuotaMarkerlatitude;
@@ -1063,6 +1062,7 @@ export function initMap() {
     }
   }
 
+
   // Add event listener to district dropdown
   document
     .getElementById("district")
@@ -1081,11 +1081,20 @@ export function initMap() {
     const dropdownCollector = document.getElementById("dropdownCollector");
     const deployBtn = document.getElementById("deployBtn");
 
-    // Get today's date in the format YYYY-MM-DD
-    const today = new Date().toISOString().split("T")[0];
+    // Create a new Date object adjusted for Philippine Standard Time (UTC+8:00)
+    const now = new Date();
+    const philippineNow = new Date(now.getTime() + (8 * 60 * 60 * 1000)); // Adding 8 hours for UTC+8:00
 
-    // Set the minimum date attribute of the date input field to today
-    dateInputField.setAttribute("min", today);
+    const year = philippineNow.getFullYear();
+    const month = String(philippineNow.getMonth() + 1).padStart(2, '0'); // January is 0
+    const day = String(philippineNow.getDate()).padStart(2, '0');
+
+    // Construct the date string in YYYY-MM-DD format
+    const today = `${year}-${month}-${day}`;
+
+    // Set the 'min' attribute of the date input field to today's date in Philippine Standard Time
+    dateInputField.setAttribute('min', today);
+
 
     // Disable dateInputField and timeInputField initially
     dateInputField.disabled = true;
@@ -1346,14 +1355,14 @@ export function initMap() {
         SelectedGCN: selectedGCNOutput.replace("Selected GCN: ", ""),
         District: districtOutput.replace("District: ", ""),
         Barangay: barangayOutput.replace("Barangay: ", ""),
-        TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
-        Recyclables: recyclablesOutput.replace("Recyclables: ", ""),
-        Biodegradable: biodegradableOutput.replace("Biodegradable: ", ""),
-        Special: specialOutput.replace("Special: ", ""),
-        NonBiodegradable: nonBiodegradableOutput.replace(
+        TotalQuota: parseInt(totalQuotaOutput.replace("Total Quota: ", "")),
+        Recyclables: parseInt(recyclablesOutput.replace("Recyclables: ", "")),
+        Biodegradable: parseInt(biodegradableOutput.replace("Biodegradable: ", "")),
+        Special: parseInt(specialOutput.replace("Special: ", "")),
+        NonBiodegradable: parseInt(nonBiodegradableOutput.replace(
           "Non-Biodegradable: ",
           ""
-        ),
+        )),
         DateInput: formatDateMMddYYYY(dateInputValue),
         TimeInput: timeInputValue,
         SelectedGCL: dropdownCollectorValue,
@@ -1379,7 +1388,7 @@ export function initMap() {
         SelectedGCN: selectedGCNOutput.replace("Selected GCN: ", ""),
         District: districtOutput.replace("District: ", ""),
         Barangay: barangayOutput.replace("Barangay: ", ""),
-        TotalQuota: totalQuotaOutput.replace("Total Quota: ", ""),
+        TotalQuota: parseInt(totalQuotaOutput.replace("Total Quota: ", "")),
         DateInput: formatDateMMddYYYY(dateInputValue),
         TimeInput: timeInputValue,
         SelectedGCL: dropdownCollectorValue,
@@ -1472,16 +1481,22 @@ export function initMap() {
                   // Construct the email data object
                   const emailData = {
                     to_email: userEmail,
-                    message: `Hello,
+                    message: `Dear Resident,
 
-                This is to inform you that our designated garbage collector (ID: ${dropdownCollectorValue}) will be collecting your garbage bins on ${formatDateMMddYYYY(
+                This email serves as a notification for the upcoming garbage collection in your area.Our designated garbage collector with ID: ${dropdownCollectorValue} will be collecting your bins on ${formatDateMMddYYYY(
                       dateInputValue
                     )} at ${timeInputValue}.
 
-                Thank you for your cooperation.
+                We kindly request your cooperation in ensuring your bins are properly placed at the designated collection point.This will allow for efficient collection and minimize disruption.
+
+                Should you have any inquiries regarding waste disposal guidelines, collection schedules, or require further assistance, please do not hesitate to contact the City Environmental Management Department through the following channels:
+                Hotline: 53106537
+                Facebook: City Environmental Management Department
+
 
                 Best regards,
                 GABO-CATALYST`,
+
                   };
                   // Send email using EmailJS
                   emailjs
