@@ -177,7 +177,7 @@
         >
           <div class="container-fluid">
             <div class="col-md-3">
-              <a class="navbar-brand header-color fs-5 fw-bolder" href="#">
+              <a class="navbar-brand header-color fs-5 fw-bolder">
                 Monitoring Center
               </a>
             </div>
@@ -538,18 +538,6 @@
                           </div>
                         </div>
                       </div>
-
-                      <div class="row text-center">
-                        <div class="col-12">
-                          <button
-                            id="deployBtn"
-                            class="btn btn-primary shadow-none mt-3"
-                            disabled
-                          >
-                            <i class="fas fa-calendar-plus"></i> Schedule
-                          </button>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -561,8 +549,28 @@
             class="tab-pane fade"
             id="pills-contact"
             role="tabpanel"
-            aria-labelledby="pills-contact-tab"
-          ></div>
+            aria-labelledby="pills-contact-tab">
+            <!-- SCHEDULES -->
+            <div class="container mt-3 table-container">
+            <table id="schedulesTable" class="table table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th>Schedule UID</th>
+                  <th>GCL Number</th>
+                  <th>District</th>
+                  <th>Barangay</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Table body will be populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+          <!-- END OF SCHEDULES -->
+        </div>
+
         </div>
       </div>
     </div>
@@ -819,15 +827,7 @@
           </tbody>
         </table>
       </div>
-    <div id="reports-content"></div>
-
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <div id="reportsTable"></div>
-        </div>
-      </div>
-    </div>
+    
 <!-- END OF TICKETS -->
 
 <!-- TICKETS RESPONDED -->
@@ -866,15 +866,6 @@
           </table>
         </div>
       </div>
-      <div id="tickets-responded"></div>
-
-      <div class="respondedcontainer">
-        <div class="row justify-content-center">
-          <div class="col-12">
-            <div id="reportstableresponded"></div>
-          </div>
-        </div>
-      </div>
       <!-- END OF TICKETS RESPONDED -->
 
       <!-- TICKETS ARCHIVE -->
@@ -911,15 +902,6 @@
               <!-- Table body will be populated dynamically -->
             </tbody>
           </table>
-        </div>
-      </div>
-      <div id="tickets-archive"></div>
-
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-12">
-            <div id="reportstablearchive"></div>
-          </div>
         </div>
       </div>
 <!-- END OF TICKETS ARCHIVE -->

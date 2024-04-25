@@ -39,7 +39,7 @@ const deploymentHistoryRef = ref(db, "DeploymentHistory");
 
 // Function to handle data retrieval and display within the Schedules tab
 function displayDeploymentHistory() {
-  const schedulesTabContent = document.getElementById("pills-contact");
+  const schedulesTableBody = document.querySelector("#schedulesTable tbody");
 
   // Fetch DeploymentHistory data
   get(deploymentHistoryRef)
@@ -47,49 +47,42 @@ function displayDeploymentHistory() {
       if (snapshot.exists()) {
         const historyData = snapshot.val();
 
-        // Clear existing content
-        schedulesTabContent.innerHTML = "";
+        // Clear existing table body content
+        schedulesTableBody.innerHTML = "";
 
-        // Iterate through each entry in historyData
+        // Iterate through each entry in historyData and populate the table rows
         Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
-          // Create card element for each schedule
-          const cardElement = document.createElement("div");
-          cardElement.classList.add("container", "top-0");
-          cardElement.innerHTML = `
-            <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
-              <div class="d-flex align-items-center">
-                <div class="bg-secondary rounded-4 p-3 me-3">
-                  <i class="fas fa-calendar-alt fa-2x text-light"></i>
-                </div>
-                <div>
-                  <p class="fw-bold fs-6 mb-0">Scheduled for collection</p>
-                  <p class="fw-light text-muted mb-0">
-                    ${scheduleInfo.SelectedGCL} has set to collect on Barangay ${scheduleInfo.Barangay}.
-                  </p>
-                </div>
-              </div>
-            </div>
-          `;
+          // Determine the status to display
+          const status = scheduleInfo.status !== undefined ? scheduleInfo.status : "not yet collected";
 
-          // Append the card to the schedulesTabContent
-          schedulesTabContent.appendChild(cardElement);
+          // Create table row for each schedule
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${scheduleUID}</td>
+            <td>${scheduleInfo.SelectedGCL}</td>
+            <td>${scheduleInfo.District}</td>
+            <td>${scheduleInfo.Barangay}</td>
+            <td>${status}</td>
+            <td><button class="actionButton" data-schedule-uid="${scheduleUID}">Action</button></td>
+          `;
+          schedulesTableBody.appendChild(row);
         });
       } else {
         // Handle case where there's no deployment history
-        schedulesTabContent.innerHTML = `
-          <div class="container">
-            <p>No deployment history available.</p>
-          </div>
+        schedulesTableBody.innerHTML = `
+          <tr>
+            <td colspan="4">No deployment history available.</td>
+          </tr>
         `;
       }
     })
     .catch((error) => {
       console.error("Error fetching DeploymentHistory:", error);
       // Handle error case
-      schedulesTabContent.innerHTML = `
-        <div class="container">
-          <p>Error fetching deployment history.</p>
-        </div>
+      schedulesTableBody.innerHTML = `
+        <tr>
+          <td colspan="4">Error fetching deployment history.</td>
+        </tr>
       `;
     });
 }
