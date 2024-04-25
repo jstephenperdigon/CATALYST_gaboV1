@@ -21,6 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+//COLLECTOR USERS
 // Reference to the UID node
 const uidRef = ref(db, "Accounts/Collectors");
 
@@ -40,6 +41,7 @@ onValue(uidRef, (snapshot) => {
   }
 });
 
+//SMART GARBAGE BIN USERS
 // Reference to the GB node
 const gbRef = ref(db, "GarbageBinControlNumber");
 
@@ -59,6 +61,7 @@ onValue(gbRef, (snapshot) => {
   }
 });
 
+//HOUSEHOLD USERS
 // Reference to the UID node
 const hsRef = ref(db, "Accounts/HouseHoldUsers");
 
@@ -76,4 +79,43 @@ onValue(hsRef, (snapshot) => {
   } else {
     hsCountContainer.textContent = "No Users found.";
   }
+});
+
+//TOTAL BAGS
+// Reference to the DeploymentHistory node
+const deploymentHistoryRef = ref(db, 'DeploymentHistory');
+
+// Get the <p> element for displaying the total bags
+const totalBagsElement = document.getElementById("TotalBags");
+
+// Function to calculate and display the total sum of TotalQuota for entries with status "complete"
+function calculateAndDisplayTotalQuota(snapshot) {
+  const deploymentHistory = snapshot.val();
+
+  if (!deploymentHistory) {
+    totalBagsElement.textContent = "";
+    return;
+  }
+
+  let totalQuotaSum = 0;
+
+  // Loop through each entry in DeploymentHistory
+  Object.values(deploymentHistory).forEach(entry => {
+    // Check if entry has status "complete" and TotalQuota is defined
+    if (entry.status === "complete" && entry.TotalQuota !== undefined) {
+      // Add the TotalQuota value to the sum
+      totalQuotaSum += entry.TotalQuota;
+    }
+  });
+
+  // Format the total bags display string
+  const totalBagsDisplay = `${totalQuotaSum} Bags`;
+
+  // Update the content of the <p> element with the formatted total bags display
+  totalBagsElement.textContent = totalBagsDisplay;
+}
+
+// Listen for changes to the DeploymentHistory node
+onValue(deploymentHistoryRef, (snapshot) => {
+  calculateAndDisplayTotalQuota(snapshot);
 });

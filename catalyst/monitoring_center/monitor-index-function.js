@@ -63,15 +63,56 @@ function displayDeploymentHistory() {
             <td>${scheduleInfo.District}</td>
             <td>${scheduleInfo.Barangay}</td>
             <td>${status}</td>
-            <td><button class="actionButton" data-schedule-uid="${scheduleUID}">Action</button></td>
+            <td><button class="btn btn-primary viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
           `;
           schedulesTableBody.appendChild(row);
+
+          // Add event listener to the "ViewDetails" button
+          const viewDetailsButton = row.querySelector(".viewDetails");
+          viewDetailsButton.addEventListener("click", () => {
+            // Get the scheduleUID associated with the clicked button
+            const clickedScheduleUID = viewDetailsButton.getAttribute("data-schedule-uid");
+
+            // Retrieve details based on scheduleUID (you can customize this part)
+            const details = historyData[clickedScheduleUID];
+            
+            // Update modal content with details
+            const modalContent = document.querySelector("#modalContent");
+            modalContent.innerHTML = `
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Schedule UID:</strong> ${scheduleUID}</p>
+                <p><strong>Selected GCL:</strong> ${details.SelectedGCL}</p>
+                <p><strong>Selected GCN:</strong> ${details.SelectedGCN}</p>
+                <p><strong>District:</strong> ${details.District}</p>
+                <p><strong>Barangay:</strong> ${details.Barangay}</p>
+                <p><strong>Status:</strong> ${details.status}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Time Sent:</strong> ${details.timeSent}</p>
+                <p><strong>Time Input:</strong> ${details.TimeInput}</p>
+                <p><strong>Time Collection Ended:</strong> ${details.TimeCollectionEnded}</p>
+                <p><strong>Selected Date Input:</strong> ${details.DateInput}</p>
+                <p><strong>Date Collection Ended:</strong> ${details.DateCollectionEnded}</p>
+                <p><strong>Biodegradable:</strong> ${details.Biodegradable}</p>
+                <p><strong>Non-Biodegradable:</strong> ${details.NonBiodegradable}</p>
+                <p><strong>Recyclables:</strong> ${details.Recyclables}</p>
+                <p><strong>Special:</strong> ${details.Special}</p>
+                <p><strong>Total Quota:</strong> ${details.TotalQuota}</p>
+              </div>
+            </div>
+          `;
+
+            // Show the modal
+            const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            detailsModal.show();
+          });
         });
       } else {
         // Handle case where there's no deployment history
         schedulesTableBody.innerHTML = `
           <tr>
-            <td colspan="4">No deployment history available.</td>
+            <td colspan="5">No deployment history available.</td>
           </tr>
         `;
       }
