@@ -23,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // Function to generate the HTML for a single report
-function generateReportResponded(reportsResponded) {
+function generateReportHTMLResponded(reportsResponded) {
   return `
               <tr>
                   <td>${reportsResponded.ticketNumber}</td>
@@ -40,11 +40,11 @@ function generateReportResponded(reportsResponded) {
 }
 
 // Function to display the reports table
-function displayReportsResponded(reportsRespondedArray) {
+function displayReportsTableResponded(reportsRespondedArray) {
 
-  const reportsresponded = document.getElementById("reportsresponded");
-  const tableHTML = `
-    <table class="table">
+  const reportstableresponded = document.getElementById("reportstableresponded");
+  const tablerespondedHTML = `
+    <table class="tableresponded">
         <thead class="table-dark">
             <tr>
                 <th scope="col">Ticket #</th>
@@ -58,41 +58,41 @@ function displayReportsResponded(reportsRespondedArray) {
             </tr>
         </thead>
         <tbody>
-            ${reportsRespondedArray.map(generateReportResponded).join("")}
+            ${reportsRespondedArray.map(generateReportHTMLResponded).join("")}
         </tbody>
     </table>
 `;
-  reportsresponded.innerHTML = tableHTML;
+  reportstableresponded.innerHTML = tablerespondedHTML;
 
   // Add event listener to "View" buttons
   document.querySelectorAll(".viewResponded").forEach((button) => {
     button.addEventListener("click", function () {
-      const ticketNumber = this.parentNode.parentNode.children[0].textContent;
-      displayModalResponded(ticketNumber);
+      const RespondedticketNumber = this.parentNode.parentNode.children[0].textContent;
+      displayModalResponded(RespondedticketNumber);
     });
   });
 }
 
 // Function to update the table when data changes
-function updateRespondedTable() {
-  const reportsRef = ref(db, "ReportsResponded");
-  onValue(reportsRef, (snapshot) => {
-    const reportsData = snapshot.val();
-    if (reportsData) {
-      const reportsRespondedArray = Object.entries(reportsData).map(
-        ([ticketNumber, reportrespond]) => ({ ticketNumber, ...reportrespond })
+function updateTableResponded() {
+  const reportsrespondedRef = ref(db, "ReportsResponded");
+  onValue(reportsrespondedRef, (snapshot) => {
+    const reportsrespondedData = snapshot.val();
+    if (reportsrespondedData) {
+      const reportsRespondedArray = Object.entries(reportsrespondedData).map(
+        ([RespondedticketNumber, reportResponded]) => ({ RespondedticketNumber, ...reportResponded })
       );
-      displayReportsResponded(reportsRespondedArray);
+      displayReportsTableResponded(reportsRespondedArray);
     } else {
-      displayReportsResponded([]);
+      displayReportsTableResponded([]);
     }
   });
 }
 
-function displayModalResponded(ticketNumber) {
+function displayModalResponded(RespondedticketNumber) {
   // Retrieve report data from Firebase based on ticketNumber
-  const reportRef = ref(db, `ReportsResponded/${ticketNumber}`);
-  get(reportRef)
+  const reportrespondedRef = ref(db, `ReportsResponded/${RespondedticketNumber}`);
+  get(reportrespondedRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
         const reportsResponded = snapshot.val();
@@ -108,7 +108,7 @@ function displayModalResponded(ticketNumber) {
         
           <div class="row">
             <div class="col-md-6">
-              <p><span class="fw-bold">Ticket Number:</span> ${ticketNumber}</p>
+              <p><span class="fw-bold">Ticket Number:</span> ${RespondedticketNumber}</p>
             </div>
             <div class="col-md-6">
               <p><span class="fw-bold">GCN:</span> ${reportsResponded.GCN}</p>
@@ -168,16 +168,16 @@ function displayModalResponded(ticketNumber) {
 `;
 
         // Show the modal
-        const modal = new bootstrap.Modal(document.getElementById("modalResponded"));
-        modal.show();
+        const modalResponded = new bootstrap.Modal(document.getElementById("modalResponded"));
+        modalResponded.show();
       } else {
         // If the report doesn't exist, display a message
         const respondContent = document.getElementById("respondContent");
         respondContent.innerHTML = "<p>Report not found.</p>";
 
         // Show the modal
-        const modal = new bootstrap.Modal(document.getElementById("modalResponded"));
-        modal.show();
+        const modalResponded = new bootstrap.Modal(document.getElementById("modalResponded"));
+        modalResponded.show();
       }
     })
     .catch((error) => {
@@ -187,12 +187,12 @@ function displayModalResponded(ticketNumber) {
       respondContent.innerHTML = "<p>Error retrieving report data.</p>";
 
       // Show the modal
-      const modal = new bootstrap.Modal(document.getElementById("modalResponded"));
-      modal.show();
+      const modalResponded = new bootstrap.Modal(document.getElementById("modalResponded"));
+      modalResponded.show();
     });
 }
 
 // Display the initial reports table when the page loads
 window.onload = function () {
-  updateRespondedTable();
+  updateTableResponded();
 };

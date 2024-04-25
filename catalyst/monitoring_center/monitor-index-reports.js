@@ -447,18 +447,56 @@ function displayCollectors() {
   });
 }
 
+// Reference to the 'reports-responded' table body
+const tableBodyResponded = document.querySelector('#reportstableresponded tbody');
 
+// Function to render data into the table
+function renderTableResponded(reports) {
+  // Clear existing table rows
+  tableBodyResponded.innerHTML = '';
+  
+  // Loop through each report key (ticketNumber) and value (report object)
+  Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${ticketNumber}</td>
+      <td>${reportResponded.GCN}</td>
+      <td>${reportResponded.Issue}</td>
+      <td>${reportResponded.district}</td>
+      <td>${reportResponded.barangay}</td>
+      <td>${reportResponded.TimeSent}</td>
+      <td>${reportResponded.DateSent}</td>
+    `;
+    tableBodyResponded.appendChild(row);
+  });
+}
 
+// Function to fetch and display reports from Firebase
+function displayReportsResponded() {
+  const reportsRef = ref(db, 'ReportsResponded');
 
+  // Listen for changes in the reports data
+  onValue(reportsRef, (snapshot) => {
+    const reportsData = snapshot.val();
 
+    if (reportsData) {
+      // Render the reports into the table
+      renderTableResponded(reportsData);
+    } else {
+      // No reports found, display a message or handle accordingly
+      tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
+    }
+  }, (error) => {
+    console.error('Error fetching reports:', error.message);
+    tableBody.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
+  });
+}
 
-
-
-
-
+// Call the displayReports function to initially populate the table
+displayReportsResponded();
 
 // Reference to the 'reports-responded' table body
-const tableBodyArchive = document.querySelector('#reportsarchive tbody');
+const tableBodyArchive = document.querySelector('#reportstablearchive tbody');
 
 // Function to render data into the table
 function renderTableArchive(reports) {
@@ -476,8 +514,6 @@ function renderTableArchive(reports) {
       <td>${reportArchive.barangay}</td>
       <td>${reportArchive.TimeSent}</td>
       <td>${reportArchive.DateSent}</td>
-      <td class="viewButtonArchive">
-      <button class="viewArchive btn btn-primary shadow-none ">View</button>
     `;
     tableBodyArchive.appendChild(row);
   });
@@ -507,18 +543,7 @@ function displayReportsArchive() {
 // Call the displayReports function to initially populate the table
 displayReportsArchive();
 
-
-
-
-
-
-
-
-
-
-
-
-// Function to display the reports table
+// Function to display the reports tables
 function displayReportsTable(reportsArray) {
   // Sort the reports based on TimeSent and DateSent in ascending order (oldest to newest)
   reportsArray.sort((a, b) => {

@@ -925,7 +925,7 @@
 
         <!-- Table Container with Fixed Height and Scroll -->
         <div class="container mt-3 table-container">
-          <table id="reportsresponded" class="table table-striped">
+          <table id="reportstableresponded" class="table table-striped">
             <thead class="table-dark">
               <tr>
                 <th>Ticket #</th>
@@ -935,7 +935,6 @@
                 <th>Barangay</th>
                 <th>Time Sent</th>
                 <th>Date Sent</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -946,10 +945,10 @@
       </div>
       <div id="tickets-responded"></div>
 
-      <div class="container">
+      <div class="respondedcontainer">
         <div class="row justify-content-center">
           <div class="col-12">
-            <div id="reportsresponded"></div>
+            <div id="reportstableresponded"></div>
           </div>
         </div>
       </div>
@@ -973,7 +972,7 @@
 
         <!-- Table Container with Fixed Height and Scroll -->
         <div class="container mt-3 table-container">
-          <table id="reportsarchive" class="table table-striped">
+          <table id="reportstablearchive" class="table table-striped">
             <thead class="table-dark">
               <tr>
                 <th>Ticket #</th>
@@ -983,7 +982,6 @@
                 <th>Barangay</th>
                 <th>Time Sent</th>
                 <th>Date Sent</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -997,7 +995,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12">
-            <div id="reportsarchive"></div>
+            <div id="reportstablearchive"></div>
           </div>
         </div>
       </div>
@@ -1154,7 +1152,7 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modalResponded" tabindex="-1" aria-hidden="true">
+    <!-- <div class="modal fade" id="modalResponded" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -1162,11 +1160,11 @@
             <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body" id="respondContent">
-            <!-- Modal content will be dynamically generated here -->
+           Modal content will be dynamically generated here
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     
     <div
       class="modal fade"
@@ -1378,7 +1376,7 @@
     <script type="text/javascript" src="monitoring.js"></script>
 
     <!-- TEMPORARY -->
-    <!-- <script type="module" src="TicketResponded.js"></script> -->
+    <!--<script type="module" src="TicketResponded.js"></script>-->
 
     <!-- <script
       defer
