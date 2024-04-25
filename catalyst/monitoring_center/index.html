@@ -153,14 +153,7 @@
               <i class="bx bx-hard-hat nav_icon"></i>
               <span class="nav_name">Collectors</span>
             </a>
-            <a href="#" class="nav_link" id="bins-link">
-              <i class="bx bxs-trash nav_icon"></i>
-              <span class="nav_name">Bins</span>
-            </a>
-            <a href="#" class="nav_link" id="stats-link">
-              <i class="bx bx-bar-chart-alt-2 nav_icon"></i>
-              <span class="nav_name">Summary</span>
-            </a>
+ 
           </div>
         </div>
         <a href="#" class="nav_link" id="signOut">
@@ -197,78 +190,8 @@
               aria-label="Search"
             /> 
             -->
-              <!-- Notification Button -->
-              <div class="dropdown">
-                <button
-                  class="btn dropdown-toggle dropdown-iconbtn shadow-none"
-                  type="button"
-                  id="notificationDropdown"
-                  data-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="fas fa-bell"></i>
-                </button>
-                <ul
-                  class="dropdown-menu dropdown-menu-end mt-3 p-4 shadow-none border-0"
-                  aria-labelledby="notificationDropdown"
-                >
-                  <!-- Notification 1 -->
-                  <li>
-                    <div class="card shadow-none border-0" style="width: 300px">
-                      <!-- Set width here -->
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-auto">
-                            <!-- Icon -->
-                            <i class="fas fa-envelope"></i>
-                          </div>
-                          <div class="col">
-                            <!-- Title -->
-                            <h5 class="card-title">New Message</h5>
-                            <!-- Message -->
-                            <p class="card-text">
-                              You have a new message from John Doe.
-                            </p>
-                            <!-- Time -->
-                            <p class="card-text">
-                              <small class="text-muted">1 minute ago</small>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- Notification 2 -->
-                  <li>
-                    <div class="card shadow-none border-0" style="width: 300px">
-                      <!-- Set width here -->
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-auto">
-                            <!-- Icon -->
-                            <i class="fas fa-bell"></i>
-                          </div>
-                          <div class="col">
-                            <!-- Title -->
-                            <h5 class="card-title">New Notification</h5>
-                            <!-- Message -->
-                            <p class="card-text">
-                              You have a new notification.
-                            </p>
-                            <!-- Time -->
-                            <p class="card-text">
-                              <small class="text-muted">2 hours ago</small>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- Add more notifications as needed -->
-                </ul>
-              </div>
-            </div>
-          </div>
+             
+          </div> 
         </nav>
       </div>
 
@@ -838,7 +761,7 @@
     </div>
 
 <!-- TICKETS -->
-    <div id="reports-content">
+    <div class="content" id="reports-content">
       <div class="container mt-5">
         <p class="fs-2 fw-bold">Tickets</p>
       </div>
@@ -1001,65 +924,7 @@
       </div>
 <!-- END OF TICKETS ARCHIVE -->
     </div>
-    
-    <div id="bins-content">
-      <div class="container mb-5 mt-5">
-        <div class="row">
-          <div class="col">
-            <h1>Bins</h1>
-          </div>
-          <div class="col-md-3">
-            <div class="input-group mb-3">
-              <input
-                type="text"
-                id="searchCollector"
-                class="form-control pl-5"
-                placeholder="Search..."
-                aria-label="Search"
-                aria-describedby="searchButton"
-              />
-            </div>
-          </div>
-          <div class="col-md-3 d-flex">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="sortDropdown"
-                  >Filter By:
-                </label>
-              </div>
-              <select class="form-control form-outline" id="sortDropdown">
-                <option selected disabled>Select an option</option>
-                <option value="ticketNumber">Ticket #</option>
-                <option value="GCN">GCN</option>
-                <option value="Issue">Issue</option>
-                <option value="district">District</option>
-                <option value="barangay">Barangay</option>
-                <option value="TimeSent">Time Sent</option>
-                <option value="DateSent">Date Sent</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div id="binsTable">
-          <!-- Table content will be populated dynamically -->
-          <table class="table table-striped">
-            <thead class="table-dark">
-              <tr>
-                <th>GCN Unit</th>
-                <th>Status</th>
-                <th>District</th>
-                <th>Barangay</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Table rows will be populated dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+   
 
     <div class="content" id="collector-content">
       <div class="container mb-5 mt-5">
@@ -1136,8 +1001,8 @@
         </table>
       </div>
     </div>
-    <div class="content" id="stats-content"></div>
 
+  
     <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
