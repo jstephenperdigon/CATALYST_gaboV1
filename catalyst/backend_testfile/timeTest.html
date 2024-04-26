@@ -4,40 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Date Input Example</title>
+    <title>Garbage Bin Control</title>
 </head>
 
 <body>
+    <h1>Garbage Bin Control</h1>
+    <button id="manageDataBtn">Manage Data for All GCNs</button>
 
-    <h2>Select a Date (Today onwards)</h2>
+    <script type="module">
+        // Import Firebase libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+        import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
-    <form>
-        <label for="date">Choose a date:</label>
-        <input type="date" id="date" name="date" required>
-        <input type="submit" value="Submit">
-    </form>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+            authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+            databaseURL: "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "smartgarbagebin-8c3ec",
+            storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+            messagingSenderId: "1062286948871",
+            appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
+        };
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get the date input field element
-            const dateInputField = document.getElementById('date');
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-            // Create a new Date object adjusted for Philippine Standard Time (UTC+8:00)
-            const now = new Date();
-            const philippineNow = new Date(now.getTime() + (8 * 60 * 60 * 1000)); // Adding 8 hours for UTC+8:00
+        // Function to add data for all existing GCNs
+        const manageData = async () => {
+            try {
+                const snapshot = await get(ref(db, 'GarbageBinControlNumber'));
+                if (snapshot.exists()) {
+                    const gcns = snapshot.val();
+                    const gcnsKeys = Object.keys(gcns);
 
-            const year = philippineNow.getFullYear();
-            const month = String(philippineNow.getMonth() + 1).padStart(2, '0'); // January is 0
-            const day = String(philippineNow.getDate()).padStart(2, '0');
+                    for (const gcn of gcnsKeys) {
+                        const data = {
+                            FillLevel: {
+                                GB1FillLevel: {
+                                    GB1: 10,
+                                    GB1Flag: "false",
+                                    GB1QuotaCount: 1,
+                                    GB1QuotaFlag: false,
+                                    GB1Status: "Not Connected",
+                                },
+                                GB2FillLevel: {
+                                    GB2: 10,
+                                    GB2Flag: "false",
+                                    GB2QuotaCount: 1,
+                                    GB2QuotaFlag: false,
+                                    GB2Status: "Not Connected",
+                                },
+                                GB3FillLevel: {
+                                    GB3: 10,
+                                    GB3Flag: "false",
+                                    GB3QuotaFlag: false,
+                                    GB3Status: "Not Connected",
+                                },
+                                GB4FillLevel: {
+                                    GB4: 10,
+                                    GB4Flag: "false",
+                                    GB4QuotaCount: 1,
+                                    GB4QuotaFlag: false,
+                                    GB4Status: "Not Connected",
+                                },
+                            },
+                            collectionFlag: "false",
+                        };
 
-            // Construct the date string in YYYY-MM-DD format
-            const today = `${year}-${month}-${day}`;
+                        // Set the data under the specified GCN path
+                        await update(ref(db, `GarbageBinControlNumber/${gcn}`), data);
+                        console.log(`Data added for GCN${gcn}`);
+                    }
+                } else {
+                    console.log("No GCNs available");
+                }
+            } catch (error) {
+                console.error("Error managing data:", error);
+            }
+        };
 
-            // Set the 'min' attribute of the date input field to today's date in Philippine Standard Time
-            dateInputField.setAttribute('min', today);
-        });
+        // Attach event listener to the Manage Data button
+        document.getElementById("manageDataBtn").addEventListener("click", manageData);
     </script>
-
 </body>
 
 </html>

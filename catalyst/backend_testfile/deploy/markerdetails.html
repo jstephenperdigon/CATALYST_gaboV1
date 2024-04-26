@@ -1,104 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Data Button</title>
-  </head>
 
-  <body>
-    <button id="addDataBtn">Add Data</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add TotalQuota Node</title>
+</head>
 
-    <script type="module">
-      // Import Firebase libraries
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-      import {
-        getDatabase,
-        ref,
-        update,
-      } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+<body>
+  <button id="addTotalQuotaBtn">Add TotalQuota Node</button>
 
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
-        authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
-        databaseURL:
-          "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "smartgarbagebin-8c3ec",
-        storageBucket: "smartgarbagebin-8c3ec.appspot.com",
-        messagingSenderId: "1062286948871",
-        appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
-      };
+  <script type="module">
+    // Import Firebase libraries
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      get,
+      update,
+    } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const db = getDatabase(app);
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+      authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+      databaseURL:
+        "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "smartgarbagebin-8c3ec",
+      storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+      messagingSenderId: "1062286948871",
+      appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
+    };
 
-      // Function to add data for a given garbage bin control number
-      function addData(garbageBinControlNumber) {
-        const data = {
-          FillLevel: {
-            GB1FillLevel: {
-              GB1: 10,
-              GB1Flag: "false",
-              GB1QuotaCount: 1,
-              GB1QuotaFlag: false,
-              GB1Status: "Not Connected",
-            },
-            GB2FillLevel: {
-              GB2: 10,
-              GB2Flag: "false",
-              GB2QuotaCount: 1,
-              GB2QuotaFlag: false,
-              GB2Status: "Not Connected",
-            },
-            GB3FillLevel: {
-              GB3: 10,
-              GB3Flag: "false",
-              GB3QuotaFlag: false,
-              GB3Status: "Not Connected",
-            },
-            GB4FillLevel: {
-              GB4: 10,
-              GB4Flag: "false",
-              GB4QuotaCount: 1,
-              GB4QuotaFlag: false,
-              GB4Status: "Not Connected",
-            },
-          },
-          collectionFlag: "false",
-          TotalQuota: 3, // New field added at the same level as FillLevel
-        };
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
+    async function removeTotalQuota(garbageBinControlNumber) {
+      try {
         // Reference to the database location for the specific garbage bin control number
         const binRef = ref(
           db,
           `GarbageBinControlNumber/${garbageBinControlNumber}`
         );
 
-        // Push data to database
-        update(binRef, data)
-          .then(() => {
-            console.log(
-              `Data added successfully for ${garbageBinControlNumber}!`
-            );
-          })
-          .catch((error) => {
-            console.error(
-              `Error adding data for ${garbageBinControlNumber}: `,
-              error
-            );
-          });
-      }
+        // Update database to remove the TotalQuota node
+        await update(binRef, {
+          TotalQuota: null  // Setting TotalQuota to null will remove it
+        });
 
-      // Add event listener to the button
-      document.getElementById("addDataBtn").addEventListener("click", () => {
-        // Loop through control numbers from GCN004 to GCN015
-        for (let i = 4; i <= 15; i++) {
-          const binControlNumber = `GCN${i.toString().padStart(3, "0")}`; // Format control number
-          addData(binControlNumber); // Add data for each control number
-        }
-      });
-    </script>
-  </body>
+        console.log(`TotalQuota node removed for ${garbageBinControlNumber}`);
+      } catch (error) {
+        console.error(`Error removing TotalQuota node for ${garbageBinControlNumber}: `, error);
+      }
+    }
+
+    // Update event listener to call removeTotalQuota function on button click
+    document.getElementById("addTotalQuotaBtn").addEventListener("click", () => {
+      const binControlNumber = 'GCN006'; // Specify the garbage bin control number
+      removeTotalQuota(binControlNumber); // Remove TotalQuota node for GCN005
+    });
+
+  </script>
+</body>
+
 </html>
