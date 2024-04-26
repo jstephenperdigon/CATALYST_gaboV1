@@ -5,15 +5,14 @@ import {
   ref,
   get,
   onValue,
-  update,
+  update
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
   authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
-  databaseURL:
-    "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+  databaseURL: "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "smartgarbagebin-8c3ec",
   storageBucket: "smartgarbagebin-8c3ec.appspot.com",
   messagingSenderId: "1062286948871",
@@ -24,15 +23,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function generateBinsHTML(bins) {
+function generateReportHTML(bins) {
   // Check if district and barangay are present and not undefined
-  let district = "District not specified";
-  let barangay = "Barangay not specified";
+  let district = 'District not specified';
+  let barangay = 'Barangay not specified';
 
   // Check if bins.Users is present and not undefined
   if (bins.Users !== undefined) {
     // Iterate over the keys of the Users object
-    Object.keys(bins.Users).forEach((userId) => {
+    Object.keys(bins.Users).forEach(userId => {
       const user = bins.Users[userId];
       // Check if user has district and barangay fields
       if (user.district !== undefined && user.barangay !== undefined) {
@@ -68,9 +67,9 @@ function generateBinsHTML(bins) {
 document.querySelectorAll(".editButton").forEach((button) => {
   button.addEventListener("click", function () {
     const GCN = this.getAttribute("data-gcn");
-    displayModal(GCN, true, function () {
+    displayModal(GCN, true, function() {
       // Callback function to refresh the view or reload data
-      updateBinsTable(); // For example, you can call updateTable() to refresh the table
+      updateTable(); // For example, you can call updateTable() to refresh the table
     });
   });
 });
@@ -83,14 +82,10 @@ function handleEdit(GCN) {
 
 // Modify the filterReports function to filter reports based on search input
 function filterReports(searchInput, filter) {
-  const reportsArray = document.querySelectorAll("#binsTable tbody tr");
+  const reportsArray = document.querySelectorAll("#reportsTable tbody tr");
   reportsArray.forEach((bins) => {
-    const value = bins
-      .querySelector(`td:nth-child(${getIndex(filter)})`)
-      .textContent.toLowerCase(); // Assuming GCN is in the first column
-    const displayStyle = value.includes(searchInput.toLowerCase())
-      ? ""
-      : "none";
+    const value = bins.querySelector(`td:nth-child(${getIndex(filter)})`).textContent.toLowerCase(); // Assuming GCN is in the first column
+    const displayStyle = value.includes(searchInput.toLowerCase()) ? "" : "none";
     bins.style.display = displayStyle;
   });
 }
@@ -108,25 +103,22 @@ document.querySelectorAll(".resetButton").forEach((button) => {
 
     // Show confirmation modal
     const confirmed = await showConfirmationModal();
-
+    
     // If user confirms reset
     if (confirmed) {
       try {
         const message = await resetDataForGCN(GCN);
         alert(message); // Display success message
         // Optionally, you can update the table here if needed
-        updateBinsTable();
+        updateTable();
       } catch (error) {
-        console.error(
-          "Error resetting fill levels for GCN:",
-          GCN,
-          error.message
-        ); // Debugging statement
+        console.error("Error resetting fill levels for GCN:", GCN, error.message); // Debugging statement
         alert(error.message); // Display error message
       }
     }
   });
 });
+
 
 // Function to show confirmation modal
 async function showConfirmationModal() {
@@ -153,7 +145,7 @@ async function showConfirmationModal() {
 }
 
 // Add event listener to handle reset button clicks using event delegation
-document.addEventListener("click", function (event) {
+document.addEventListener("click", function(event) {
   // Check if the clicked element is a reset button
   if (event.target.classList.contains("resetButton")) {
     // Get the GCN value from the data-gcn attribute of the clicked button
@@ -164,7 +156,7 @@ document.addEventListener("click", function (event) {
       .then((message) => {
         // Reset successful
         alert(message);
-        updateBinsTable(); // Optionally, update the table
+        updateTable(); // Optionally, update the table
       })
       .catch((error) => {
         // Reset failed
@@ -174,22 +166,18 @@ document.addEventListener("click", function (event) {
 });
 
 // Modify the searchReports function to use the filterReports function and trigger filtering on input change
-window.searchReports = function () {
-  const searchInput = document
-    .getElementById("searchInput")
-    .value.toLowerCase();
+window.searchReports = function() {
+  const searchInput = document.getElementById("searchInput").value.toLowerCase();
   const filter = document.getElementById("filterDropdown").value;
 
   filterReports(searchInput, filter);
 };
 
 // Add event listener to the filter dropdown
-document
-  .getElementById("filterDropdown")
-  .addEventListener("change", searchReports);
+document.getElementById("filterDropdown").addEventListener("change", searchReports);
 
 // Add event listener to the search input to trigger search on input change
-document.getElementById("searchInput").addEventListener("input", function () {
+document.getElementById("searchInput").addEventListener("input", function() {
   window.searchReports();
 });
 
@@ -197,30 +185,34 @@ document.getElementById("searchInput").addEventListener("input", function () {
 
 // Function to get the index of the selected column
 function getIndex(key) {
-  const headers = ["GCN", "status", "district", "barangay"];
+  const headers = [
+    "GCN",
+    "status",
+    "district",
+    "barangay",
+  ];
   return headers.indexOf(key) + 1;
 }
 
 // Update the updateTable() function to fetch data from Firebase
-function updateBinsTable() {
+function updateTable() {
   const reportsRef = ref(db, "GarbageBinControlNumber");
   onValue(reportsRef, (snapshot) => {
     const reportsData = snapshot.val();
     if (reportsData) {
-      const reportsArray = Object.entries(reportsData).map(([GCN, bins]) => ({
-        GCN,
-        ...bins,
-      }));
-      displayBinsTable(reportsArray);
+      const reportsArray = Object.entries(reportsData).map(
+        ([GCN, bins]) => ({ GCN, ...bins })
+      );
+      displayReportsTable(reportsArray);
     } else {
-      displayBinsTable([]);
+      displayReportsTable([]);
     }
   });
 }
 
 // Function to display the reports table
-function displayBinsTable(reportsArray) {
-  const reportsTable = document.getElementById("binsTable");
+function displayReportsTable(reportsArray) {
+  const reportsTable = document.getElementById("reportsTable");
   const tableHTML = `
     <table border="1">
       <thead>
@@ -233,12 +225,12 @@ function displayBinsTable(reportsArray) {
         </tr>
       </thead>
       <tbody>
-        ${reportsArray.map(generateBinsHTML).join("")}
+        ${reportsArray.map(generateReportHTML).join("")}
       </tbody>
     </table>
   `;
   reportsTable.innerHTML = tableHTML;
-
+  
   // Add event listener to "View" buttons
   document.querySelectorAll(".viewButton").forEach((button) => {
     button.addEventListener("click", function () {
@@ -271,7 +263,7 @@ window.resetList = function () {
   document.getElementById("sortDropdown").selectedIndex = 0;
 
   // Retrieve the initial data and update the table
-  updateBinsTable();
+  updateTable();
 };
 
 // Function to close the modal when the user clicks on the close button
@@ -306,12 +298,10 @@ async function populateAutocompleteList() {
 // Autocomplete function
 function autocomplete(input, arr) {
   let currentFocus;
-  input.addEventListener("input", function (e) {
+  input.addEventListener("input", function(e) {
     let val = this.value;
     closeAllLists();
-    if (!val) {
-      return false;
-    }
+    if (!val) { return false;}
     currentFocus = -1;
     let matches = arr.filter((item) => {
       return item.toLowerCase().includes(val.toLowerCase());
@@ -322,12 +312,10 @@ function autocomplete(input, arr) {
     this.parentNode.appendChild(autocompleteList);
     for (let i = 0; i < matches.length; i++) {
       let autocompleteOption = document.createElement("div");
-      autocompleteOption.innerHTML =
-        "<strong>" + matches[i].substr(0, val.length) + "</strong>";
+      autocompleteOption.innerHTML = "<strong>" + matches[i].substr(0, val.length) + "</strong>";
       autocompleteOption.innerHTML += matches[i].substr(val.length);
-      autocompleteOption.innerHTML +=
-        "<input type='hidden' value='" + matches[i] + "'>";
-      autocompleteOption.addEventListener("click", function (e) {
+      autocompleteOption.innerHTML += "<input type='hidden' value='" + matches[i] + "'>";
+      autocompleteOption.addEventListener("click", function(e) {
         input.value = this.getElementsByTagName("input")[0].value;
         closeAllLists();
       });
@@ -335,8 +323,7 @@ function autocomplete(input, arr) {
     }
   });
   function closeAllLists(elmnt) {
-    let autocompleteItems =
-      document.getElementsByClassName("autocomplete-items");
+    let autocompleteItems = document.getElementsByClassName("autocomplete-items");
     for (let i = 0; i < autocompleteItems.length; i++) {
       if (elmnt != autocompleteItems[i] && elmnt != input) {
         autocompleteItems[i].parentNode.removeChild(autocompleteItems[i]);
@@ -349,7 +336,7 @@ function autocomplete(input, arr) {
 }
 
 // Call the function to populate the autocomplete list on window load
-window.onload = function () {
+window.onload = function() {
   populateAutocompleteList();
 };
 
@@ -359,63 +346,55 @@ function displayModal(GCN, isEditModal = false) {
   currentGCN = GCN; // Set the GCN to a global variable
 
   // Get the report data from Firebase based on the GCN
-  const reportRef = ref(db, "GarbageBinControlNumber/" + GCN + "/FillLevel"); // Correct path to FillLevel data
+  const reportRef = ref(db, 'GarbageBinControlNumber/' + GCN + '/FillLevel'); // Correct path to FillLevel data
   get(reportRef)
     .then((snapshot) => {
       const fillLevelData = snapshot.exists() ? snapshot.val() : null;
 
       // Initialize an empty string to store the fill level details
-      let fillLevelDetails = "";
+      let fillLevelDetails = '';
+
+      // Initialize total quota count
+      let totalQuotaCount = 0;
 
       if (fillLevelData) {
         // Iterate over each fill level (GB1FillLevel to GB4FillLevel)
         for (let i = 1; i <= 4; i++) {
           const fillLevelKey = `GB${i}FillLevel`;
           const fillLevelDataSingle = fillLevelData[fillLevelKey];
-          if (fillLevelDataSingle) {
-            // Check if fill level data exists
+          if (fillLevelDataSingle) { // Check if fill level data exists
             // Append fill level details to the string
             fillLevelDetails += `
               <h4>${fillLevelKey}</h4>
-              ${
-                isEditModal
-                  ? `
+              ${isEditModal ? `
                 <label for="${fillLevelKey}">GB${i}</label>
-                <input type="text" id="${fillLevelKey}" class="input-field" value="${
-                      fillLevelDataSingle[`GB${i}`]
-                    }">
+                <input type="text" id="${fillLevelKey}" class="input-field" value="${fillLevelDataSingle[`GB${i}`]}">
                 <br>
                 <label for="${fillLevelKey}Flag">Flag:</label>
-                <input type="text" id="${fillLevelKey}Flag" class="input-field" value="${
-                      fillLevelDataSingle[`GB${i}Flag`]
-                    }">
+                <input type="text" id="${fillLevelKey}Flag" class="input-field" value="${fillLevelDataSingle[`GB${i}Flag`]}">
                 <br>
                 <label for="${fillLevelKey}QuotaCount">Quota Count:</label>
-                <input type="text" id="${fillLevelKey}QuotaCount" class="input-field" value="${
-                      fillLevelDataSingle[`GB${i}QuotaCount`]
-                    }">
+                <input type="text" id="${fillLevelKey}QuotaCount" class="input-field" value="${fillLevelDataSingle[`GB${i}QuotaCount`] !== undefined ? fillLevelDataSingle[`GB${i}QuotaCount`] : 'None'}">
                 <br>
                 <label for="${fillLevelKey}QuotaFlag">Quota Flag:</label>
-                <input type="text" id="${fillLevelKey}QuotaFlag" class="input-field" value="${
-                      fillLevelDataSingle[`GB${i}QuotaFlag`]
-                    }">
+                <input type="text" id="${fillLevelKey}QuotaFlag" class="input-field" value="${fillLevelDataSingle[`GB${i}QuotaFlag`]}">
                 <br>
                 <label for="${fillLevelKey}Status">Status:</label>
-                <input type="text" id="${fillLevelKey}Status" class="input-field" value="${
-                      fillLevelDataSingle[`GB${i}Status`]
-                    }">
+                <input type="text" id="${fillLevelKey}Status" class="input-field" value="${fillLevelDataSingle[`GB${i}Status`]}">
                 <br>
-              `
-                  : `
+              ` : `
               <p>GB${i}: ${fillLevelDataSingle[`GB${i}`]}</p>
               <p>Flag: ${fillLevelDataSingle[`GB${i}Flag`]}</p>
-              <p>Quota Count: ${fillLevelDataSingle[`GB${i}QuotaCount`]}</p>
+              <p>Quota Count: ${fillLevelDataSingle[`GB${i}QuotaCount`] !== undefined ? fillLevelDataSingle[`GB${i}QuotaCount`] : 'None'}</p>
               <p>Quota Flag: ${fillLevelDataSingle[`GB${i}QuotaFlag`]}</p>
               <p>Status: ${fillLevelDataSingle[`GB${i}Status`]}</p>
               <hr>
-              `
-              }
-            `;
+              `}`;
+
+            // Calculate total quota count if QuotaCount is non-zero
+            if (!isEditModal && fillLevelDataSingle[`GB${i}QuotaCount`] && fillLevelDataSingle[`GB${i}QuotaCount`] !== "undefined") {
+              totalQuotaCount += parseInt(fillLevelDataSingle[`GB${i}QuotaCount`] || 0);
+            }
           }
         }
       } else {
@@ -423,15 +402,24 @@ function displayModal(GCN, isEditModal = false) {
         fillLevelDetails = "<p>No Fill Level Found</p>";
       }
 
+      // Add total quota field only if it's not an edit modal
+      let totalQuotaField = '';
+      if (!isEditModal) {
+        totalQuotaField = `
+          <h4>TOTAL QUOTA:</h4>
+          <p>Total Quota: ${totalQuotaCount}</p>
+        `;
+      }
+
       // Add password field if it's an edit modal
-      let passwordField = "";
+      let passwordField = '';
       if (isEditModal) {
         // Get the password data from Firebase
         const passwordRef = ref(db, `GarbageBinControlNumber/${GCN}/Password`);
         get(passwordRef)
           .then((snapshot) => {
             // Check if the password exists
-            const password = snapshot.exists() ? snapshot.val() : "";
+            const password = snapshot.exists() ? snapshot.val() : '';
 
             // Populate the password field
             passwordField = `
@@ -440,42 +428,15 @@ function displayModal(GCN, isEditModal = false) {
               <input type="text" id="password" class="input-field" value="${password}">
             `;
 
-            // Get the Total Quota data from Firebase
-            const totalQuotaRef = ref(
-              db,
-              `GarbageBinControlNumber/${GCN}/TotalQuota`
-            );
-            get(totalQuotaRef)
-              .then((totalQuotaSnapshot) => {
-                // Check if the Total Quota exists
-                const totalQuota = totalQuotaSnapshot.exists()
-                  ? totalQuotaSnapshot.val()
-                  : "";
+            // Fetch and display user details
+            displayUserDetails(isEditModal);
 
-                // Populate the Total Quota field
-                const totalQuotaField = `
-                  <h4>Total Quota</h4>
-                  <label>Total Quota</label>
-                  <input type="text" id="totalQuota" class="input-field" value="${totalQuota}">
-                `;
-
-                // Fetch and display user details
-                displayUserDetails(isEditModal);
-
-                // Add the Total Quota details to the modal content
-                modalContent.innerHTML = `
-                  <h4>FILL LEVEL DETAILS:</h4>
-                  ${fillLevelDetails}
-                  ${passwordField}
-                  ${totalQuotaField}
-                `;
-              })
-              .catch((error) => {
-                console.error("Error retrieving Total Quota data:", error);
-                // Display an error message if there's an issue fetching the Total Quota data
-                modalContent.innerHTML =
-                  "<h4>Total Quota Details:</h4><p>Error retrieving Total Quota data.</p>";
-              });
+            // Add the fill level details, password field, and user details to the modal content
+            modalContent.innerHTML = `
+              <h4>FILL LEVEL DETAILS:</h4>
+              ${fillLevelDetails}
+              ${passwordField}
+            `;
           })
           .catch((error) => {
             console.error("Error retrieving password:", error);
@@ -493,7 +454,7 @@ function displayModal(GCN, isEditModal = false) {
         modalContent.innerHTML = `
           <h4>FILL LEVEL DETAILS:</h4>
           ${fillLevelDetails}
-          ${passwordField}
+          ${totalQuotaField}
         `;
       }
 
@@ -503,8 +464,7 @@ function displayModal(GCN, isEditModal = false) {
     .catch((error) => {
       console.error("Error retrieving report:", error);
       // Display an error message if there's an issue fetching the report
-      modalContent.innerHTML =
-        "<p>No Fill Level Found</p><p>Error retrieving report data.</p>";
+      modalContent.innerHTML = "<p>No Fill Level Found</p><p>Error retrieving report data.</p>";
       // Display the modal
       modal.style.display = "block";
     });
@@ -526,74 +486,51 @@ function displayModal(GCN, isEditModal = false) {
 // Function to fetch and display user details
 function displayUserDetails(isEditModal) {
   // Fetch user data for the specified GCN
-  const usersRef = ref(db, "GarbageBinControlNumber/" + currentGCN + "/Users");
+  const usersRef = ref(db, 'GarbageBinControlNumber/' + currentGCN + '/Users');
   get(usersRef)
     .then((userSnapshot) => {
       // Check if user data exists
       if (userSnapshot.exists()) {
         const usersData = userSnapshot.val();
-        let usersHTML = ""; // Initialize variable to store user details HTML
+        let usersHTML = ''; // Initialize variable to store user details HTML
 
         // Iterate over each user and construct the HTML
-        Object.keys(usersData).forEach((userId) => {
+        Object.keys(usersData).forEach(userId => {
           const user = usersData[userId];
           usersHTML += `
             <h4>User Details:</h4>
-            ${
-              isEditModal
-                ? `
+            ${isEditModal ? `
               <label for="addressLine1_${userId}">Address Line 1</label>
-              <input type="text" id="addressLine1_${userId}" class="input-field" value="${
-                    user.addressLine1 || ""
-                  }">
+              <input type="text" id="addressLine1_${userId}" class="input-field" value="${user.addressLine1 || ''}">
               <br>
               <label for="barangay_${userId}">Barangay</label>
-              <input type="text" id="barangay_${userId}" class="input-field" value="${
-                    user.barangay || ""
-                  }">
+              <input type="text" id="barangay_${userId}" class="input-field" value="${user.barangay || ''}">
               <br>
               <label for="city_${userId}">City</label>
-              <input type="text" id="city_${userId}" class="input-field" value="${
-                    user.city || ""
-                  }">
+              <input type="text" id="city_${userId}" class="input-field" value="${user.city || ''}">
               <br>
               <label for="country_${userId}">Country</label>
-              <input type="text" id="country_${userId}" class="input-field" value="${
-                    user.country || ""
-                  }">
+              <input type="text" id="country_${userId}" class="input-field" value="${user.country || ''}">
               <br>
               <label for="district_${userId}">District</label>
-              <input type="text" id="district_${userId}" class="input-field" value="${
-                    user.district || ""
-                  }">
+              <input type="text" id="district_${userId}" class="input-field" value="${user.district || ''}">
               <br>
               <label for="email_${userId}">Email</label>
-              <input type="email" id="email_${userId}" class="input-field" value="${
-                    user.email || ""
-                  }">
+              <input type="email" id="email_${userId}" class="input-field" value="${user.email || ''}">
               <br>
               <label for="firstName_${userId}">First Name</label>
-              <input type="text" id="firstName_${userId}" class="input-field" value="${
-                    user.firstName || ""
-                  }">
+              <input type="text" id="firstName_${userId}" class="input-field" value="${user.firstName || ''}">
               <br>
               <label for="lastName_${userId}">Last Name</label>
-              <input type="text" id="lastName_${userId}" class="input-field" value="${
-                    user.lastName || ""
-                  }">
+              <input type="text" id="lastName_${userId}" class="input-field" value="${user.lastName || ''}">
               <br>
               <label for="mobileNumber_${userId}">Mobile Number</label>
-              <input type="tel" id="mobileNumber_${userId}" class="input-field" value="${
-                    user.mobileNumber || ""
-                  }">
+              <input type="tel" id="mobileNumber_${userId}" class="input-field" value="${user.mobileNumber || ''}">
               <br>
               <label for="province_${userId}">Province</label>
-              <input type="text" id="province_${userId}" class="input-field" value="${
-                    user.province || ""
-                  }">                
+              <input type="text" id="province_${userId}" class="input-field" value="${user.province || ''}">                
               <br>
-            `
-                : `
+            ` : `
             <p>Address Line 1: ${user.addressLine1}</p>
             <p>Barangay: ${user.barangay}</p>
             <p>City: ${user.city}</p>
@@ -604,13 +541,13 @@ function displayUserDetails(isEditModal) {
             <p>Last Name: ${user.lastName}</p>
             <p>Mobile Number: ${user.mobileNumber}</p>
             <p>Province: ${user.province}</p>
-            `
-            }
+            `}
           `;
         });
 
         // Add user details HTML to the modal content
         modalContent.innerHTML += usersHTML;
+
       } else {
         // If no users found, display a message
         modalContent.innerHTML += "<h4>User Details:</h4><p>No User Found</p>";
@@ -618,8 +555,7 @@ function displayUserDetails(isEditModal) {
 
       // Add save button if it's an edit modal
       if (isEditModal) {
-        modalContent.innerHTML +=
-          '<button id="saveBtn" class="btn">Save</button>';
+        modalContent.innerHTML += '<button id="saveBtn" class="btn">Save</button>';
         const saveBtn = modalContent.querySelector("#saveBtn"); // Use modalContent to query the save button
         saveBtn.addEventListener("click", saveChanges);
       }
@@ -627,8 +563,7 @@ function displayUserDetails(isEditModal) {
     .catch((error) => {
       console.error("Error retrieving user data:", error);
       // Display an error message if there's an issue fetching the user data
-      modalContent.innerHTML +=
-        "<h4>User Details:</h4><p>Error retrieving user data.</p>";
+      modalContent.innerHTML += "<h4>User Details:</h4><p>Error retrieving user data.</p>";
     });
 }
 
@@ -650,14 +585,10 @@ async function saveChanges() {
 
     // Get the fill level value and other details from the modal
     fillLevelData[`GB${i}`] = document.getElementById(`${fillLevelKey}`).value;
-    fillLevelData[`GB${i}Flag`] =
-      document.getElementById(`${fillLevelKey}Flag`).value || "";
-    fillLevelData[`GB${i}QuotaCount`] =
-      document.getElementById(`${fillLevelKey}QuotaCount`).value || "";
-    fillLevelData[`GB${i}QuotaFlag`] =
-      document.getElementById(`${fillLevelKey}QuotaFlag`).value || "";
-    fillLevelData[`GB${i}Status`] =
-      document.getElementById(`${fillLevelKey}Status`).value || "";
+    fillLevelData[`GB${i}Flag`] = document.getElementById(`${fillLevelKey}Flag`).value || '';
+    fillLevelData[`GB${i}QuotaCount`] = document.getElementById(`${fillLevelKey}QuotaCount`).value || '';
+    fillLevelData[`GB${i}QuotaFlag`] = document.getElementById(`${fillLevelKey}QuotaFlag`).value || '';
+    fillLevelData[`GB${i}Status`] = document.getElementById(`${fillLevelKey}Status`).value || '';
 
     // Add the fill level data to the updatedData object
     updatedData[`FillLevel/${fillLevelKey}`] = fillLevelData;
@@ -669,16 +600,12 @@ async function saveChanges() {
   // Add the password to the updatedData object
   updatedData["Password"] = password;
 
-  // Get the total quota value from the modal
-  const totalQuota = document.getElementById("totalQuota").value;
 
-  // Add the total quota to the updatedData object
-  updatedData["TotalQuota"] = totalQuota;
 
   // Get user data from the modal
   const usersData = {};
   const userElements = document.querySelectorAll("[id^=addressLine1]");
-  userElements.forEach((element) => {
+  userElements.forEach(element => {
     const userId = element.id.split("_")[1];
     const user = {
       addressLine1: document.getElementById(`addressLine1_${userId}`).value,
@@ -690,7 +617,7 @@ async function saveChanges() {
       firstName: document.getElementById(`firstName_${userId}`).value,
       lastName: document.getElementById(`lastName_${userId}`).value,
       mobileNumber: document.getElementById(`mobileNumber_${userId}`).value,
-      province: document.getElementById(`province_${userId}`).value,
+      province: document.getElementById(`province_${userId}`).value
     };
 
     // Check if level field exists
@@ -725,7 +652,6 @@ async function resetDataForGCN(GCN) {
   // If user confirms reset
   if (confirmed) {
     const defaultFillLevel = "10"; // Set your default fill level value here
-    const defaultQuotaCount = "0";
 
     try {
       // Construct the reference to the GCN node
@@ -737,33 +663,32 @@ async function resetDataForGCN(GCN) {
           GB1FillLevel: {
             GB1: defaultFillLevel,
             GB1Flag: "false",
-            GB1QuotaCount: defaultQuotaCount,
             GB1QuotaFlag: "false",
             GB1Status: "Not Connected",
           },
           GB2FillLevel: {
             GB2: defaultFillLevel,
             GB2Flag: "false",
-            GB2QuotaCount: defaultQuotaCount,
             GB2QuotaFlag: "false",
             GB2Status: "Not Connected",
           },
           GB3FillLevel: {
             GB3: defaultFillLevel,
             GB3Flag: "false",
-            GB3QuotaCount: defaultQuotaCount,
             GB3QuotaFlag: "false",
             GB3Status: "Not Connected",
           },
           GB4FillLevel: {
             GB4: defaultFillLevel,
             GB4Flag: "false",
-            GB4QuotaCount: defaultQuotaCount,
             GB4QuotaFlag: "false",
             GB4Status: "Not Connected",
           },
         },
-        TotalQuota: "0", // Reset TotalQuota to zero
+        GB1QuotaCount: null,
+        GB2QuotaCount: null,
+        GB3QuotaCount: null,
+        GB4QuotaCount: null,
         Location: null, // Remove Reports data
         reports: null, // Remove Location data
         Users: null, // Remove Users data
@@ -788,7 +713,9 @@ async function showResetConfirmationDialog() {
   });
 }
 
+
 // Itakda ang mga event listeners sa labas ng function na displayModal
 window.onload = function () {
-  updateBinsTable();
+  updateTable();
 };
+
