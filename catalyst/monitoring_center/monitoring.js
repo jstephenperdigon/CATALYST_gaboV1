@@ -40,8 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Set initial content visibility
   document.getElementById("welcome-content").style.display = "block";
   document.getElementById("map-content").style.display = "none";
+  document.getElementById("bins-content").style.display = "none";
   document.getElementById("reports-content").style.display = "none";
-
   document.getElementById("collector-content").style.display = "none";
   // Handle clicks on navigation links
   document
@@ -56,6 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Handle clicks on navigation links
+   document.getElementById("bins-link").addEventListener("click", function () {
+    showContent("bins");
+  });
+
   document
     .getElementById("collectors-link")
     .addEventListener("click", function () {
@@ -81,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("welcome-content").style.display = "none";
     document.getElementById("map-content").style.display = "none";
     document.getElementById("reports-content").style.display = "none";
-  
+    document.getElementById("bins-content").style.display = "none";
 
     document.getElementById("collector-content").style.display = "none";
     // Show the selected content

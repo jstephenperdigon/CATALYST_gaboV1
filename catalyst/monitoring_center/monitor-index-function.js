@@ -2,7 +2,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebas
 import {
   getDatabase,
   ref,
+  get,
   onValue,
+  update
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -145,7 +147,7 @@ function displayActivities() {
       Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
         // Create card element for each schedule
         const cardElement = document.createElement('div');
-        cardElement.classList.add('container', 'top-0');
+        cardElement.classList.add('containerBins', 'top-0');
         cardElement.innerHTML = `
           <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
             <div class="d-flex align-items-center">
