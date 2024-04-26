@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garbage Bin Control Form</title>
+</head>
+
+<body>
+    <h1>Garbage Bin Control Form</h1>
+    <form id="garbageBinForm" action="#" method="post">
+        <div>
+            <label for="gcn_number">GCN Number:</label>
+            <input type="text" id="gcn_number" name="gcn_number">
+        </div>
+        <p>Location</p>
+        <div>
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude">
+        </div>
+        <div>
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude">
+        </div>
+        <br>
+        <div>
+            <label for="sample_number">Sample #:</label>
+            <input type="text" id="sample_number" name="sample_number">
+        </div>
+        <div>
+            <label for="barangay">Barangay:</label>
+            <input type="text" id="barangay" name="barangay">
+        </div>
+        <div>
+            <label for="district">District:</label>
+            <input type="text" id="district" name="district">
+        </div>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+    import {
+        getDatabase,
+        ref,
+        set,
+    } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+        authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+        databaseURL:
+            "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "smartgarbagebin-8c3ec",
+        storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+        messagingSenderId: "1062286948871",
+        appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    function addDataToFirebase() {
+        // Get values from the form
+        var gcnNumber = document.getElementById("gcn_number").value;
+        var latitude = document.getElementById("latitude").value;
+        var longitude = document.getElementById("longitude").value;
+        var sampleNumber = document.getElementById("sample_number").value;
+        var barangay = document.getElementById("barangay").value;
+        var district = document.getElementById("district").value;
+
+        // Add data to the database under GarbageBinControlNumber
+        const garbageBinControlNumberRef = ref(
+            db,
+            "GarbageBinControlNumber/" + gcnNumber
+        );
+        set(garbageBinControlNumberRef, {
+            Location: {
+                Latitude: latitude,
+                Longitude: longitude,
+            }
+        })
+            .then(() => {
+                console.log("Garbage bin control number data added successfully!");
+            })
+            .catch((error) => {
+                console.error("Error adding garbage bin control number data: ", error);
+            });
+
+        // Add data to the database under Users nested inside GCN###
+        const usersRef = ref(
+            db,
+            "GarbageBinControlNumber/" + gcnNumber + "/Users" + sampleNumber
+        );
+        set(usersRef, {
+            barangay: barangay,
+            district: district,
+        })
+            .then(() => {
+                console.log("User data added successfully!");
+            })
+            .catch((error) => {
+                console.error("Error adding user data: ", error);
+            });
+    }
+
+    // Add event listener for form submission
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById("garbageBinForm");
+        if (form) {
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent form submission
+                addDataToFirebase(); // Call the addDataToFirebase function
+            });
+        }
+    });
+
+
+
+
+</script>
+
+</html>
