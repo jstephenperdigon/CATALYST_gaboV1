@@ -41,7 +41,6 @@
     </form>
 </body>
 <script type="module">
-
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
     import {
         getDatabase,
@@ -93,11 +92,11 @@
             });
 
         // Add data to the database under Users nested inside GCN###
-        const usersRef = ref(
+        const sampleNumberRef = ref(
             db,
-            "GarbageBinControlNumber/" + gcnNumber + "/Users" + sampleNumber
+            "GarbageBinControlNumber/" + gcnNumber + "/Users/" + sampleNumber
         );
-        set(usersRef, {
+        set(sampleNumberRef, {
             barangay: barangay,
             district: district,
         })
@@ -119,10 +118,6 @@
             });
         }
     });
-
-
-
-
 </script>
 
 </html>
