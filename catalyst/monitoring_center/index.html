@@ -149,10 +149,7 @@
               <i class="bx bx-message-square-detail nav_icon"></i>
               <span class="nav_name">Tickets</span>
             </a>
-            <a href="#" class="nav_link" id="bins-link">
-              <i class="bx bxs-trash nav_icon"></i>
-              <span class="nav_name">Bins</span>
-            </a>
+
             <a href="#" class="nav_link" id="collectors-link">
               <i class="bx bx-hard-hat nav_icon"></i>
               <span class="nav_name">Collectors</span>
@@ -893,7 +890,7 @@
       <!-- END OF TICKETS -->
 
       <!-- TICKETS RESPONDED -->
-      <div id="tickets-responded">
+      <div class="content" id="tickets-responded">
         <div class="container mt-5">
           <p class="fs-2 fw-bold">Tickets Responded</p>
         </div>
@@ -901,12 +898,33 @@
           <div class="row justify-content-end">
             <div class="col-md-3">
               <div class="input-group">
-                <div class="form-outline" data-mdb-input-init></div>
+                <div class="form-outline" data-mdb-input-init>
+                  <input type="search" id="searchInputResponded" class="form-control border border-2 rounded p-1" />
+                  <label class="form-label" for="searchInputResponded">Search</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 d-flex">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="sortDropdownResponded">Filter By:</label>
+                </div>
+                <select class="custom-select form-control form-outline" id="sortDropdownResponded">
+                  <option selected disabled>Select an option</option>
+                  <option value="ticketNumber">Ticket #</option>
+                  <option value="GCN">GCN</option>
+                  <option value="Issue">Issue</option>
+                  <option value="district">District</option>
+                  <option value="barangay">Barangay</option>
+                  <option value="TimeSent">Time Sent</option>
+                  <option value="DateSent">Date Sent</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
-
+      
+      
         <!-- Table Container with Fixed Height and Scroll -->
         <div class="container mt-3 table-container">
           <table id="reportstableresponded" class="table table-striped">
@@ -939,12 +957,32 @@
           <div class="row justify-content-end">
             <div class="col-md-3">
               <div class="input-group">
-                <div class="form-outline" data-mdb-input-init></div>
+                <div class="form-outline" data-mdb-input-init>
+                  <input type="search" id="searchInputArchive" class="form-control border border-2 rounded p-1" />
+                  <label class="form-label" for="searchInputArchive">Search</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 d-flex">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="sortDropdownArchive">Filter By:</label>
+                </div>
+                <select class="custom-select form-control form-outline" id="sortDropdownArchive">
+                  <option selected disabled>Select an option</option>
+                  <option value="ticketNumber">Ticket #</option>
+                  <option value="GCN">GCN</option>
+                  <option value="Issue">Issue</option>
+                  <option value="district">District</option>
+                  <option value="barangay">Barangay</option>
+                  <option value="TimeSent">Time Sent</option>
+                  <option value="DateSent">Date Sent</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
-
+      
         <!-- Table Container with Fixed Height and Scroll -->
         <div class="container mt-3 table-container">
           <table id="reportstablearchive" class="table table-striped">
@@ -968,18 +1006,6 @@
       </div>
       <!-- END OF TICKETS ARCHIVE -->
     </div>
-
-    <!-- BINS -->
-    <div id="bins-content">
-      <div class="container mb-5 mt-5">
-        <div class="row">
-          <div class="col">
-            <h1>Bins</h1>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- END OF BINS -->
 
     <div class="content" id="collector-content">
       <div class="container mb-5 mt-5">
