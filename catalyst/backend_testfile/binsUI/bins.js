@@ -46,19 +46,20 @@ function generateReportHTML(bins) {
   // Define GCN variable for use in event listener
   const GCN = bins.GCN;
 
-  const html = `
-    <tr>
-      <td>${bins.GCN}</td>
-      <td>${bins.status}</td>
-      <td>${district}</td>
-      <td>${barangay}</td>
-      <td class="actionButtons">
-        <button class="viewButton" data-gcn="${bins.GCN}">View</button>
-        <button class="editButton" data-gcn="${bins.GCN}">Edit</button>  
-        <button class="resetButton" data-gcn="${bins.GCN}">Reset</button>
-      </td>
-    </tr>
-  `;
+const html = `
+  <tr>
+    <td>${bins.GCN}</td>
+    <td>${bins.status !== undefined ? bins.status : "None"}</td>
+    <td>${district}</td>
+    <td>${barangay}</td>
+    <td class="actionButtons">
+      <button class="viewButton" data-gcn="${bins.GCN}">View</button>
+      <button class="editButton" data-gcn="${bins.GCN}">Edit</button>  
+      <button class="resetButton" data-gcn="${bins.GCN}">Reset</button>
+    </td>
+  </tr>
+`;
+
 
   // Return HTML
   return html;
@@ -88,12 +89,6 @@ function filterReports(searchInput, filter) {
     const displayStyle = value.includes(searchInput.toLowerCase()) ? "" : "none";
     bins.style.display = displayStyle;
   });
-}
-
-// Function to display the modal for the selected GCN
-function displayModalForGCN(GCN) {
-  // Display the modal for the selected GCN
-  displayModal(GCN, true);
 }
 
 // Add event listener to each "Reset" button
