@@ -83,23 +83,17 @@ function handleMoveToArchive(ticketNumber) {
         if (
           confirm("Are you sure you want to move this report to the archive?")
         ) {
-          // Set report data to ReportsArchive
+          // Add ReportStatus: Archived to reportData
+          reportData.ReportStatus = "Archived";
+
+          // Set report data to ReportsArchive without removing from Reports
           return set(archiveRef, reportData)
             .then(() => {
               console.log("Report moved to ReportsArchive successfully.");
-
-              // Once moved to ReportsArchive, add ReportStatus: Archived
-              reportData.ReportStatus = "Archived";
-
-              // Once moved to ReportsArchive, remove ticketNumber from Reports
-              const reportToRemoveRef = ref(db, `Reports/${ticketNumber}`);
-              return remove(reportToRemoveRef);
-            })
-            .then(() => {
-              console.log("TicketNumber removed from Reports successfully.");
+              console.log("Report status updated to 'Archived'.");
             })
             .catch((error) => {
-              console.error("Error removing ticketNumber from Reports:", error);
+              console.error("Error moving report to archive:", error);
             });
         } else {
           console.log("Archive action canceled by user.");
@@ -481,12 +475,6 @@ function renderTableResponded(reports) {
   // Clear existing table rows
   tableBodyResponded.innerHTML = "";
 
-  // Define handleButtonClick function
-  function handleButtonClick(ticketNumber) {
-    // Handle button click action here, e.g., show details, perform an action, etc.
-    console.log(`Button clicked for ticket number: ${ticketNumber}`);
-  }
-
   // Loop through each report key (ticketNumber) and value (report object)
   Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
     const row = document.createElement("tr");
@@ -502,13 +490,82 @@ function renderTableResponded(reports) {
     `;
     tableBodyResponded.appendChild(row);
   });
+}
 
-  // Attach event listener to the table body (using event delegation)
-  tableBodyResponded.addEventListener("click", (event) => {
-    if (event.target.classList.contains("button")) {
-      const ticketNumber = event.target.dataset.ticket;
-      handleButtonClick(ticketNumber);
-    }
+// Function to open modal and populate content with ticket details
+function openModalWithTicketDetails(ticketNumber, reportsData) {
+  // Retrieve the details of the selected ticket based on its ticket number
+  const selectedTicket = reportsData[ticketNumber];
+
+  // Open the modal
+  $('#modal').modal('show');
+
+  // Populate the modal content with the details of the selected ticket
+  document.getElementById("modalContent").innerHTML = `
+    <div class="row">
+            <div class="col-md-6">
+              <p><span class="fw-bold">Ticket Number:</span> ${ticketNumber}</p>
+            </div>
+            <div class="col-md-6">
+              <p><span class="fw-bold">GCN:</span> ${selectedTicket.GCN}</p>
+            </div>
+          </div>
+
+            <div class="row">
+             <div class="col-md-6">
+                  <p><span class="fw-bold">Issue:</span> ${selectedTicket.Issue}</p>
+              </div>
+              <div class="col-md-6">
+                 <p><span class="fw-bold">Description:</span> ${
+                   selectedTicket.Description || "N/A"
+                 }</p>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                  <p><span class="fw-bold">Date Sent:</span> ${
+                    selectedTicket.DateSent
+                  }</p>
+                </div>
+                <div class="col-md-6">
+                 <p><span class="fw-bold">Status:</span> ${selectedTicket.ReportStatus}</p>
+                </div>
+            </div>
+            <div class="container">
+            <p class="fs-5"> USER DETAILS</p>
+            </div>
+          <div class="row">
+              <div class="col-md-6">
+                  <p><span class="fw-bold">Name:</span> ${selectedTicket.firstName} ${
+          selectedTicket.lastName
+        }</p>
+                  <p><span class="fw-bold">Email:</span> ${selectedTicket.email}</p>
+                  <p><span class="fw-bold">Mobile Number:</span> ${
+                    selectedTicket.mobileNumber
+                  }</p>
+          </div>
+          <div class="row">
+              <div class="col-md-6">
+                <p><span class="fw-bold">District:</span> ${selectedTicket.district}</p>
+                <p><span class="fw-bold">Barangay:</span> ${selectedTicket.barangay}</p>
+                <p><span class="fw-bold">City:</span> ${selectedTicket.city}</p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+              
+                <p><span class="fw-bold">Address Line 1:</span> ${
+                  selectedTicket.addressLine1
+                }</p>
+              </div>
+          </div>
+  `;
+
+  // Add event listener to the close button inside the modal header
+  const closeButton = document.querySelector("#modal .modal-header .btn-close");
+  closeButton.addEventListener("click", function () {
+    // Close the modal
+    $('#modal').modal('hide');
   });
 }
 
@@ -525,6 +582,17 @@ function displayReportsResponded() {
       if (reportsData) {
         // Render the reports into the table
         renderTableResponded(reportsData);
+
+        // Attach event listener to the document that listens for clicks on elements with class '.viewTicketResponded'
+        document.addEventListener("click", function(event) {
+          // Check if the clicked element has class '.viewTicketResponded'
+          if (event.target.classList.contains("viewTicketResponded")) {
+            // Retrieve the ticket number associated with the clicked button
+            const ticketNumber = event.target.dataset.ticketresponded;
+            // Open modal and populate content with ticket details
+            openModalWithTicketDetails(ticketNumber, reportsData);
+          }
+        });
       } else {
         // No reports found, display a message or handle accordingly
         tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
@@ -532,8 +600,7 @@ function displayReportsResponded() {
     },
     (error) => {
       console.error("Error fetching reports:", error.message);
-      tableBody.innerHTML =
-        '<tr><td colspan="7">Error fetching reports.</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
     }
   );
 }
@@ -784,12 +851,13 @@ function displayModal(ticketNumber) {
                 <p><span class="fw-bold">Address Line 1:</span> ${
                   report.addressLine1
                 }</p>
+              </div>
+          </div>
           <div class="modal-footer justify-content-center">
             <button class="btn btn-primary shadow-none" id="respondButton">Send Respond</button>
           </div>
+        </div>
       </div>
-    </div>
-  </div>
 `;
 
         // Show the modal
@@ -825,7 +893,7 @@ function displayModal(ticketNumber) {
                 .then((snapshot) => {
                   if (snapshot.exists()) {
                     const reportData = snapshot.val();
-                    reportData.ReportsResponded = "Responded";
+                    reportData.ReportStatus = "Responded";
                     return set(respondedReportRef, reportData);
                   } else {
                     console.error("Report not found.");
