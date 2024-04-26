@@ -578,6 +578,7 @@ function renderTableArchive(reports) {
       <td>${reportArchive.barangay}</td>
       <td>${reportArchive.TimeSent}</td>
       <td>${reportArchive.DateSent}</td>
+      <td><button class="btn btn-primary viewTicketArchive" data-ticketarchive="${ticketNumber}">View</button></td>
     `;
     tableBodyArchive.appendChild(row);
   });
