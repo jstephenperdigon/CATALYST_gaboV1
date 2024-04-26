@@ -477,34 +477,14 @@ const tableBodyResponded = document.querySelector(
   "#reportstableresponded tbody"
 );
 
-// Define a variable to hold the reference to the modal
-const modal = document.getElementById("modalResponded");
-
-// Get the <span> element that closes the modal
-const closeBtn = modal.querySelector(".close");
-
-// Function to open the modal
-function openModal() {
-  modal.style.display = "block";
-}
-
-// Function to close the modal
-function closeModal() {
-  modal.style.display = "none";
-}
-
-// Event listener for close button
-closeBtn.addEventListener("click", closeModal);
-
 function renderTableResponded(reports) {
   // Clear existing table rows
   tableBodyResponded.innerHTML = "";
 
   // Define handleButtonClick function
   function handleButtonClick(ticketNumber) {
+    // Handle button click action here, e.g., show details, perform an action, etc.
     console.log(`Button clicked for ticket number: ${ticketNumber}`);
-    // Open the modal when the button is clicked
-    openModal();
   }
 
   // Loop through each report key (ticketNumber) and value (report object)
@@ -525,8 +505,8 @@ function renderTableResponded(reports) {
 
   // Attach event listener to the table body (using event delegation)
   tableBodyResponded.addEventListener("click", (event) => {
-    if (event.target.classList.contains("viewTicketResponded")) {
-      const ticketNumber = event.target.dataset.ticketresponded;
+    if (event.target.classList.contains("button")) {
+      const ticketNumber = event.target.dataset.ticket;
       handleButtonClick(ticketNumber);
     }
   });
