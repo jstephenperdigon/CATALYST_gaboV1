@@ -997,7 +997,7 @@ export function initMap() {
           );
 
           // Check if adding this marker will exceed the limit
-          if (totalQuotaSum + totalQuota <= 90) {
+          if (totalQuotaSum + totalQuota <= 96) {
             selectedGCNs.push(gcn); // Add GCN to the selectedGCNs array
             totalQuotaSum += totalQuota;
             gb1QuotaSum += gb1QuotaCount; // Accumulate gb1QuotaCount
@@ -1005,8 +1005,8 @@ export function initMap() {
             gb3QuotaSum += gb3QuotaCount; // Accumulate gb3QuotaCount
             gb4QuotaSum += gb4QuotaCount; // Accumulate gb4QuotaCount
 
-            // If the total quota exceeds 90, break the loop
-            if (totalQuotaSum > 90) break;
+            // If the total quota exceeds 96, break the loop
+            if (totalQuotaSum > 96) break;
           }
         }
 
