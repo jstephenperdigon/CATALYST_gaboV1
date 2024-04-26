@@ -4,7 +4,7 @@ import {
   ref,
   get,
   onValue,
-  update
+  update,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -44,21 +44,26 @@ function displayDeploymentHistory() {
   const schedulesTableBody = document.querySelector("#schedulesTable tbody");
 
   // Listen for changes to deploymentHistoryRef
-  onValue(deploymentHistoryRef, (snapshot) => {
-    const historyData = snapshot.val();
+  onValue(
+    deploymentHistoryRef,
+    (snapshot) => {
+      const historyData = snapshot.val();
 
-    // Clear existing table body content
-    schedulesTableBody.innerHTML = "";
+      // Clear existing table body content
+      schedulesTableBody.innerHTML = "";
 
       if (historyData) {
-      // Iterate through each entry in historyData and populate the table rows
-      Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
-        // Determine the status to display
-        const status = scheduleInfo.status !== undefined ? scheduleInfo.status : "Not yet collected";
+        // Iterate through each entry in historyData and populate the table rows
+        Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
+          // Determine the status to display
+          const status =
+            scheduleInfo.status !== undefined
+              ? scheduleInfo.status
+              : "Not yet collected";
 
-        // Create table row for each schedule
-        const row = document.createElement("tr");
-        row.innerHTML = `
+          // Create table row for each schedule
+          const row = document.createElement("tr");
+          row.innerHTML = `
           <td>${scheduleUID}</td>
           <td>${scheduleInfo.SelectedGCL}</td>
           <td>${scheduleInfo.District}</td>
@@ -66,20 +71,23 @@ function displayDeploymentHistory() {
           <td>${status}</td>
           <td><button class="btn btn-primary viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
         `;
-        schedulesTableBody.appendChild(row);
+          schedulesTableBody.appendChild(row);
 
-        // Add event listener to the "ViewDetails" button
-        const viewDetailsButton = row.querySelector(".viewDetails");
-        viewDetailsButton.addEventListener("click", () => {
-          // Get the scheduleUID associated with the clicked button
-          const clickedScheduleUID = viewDetailsButton.getAttribute("data-schedule-uid");
+          // Add event listener to the "ViewDetails" button
+          const viewDetailsButton = row.querySelector(".viewDetails");
+          viewDetailsButton.addEventListener("click", () => {
+            // Get the scheduleUID associated with the clicked button
+            const clickedScheduleUID =
+              viewDetailsButton.getAttribute("data-schedule-uid");
 
-          // Retrieve details based on scheduleUID (you can customize this part)
-          const details = historyData[clickedScheduleUID];
+            // Retrieve details based on scheduleUID (you can customize this part)
+            const details = historyData[clickedScheduleUID];
 
-          // Update modal content with details
-          const modalContent = document.querySelector("#modalScheduleContent");
-          modalContent.innerHTML = `
+            // Update modal content with details
+            const modalContent = document.querySelector(
+              "#modalScheduleContent"
+            );
+            modalContent.innerHTML = `
             <div class="row">
               <div class="col-md-6">
                 <p><strong>Schedule UID:</strong> ${scheduleUID}</p>
@@ -87,16 +95,32 @@ function displayDeploymentHistory() {
                 <p><strong>Selected GCN:</strong> ${details.SelectedGCN}</p>
                 <p><strong>District:</strong> ${details.District}</p>
                 <p><strong>Barangay:</strong> ${details.Barangay}</p>
-                <p><strong>Status:</strong> ${details.status !== undefined ? details.status : "Not yet collected"}</p>
+                <p><strong>Status:</strong> ${
+                  details.status !== undefined
+                    ? details.status
+                    : "Not yet collected"
+                }</p>
               </div>
               <div class="col-md-6">
                 <p><strong>Time Sent:</strong> ${details.timeSent}</p>
                 <p><strong>Time Input:</strong> ${details.TimeInput}</p>
-                <p><strong>Time Collection Ended:</strong> ${details.TimeCollectionEnded !== undefined ? details.TimeCollectionEnded : "None"}</p>
-                <p><strong>Selected Date Input:</strong> ${details.DateInput}</p>
-                <p><strong>Date Collection Ended:</strong> ${details.DateCollectionEnded !== undefined ? details.DateCollectionEnded : "None"}</p>
+                <p><strong>Time Collection Ended:</strong> ${
+                  details.TimeCollectionEnded !== undefined
+                    ? details.TimeCollectionEnded
+                    : "None"
+                }</p>
+                <p><strong>Selected Date Input:</strong> ${
+                  details.DateInput
+                }</p>
+                <p><strong>Date Collection Ended:</strong> ${
+                  details.DateCollectionEnded !== undefined
+                    ? details.DateCollectionEnded
+                    : "None"
+                }</p>
                 <p><strong>Biodegradable:</strong> ${details.Biodegradable}</p>
-                <p><strong>Non-Biodegradable:</strong> ${details.NonBiodegradable}</p>
+                <p><strong>Non-Biodegradable:</strong> ${
+                  details.NonBiodegradable
+                }</p>
                 <p><strong>Recyclables:</strong> ${details.Recyclables}</p>
                 <p><strong>Special:</strong> ${details.Special}</p>
                 <p><strong>Total Quota:</strong> ${details.TotalQuota}</p>
@@ -104,51 +128,58 @@ function displayDeploymentHistory() {
             </div>
           `;
 
-          // Show the modal
-          const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
-          detailsModal.show();
+            // Show the modal
+            const detailsModal = new bootstrap.Modal(
+              document.getElementById("detailsModal")
+            );
+            detailsModal.show();
+          });
         });
-      });
-    } else {
-      // Handle case where there's no deployment history
-      schedulesTableBody.innerHTML = `
+      } else {
+        // Handle case where there's no deployment history
+        schedulesTableBody.innerHTML = `
         <tr>
           <td colspan="6">No deployment history available.</td>
         </tr>
       `;
-    }
-  }, (error) => {
-    console.error("Error fetching DeploymentHistory:", error);
-    // Handle error case
-    schedulesTableBody.innerHTML = `
+      }
+    },
+    (error) => {
+      console.error("Error fetching DeploymentHistory:", error);
+      // Handle error case
+      schedulesTableBody.innerHTML = `
       <tr>
         <td colspan="4">Error fetching deployment history.</td>
       </tr>
     `;
-  });
+    }
+  );
 }
 
 // Call the function to display deployment history when the DOM content is loaded
 document.addEventListener("DOMContentLoaded", displayDeploymentHistory);
 
-
 function displayActivities() {
-  const activitiesTabContent = document.querySelector('.card-activity .card-body');
+  const activitiesTabContent = document.querySelector(
+    ".card-activity .card-body"
+  );
 
   // Set up listener for 'DeploymentHistory' changes
-  onValue(deploymentHistoryRef, (snapshot) => {
-    const historyData = snapshot.val();
+  onValue(
+    deploymentHistoryRef,
+    (snapshot) => {
+      const historyData = snapshot.val();
 
-    // Clear existing content
-    activitiesTabContent.innerHTML = '';
+      // Clear existing content
+      activitiesTabContent.innerHTML = "";
 
-    if (historyData) {
-      // Iterate through each entry in historyData
-      Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
-        // Create card element for each schedule
-        const cardElement = document.createElement('div');
-        cardElement.classList.add('containerBins', 'top-0');
-        cardElement.innerHTML = `
+      if (historyData) {
+        // Iterate through each entry in historyData
+        Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
+          // Create card element for each schedule
+          const cardElement = document.createElement("div");
+          cardElement.classList.add("containerBins", "top-0");
+          cardElement.innerHTML = `
           <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
             <div class="d-flex align-items-center">
               <div class="bg-secondary rounded-4 p-3 me-3">
@@ -156,35 +187,38 @@ function displayActivities() {
               </div>
               <div>
                 <p class="fw-bold fs-6 mb-0">Scheduled for collection</p>
-                <p class="fw-light text-muted mb-0">
-                  ${scheduleInfo.SelectedGCL} has set to collect on Barangay ${scheduleInfo.Barangay}.
-                </p>
+              <p class="fw-light text-muted mb-0">
+  ${scheduleInfo.SelectedGCL} is set to collect in Barangay ${scheduleInfo.Barangay}.
+</p>
+
               </div>
             </div>
           </div>
         `;
 
-        // Append the card to the activitiesTabContent
-        activitiesTabContent.appendChild(cardElement);
-      });
-    } else {
-      // Handle case where there's no deployment history
-      activitiesTabContent.innerHTML = `
+          // Append the card to the activitiesTabContent
+          activitiesTabContent.appendChild(cardElement);
+        });
+      } else {
+        // Handle case where there's no deployment history
+        activitiesTabContent.innerHTML = `
         <div class="container">
           <p>No deployment history available.</p>
         </div>
       `;
-    }
-  }, (error) => {
-    console.error('Error fetching DeploymentHistory:', error);
-    // Handle error case
-    activitiesTabContent.innerHTML = `
+      }
+    },
+    (error) => {
+      console.error("Error fetching DeploymentHistory:", error);
+      // Handle error case
+      activitiesTabContent.innerHTML = `
       <div class="container">
         <p>Error fetching deployment history.</p>
       </div>
     `;
-  });
+    }
+  );
 }
 
 // Call the function to display deployment history when the DOM content is loaded
-document.addEventListener('DOMContentLoaded', displayActivities);
+document.addEventListener("DOMContentLoaded", displayActivities);
