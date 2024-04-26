@@ -54,7 +54,7 @@ function displayDeploymentHistory() {
       // Iterate through each entry in historyData and populate the table rows
       Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
         // Determine the status to display
-        const status = scheduleInfo.status !== undefined ? scheduleInfo.status : "Not yet collected";
+        const status = scheduleInfo.status !== undefined ? scheduleInfo.status : "Pending";
 
         // Create table row for each schedule
         const row = document.createElement("tr");
@@ -87,7 +87,7 @@ function displayDeploymentHistory() {
                 <p><strong>Selected GCN:</strong> ${details.SelectedGCN}</p>
                 <p><strong>District:</strong> ${details.District}</p>
                 <p><strong>Barangay:</strong> ${details.Barangay}</p>
-                <p><strong>Status:</strong> ${details.status !== undefined ? details.status : "Not yet collected"}</p>
+                <p><strong>Status:</strong> ${details.status !== undefined ? details.status : "Pending"}</p>
               </div>
               <div class="col-md-6">
                 <p><strong>Time Sent:</strong> ${details.timeSent}</p>

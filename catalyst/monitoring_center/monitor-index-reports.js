@@ -505,7 +505,7 @@ function renderTableResponded(reports) {
 
   // Attach event listener to the table body (using event delegation)
   tableBodyResponded.addEventListener("click", (event) => {
-    if (event.target.classList.contains("button")) {
+    if (event.target.classList.contains(".viewTicketResponded")) {
       const ticketNumber = event.target.dataset.ticket;
       handleButtonClick(ticketNumber);
     }

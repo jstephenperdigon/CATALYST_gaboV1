@@ -713,4 +713,3 @@ async function showResetConfirmationDialog() {
 window.onload = function () {
   updateTable();
 };
-

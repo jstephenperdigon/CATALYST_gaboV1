@@ -855,21 +855,20 @@
           </tbody>
         </table>
       </div>
-      <div id="reports-content"></div>
       
       <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Report Details</h5>
-              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modalContent">
-              <!-- Modal content will be dynamically generated here -->
-            </div>
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Report Details</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modalContent">
+            <!-- Modal content will be dynamically generated here -->
           </div>
         </div>
       </div>
+    </div>
     
 <!-- END OF TICKETS -->
 
@@ -951,85 +950,18 @@
       </div>
 <!-- END OF TICKETS ARCHIVE -->
     </div>
-   
+
+<!-- BINS -->
   <div id="bins-content">
     <div class="container mb-5 mt-5">
       <div class="row">
         <div class="col">
           <h1>Bins</h1>
         </div>
-        <div class="col-md-3">
-          <div class="input-group mb-3">
-            <input type="text" id="searchBins" class="form-control pl-5" placeholder="Search..." aria-label="Search"
-              aria-describedby="searchButton" />
-          </div>
-        </div>
-        <div class="col-md-3 d-flex"> 
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="filterDropdown">Filter By:
-              </label>
-            </div>
-            <select class="form-control form-outline" id="filterDropdown">
-              <option selected disabled>Select an option</option>
-              <option value="GCN">GCN Unit</option>
-              <option value="status">Status</option>
-              <option value="district">District</option>
-              <option value="barangay">Barangay</option>  
-            </select>
-          </div>
-        </div>
       </div>
-  
-      <div id="binsTable">
-        <!-- Table content will be populated dynamically -->
-        <table class="table table-striped">
-          <thead class="table-dark">
-            <tr>
-              <th>GCN Unit</th>
-              <th>Status</th>
-              <th>District</th>
-              <th>Barangay</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Table rows will be populated dynamically -->
-          </tbody>
-        </table>
-      </div>
-
-      <div id="containerBins">
-        <div id="Binsmodal" class="modal">
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalBinsContent"></div>
-          </div>
-        </div>
-      </div>
-
-        <!-- Modal HTML for Editing -->
-        <div id="editModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="closeEditButton">&times;</span>
-                <h2>Edit Data</h2>
-                <label for="editPasswordInput">New Password:</label>
-                <input type="password" id="editPasswordInput" placeholder="Enter new password">
-                <button id="saveEditPasswordButton">Save</button>
-            </div>
-        </div>
-
-        <!-- Modal HTML for Viewing -->
-        <div id="viewModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <div id="viewModalContent"></div>
-            </div>
-        </div>
-
     </div>
   </div>
-
+<!-- END OF BINS -->
 
     <div class="content" id="collector-content">
       <div class="container mb-5 mt-5">
@@ -1301,9 +1233,10 @@
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
     ></script>
+    <script type="module" src="monitor-index-function.js"></script>
     <script type="module" src="monitor-index-reports.js"></script>
     <script type="module" src="monitoring-gb-account-count.js"></script>
-    <script type="module" src="monitor-index-function.js"></script>
+   
     <script type="module" src="Schedule.js"></script>
 
     <script type="text/javascript" src="../src/jquery.min.js"></script>
@@ -1316,9 +1249,6 @@
     <script type="text/javascript" src="components/session.js"></script>
     <script type="text/javascript" src="components/dropDown.js"></script>
     <script type="text/javascript" src="monitoring.js"></script>
-
-    <!-- TEMPORARY -->
-    <!--<script type="module" src="TicketResponded.js"></script>-->
 
     <!-- <script
       defer
