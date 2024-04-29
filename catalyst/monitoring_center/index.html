@@ -1054,7 +1054,7 @@
                 <option value="email">Email</option>
                 <option value="mobileNumber">Mobile Number</option>
                 <option value="district">District</option>
-                <option value="barangay">Barangay</option>
+                <option value="barangay">Area</option>
               </select>
             </div>
           </div>
@@ -1070,7 +1070,7 @@
               <th>Email</th>
               <th>Mobile Number</th>
               <th>District</th>
-              <th>Barangay</th>
+              <th>Area</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -1155,7 +1155,7 @@
                   <span class="input-group-text" id="basic-addon1">+63</span>
                   <input
                     type="text"
-                    id="mobileNumber1"
+                    id="mobileNumberModal"
                     class="form-control"
                     placeholder="Mobile Number"
                     aria-label="Mobile Number"
@@ -1165,10 +1165,10 @@
                 <div class="row mb-5">
                   <div class="col-md-6 mb-3">
                     <div class="form-outline" data-mdb-input-init>
-                      <label for="districtDropdown1"></label>
+                      <label for="districtDropdownModal"></label>
                       <select
                         class="form-select"
-                        id="districtDropdown1"
+                        id="districtDropdownModal"
                         required
                       >
                         <option selected disabled>Select District</option>
@@ -1180,10 +1180,10 @@
                   </div>
                   <div class="col-md-6 mb-3">
                     <div class="form-outline" data-mdb-input-init>
-                      <label for="barangayDropdown1"></label>
+                      <label for="barangayDropdownModal"></label>
                       <select
                         class="form-select"
-                        id="barangayDropdown1"
+                        id="barangayDropdownModal"
                         required
                       >
                         <option selected disabled>Select Barangay</option>
@@ -1194,7 +1194,7 @@
                 <div class="col-12 d-flex">
                   <input
                     type="submit"
-                    id="submitBtn"
+                    id="AddCollectorBtn"
                     class="btn btn-primary shadow-none"
                     value="Submit"
                     data-mdb-ripple-init
