@@ -114,7 +114,6 @@ function handleMoveToArchive(ticketNumber) {
 
 // Function to generate HTML for each collector
 function generateCollectorHTML(collectorUID, collectors) {
-  
   return `
     <tr>
       <td>${collectors.GCL}</td>
@@ -314,12 +313,13 @@ document.addEventListener("click", async function (e) {
               await set(collectorRef, updatedUserData);
               // Display the success message
               alert("Collector data updated successfully.");
-              
+
               // Close the modal
-              document.getElementById('viewCollectorModal').style.display = 'none';
+              document.getElementById("viewCollectorModal").style.display =
+                "none";
 
               // Refresh the page
-              location.reload(); 
+              location.reload();
             } else {
               console.log(`Collector with UID ${UID} not found.`);
             }
@@ -437,6 +437,14 @@ document
   .getElementById("searchCategory")
   .addEventListener("change", performSearch);
 
+// Function to extract numeric part of GCL number
+function extractNumericGCL(gcl) {
+  // Use regular expression to extract numeric part of GCL
+  const numericPart = gcl.match(/\d+/);
+  // Return the numeric part as integer
+  return numericPart ? parseInt(numericPart[0]) : 0; // Return 0 if no numeric part found
+}
+
 // Function to display collectors in the table
 function displayCollectors() {
   onValue(collectorsRef, (snapshot) => {
@@ -445,9 +453,18 @@ function displayCollectors() {
       const collectorsTableBody = document.querySelector(
         "#collectorsTable tbody"
       );
+      let collectorsArray = Object.entries(collectorsData).map(
+        ([collectorUID, collector]) => ({ uid: collectorUID, ...collector })
+      );
+
+      // Sort collectors by extracted numeric GCL number in descending order
+      collectorsArray.sort(
+        (a, b) => extractNumericGCL(b.GCL) - extractNumericGCL(a.GCL)
+      );
+
       let tableHTML = "";
-      Object.entries(collectorsData).forEach(([collectorUID, collector]) => {
-        tableHTML += generateCollectorHTML(collectorUID, collector);
+      collectorsArray.forEach((collector) => {
+        tableHTML += generateCollectorHTML(collector.uid, collector);
       });
       collectorsTableBody.innerHTML = tableHTML;
     } else {
@@ -489,7 +506,7 @@ function openModalWithTicketDetails(ticketNumber, reportsData) {
   const selectedTicket = reportsData[ticketNumber];
 
   // Open the modal
-  $('#modal').modal('show');
+  $("#modal").modal("show");
 
   // Populate the modal content with the details of the selected ticket
   document.getElementById("modalContent").innerHTML = `
@@ -504,7 +521,9 @@ function openModalWithTicketDetails(ticketNumber, reportsData) {
 
             <div class="row">
              <div class="col-md-6">
-                  <p><span class="fw-bold">Issue:</span> ${selectedTicket.Issue}</p>
+                  <p><span class="fw-bold">Issue:</span> ${
+                    selectedTicket.Issue
+                  }</p>
               </div>
               <div class="col-md-6">
                  <p><span class="fw-bold">Description:</span> ${
@@ -519,7 +538,9 @@ function openModalWithTicketDetails(ticketNumber, reportsData) {
                   }</p>
                 </div>
                 <div class="col-md-6">
-                 <p><span class="fw-bold">Status:</span> ${selectedTicket.ReportStatus}</p>
+                 <p><span class="fw-bold">Status:</span> ${
+                   selectedTicket.ReportStatus
+                 }</p>
                 </div>
             </div>
             <div class="container">
@@ -527,18 +548,24 @@ function openModalWithTicketDetails(ticketNumber, reportsData) {
             </div>
           <div class="row">
               <div class="col-md-6">
-                  <p><span class="fw-bold">Name:</span> ${selectedTicket.firstName} ${
-          selectedTicket.lastName
-        }</p>
-                  <p><span class="fw-bold">Email:</span> ${selectedTicket.email}</p>
+                  <p><span class="fw-bold">Name:</span> ${
+                    selectedTicket.firstName
+                  } ${selectedTicket.lastName}</p>
+                  <p><span class="fw-bold">Email:</span> ${
+                    selectedTicket.email
+                  }</p>
                   <p><span class="fw-bold">Mobile Number:</span> ${
                     selectedTicket.mobileNumber
                   }</p>
           </div>
           <div class="row">
               <div class="col-md-6">
-                <p><span class="fw-bold">District:</span> ${selectedTicket.district}</p>
-                <p><span class="fw-bold">Barangay:</span> ${selectedTicket.barangay}</p>
+                <p><span class="fw-bold">District:</span> ${
+                  selectedTicket.district
+                }</p>
+                <p><span class="fw-bold">Barangay:</span> ${
+                  selectedTicket.barangay
+                }</p>
                 <p><span class="fw-bold">City:</span> ${selectedTicket.city}</p>
               </div>
           </div>
@@ -556,7 +583,7 @@ function openModalWithTicketDetails(ticketNumber, reportsData) {
   const closeButton = document.querySelector("#modal .modal-header .btn-close");
   closeButton.addEventListener("click", function () {
     // Close the modal
-    $('#modal').modal('hide');
+    $("#modal").modal("hide");
   });
 }
 
@@ -575,7 +602,7 @@ function displayReportsResponded() {
         renderTableResponded(reportsData);
 
         // Attach event listener to the document that listens for clicks on elements with class '.viewTicketResponded'
-        document.addEventListener("click", function(event) {
+        document.addEventListener("click", function (event) {
           // Check if the clicked element has class '.viewTicketResponded'
           if (event.target.classList.contains("viewTicketResponded")) {
             // Retrieve the ticket number associated with the clicked button
@@ -591,7 +618,8 @@ function displayReportsResponded() {
     },
     (error) => {
       console.error("Error fetching reports:", error.message);
-      tableBody.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
+      tableBody.innerHTML =
+        '<tr><td colspan="7">Error fetching reports.</td></tr>';
     }
   );
 }
@@ -599,14 +627,16 @@ function displayReportsResponded() {
 // Call the displayReports function to initially populate the table
 displayReportsResponded();
 
-// SEARCH FOR TICKET RESPONDED 
+// SEARCH FOR TICKET RESPONDED
 // Function to filter responded tickets based on search input and selected sorting column
 function filterTicketsResponded(searchInput, sortKey) {
-  const ticketsArray = document.querySelectorAll("#reportstableresponded tbody tr");
+  const ticketsArray = document.querySelectorAll(
+    "#reportstableresponded tbody tr"
+  );
   ticketsArray.forEach((ticket) => {
     const columnValue = ticket
-  .querySelector(`td:nth-child(${getIndexResponded(sortKey)})`)
-  .textContent.toLowerCase();
+      .querySelector(`td:nth-child(${getIndexResponded(sortKey)})`)
+      .textContent.toLowerCase();
     const displayStyle = columnValue.includes(searchInput) ? "" : "none";
     ticket.style.display = displayStyle;
   });
@@ -623,9 +653,11 @@ window.searchTicketsResponded = function () {
 };
 
 // Function to handle live search while typing for responded tickets
-document.getElementById("searchInputResponded").addEventListener("input", function () {
-  window.searchTicketsResponded();
-});
+document
+  .getElementById("searchInputResponded")
+  .addEventListener("input", function () {
+    window.searchTicketsResponded();
+  });
 
 // Function to get the index of the selected column for responded tickets
 function getIndexResponded(key) {
@@ -674,7 +706,7 @@ function openModalWithTicketDetailsArchive(ticketNumber, reportsData) {
   const selectedTicket = reportsData[ticketNumber];
 
   // Open the modal
-  $('#modal').modal('show');
+  $("#modal").modal("show");
 
   // Populate the modal content with the details of the selected ticket
   document.getElementById("modalContent").innerHTML = `
@@ -689,7 +721,9 @@ function openModalWithTicketDetailsArchive(ticketNumber, reportsData) {
 
             <div class="row">
              <div class="col-md-6">
-                  <p><span class="fw-bold">Issue:</span> ${selectedTicket.Issue}</p>
+                  <p><span class="fw-bold">Issue:</span> ${
+                    selectedTicket.Issue
+                  }</p>
               </div>
               <div class="col-md-6">
                  <p><span class="fw-bold">Description:</span> ${
@@ -704,7 +738,9 @@ function openModalWithTicketDetailsArchive(ticketNumber, reportsData) {
                   }</p>
                 </div>
                 <div class="col-md-6">
-                 <p><span class="fw-bold">Status:</span> ${selectedTicket.ReportStatus}</p>
+                 <p><span class="fw-bold">Status:</span> ${
+                   selectedTicket.ReportStatus
+                 }</p>
                 </div>
             </div>
             <div class="container">
@@ -712,18 +748,24 @@ function openModalWithTicketDetailsArchive(ticketNumber, reportsData) {
             </div>
           <div class="row">
               <div class="col-md-6">
-                  <p><span class="fw-bold">Name:</span> ${selectedTicket.firstName} ${
-          selectedTicket.lastName
-        }</p>
-                  <p><span class="fw-bold">Email:</span> ${selectedTicket.email}</p>
+                  <p><span class="fw-bold">Name:</span> ${
+                    selectedTicket.firstName
+                  } ${selectedTicket.lastName}</p>
+                  <p><span class="fw-bold">Email:</span> ${
+                    selectedTicket.email
+                  }</p>
                   <p><span class="fw-bold">Mobile Number:</span> ${
                     selectedTicket.mobileNumber
                   }</p>
           </div>
           <div class="row">
               <div class="col-md-6">
-                <p><span class="fw-bold">District:</span> ${selectedTicket.district}</p>
-                <p><span class="fw-bold">Barangay:</span> ${selectedTicket.barangay}</p>
+                <p><span class="fw-bold">District:</span> ${
+                  selectedTicket.district
+                }</p>
+                <p><span class="fw-bold">Barangay:</span> ${
+                  selectedTicket.barangay
+                }</p>
                 <p><span class="fw-bold">City:</span> ${selectedTicket.city}</p>
               </div>
           </div>
@@ -741,7 +783,7 @@ function openModalWithTicketDetailsArchive(ticketNumber, reportsData) {
   const closeButton = document.querySelector("#modal .modal-header .btn-close");
   closeButton.addEventListener("click", function () {
     // Close the modal
-    $('#modal').modal('hide');
+    $("#modal").modal("hide");
   });
 }
 
@@ -760,7 +802,7 @@ function displayReportsArchive() {
         renderTableArchive(reportsData);
 
         // Attach event listener to the document that listens for clicks on elements with class '.viewTicketArchive'
-        document.addEventListener("click", function(event) {
+        document.addEventListener("click", function (event) {
           // Check if the clicked element has class '.viewTicketArchive'
           if (event.target.classList.contains("viewTicketArchive")) {
             // Retrieve the ticket number associated with the clicked button
@@ -771,16 +813,17 @@ function displayReportsArchive() {
         });
       } else {
         // No reports found, display a message or handle accordingly
-        tableBodyArchive.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
+        tableBodyArchive.innerHTML =
+          '<tr><td colspan="7">No reports found.</td></tr>';
       }
     },
     (error) => {
       console.error("Error fetching reports:", error.message);
-      tableBodyArchive.innerHTML = '<tr><td colspan="7">Error fetching reports.</td></tr>';
+      tableBodyArchive.innerHTML =
+        '<tr><td colspan="7">Error fetching reports.</td></tr>';
     }
   );
 }
-
 
 // Call the displayReports function to initially populate the table
 displayReportsArchive();
@@ -788,11 +831,13 @@ displayReportsArchive();
 //SEARCH FOR TICKETS ARCHIVE
 // Function to filter archived tickets based on search input and selected sorting column
 function filterTicketsArchive(searchInput, sortKey) {
-  const ticketsArray = document.querySelectorAll("#reportstablearchive tbody tr");
+  const ticketsArray = document.querySelectorAll(
+    "#reportstablearchive tbody tr"
+  );
   ticketsArray.forEach((ticket) => {
     const columnValue = ticket
-  .querySelector(`td:nth-child(${getIndexArchive(sortKey)})`)
-  .textContent.toLowerCase();
+      .querySelector(`td:nth-child(${getIndexArchive(sortKey)})`)
+      .textContent.toLowerCase();
     const displayStyle = columnValue.includes(searchInput) ? "" : "none";
     ticket.style.display = displayStyle;
   });
@@ -809,9 +854,11 @@ window.searchTicketsArchive = function () {
 };
 
 // Function to handle live search while typing for archived tickets
-document.getElementById("searchInputArchive").addEventListener("input", function () {
-  window.searchTicketsArchive();
-});
+document
+  .getElementById("searchInputArchive")
+  .addEventListener("input", function () {
+    window.searchTicketsArchive();
+  });
 
 // Function to get the index of the selected column for archived tickets
 function getIndexArchive(key) {
@@ -1078,6 +1125,19 @@ window.onload = function () {
 
 const usersRef = ref(db, "Accounts/Collectors");
 
+// Function to clear the text fields inside the modal
+function clearModalFields() {
+  document.getElementById("fName").value = "";
+  document.getElementById("mName").value = "";
+  document.getElementById("lName").value = "";
+  document.getElementById("sFix").value = "";
+  document.getElementById("eMail").value = "";
+  document.getElementById("mobileNumberModal").value = "";
+  document.getElementById("districtDropdownModal").selectedIndex = 0;
+  document.getElementById("barangayDropdownModal").innerHTML =
+    "<option selected disabled>Select Barangay</option>";
+}
+
 // Function to handle form submission
 async function addUser(event) {
   event.preventDefault(); // Prevent the default form submission behavior
@@ -1145,11 +1205,10 @@ async function addUser(event) {
     alert("User added successfully!");
 
     // Close the modal after adding the user successfully
-    $('#addCollectorModal').modal('hide');
+    $("#addCollectorModal").modal("hide");
 
     // Refresh the page
     location.reload();
-
   } catch (error) {
     console.error("Error adding user: ", error);
     // Handle error, display error message, or re-enable the submit button
@@ -1172,8 +1231,12 @@ function generateRandomPassword() {
 document.getElementById("viewForm").addEventListener("submit", addUser);
 
 document.addEventListener("DOMContentLoaded", function () {
-  const districtDropdownModal = document.getElementById("districtDropdownModal");
-  const barangayDropdownModal = document.getElementById("barangayDropdownModal");
+  const districtDropdownModal = document.getElementById(
+    "districtDropdownModal"
+  );
+  const barangayDropdownModal = document.getElementById(
+    "barangayDropdownModal"
+  );
 
   // Define the mapping of districts to barangays
   const districtToBarangays = {
@@ -1237,7 +1300,6 @@ document.addEventListener("DOMContentLoaded", function () {
       "Brgy 175",
       "Brgy 176",
       "Brgy 177",
-
     ],
     2: [
       "Brgy5",
@@ -1357,7 +1419,6 @@ document.addEventListener("DOMContentLoaded", function () {
       "Brgy 129",
       "Brgy 130",
       "Brgy 131",
-
     ],
     3: [
       "Brgy 178",
@@ -1394,4 +1455,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Attach an event listener to the District dropdown
   districtDropdownModal.addEventListener("change", updateBarangayDropdown);
+});
+
+// Add an event listener to clear the modal fields when the DOM is loaded
+document.addEventListener("DOMContentLoaded", function () {
+  clearModalFields();
 });
