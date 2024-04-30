@@ -1148,9 +1148,57 @@ async function addUser(event) {
   const lastName = document.getElementById("lName").value;
   const suffix = document.getElementById("sFix").value;
   const email = document.getElementById("eMail").value;
-  const mobileNumber = document.getElementById("mobileNumberModal").value;
+  const mobileNumberField = document.getElementById("mobileNumberModal");
+  const mobileNumber = mobileNumberField.value;
   const district = document.getElementById("districtDropdownModal").value;
   const barangay = document.getElementById("districtDropdownModal").value;
+
+  // Regular expression pattern to allow only letters
+  const lettersOnlyPattern = /^[A-Za-z]+$/;
+
+  // Regular expression pattern to allow only Gmail addresses
+  const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail.com$/;
+
+  // Regular expression pattern to allow only numbers and limit to 11 characters
+  const mobileNumberPattern = /^[0-9]{1,11}$/;
+
+  // Validation for firstName
+  if (!lettersOnlyPattern.test(firstName)) {
+    alert("First name should contain only letters.");
+    return;
+  }
+
+  // Validation for middleName
+  if (!lettersOnlyPattern.test(middleName)) {
+    alert("Middle name should contain only letters.");
+    return;
+  }
+
+  // Validation for lastName
+  if (!lettersOnlyPattern.test(lastName)) {
+    alert("Last name should contain only letters.");
+    return;
+  }
+
+  // Validation for suffix
+  if (suffix && !lettersOnlyPattern.test(suffix)) {
+    alert("Suffix should contain only letters.");
+    return;
+  }
+
+  // Validation for email
+  if (!gmailPattern.test(email)) {
+    alert("Only Gmail email addresses are allowed.");
+    return;
+  }
+
+  // Validation for mobileNumber
+  if (!mobileNumberPattern.test(mobileNumber) || mobileNumber.length !== 11) {
+    alert(
+      "Mobile number should contain only numbers and should be exactly 11 digits."
+    );
+    return;
+  }
 
   // Check if District and Barangay are selected
   if (district === "Select District" || barangay === "Select Barangay") {
@@ -1460,4 +1508,11 @@ document.addEventListener("DOMContentLoaded", function () {
 // Add an event listener to clear the modal fields when the DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
   clearModalFields();
+
+  // Add event listener to mobile number field
+  document
+    .getElementById("mobileNumberModal")
+    .addEventListener("click", function () {
+      this.value = "09";
+    });
 });
