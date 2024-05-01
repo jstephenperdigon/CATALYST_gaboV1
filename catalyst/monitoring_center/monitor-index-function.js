@@ -2,9 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebas
 import {
   getDatabase,
   ref,
-  get,
   onValue,
-  update,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -53,41 +51,61 @@ function displayDeploymentHistory() {
       schedulesTableBody.innerHTML = "";
 
       if (historyData) {
-        // Iterate through each entry in historyData and populate the table rows
-        Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
-          // Determine the status to display
-          const status =
-            scheduleInfo.status !== undefined
-              ? scheduleInfo.status
-              : "Not yet collected";
+        // Convert historyData to an array of objects
+        const historyArray = Object.entries(historyData).map(
+          ([scheduleUID, scheduleInfo]) => ({
+            scheduleUID,
+            ...scheduleInfo,
+          })
+        );
 
-          // Create table row for each schedule
-          const row = document.createElement("tr");
-          row.innerHTML = `
-          <td>${scheduleUID}</td>
-          <td>${scheduleInfo.SelectedGCL}</td>
-          <td>${scheduleInfo.District}</td>
-          <td>${scheduleInfo.Barangay}</td>
-          <td>${status}</td>
-          <td><button class="btn btn-primary viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
-        `;
-          schedulesTableBody.appendChild(row);
+        // Sort the historyArray based on combined DateInput and timeSent in descending order
+        historyArray.sort((a, b) => {
+          const combinedDateTimeA = new Date(`${a.DateInput} ${a.timeSent}`);
+          const combinedDateTimeB = new Date(`${b.DateInput} ${b.timeSent}`);
+          return combinedDateTimeB - combinedDateTimeA;
+        });
 
-          // Add event listener to the "ViewDetails" button
-          const viewDetailsButton = row.querySelector(".viewDetails");
-          viewDetailsButton.addEventListener("click", () => {
-            // Get the scheduleUID associated with the clicked button
-            const clickedScheduleUID =
-              viewDetailsButton.getAttribute("data-schedule-uid");
+        // Iterate through each entry in historyArray and populate the table rows
+        historyArray.forEach(
+          ({
+            scheduleUID,
+            SelectedGCL,
+            District,
+            Barangay,
+            status,
+            timeSent,
+            DateInput,
+          }) => {
+            // Create table row for each schedule
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${scheduleUID}</td>
+              <td>${SelectedGCL}</td>
+              <td>${District}</td>
+              <td>${Barangay}</td>
+              <td>${status !== undefined ? status : "Not yet collected"}</td>
+              <td>${timeSent}</td>
+              <td>${DateInput}</td>
+              <td><button class="btn btn-primary viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
+            `;
+            schedulesTableBody.appendChild(row);
 
-            // Retrieve details based on scheduleUID (you can customize this part)
-            const details = historyData[clickedScheduleUID];
+            // Add event listener to the "ViewDetails" button
+            const viewDetailsButton = row.querySelector(".viewDetails");
+            viewDetailsButton.addEventListener("click", () => {
+              // Get the scheduleUID associated with the clicked button
+              const clickedScheduleUID =
+                viewDetailsButton.getAttribute("data-schedule-uid");
 
-            // Update modal content with details
-            const modalContent = document.querySelector(
-              "#modalScheduleContent"
-            );
-            modalContent.innerHTML = `
+              // Retrieve details based on scheduleUID (you can customize this part)
+              const details = historyData[clickedScheduleUID];
+
+              // Update modal content with details
+              const modalContent = document.querySelector(
+                "#modalScheduleContent"
+              );
+              modalContent.innerHTML = `
             <div class="row">
               <div class="col-md-6">
                 <p><strong>Schedule UID:</strong> ${scheduleUID}</p>
@@ -128,13 +146,14 @@ function displayDeploymentHistory() {
             </div>
           `;
 
-            // Show the modal
-            const detailsModal = new bootstrap.Modal(
-              document.getElementById("detailsModal")
-            );
-            detailsModal.show();
-          });
-        });
+              // Show the modal
+              const detailsModal = new bootstrap.Modal(
+                document.getElementById("detailsModal")
+              );
+              detailsModal.show();
+            });
+          }
+        );
       } else {
         // Handle case where there's no deployment history
         schedulesTableBody.innerHTML = `
