@@ -17,13 +17,18 @@ function displayMarkersOnMap(map) {
     // Loop through each garbage bin in the data
     for (const gcnKey in data) {
       const location = data[gcnKey]?.Location; // Get the location object
-      const gb1QuotaCount = data[gcnKey]?.FillLevel?.GB1FillLevel?.GB1QuotaCount || 0;
-      const gb2QuotaCount = data[gcnKey]?.FillLevel?.GB2FillLevel?.GB2QuotaCount || 0;
-      const gb3QuotaCount = data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount || 0;
-      const gb4QuotaCount = data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount || 0;
+      const gb1QuotaCount =
+        data[gcnKey]?.FillLevel?.GB1FillLevel?.GB1QuotaCount || 0;
+      const gb2QuotaCount =
+        data[gcnKey]?.FillLevel?.GB2FillLevel?.GB2QuotaCount || 0;
+      const gb3QuotaCount =
+        data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount || 0;
+      const gb4QuotaCount =
+        data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount || 0;
 
       // Calculate total quota by summing up individual quota counts
-      const totalQuota = gb1QuotaCount + gb2QuotaCount + gb3QuotaCount + gb4QuotaCount;
+      const totalQuota =
+        gb1QuotaCount + gb2QuotaCount + gb3QuotaCount + gb4QuotaCount;
 
       // Check if Users object exists and has at least one user
       const users = data[gcnKey]?.Users;
@@ -59,10 +64,16 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${gb1QuotaCount !== 0 ? gb1QuotaCount : "none"}</p>
-              <p>Biodegradable: ${gb2QuotaCount !== 0 ? gb2QuotaCount : "none"}</p>
+              <p>Recyclables: ${
+                gb1QuotaCount !== 0 ? gb1QuotaCount : "none"
+              }</p>
+              <p>Biodegradable: ${
+                gb2QuotaCount !== 0 ? gb2QuotaCount : "none"
+              }</p>
               <p>Special: ${gb3QuotaCount !== 0 ? gb3QuotaCount : "none"}</p>
-              <p>Non-Biodegradable: ${gb4QuotaCount !== 0 ? gb4QuotaCount : "none"}</p>
+              <p>Non-Biodegradable: ${
+                gb4QuotaCount !== 0 ? gb4QuotaCount : "none"
+              }</p>
             </div>`
           );
         } else {
@@ -81,10 +92,18 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${gb1QuotaCount !== 0 ? gb1QuotaCount : "none"}</p>
-                        <p>Biodegradable: ${gb2QuotaCount !== 0 ? gb2QuotaCount : "none"}</p>
-                        <p>Special: ${gb3QuotaCount !== 0 ? gb3QuotaCount : "none"}</p>
-                        <p>Non-Biodegradable: ${gb4QuotaCount !== 0 ? gb4QuotaCount : "none"}</p>
+                        <p>Recyclables: ${
+                          gb1QuotaCount !== 0 ? gb1QuotaCount : "none"
+                        }</p>
+                        <p>Biodegradable: ${
+                          gb2QuotaCount !== 0 ? gb2QuotaCount : "none"
+                        }</p>
+                        <p>Special: ${
+                          gb3QuotaCount !== 0 ? gb3QuotaCount : "none"
+                        }</p>
+                        <p>Non-Biodegradable: ${
+                          gb4QuotaCount !== 0 ? gb4QuotaCount : "none"
+                        }</p>
                       </div>`,
           });
 
@@ -98,7 +117,9 @@ function displayMarkersOnMap(map) {
         }
       } else {
         // If marker exists but doesn't meet the condition, remove it from the map
-        let existingMarkerIndex = markers.findIndex((marker) => marker.title === gcnKey);
+        let existingMarkerIndex = markers.findIndex(
+          (marker) => marker.title === gcnKey
+        );
         if (existingMarkerIndex !== -1) {
           markers[existingMarkerIndex].setMap(null);
           markers.splice(existingMarkerIndex, 1);
@@ -107,7 +128,6 @@ function displayMarkersOnMap(map) {
     }
   });
 }
-
 
 // Function to display all markers on the map
 function showAllMarkers(map) {
@@ -488,7 +508,8 @@ function checkInputsAndEnableButton() {
 
   // Check if all fields have valid input
   const isDateValid = dateInputField.value !== "";
-  const isTimeValid = timeInputField.value !== "" && timeInputField.value !== "Select Time";
+  const isTimeValid =
+    timeInputField.value !== "" && timeInputField.value !== "Select Time";
   const isCollectorSelected =
     dropdownCollector.value !== "" &&
     dropdownCollector.value !== "Select Collector";
@@ -812,24 +833,27 @@ export function initMap() {
     <div class="container mt-2">
     <div class="row">
         <div class="col-md-6">
-            <div class="form-outline mb-4">
-                <label class="form-label" for="controlNumbers">Control Numbers:</label>
-                <p id="controlNumbers" class="form-control selected-gcn">${selectedGCNs.join(
-      ", "
-    )}</p>
-            </div>
-            <div class="form-outline mb-4">
-                <label class="form-label" for="district">District:</label>
-                <p id="district" class="form-control district">${selectedDistrict}</p>
-            </div>
-            <div class="form-outline mb-4">
-                <label class="form-label" for="barangay">Barangay:</label>
-                <p id="barangay" class="form-control barangay">${selectedBarangay}</p>
-            </div>
-            <div class="form-outline mb-4">
+          <div class="form-outline mb-4">
                 <label class="form-label" for="garbageBags">Garbage Bags:</label>
-                <p id="garbageBags" class="form-control total-quota">${totalQuotaSum}</p>
+                <p id="garbageBags" class="form-control total-quota fs-1 fw-bolder text-success">${totalQuotaSum}</p>
             </div>
+          <div class="form-outline mb-4">
+              <label class="form-label" for="controlNumbers">Control Numbers:</label>
+                  <div class="d-flex align-items-center">
+                      <p id="controlNumbers" class="form-control selected-gcn">${selectedGCNs
+                        .slice(0, 10)
+                        .join(", ")}</p>
+                        ${
+                          selectedGCNs.length > 10
+                            ? `<button class="btn shadow-none bg-transparent btn-sm" data-toggle="modal" data-target="#additionalGCNsModal">
+                                    <i class="fas fa-chevron-right fa-1x"></i>
+                                  </button>`
+                            : ""
+                        }
+                  </div>
+          </div>
+            
+          
         </div>
         <div class="col-md-6">
         <p class="fs-4 fw-bold text-muted"> Waste Composition </p>
@@ -893,6 +917,42 @@ export function initMap() {
         </div>
     </div>
 </div>
+           <!-- Modal -->
+            <div
+              class="modal fade"
+              id="additionalGCNsModal"
+              tabindex="-1"
+              aria-labelledby="additionalGCNsModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="additionalGCNsModalLabel">
+                      Control Numbers
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>${selectedGCNs.slice(10).join(", ")}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
 `;
   }
 
@@ -946,7 +1006,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-            0
+              0
           );
 
           const totalQuota =
@@ -993,7 +1053,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-            0
+              0
           );
 
           // Check if adding this marker will exceed the limit
@@ -1011,7 +1071,8 @@ export function initMap() {
         }
 
         // Change icon of all selected markers (GCNs)
-        const blueDotIcon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+        const blueDotIcon =
+          "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
         for (const marker of filteredMarkers) {
           const gcn = marker.infoWindow.content.match(/GCN: (.+?)</)[1];
           if (selectedGCNs.includes(gcn)) {
@@ -1034,9 +1095,14 @@ export function initMap() {
         // Print latitude and longitude of GCN with the highest total quota
         if (filteredMarkers.length > 0) {
           const highestQuotaMarker = filteredMarkers[0]; // Get the marker with the highest total quota
-          const gcn = highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
-          const highestQuotaMarkerlatitude = highestQuotaMarker.getPosition().lat();
-          const highestQuotaMarkerlongitude = highestQuotaMarker.getPosition().lng();
+          const gcn =
+            highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
+          const highestQuotaMarkerlatitude = highestQuotaMarker
+            .getPosition()
+            .lat();
+          const highestQuotaMarkerlongitude = highestQuotaMarker
+            .getPosition()
+            .lng();
 
           // Assign values to highLatitude and highLongitude
           highLatitude = highestQuotaMarkerlatitude;
@@ -1062,7 +1128,6 @@ export function initMap() {
     }
   }
 
-
   // Add event listener to district dropdown
   document
     .getElementById("district")
@@ -1083,18 +1148,17 @@ export function initMap() {
 
     // Create a new Date object adjusted for Philippine Standard Time (UTC+8:00)
     const now = new Date();
-    const philippineNow = new Date(now.getTime() + (8 * 60 * 60 * 1000)); // Adding 8 hours for UTC+8:00
+    const philippineNow = new Date(now.getTime() + 8 * 60 * 60 * 1000); // Adding 8 hours for UTC+8:00
 
     const year = philippineNow.getFullYear();
-    const month = String(philippineNow.getMonth() + 1).padStart(2, '0'); // January is 0
-    const day = String(philippineNow.getDate()).padStart(2, '0');
+    const month = String(philippineNow.getMonth() + 1).padStart(2, "0"); // January is 0
+    const day = String(philippineNow.getDate()).padStart(2, "0");
 
     // Construct the date string in YYYY-MM-DD format
     const today = `${year}-${month}-${day}`;
 
     // Set the 'min' attribute of the date input field to today's date in Philippine Standard Time
-    dateInputField.setAttribute('min', today);
-
+    dateInputField.setAttribute("min", today);
 
     // Disable dateInputField and timeInputField initially
     dateInputField.disabled = true;
@@ -1357,12 +1421,13 @@ export function initMap() {
         Barangay: barangayOutput.replace("Barangay: ", ""),
         TotalQuota: parseInt(totalQuotaOutput.replace("Total Quota: ", "")),
         Recyclables: parseInt(recyclablesOutput.replace("Recyclables: ", "")),
-        Biodegradable: parseInt(biodegradableOutput.replace("Biodegradable: ", "")),
+        Biodegradable: parseInt(
+          biodegradableOutput.replace("Biodegradable: ", "")
+        ),
         Special: parseInt(specialOutput.replace("Special: ", "")),
-        NonBiodegradable: parseInt(nonBiodegradableOutput.replace(
-          "Non-Biodegradable: ",
-          ""
-        )),
+        NonBiodegradable: parseInt(
+          nonBiodegradableOutput.replace("Non-Biodegradable: ", "")
+        ),
         DateInput: formatDateMMddYYYY(dateInputValue),
         TimeInput: timeInputValue,
         SelectedGCL: dropdownCollectorValue,
@@ -1496,7 +1561,6 @@ export function initMap() {
 
                 Best regards,
                 GABO-CATALYST`,
-
                   };
                   // Send email using EmailJS
                   emailjs

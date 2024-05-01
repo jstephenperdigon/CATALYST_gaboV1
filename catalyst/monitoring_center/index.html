@@ -901,17 +901,28 @@
             <div class="col-md-3">
               <div class="input-group">
                 <div class="form-outline" data-mdb-input-init>
-                  <input type="search" id="searchInputResponded" class="form-control border border-2 rounded p-1" />
-                  <label class="form-label" for="searchInputResponded">Search</label>
+                  <input
+                    type="search"
+                    id="searchInputResponded"
+                    class="form-control border border-2 rounded p-1"
+                  />
+                  <label class="form-label" for="searchInputResponded"
+                    >Search</label
+                  >
                 </div>
               </div>
             </div>
             <div class="col-md-3 d-flex">
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="sortDropdownResponded">Filter By:</label>
+                  <label class="input-group-text" for="sortDropdownResponded"
+                    >Filter By:</label
+                  >
                 </div>
-                <select class="custom-select form-control form-outline" id="sortDropdownResponded">
+                <select
+                  class="custom-select form-control form-outline"
+                  id="sortDropdownResponded"
+                >
                   <option selected disabled>Select an option</option>
                   <option value="ticketNumber">Ticket #</option>
                   <option value="GCN">GCN</option>
@@ -925,8 +936,7 @@
             </div>
           </div>
         </div>
-      
-      
+
         <!-- Table Container with Fixed Height and Scroll -->
         <div class="container mt-3 table-container">
           <table id="reportstableresponded" class="table table-striped">
@@ -960,17 +970,28 @@
             <div class="col-md-3">
               <div class="input-group">
                 <div class="form-outline" data-mdb-input-init>
-                  <input type="search" id="searchInputArchive" class="form-control border border-2 rounded p-1" />
-                  <label class="form-label" for="searchInputArchive">Search</label>
+                  <input
+                    type="search"
+                    id="searchInputArchive"
+                    class="form-control border border-2 rounded p-1"
+                  />
+                  <label class="form-label" for="searchInputArchive"
+                    >Search</label
+                  >
                 </div>
               </div>
             </div>
             <div class="col-md-3 d-flex">
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="sortDropdownArchive">Filter By:</label>
+                  <label class="input-group-text" for="sortDropdownArchive"
+                    >Filter By:</label
+                  >
                 </div>
-                <select class="custom-select form-control form-outline" id="sortDropdownArchive">
+                <select
+                  class="custom-select form-control form-outline"
+                  id="sortDropdownArchive"
+                >
                   <option selected disabled>Select an option</option>
                   <option value="ticketNumber">Ticket #</option>
                   <option value="GCN">GCN</option>
@@ -984,7 +1005,7 @@
             </div>
           </div>
         </div>
-      
+
         <!-- Table Container with Fixed Height and Scroll -->
         <div class="container mt-3 table-container">
           <table id="reportstablearchive" class="table table-striped">
@@ -1272,10 +1293,21 @@
         </div>
       </div>
     </div>
+
     <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
     ></script>
+    <script>
+      function toggleAdditionalGCNs() {
+        var additionalGCNs = document.getElementById("additionalGCNs");
+        if (additionalGCNs.style.display === "none") {
+          additionalGCNs.style.display = "block";
+        } else {
+          additionalGCNs.style.display = "none";
+        }
+      }
+    </script>
     <script type="module" src="monitor-index-function.js"></script>
     <script type="module" src="monitor-index-reports.js"></script>
     <script type="module" src="monitoring-gb-account-count.js"></script>
