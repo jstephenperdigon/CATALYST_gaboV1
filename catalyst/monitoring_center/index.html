@@ -563,6 +563,33 @@
             role="tabpanel"
             aria-labelledby="pills-contact-tab"
           >
+
+          <div class="container mb-5">
+            <div class="row justify-content-end">
+              <div class="col-md-3">
+                <div class="input-group">
+                  <div class="form-outline" data-mdb-input-init>
+                    <input type="search" id="searchHistory" class="form-control" />
+                    <label class="form-label" for="searchHistory">Search</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 d-flex">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="FilterHistory">Filter By:
+                    </label>
+                  </div>
+                  <select class="custom-select form-control form-outline" id="FilterHistory">
+                    <option selected disabled>Select an option</option>
+                    <option value="GCL">GCL Number</option>
+                    <option value="DateInput">Date</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
             <!-- SCHEDULES -->
             <div class="container mt-3 table-container">
               <table id="schedulesTable" class="table table-striped">
@@ -572,9 +599,9 @@
                     <th>GCL Number</th>
                     <th>District</th>
                     <th>Barangay</th>
-                    <th>Status</th>
                     <th>Time Sent</th>
                     <th>Date Input</th>
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                 </thead>
