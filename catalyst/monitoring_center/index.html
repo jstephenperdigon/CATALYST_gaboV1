@@ -49,27 +49,6 @@
         padding: 16px;
       }
 
-      /* Add this style for better table appearance */
-      table {
-        border: none;
-        border-collapse: collapse;
-        width: 100%;
-        margin-top: 20px;
-      }
-
-      td {
-        border: solid #e4e4e4 1px;
-        padding: 8px;
-        text-align: center;
-      }
-
-      th {
-        border: none;
-        background-color: #e4e4e4;
-        padding: 8px;
-        text-align: center;
-      }
-
       .notification-box {
         z-index: 1;
         display: none;
@@ -378,8 +357,84 @@
             <div class="row">
               <div class="col">
                 <div class="container mt-5">
-                  <div class="row">
-                    <div class="col-md-12">
+                  <div class="row justify-content-end">
+                    <div class="col-md-6">
+                      <div
+                        class="card shadow-none border-0 text-start bg-transparent"
+                      >
+                        <div class="card-body">
+                          <p class="fs-4 fw-bold">Bags Population</p>
+                        </div>
+                      </div>
+                      <div class="card p-2 shadow-none border-0">
+                        <div
+                          class="card rounded-5 border-0 p-3 shadow-none bg-transparent"
+                        >
+                          <div class="text-center">
+                            <div class="row">
+                              <div class="col">
+                                <p class="fs-6 text-muted mb-0">Barangay</p>
+                              </div>
+                              <div class="col">
+                                <p class="fs-6 text-muted mb-0">District</p>
+                              </div>
+                              <div class="col">
+                                <p class="fs-6 text-muted mb-0">
+                                  Bag Population
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card p-2 shadow-none border-0">
+                        <div
+                          class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark"
+                        >
+                          <div class="text-center">
+                            <div class="row">
+                              <div class="col">
+                                <p class="fw-bold fs-6 mb-0 text-light">
+                                  Barangay 188
+                                </p>
+                              </div>
+                              <div class="col">
+                                <p class="fw-bold fs-6 mb-0 text-light">
+                                  District 3
+                                </p>
+                              </div>
+                              <div class="col">
+                                <p class="fw-bold fs-6 mb-0 text-light">96</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card p-2 shadow-none border-0">
+                        <div
+                          class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark"
+                        >
+                          <div class="text-center">
+                            <div class="row">
+                              <div class="col">
+                                <p class="fw-bold fs-6 mb-0 text-light">
+                                  Barangay 176
+                                </p>
+                              </div>
+                              <div class="col">
+                                <p class="fw-bold fs-6 mb-0 text-light">
+                                  District 1
+                                </p>
+                              </div>
+                              <div class="col">
+                                <p class="fw-bold fs-6 mb-0 text-light">96</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
                       <div
                         class="card shadow-none border-0 text-start bg-transparent"
                       >
@@ -559,7 +614,7 @@
               <table id="schedulesTable" class="table table-striped">
                 <thead class="table-dark">
                   <tr>
-                    <th>Schedule UID</th>
+                    <th>Schedule ID</th>
                     <th>GCL Number</th>
                     <th>District</th>
                     <th>Barangay</th>

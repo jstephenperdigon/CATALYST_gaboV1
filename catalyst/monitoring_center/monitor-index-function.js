@@ -57,9 +57,7 @@ function displayDeploymentHistory() {
         Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
           // Determine the status to display
           const status =
-            scheduleInfo.status !== undefined
-              ? scheduleInfo.status
-              : "Not yet collected";
+            scheduleInfo.status !== undefined ? scheduleInfo.status : "Pending";
 
           // Create table row for each schedule
           const row = document.createElement("tr");
@@ -69,7 +67,7 @@ function displayDeploymentHistory() {
           <td>${scheduleInfo.District}</td>
           <td>${scheduleInfo.Barangay}</td>
           <td>${status}</td>
-          <td><button class="btn btn-primary viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
+          <td><button class="btn btn-primary viewDetails shadow-none" data-schedule-uid="${scheduleUID}"><i class="fa fa-eye"> </i></button></td>
         `;
           schedulesTableBody.appendChild(row);
 
@@ -90,7 +88,7 @@ function displayDeploymentHistory() {
             modalContent.innerHTML = `
             <div class="row">
               <div class="col-md-6">
-                <p><strong>Schedule UID:</strong> ${scheduleUID}</p>
+                <p><strong>Schedule ID:</strong> ${scheduleUID}</p>
                 <p><strong>Selected GCL:</strong> ${details.SelectedGCL}</p>
                 <p><strong>Selected GCN:</strong> ${details.SelectedGCN}</p>
                 <p><strong>District:</strong> ${details.District}</p>

@@ -1,17 +1,11 @@
 {
   "hosting": {
-    "site":"garbagebinoptimized-v1",
+    "site":"gabophv1",
     "public": "catalyst",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
     ]
   }
 }
