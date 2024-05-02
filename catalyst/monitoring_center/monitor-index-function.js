@@ -19,8 +19,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-
-
 // Retrieve userId from sessionStorage
 const accountId = sessionStorage.getItem("uid");
 
@@ -130,17 +128,25 @@ function displayDeploymentHistory() {
               }) => {
                 // Create table row for each schedule
                 const row = document.createElement("tr");
+                const statusClass =
+                  status !== undefined && status.toLowerCase() === "complete"
+                    ? "text-success"
+                    : "text-warning";
                 row.innerHTML = `
-                  <td>${scheduleUID}</td>
-                  <td>${SelectedGCL}</td>
-                  <td>${District}</td>
-                  <td>${Barangay}</td>
-                  <td>${timeSent}</td>
-                  <td>${DateInput}</td>
-                  <td>${status !== undefined ? status : "Not yet collected"
-                  }</td>
-                  <td><button class="btn btn-primary viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
-                `;
+                <td>${scheduleUID}</td>
+                <td>${SelectedGCL}</td>
+                <td>${District}</td>
+                <td>${Barangay}</td>
+                <td>${timeSent}</td>
+                <td>${DateInput}</td>
+                <td class="${statusClass}">${
+                  status !== undefined && status.toLowerCase() === "complete"
+                    ? status
+                    : "Pending"
+                }</td>
+                <td><button class="btn btn-primary shadow-none viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
+`;
+
                 schedulesTableBody.appendChild(row);
 
                 // Add event listener to the "ViewDetails" button
@@ -165,27 +171,32 @@ function displayDeploymentHistory() {
                 <p><strong>Selected GCN:</strong> ${details.SelectedGCN}</p>
                 <p><strong>District:</strong> ${details.District}</p>
                 <p><strong>Barangay:</strong> ${details.Barangay}</p>
-                <p><strong>Status:</strong> ${details.status !== undefined
-                      ? details.status
-                      : "Not yet collected"
-                    }</p>
+                <p><strong>Status:</strong> ${
+                  details.status !== undefined
+                    ? details.status
+                    : "Not yet collected"
+                }</p>
               </div>
               <div class="col-md-6">
                 <p><strong>Time Sent:</strong> ${details.timeSent}</p>
                 <p><strong>Time Input:</strong> ${details.TimeInput}</p>
-                <p><strong>Time Collection Ended:</strong> ${details.TimeCollectionEnded !== undefined
-                      ? details.TimeCollectionEnded
-                      : "None"
-                    }</p>
-                <p><strong>Selected Date Input:</strong> ${details.DateInput
-                    }</p>
-                <p><strong>Date Collection Ended:</strong> ${details.DateCollectionEnded !== undefined
-                      ? details.DateCollectionEnded
-                      : "None"
-                    }</p>
+                <p><strong>Time Collection Ended:</strong> ${
+                  details.TimeCollectionEnded !== undefined
+                    ? details.TimeCollectionEnded
+                    : "None"
+                }</p>
+                <p><strong>Selected Date Input:</strong> ${
+                  details.DateInput
+                }</p>
+                <p><strong>Date Collection Ended:</strong> ${
+                  details.DateCollectionEnded !== undefined
+                    ? details.DateCollectionEnded
+                    : "None"
+                }</p>
                 <p><strong>Biodegradable:</strong> ${details.Biodegradable}</p>
-                <p><strong>Non-Biodegradable:</strong> ${details.NonBiodegradable
-                    }</p>
+                <p><strong>Non-Biodegradable:</strong> ${
+                  details.NonBiodegradable
+                }</p>
                 <p><strong>Recyclables:</strong> ${details.Recyclables}</p>
                 <p><strong>Special:</strong> ${details.Special}</p>
                 <p><strong>Total Quota:</strong> ${details.TotalQuota}</p>
@@ -310,17 +321,15 @@ function displayActivities() {
 // Call the function to display deployment history when the DOM content is loaded
 document.addEventListener("DOMContentLoaded", displayActivities);
 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.querySelector('#garbageBinData');
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector("#garbageBinData");
 
   // Reference to your GarbageBinControlNumber node
-  const garbageBinRef = ref(db, 'GarbageBinControlNumber');
+  const garbageBinRef = ref(db, "GarbageBinControlNumber");
 
   // Fetch data when value changes
   onValue(garbageBinRef, (snapshot) => {
-    container.innerHTML = ''; // Clear previous data
+    container.innerHTML = ""; // Clear previous data
 
     const dataByBarangay = {}; // Object to store data grouped by barangay
 
@@ -328,22 +337,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const gcn = childSnapshot.key; // GCN###
 
       // Check if collectionFlag is "false"
-      const collectionFlag = childSnapshot.child('collectionFlag').val();
+      const collectionFlag = childSnapshot.child("collectionFlag").val();
       if (collectionFlag !== "false") {
         return; // Skip processing if collectionFlag is not "false"
       }
 
-      const users = childSnapshot.child('Users');
+      const users = childSnapshot.child("Users");
 
       users.forEach((user) => {
-        const barangayRaw = user.child('barangay').val() || 'Unknown';
-        const district = user.child('district').val() || 'Unknown';
+        const barangayRaw = user.child("barangay").val() || "Unknown";
+        const district = user.child("district").val() || "Unknown";
 
         // Extract numeric part from barangay (assuming it starts with a specific prefix)
         const barangay = extractNumberFromString(barangayRaw);
 
         // Fetch FillLevel data for the GCN
-        const fillLevelData = childSnapshot.child('FillLevel').val() || {};
+        const fillLevelData = childSnapshot.child("FillLevel").val() || {};
 
         // Calculate total quota count
         const totalQuota = calculateTotalQuota(fillLevelData);
@@ -368,34 +377,36 @@ document.addEventListener('DOMContentLoaded', () => {
       .map(([barangay, { totalBins, districts }]) => ({
         barangay,
         totalBins,
-        mostCommonDistrict: Object.keys(districts).reduce((a, b) => (districts[a] > districts[b] ? a : b))
+        mostCommonDistrict: Object.keys(districts).reduce((a, b) =>
+          districts[a] > districts[b] ? a : b
+        ),
       }))
       .sort((a, b) => b.totalBins - a.totalBins); // Sort by totalBins in descending order
 
     // Render the sorted data by barangay
     sortedBarangays.forEach(({ barangay, totalBins, mostCommonDistrict }) => {
       // Create HTML card element for each barangay data
-      const cardElement = document.createElement('div');
-      cardElement.classList.add('col');
+      const cardElement = document.createElement("div");
+      cardElement.classList.add("col");
       cardElement.innerHTML = `
-        <div class="card p-2 shadow-none border-0">
-          <div class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark">
-            <div class="text-center">
-              <div class="row">
-                <div class="col">
-                  <p class="fw-bold fs-6 mb-0 text-light">Barangay ${barangay}</p>
-                </div>
-                <div class="col">
-                  <p class="fw-bold fs-6 mb-0 text-light">${mostCommonDistrict}</p>
-                </div>
-                <div class="col">
-                  <p class="fw-bold fs-6 mb-0 text-light">${totalBins}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+                        <div class="card p-2 shadow-none border-0 bg-transparent">
+                            <div class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark">
+                                <div class="text-center">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="fw-bold fs-6 mb-0 text-light">Barangay ${barangay}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="fw-bold fs-6 mb-0 text-light">${mostCommonDistrict}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="fw-bold fs-6 mb-0 text-light">${totalBins}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
       container.appendChild(cardElement);
     });
   });
@@ -419,4 +430,3 @@ function calculateTotalQuota(fillLevelData) {
 
   return totalQuota;
 }
-

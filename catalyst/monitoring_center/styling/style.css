@@ -39,8 +39,7 @@ body {
   font-family: "Product Sans", sans-serif;
   font-weight: 400; /* Regular */
   position: relative;
-  transition: 0.5s;
-  background-color: #ffffff;
+  background-color: #f1f1f1;
 }
 a {
   text-decoration: none;
@@ -133,6 +132,7 @@ a {
   height: 100%;
   background-color: var(--first-color);
   padding: 0.5rem 1rem 0 0;
+  margin-right: 50px;
   /* ... your existing styles ... */
   transition: width 0.75s;
   z-index: 1;
