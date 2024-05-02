@@ -129,18 +129,13 @@ a {
 .l-navbar {
   top: 0;
   left: -30%;
-  width: var(--nav-width);
+  width: 210px;
   height: 100%;
   background-color: var(--first-color);
   padding: 0.5rem 1rem 0 0;
   /* ... your existing styles ... */
   transition: width 0.75s;
   z-index: 1;
-}
-
-.l-navbar:hover {
-  width: 220px;
-  /* Adjust the width as needed */
 }
 
 .body-pd .content {

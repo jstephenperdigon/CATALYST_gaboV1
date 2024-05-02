@@ -25,14 +25,6 @@ function displayMarkersOnMap(map) {
         data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount || 0;
       const gb4QuotaCount =
         data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount || 0;
-      const gb1QuotaCount =
-        data[gcnKey]?.FillLevel?.GB1FillLevel?.GB1QuotaCount || 0;
-      const gb2QuotaCount =
-        data[gcnKey]?.FillLevel?.GB2FillLevel?.GB2QuotaCount || 0;
-      const gb3QuotaCount =
-        data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount || 0;
-      const gb4QuotaCount =
-        data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount || 0;
 
       // Calculate total quota by summing up individual quota counts
       const totalQuota =
