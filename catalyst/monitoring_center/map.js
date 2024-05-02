@@ -845,23 +845,18 @@ export function initMap() {
                 <label class="form-label" for="garbageBags">Garbage Bags:</label>
                 <p id="garbageBags" class="form-control total-quota fs-1 fw-bolder text-success">${totalQuotaSum}</p>
             </div>
-          <div class="form-outline mb-4">
-              <label class="form-label" for="controlNumbers">Control Numbers:</label>
-                  <div class="d-flex align-items-center">
-                      <p id="controlNumbers" class="form-control selected-gcn">${selectedGCNs
-                        .slice(0, 7)
-                        .join(", ")}</p>
-                        ${
-                          selectedGCNs.length > 7
-                            ? `<button class="btn shadow-none bg-transparent btn-sm" data-toggle="modal" data-target="#additionalGCNsModal">
-                                    <i class="fas fa-chevron-right fa-1x"></i>
-                                  </button>`
-                            : ""
-                        }
-                  </div>
-          </div>
-            
-          
+            <div class="form-outline mb-4">
+                <label class="form-label" for="district">District:</label>
+                <p id="district" class="form-control district">${selectedDistrict}</p>
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="barangay">Barangay:</label>
+                <p id="barangay" class="form-control barangay">${selectedBarangay}</p>
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="garbageBags">Garbage Bags:</label>
+                <p id="garbageBags" class="form-control total-quota">${totalQuotaSum}</p>
+            </div>
         </div>
         <div class="col-md-6">
         <p class="fs-4 fw-bold text-muted"> Waste Composition </p>
@@ -925,81 +920,6 @@ export function initMap() {
         </div>
     </div>
 </div>
-           <!-- Modal -->
-            <div
-              class="modal fade"
-              id="additionalGCNsModal"
-              tabindex="-1"
-              aria-labelledby="additionalGCNsModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="additionalGCNsModalLabel">
-                      Control Numbers
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <p>${selectedGCNs.slice(10).join(", ")}</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
-    </div>
-</div>
-           <!-- Modal -->
-            <div
-              class="modal fade"
-              id="additionalGCNsModal"
-              tabindex="-1"
-              aria-labelledby="additionalGCNsModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="additionalGCNsModalLabel">
-                      Control Numbers
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <p>${selectedGCNs.slice(7).join(", ")}</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
 `;
   }
 
@@ -1150,14 +1070,6 @@ export function initMap() {
           const highestQuotaMarkerlongitude = highestQuotaMarker
             .getPosition()
             .lng();
-          const gcn =
-            highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
-          const highestQuotaMarkerlatitude = highestQuotaMarker
-            .getPosition()
-            .lat();
-          const highestQuotaMarkerlongitude = highestQuotaMarker
-            .getPosition()
-            .lng();
 
           // Assign values to highLatitude and highLongitude
           highLatitude = highestQuotaMarkerlatitude;
@@ -1204,11 +1116,8 @@ export function initMap() {
     // Create a new Date object adjusted for Philippine Standard Time (UTC+8:00)
     const now = new Date();
     const philippineNow = new Date(now.getTime() + 8 * 60 * 60 * 1000); // Adding 8 hours for UTC+8:00
-    const philippineNow = new Date(now.getTime() + 8 * 60 * 60 * 1000); // Adding 8 hours for UTC+8:00
 
     const year = philippineNow.getFullYear();
-    const month = String(philippineNow.getMonth() + 1).padStart(2, "0"); // January is 0
-    const day = String(philippineNow.getDate()).padStart(2, "0");
     const month = String(philippineNow.getMonth() + 1).padStart(2, "0"); // January is 0
     const day = String(philippineNow.getDate()).padStart(2, "0");
 
@@ -1216,7 +1125,6 @@ export function initMap() {
     const today = `${year}-${month}-${day}`;
 
     // Set the 'min' attribute of the date input field to today's date in Philippine Standard Time
-    dateInputField.setAttribute("min", today);
     dateInputField.setAttribute("min", today);
 
     // Disable dateInputField and timeInputField initially
