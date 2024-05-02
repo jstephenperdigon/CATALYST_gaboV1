@@ -326,6 +326,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     snapshot.forEach((childSnapshot) => {
       const gcn = childSnapshot.key; // GCN###
+
+      // Check if collectionFlag is "false"
+      const collectionFlag = childSnapshot.child('collectionFlag').val();
+      if (collectionFlag !== "false") {
+        return; // Skip processing if collectionFlag is not "false"
+      }
+
       const users = childSnapshot.child('Users');
 
       users.forEach((user) => {
@@ -371,24 +378,24 @@ document.addEventListener('DOMContentLoaded', () => {
       const cardElement = document.createElement('div');
       cardElement.classList.add('col');
       cardElement.innerHTML = `
-                        <div class="card p-2 shadow-none border-0">
-                            <div class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark">
-                                <div class="text-center">
-                                    <div class="row">
-                                        <div class="col">
-                                            <p class="fw-bold fs-6 mb-0 text-light">Barangay ${barangay}</p>
-                                        </div>
-                                        <div class="col">
-                                            <p class="fw-bold fs-6 mb-0 text-light">${mostCommonDistrict}</p>
-                                        </div>
-                                        <div class="col">
-                                            <p class="fw-bold fs-6 mb-0 text-light">${totalBins}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+        <div class="card p-2 shadow-none border-0">
+          <div class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark">
+            <div class="text-center">
+              <div class="row">
+                <div class="col">
+                  <p class="fw-bold fs-6 mb-0 text-light">Barangay ${barangay}</p>
+                </div>
+                <div class="col">
+                  <p class="fw-bold fs-6 mb-0 text-light">${mostCommonDistrict}</p>
+                </div>
+                <div class="col">
+                  <p class="fw-bold fs-6 mb-0 text-light">${totalBins}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
       container.appendChild(cardElement);
     });
   });
@@ -412,3 +419,4 @@ function calculateTotalQuota(fillLevelData) {
 
   return totalQuota;
 }
+
