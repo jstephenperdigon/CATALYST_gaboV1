@@ -25,6 +25,14 @@ function displayMarkersOnMap(map) {
         data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount || 0;
       const gb4QuotaCount =
         data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount || 0;
+      const gb1QuotaCount =
+        data[gcnKey]?.FillLevel?.GB1FillLevel?.GB1QuotaCount || 0;
+      const gb2QuotaCount =
+        data[gcnKey]?.FillLevel?.GB2FillLevel?.GB2QuotaCount || 0;
+      const gb3QuotaCount =
+        data[gcnKey]?.FillLevel?.GB3FillLevel?.GB3QuotaCount || 0;
+      const gb4QuotaCount =
+        data[gcnKey]?.FillLevel?.GB4FillLevel?.GB4QuotaCount || 0;
 
       // Calculate total quota by summing up individual quota counts
       const totalQuota =
@@ -939,6 +947,45 @@ export function initMap() {
                     ></button>
                   </div>
                   <div class="modal-body">
+                    <p>${selectedGCNs.slice(10).join(", ")}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+           <!-- Modal -->
+            <div
+              class="modal fade"
+              id="additionalGCNsModal"
+              tabindex="-1"
+              aria-labelledby="additionalGCNsModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="additionalGCNsModalLabel">
+                      Control Numbers
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
                     <p>${selectedGCNs.slice(7).join(", ")}</p>
                   </div>
                   <div class="modal-footer">
@@ -1103,6 +1150,14 @@ export function initMap() {
           const highestQuotaMarkerlongitude = highestQuotaMarker
             .getPosition()
             .lng();
+          const gcn =
+            highestQuotaMarker.infoWindow.content.match(/GCN: (.+?)</);
+          const highestQuotaMarkerlatitude = highestQuotaMarker
+            .getPosition()
+            .lat();
+          const highestQuotaMarkerlongitude = highestQuotaMarker
+            .getPosition()
+            .lng();
 
           // Assign values to highLatitude and highLongitude
           highLatitude = highestQuotaMarkerlatitude;
@@ -1149,8 +1204,11 @@ export function initMap() {
     // Create a new Date object adjusted for Philippine Standard Time (UTC+8:00)
     const now = new Date();
     const philippineNow = new Date(now.getTime() + 8 * 60 * 60 * 1000); // Adding 8 hours for UTC+8:00
+    const philippineNow = new Date(now.getTime() + 8 * 60 * 60 * 1000); // Adding 8 hours for UTC+8:00
 
     const year = philippineNow.getFullYear();
+    const month = String(philippineNow.getMonth() + 1).padStart(2, "0"); // January is 0
+    const day = String(philippineNow.getDate()).padStart(2, "0");
     const month = String(philippineNow.getMonth() + 1).padStart(2, "0"); // January is 0
     const day = String(philippineNow.getDate()).padStart(2, "0");
 
@@ -1158,6 +1216,7 @@ export function initMap() {
     const today = `${year}-${month}-${day}`;
 
     // Set the 'min' attribute of the date input field to today's date in Philippine Standard Time
+    dateInputField.setAttribute("min", today);
     dateInputField.setAttribute("min", today);
 
     // Disable dateInputField and timeInputField initially

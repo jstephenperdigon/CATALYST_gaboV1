@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule Transfer</title>
+  </head>
+  <body>
+    <h1>Schedule Transfer</h1>
+    <button id="transferButton">Transfer Schedule</button>
+
+    <script type="module">
+      // Import Firebase libraries
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        get,
+        update,
+      } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+        authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+        databaseURL:
+          "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "smartgarbagebin-8c3ec",
+        storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+        messagingSenderId: "1062286948871",
+        appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      // Function to transfer schedule from AssignedSchedule to ScheduleCompleted
+      const transferSchedule = async (scheduleUID) => {
+        try {
+          const collectorID = "-NuOS8qIaQOIjjRBWIUr"; // Update with the correct collector ID
+
+          // Get the schedule details from AssignedSchedule
+          const assignedScheduleRef = ref(
+            db,
+            `Accounts/Collectors/${collectorID}/AssignedSchedule/${scheduleUID}`
+          );
+          const assignedScheduleSnapshot = await get(assignedScheduleRef);
+
+          if (assignedScheduleSnapshot.exists()) {
+            const scheduleDetails = assignedScheduleSnapshot.val();
+
+            // Add status and completion details
+            scheduleDetails.status = "complete";
+            scheduleDetails.TimeCollectionEnded = "11:00 PM";
+            scheduleDetails.TimeCollectionStart = "10:00 PM";
+            scheduleDetails.DateCollectionEnded = "MM-DD-YYYY";
+            scheduleDetails.DateCollectionStart = "MM-DD-YYYY";
+
+            // Transfer the schedule to ScheduleCompleted
+            const scheduleCompletedRef = ref(
+              db,
+              `Accounts/Collectors/${collectorID}/ScheduleCompleted/${scheduleUID}`
+            );
+            await update(scheduleCompletedRef, scheduleDetails);
+
+            console.log(`Schedule ${scheduleUID} transferred successfully.`);
+          } else {
+            console.log(
+              `Schedule ${scheduleUID} does not exist in AssignedSchedule.`
+            );
+          }
+        } catch (error) {
+          console.error("Error transferring schedule:", error);
+        }
+      };
+
+      // Event listener for the transfer button
+      document
+        .getElementById("transferButton")
+        .addEventListener("click", async () => {
+          // ScheduleUIDs to transfer
+          const scheduleUIDs = [
+            "GCL50005012024127Y",
+            "GCL5000502202430P2",
+            "GCL50005032024IB9M",
+            "GCL50005112024BGJ2",
+          ];
+
+          // Transfer each schedule
+          for (const scheduleUID of scheduleUIDs) {
+            await transferSchedule(scheduleUID);
+          }
+
+          console.log("All schedules transferred successfully.");
+        });
+    </script>
+  </body>
+</html>

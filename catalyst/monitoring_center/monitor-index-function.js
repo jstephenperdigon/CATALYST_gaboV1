@@ -2,9 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebas
 import {
   getDatabase,
   ref,
-  get,
   onValue,
-  update,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -36,6 +34,8 @@ function logout() {
 // Attach the logout function to the click event of the "SignOut" link
 document.getElementById("signOut").addEventListener("click", logout);
 
+//BENNINGING SCHEDULES
+
 // Reference to the 'DeploymentHistory' node in Firebase
 const deploymentHistoryRef = ref(db, "DeploymentHistory");
 
@@ -53,39 +53,110 @@ function displayDeploymentHistory() {
       schedulesTableBody.innerHTML = "";
 
       if (historyData) {
-        // Iterate through each entry in historyData and populate the table rows
-        Object.entries(historyData).forEach(([scheduleUID, scheduleInfo]) => {
-          // Determine the status to display
-          const status =
-            scheduleInfo.status !== undefined ? scheduleInfo.status : "Pending";
+        // Convert historyData to an array of objects
+        const historyArray = Object.entries(historyData).map(
+          ([scheduleUID, scheduleInfo]) => ({
+            scheduleUID,
+            ...scheduleInfo,
+          })
+        );
 
-          // Create table row for each schedule
-          const row = document.createElement("tr");
-          row.innerHTML = `
-          <td>${scheduleUID}</td>
-          <td>${scheduleInfo.SelectedGCL}</td>
-          <td>${scheduleInfo.District}</td>
-          <td>${scheduleInfo.Barangay}</td>
-          <td>${status}</td>
-          <td><button class="btn btn-primary viewDetails shadow-none" data-schedule-uid="${scheduleUID}"><i class="fa fa-eye"> </i></button></td>
-        `;
-          schedulesTableBody.appendChild(row);
+        // Sort the historyArray based on combined DateInput and timeSent in descending order
+        historyArray.sort((a, b) => {
+          const combinedDateTimeA = new Date(`${a.DateInput} ${a.timeSent}`);
+          const combinedDateTimeB = new Date(`${b.DateInput} ${b.timeSent}`);
+          return combinedDateTimeB - combinedDateTimeA;
+        });
 
-          // Add event listener to the "ViewDetails" button
-          const viewDetailsButton = row.querySelector(".viewDetails");
-          viewDetailsButton.addEventListener("click", () => {
-            // Get the scheduleUID associated with the clicked button
-            const clickedScheduleUID =
-              viewDetailsButton.getAttribute("data-schedule-uid");
+        // Function to filter deployment history based on search input
+        function filterDeploymentHistory(searchQuery) {
+          const filteredHistory = [];
 
-            // Retrieve details based on scheduleUID (you can customize this part)
-            const details = historyData[clickedScheduleUID];
+          // Iterate through each entry in historyArray and check if it matches the search query
+          historyArray.forEach(
+            ({
+              scheduleUID,
+              SelectedGCL,
+              District,
+              Barangay,
+              status,
+              timeSent,
+              DateInput,
+            }) => {
+              // Check if any of the fields contain the search query
+              if (
+                scheduleUID.toLowerCase().includes(searchQuery) ||
+                SelectedGCL.toLowerCase().includes(searchQuery) ||
+                District.toLowerCase().includes(searchQuery) ||
+                Barangay.toLowerCase().includes(searchQuery) ||
+                timeSent.toLowerCase().includes(searchQuery) ||
+                DateInput.toLowerCase().includes(searchQuery)
+              ) {
+                // If any field matches, add it to the filtered history
+                filteredHistory.push({
+                  scheduleUID,
+                  SelectedGCL,
+                  District,
+                  Barangay,
+                  status,
+                  timeSent,
+                  DateInput,
+                });
+              }
+            }
+          );
 
-            // Update modal content with details
-            const modalContent = document.querySelector(
-              "#modalScheduleContent"
-            );
-            modalContent.innerHTML = `
+          return filteredHistory;
+        }
+
+        // Function to update deployment history table with filtered data
+        function updateDeploymentHistoryTable(filteredData) {
+          // Clear existing table body content
+          schedulesTableBody.innerHTML = "";
+
+          if (filteredData.length > 0) {
+            // Iterate through filtered data and populate the table rows
+            filteredData.forEach(
+              ({
+                scheduleUID,
+                SelectedGCL,
+                District,
+                Barangay,
+                status,
+                timeSent,
+                DateInput,
+              }) => {
+                // Create table row for each schedule
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                  <td>${scheduleUID}</td>
+                  <td>${SelectedGCL}</td>
+                  <td>${District}</td>
+                  <td>${Barangay}</td>
+                  <td>${timeSent}</td>
+                  <td>${DateInput}</td>
+                  <td>${
+                    status !== undefined ? status : "Not yet collected"
+                  }</td>
+                  <td><button class="btn btn-primary viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
+                `;
+                schedulesTableBody.appendChild(row);
+
+                // Add event listener to the "ViewDetails" button
+                const viewDetailsButton = row.querySelector(".viewDetails");
+                viewDetailsButton.addEventListener("click", () => {
+                  // Get the scheduleUID associated with the clicked button
+                  const clickedScheduleUID =
+                    viewDetailsButton.getAttribute("data-schedule-uid");
+
+                  // Retrieve details based on scheduleUID (you can customize this part)
+                  const details = historyData[clickedScheduleUID];
+
+                  // Update modal content with details
+                  const modalContent = document.querySelector(
+                    "#modalScheduleContent"
+                  );
+                  modalContent.innerHTML = `
             <div class="row">
               <div class="col-md-6">
                 <p><strong>Schedule ID:</strong> ${scheduleUID}</p>
@@ -126,12 +197,32 @@ function displayDeploymentHistory() {
             </div>
           `;
 
-            // Show the modal
-            const detailsModal = new bootstrap.Modal(
-              document.getElementById("detailsModal")
+                  // Show the modal
+                  const detailsModal = new bootstrap.Modal(
+                    document.getElementById("detailsModal")
+                  );
+                  detailsModal.show();
+                });
+              }
             );
-            detailsModal.show();
-          });
+          } else {
+            // Handle case where there's no deployment history
+            schedulesTableBody.innerHTML = `
+        <tr>
+          <td colspan="6">No deployment history available.</td>
+        </tr>
+      `;
+          }
+        }
+        // Call the updateDeploymentHistoryTable function initially with all data
+        updateDeploymentHistoryTable(historyArray);
+
+        // Add event listener for the search input field
+        const searchInput = document.querySelector("#searchHistory");
+        searchInput.addEventListener("input", () => {
+          const searchQuery = searchInput.value.toLowerCase();
+          const filteredData = filterDeploymentHistory(searchQuery);
+          updateDeploymentHistoryTable(filteredData);
         });
       } else {
         // Handle case where there's no deployment history
@@ -156,6 +247,8 @@ function displayDeploymentHistory() {
 
 // Call the function to display deployment history when the DOM content is loaded
 document.addEventListener("DOMContentLoaded", displayDeploymentHistory);
+
+//END OF SCHEDULES
 
 function displayActivities() {
   const activitiesTabContent = document.querySelector(

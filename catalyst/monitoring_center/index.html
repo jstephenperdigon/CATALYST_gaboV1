@@ -128,10 +128,7 @@
               <i class="bx bx-message-square-detail nav_icon"></i>
               <span class="nav_name">Tickets</span>
             </a>
-            <a href="#" class="nav_link" id="bins-link">
-              <i class="bx bxs-trash nav_icon"></i>
-              <span class="nav_name">Bins</span>
-            </a>
+
             <a href="#" class="nav_link" id="collectors-link">
               <i class="bx bx-hard-hat nav_icon"></i>
               <span class="nav_name">Collectors</span>
@@ -609,6 +606,42 @@
             role="tabpanel"
             aria-labelledby="pills-contact-tab"
           >
+            <div class="container mb-5">
+              <div class="row justify-content-end">
+                <div class="col-md-3">
+                  <div class="input-group">
+                    <div class="form-outline" data-mdb-input-init>
+                      <input
+                        type="search"
+                        id="searchHistory"
+                        class="form-control"
+                      />
+                      <label class="form-label" for="searchHistory"
+                        >Search</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 d-flex">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="FilterHistory"
+                        >Filter By:
+                      </label>
+                    </div>
+                    <select
+                      class="custom-select form-control form-outline"
+                      id="FilterHistory"
+                    >
+                      <option selected disabled>Select an option</option>
+                      <option value="GCL">GCL Number</option>
+                      <option value="DateInput">Date</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- SCHEDULES -->
             <div class="container mt-3 table-container">
               <table id="schedulesTable" class="table table-striped">
@@ -618,6 +651,8 @@
                     <th>GCL Number</th>
                     <th>District</th>
                     <th>Barangay</th>
+                    <th>Time Sent</th>
+                    <th>Date Input</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -936,7 +971,7 @@
       <!-- END OF TICKETS -->
 
       <!-- TICKETS RESPONDED -->
-      <div id="tickets-responded">
+      <div class="content" id="tickets-responded">
         <div class="container mt-5">
           <p class="fs-2 fw-bold">Tickets Responded</p>
         </div>
@@ -944,7 +979,38 @@
           <div class="row justify-content-end">
             <div class="col-md-3">
               <div class="input-group">
-                <div class="form-outline" data-mdb-input-init></div>
+                <div class="form-outline" data-mdb-input-init>
+                  <input
+                    type="search"
+                    id="searchInputResponded"
+                    class="form-control border border-2 rounded p-1"
+                  />
+                  <label class="form-label" for="searchInputResponded"
+                    >Search</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 d-flex">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="sortDropdownResponded"
+                    >Filter By:</label
+                  >
+                </div>
+                <select
+                  class="custom-select form-control form-outline"
+                  id="sortDropdownResponded"
+                >
+                  <option selected disabled>Select an option</option>
+                  <option value="ticketNumber">Ticket #</option>
+                  <option value="GCN">GCN</option>
+                  <option value="Issue">Issue</option>
+                  <option value="district">District</option>
+                  <option value="barangay">Barangay</option>
+                  <option value="TimeSent">Time Sent</option>
+                  <option value="DateSent">Date Sent</option>
+                </select>
               </div>
             </div>
           </div>
@@ -982,7 +1048,38 @@
           <div class="row justify-content-end">
             <div class="col-md-3">
               <div class="input-group">
-                <div class="form-outline" data-mdb-input-init></div>
+                <div class="form-outline" data-mdb-input-init>
+                  <input
+                    type="search"
+                    id="searchInputArchive"
+                    class="form-control border border-2 rounded p-1"
+                  />
+                  <label class="form-label" for="searchInputArchive"
+                    >Search</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 d-flex">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="sortDropdownArchive"
+                    >Filter By:</label
+                  >
+                </div>
+                <select
+                  class="custom-select form-control form-outline"
+                  id="sortDropdownArchive"
+                >
+                  <option selected disabled>Select an option</option>
+                  <option value="ticketNumber">Ticket #</option>
+                  <option value="GCN">GCN</option>
+                  <option value="Issue">Issue</option>
+                  <option value="district">District</option>
+                  <option value="barangay">Barangay</option>
+                  <option value="TimeSent">Time Sent</option>
+                  <option value="DateSent">Date Sent</option>
+                </select>
               </div>
             </div>
           </div>
@@ -1011,18 +1108,6 @@
       </div>
       <!-- END OF TICKETS ARCHIVE -->
     </div>
-
-    <!-- BINS -->
-    <div id="bins-content">
-      <div class="container mb-5 mt-5">
-        <div class="row">
-          <div class="col">
-            <h1>Bins</h1>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- END OF BINS -->
 
     <div class="content" id="collector-content">
       <div class="container mb-5 mt-5">
@@ -1071,7 +1156,7 @@
                 <option value="email">Email</option>
                 <option value="mobileNumber">Mobile Number</option>
                 <option value="district">District</option>
-                <option value="barangay">Barangay</option>
+                <option value="barangay">Area</option>
               </select>
             </div>
           </div>
@@ -1087,7 +1172,7 @@
               <th>Email</th>
               <th>Mobile Number</th>
               <th>District</th>
-              <th>Barangay</th>
+              <th>Area</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -1172,7 +1257,7 @@
                   <span class="input-group-text" id="basic-addon1">+63</span>
                   <input
                     type="text"
-                    id="mobileNumber1"
+                    id="mobileNumberModal"
                     class="form-control"
                     placeholder="Mobile Number"
                     aria-label="Mobile Number"
@@ -1182,10 +1267,10 @@
                 <div class="row mb-5">
                   <div class="col-md-6 mb-3">
                     <div class="form-outline" data-mdb-input-init>
-                      <label for="districtDropdown1"></label>
+                      <label for="districtDropdownModal"></label>
                       <select
                         class="form-select"
-                        id="districtDropdown1"
+                        id="districtDropdownModal"
                         required
                       >
                         <option selected disabled>Select District</option>
@@ -1197,10 +1282,10 @@
                   </div>
                   <div class="col-md-6 mb-3">
                     <div class="form-outline" data-mdb-input-init>
-                      <label for="barangayDropdown1"></label>
+                      <label for="barangayDropdownModal"></label>
                       <select
                         class="form-select"
-                        id="barangayDropdown1"
+                        id="barangayDropdownModal"
                         required
                       >
                         <option selected disabled>Select Barangay</option>
@@ -1211,7 +1296,7 @@
                 <div class="col-12 d-flex">
                   <input
                     type="submit"
-                    id="submitBtn"
+                    id="AddCollectorBtn"
                     class="btn btn-primary shadow-none"
                     value="Submit"
                     data-mdb-ripple-init
@@ -1287,15 +1372,24 @@
         </div>
       </div>
     </div>
+
     <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
     ></script>
+    <script>
+      function toggleAdditionalGCNs() {
+        var additionalGCNs = document.getElementById("additionalGCNs");
+        if (additionalGCNs.style.display === "none") {
+          additionalGCNs.style.display = "block";
+        } else {
+          additionalGCNs.style.display = "none";
+        }
+      }
+    </script>
     <script type="module" src="monitor-index-function.js"></script>
     <script type="module" src="monitor-index-reports.js"></script>
     <script type="module" src="monitoring-gb-account-count.js"></script>
-
-    <script type="module" src="Schedule.js"></script>
 
     <script type="text/javascript" src="../src/jquery.min.js"></script>
     <script type="text/javascript" src="../src/bootstrap.min.js"></script>
