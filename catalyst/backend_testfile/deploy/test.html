@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garbage Bin Data</title>
+    <!-- Bootstrap CSS link -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="garbageBinData"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+            authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+            databaseURL:
+                "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "smartgarbagebin-8c3ec",
+            storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+            messagingSenderId: "1062286948871",
+            appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
+        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('#garbageBinData');
+
+            // Reference to your GarbageBinControlNumber node
+            const garbageBinRef = ref(db, 'GarbageBinControlNumber');
+
+            // Fetch data when value changes
+            onValue(garbageBinRef, (snapshot) => {
+                container.innerHTML = ''; // Clear previous data
+
+                const dataByBarangay = {}; // Object to store data grouped by barangay
+
+                snapshot.forEach((childSnapshot) => {
+                    const gcn = childSnapshot.key; // GCN###
+                    const users = childSnapshot.child('Users');
+
+                    users.forEach((user) => {
+                        const barangayRaw = user.child('barangay').val() || 'Unknown';
+                        const district = user.child('district').val() || 'Unknown';
+
+                        // Extract numeric part from barangay (assuming it starts with a specific prefix)
+                        const barangay = extractNumberFromString(barangayRaw);
+
+                        // Fetch FillLevel data for the GCN
+                        const fillLevelData = childSnapshot.child('FillLevel').val() || {};
+
+                        // Calculate total quota count
+                        const totalQuota = calculateTotalQuota(fillLevelData);
+
+                        // Group data by barangay
+                        if (!dataByBarangay[barangay]) {
+                            dataByBarangay[barangay] = { totalBins: 0, districts: {} };
+                        }
+
+                        // Accumulate totalQuota and count districts for each barangay
+                        dataByBarangay[barangay].totalBins += totalQuota;
+
+                        if (!dataByBarangay[barangay].districts[district]) {
+                            dataByBarangay[barangay].districts[district] = 0;
+                        }
+                        dataByBarangay[barangay].districts[district]++;
+                    });
+                });
+
+                // Convert dataByBarangay object into an array of objects for sorting
+                const sortedBarangays = Object.entries(dataByBarangay)
+                    .map(([barangay, { totalBins, districts }]) => ({
+                        barangay,
+                        totalBins,
+                        mostCommonDistrict: Object.keys(districts).reduce((a, b) => (districts[a] > districts[b] ? a : b))
+                    }))
+                    .sort((a, b) => b.totalBins - a.totalBins); // Sort by totalBins in descending order
+
+                // Render the sorted data by barangay
+                sortedBarangays.forEach(({ barangay, totalBins, mostCommonDistrict }) => {
+                    // Create HTML card element for each barangay data
+                    const cardElement = document.createElement('div');
+                    cardElement.classList.add('col');
+                    cardElement.innerHTML = `
+                        <div class="card p-2 shadow-none border-0">
+                            <div class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark">
+                                <div class="text-center">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="fw-bold fs-6 mb-0 text-light">Barangay ${barangay}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="fw-bold fs-6 mb-0 text-light">${mostCommonDistrict}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="fw-bold fs-6 mb-0 text-light">${totalBins}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(cardElement);
+                });
+            });
+        });
+
+        // Function to extract numeric part from string (e.g., "Brgy 188" -> "188")
+        function extractNumberFromString(str) {
+            const matches = str.match(/\d+/); // Match digits
+            return matches ? matches[0] : str; // Return the first match (numeric part) or the whole string
+        }
+
+        // Function to calculate total quota count
+        function calculateTotalQuota(fillLevelData) {
+            let totalQuota = 0;
+
+            // Sum only specific GB quota counts
+            totalQuota += fillLevelData.GB1FillLevel?.GB1QuotaCount || 0;
+            totalQuota += fillLevelData.GB2FillLevel?.GB2QuotaCount || 0;
+            totalQuota += fillLevelData.GB3FillLevel?.GB3QuotaCount || 0;
+            totalQuota += fillLevelData.GB4FillLevel?.GB4QuotaCount || 0;
+
+            return totalQuota;
+        }
+    </script>
+</body>
+
+</html>

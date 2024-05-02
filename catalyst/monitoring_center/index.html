@@ -1,178 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Monitoring Center</title>
-    <link rel="stylesheet" href="src/mdb.min.css" />
-    <link rel="stylesheet" href="src/bootstrap.min.css" />
-    <link rel="stylesheet" href="styling/style.css" />
-    <link rel="stylesheet" href="styling/pulse.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
-      rel="stylesheet"
-    />
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoring Center</title>
+  <link rel="stylesheet" href="src/mdb.min.css" />
+  <link rel="stylesheet" href="src/bootstrap.min.css" />
+  <link rel="stylesheet" href="styling/style.css" />
+  <link rel="stylesheet" href="styling/pulse.css" />
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet" />
 
-    <style>
-      .card1 {
-        border: 0px solid #11531e;
-      }
-      /* Drop Down Icon */
-      .dropdown-iconbtn {
-        background-color: #11531e;
-        color: #fff;
-      }
-      .dropdown-iconbtn:hover {
-        border: solid 2px #11531e;
-        color: #11531e;
-        background-color: transparent;
-      }
-      .dropdown-toggle::after {
-        display: none;
-      }
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-      /* Make dropdown menu items floating */
-      .dropdown-menu {
-        position: absolute;
-        right: 0;
-        left: auto;
-      }
-      .content {
-        margin-left: 70px;
-        /* Same as the width of the sidebar */
-        padding: 16px;
-      }
+  <style>
+    .card1 {
+      border: 0px solid #11531e;
+    }
 
-      .notification-box {
-        z-index: 1;
-        display: none;
-        position: absolute;
-        top: 50px;
-        right: 100px;
-        padding: 10px;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
+    /* Drop Down Icon */
+    .dropdown-iconbtn {
+      background-color: #11531e;
+      color: #fff;
+    }
 
-      /* Modal styles */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1050;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgb(0, 0, 0);
-        background-color: rgba(0, 0, 0, 0.4);
-      }
+    .dropdown-iconbtn:hover {
+      border: solid 2px #11531e;
+      color: #11531e;
+      background-color: transparent;
+    }
 
-      .modal-content {
-        background-color: #fefefe;
+    .dropdown-toggle::after {
+      display: none;
+    }
 
-        margin-bottom: 15%;
-        padding: 20px;
-        border: 1px solid #888;
-      }
+    /* Make dropdown menu items floating */
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      left: auto;
+    }
 
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
+    .content {
+      margin-left: 70px;
+      /* Same as the width of the sidebar */
+      padding: 16px;
+    }
 
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-      .header-color {
-        color: #11531e;
-      }
+    .notification-box {
+      z-index: 1;
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 100px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-      .table-container {
-        max-height: 500px; /* Adjust this value as needed */
-        overflow-y: auto; /* Enable vertical scrolling */
-      }
-    </style>
-  </head>
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.4);
+    }
 
-  <body id="body-pd">
-    <div class="l-navbar header" id="nav-bar">
-      <nav class="nav1">
-        <div class="header_toggle">
-          <a href="#" class="nav_logo">
-            <span class="nav_logo-name">Monitoring Center</span>
-          </a>
-          <div class="nav_list">
-            <a href="#" class="nav_link active1" id="welcome-link">
-              <i class="bx bx-home-alt-2 nav_icon"></i>
-              <span class="nav_name">Home</span>
-            </a>
-            <a href="#" class="nav_link" id="map-link">
-              <i class="bx bx-map-alt nav_icon"></i>
-              <span class="nav_name">Map</span>
-            </a>
-            <a href="#" class="nav_link" id="reports-link">
-              <i class="bx bx-message-square-detail nav_icon"></i>
-              <span class="nav_name">Tickets</span>
-            </a>
+    .modal-content {
+      background-color: #fefefe;
 
-            <a href="#" class="nav_link" id="collectors-link">
-              <i class="bx bx-hard-hat nav_icon"></i>
-              <span class="nav_name">Collectors</span>
-            </a>
-          </div>
-        </div>
-        <a href="#" class="nav_link" id="signOut">
-          <i class="bx bx-log-out nav_icon"></i>
-          <span class="nav_name">Signout</span>
+      margin-bottom: 15%;
+      padding: 20px;
+      border: 1px solid #888;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .header-color {
+      color: #11531e;
+    }
+
+    .table-container {
+      max-height: 500px;
+      /* Adjust this value as needed */
+      overflow-y: auto;
+      /* Enable vertical scrolling */
+    }
+  </style>
+</head>
+
+<body id="body-pd">
+  <div class="l-navbar header" id="nav-bar">
+    <nav class="nav1">
+      <div class="header_toggle">
+        <a href="#" class="nav_logo">
+          <span class="nav_logo-name">Monitoring Center</span>
         </a>
-      </nav>
-    </div>
-    <!-- NAVBAR -->
+        <div class="nav_list">
+          <a href="#" class="nav_link active1" id="welcome-link">
+            <i class="bx bx-home-alt-2 nav_icon"></i>
+            <span class="nav_name">Home</span>
+          </a>
+          <a href="#" class="nav_link" id="map-link">
+            <i class="bx bx-map-alt nav_icon"></i>
+            <span class="nav_name">Map</span>
+          </a>
+          <a href="#" class="nav_link" id="reports-link">
+            <i class="bx bx-message-square-detail nav_icon"></i>
+            <span class="nav_name">Tickets</span>
+          </a>
 
-    <!-- Container Main start -->
-    <div class="content" id="welcome-content">
-      <!--<div class="container-fluid bg-dark p-3 rounded-4">
+          <a href="#" class="nav_link" id="collectors-link">
+            <i class="bx bx-hard-hat nav_icon"></i>
+            <span class="nav_name">Collectors</span>
+          </a>
+        </div>
+      </div>
+      <a href="#" class="nav_link" id="signOut">
+        <i class="bx bx-log-out nav_icon"></i>
+        <span class="nav_name">Signout</span>
+      </a>
+    </nav>
+  </div>
+  <!-- NAVBAR -->
+
+  <!-- Container Main start -->
+  <div class="content" id="welcome-content">
+    <!--<div class="container-fluid bg-dark p-3 rounded-4">
        <div class="d-flex container flex-row-reverse">
           <i class="fas fa-user-check text-white"></i>
         </div> 
       </div>-->
-      <div class="container">
-        <nav
-          class="navbar navbar-light bg-light shadow-none bg-transparent mb-4"
-        >
-          <div class="container-fluid">
-            <div class="col-md-3">
-              <a class="navbar-brand header-color fs-5 fw-bolder">
-                Monitoring Center
-              </a>
-            </div>
+    <div class="container">
+      <nav class="navbar navbar-light bg-light shadow-none bg-transparent mb-4">
+        <div class="container-fluid">
+          <div class="col-md-3">
+            <a class="navbar-brand header-color fs-5 fw-bolder">
+              Monitoring Center
+            </a>
+          </div>
 
-            <div class="col-md-auto d-flex">
-              <!-- <input
+          <div class="col-md-auto d-flex">
+            <!-- <input
               class="form-control me-2"
               type="search"
               placeholder="Search"
               aria-label="Search"
             /> 
-            --></div>
+            -->
           </div>
-        </nav>
-      </div>
+        </div>
+      </nav>
+    </div>
 
-      <!-- <div class="container-fluid">
+    <!-- <div class="container-fluid">
         <div class="row justify-content-start">
           <div class="col-md-12 text-center">
             <div class="card shadow-none border-0 bg-gradient-1">
@@ -183,126 +184,86 @@
           </div>
         </div>
       </div> -->
+    <div class="container">
       <div class="container">
-        <div class="container">
-          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link active fw-bold"
-                id="pills-home-tab"
-                data-mdb-toggle="pill"
-                data-mdb-target="#pills-home"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                <i class="fas fa-chart-line me-2"></i> Overview
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link fw-bold"
-                id="pills-profile-tab"
-                data-mdb-toggle="pill"
-                data-mdb-target="#pills-profile"
-                type="button"
-                role="tab"
-                aria-controls="pills-profile"
-                aria-selected="false"
-              >
-                <i class="fas fa-calendar-alt me-2"></i> Scheduling
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link fw-bold"
-                id="pills-contact-tab"
-                data-mdb-toggle="pill"
-                data-mdb-target="#pills-contact"
-                type="button"
-                role="tab"
-                aria-controls="pills-contact"
-                aria-selected="false"
-              >
-                <i class="fas fa-calendar-check me-2"></i> Schedules
-              </button>
-            </li>
-          </ul>
-        </div>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active fw-bold" id="pills-home-tab" data-mdb-toggle="pill"
+              data-mdb-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+              <i class="fas fa-chart-line me-2"></i> Overview
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold" id="pills-profile-tab" data-mdb-toggle="pill"
+              data-mdb-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+              aria-selected="false">
+              <i class="fas fa-calendar-alt me-2"></i> Scheduling
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold" id="pills-contact-tab" data-mdb-toggle="pill"
+              data-mdb-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+              aria-selected="false">
+              <i class="fas fa-calendar-check me-2"></i> Schedules
+            </button>
+          </li>
+        </ul>
+      </div>
 
-        <div class="tab-content" id="pills-tabContent">
-          <div
-            class="tab-pane fade show active container-fluid"
-            id="pills-home"
-            role="tabpanel"
-            aria-labelledby="pills-home-tab"
-          >
-            <div class="row">
-              <div class="col-9">
-                <!-- Cards -->
-                <div class="card shadow-none rounded-4 card1">
-                  <div class="card-body text-center">
-                    <div class="container">
-                      <div class="row justify-content-between">
-                        <div class="col-3 col-sm-6">
-                          <a
-                            href="#"
-                            class="nav-card nav-link"
-                            id="collectors-card"
-                          >
-                            <div class="card shadow-none p-1 border-0">
-                              <div class="card-body">
-                                <div class="row">
-                                  <div class="col-5">
-                                    <p
-                                      class="fs-1 text-success fw-bold"
-                                      id="uidCount"
-                                    ></p>
-                                  </div>
-                                  <div class="col">
-                                    <p class="fs-5 text-muted">
-                                      Garbage Collectors
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="col-3 col-sm-6">
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active container-fluid" id="pills-home" role="tabpanel"
+          aria-labelledby="pills-home-tab">
+          <div class="row">
+            <div class="col-9">
+              <!-- Cards -->
+              <div class="card shadow-none rounded-4 card1">
+                <div class="card-body text-center">
+                  <div class="container">
+                    <div class="row justify-content-between">
+                      <div class="col-3 col-sm-6">
+                        <a href="#" class="nav-card nav-link" id="collectors-card">
                           <div class="card shadow-none p-1 border-0">
                             <div class="card-body">
                               <div class="row">
                                 <div class="col-5">
-                                  <p
-                                    class="fs-1 text-success fw-bold"
-                                    id="hsCount"
-                                  ></p>
+                                  <p class="fs-1 text-success fw-bold" id="uidCount"></p>
                                 </div>
                                 <div class="col">
-                                  <p class="fs-5 text-muted">Household Users</p>
+                                  <p class="fs-5 text-muted">
+                                    Garbage Collectors
+                                  </p>
                                 </div>
                               </div>
                             </div>
                           </div>
+                        </a>
+                      </div>
+                      <div class="col-3 col-sm-6">
+                        <div class="card shadow-none p-1 border-0">
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-5">
+                                <p class="fs-1 text-success fw-bold" id="hsCount"></p>
+                              </div>
+                              <div class="col">
+                                <p class="fs-5 text-muted">Household Users</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div class="col-3 col-sm-6">
+                      </div>
+                      <div class="col-3 col-sm-6">
+                        <div class="card shadow-none p-1 border-0">
                           <div class="card shadow-none p-1 border-0">
-                            <div class="card shadow-none p-1 border-0">
-                              <div class="card-body">
-                                <div class="row">
-                                  <div class="col-5">
-                                    <p
-                                      class="fs-1 text-success fw-bold"
-                                      id="gbCount"
-                                    ></p>
-                                  </div>
-                                  <div class="col">
-                                    <p class="fs-5 text-muted">
-                                      Smart Garbage Bins
-                                    </p>
-                                  </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-5">
+                                  <p class="fs-1 text-success fw-bold" id="gbCount"></p>
+                                </div>
+                                <div class="col">
+                                  <p class="fs-5 text-muted">
+                                    Smart Garbage Bins
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -312,285 +273,179 @@
                     </div>
                   </div>
                 </div>
-
-                <!-- Cards -->
               </div>
-              <div class="col-3">
-                <div class="container">
-                  <div class="row">
-                    <div
-                      class="card rounded-4 shadow-none border-0 position-relative p-2"
-                    >
-                      <div class="row mt-1 p-3">
-                        <div class="col-9">
-                          <p class="fs-3 fw-bold text-muted">
-                            Total Trash Bags Collected
-                          </p>
-                        </div>
-                        <div class="col-2">
-                          <button
-                            type="button"
-                            class="btn bg-transparent shadow-none btn-sm m-2 text-muted"
-                            style="text-transform: none"
-                          >
-                            <i class="fas fa-2x fa-chevron-right"></i>
-                          </button>
+
+              <!-- Cards -->
+            </div>
+            <div class="col-3">
+              <div class="container">
+                <div class="row">
+                  <div class="card rounded-4 shadow-none border-0 position-relative p-2">
+                    <div class="row mt-1 p-3">
+                      <div class="col-9">
+                        <p class="fs-3 fw-bold text-muted">
+                          Total Trash Bags Collected
+                        </p>
+                      </div>
+                      <div class="col-2">
+                        <button type="button" class="btn bg-transparent shadow-none btn-sm m-2 text-muted"
+                          style="text-transform: none">
+                          <i class="fas fa-2x fa-chevron-right"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <!-- See More Button -->
+
+                    <div class="row text-start text-center">
+                      <p class="fs-1 fw-bolder text-success" id="TotalBags"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="container mt-5">
+                <div class="row justify-content-end">
+                  <div class="col-md-6">
+                    <div class="card shadow-none border-0 text-start bg-transparent">
+                      <div class="card-body">
+                        <p class="fs-4 fw-bold">Bags Population</p>
+                      </div>
+                    </div>
+                    <div class="card p-2 shadow-none border-0">
+                      <div class="card rounded-5 border-0 p-3 shadow-none bg-transparent">
+                        <div class="text-center">
+                          <div class="row">
+                            <div class="col">
+                              <p class="fs-6 text-muted mb-0">Barangay</p>
+                            </div>
+                            <div class="col">
+                              <p class="fs-6 text-muted mb-0">District</p>
+                            </div>
+                            <div class="col">
+                              <p class="fs-6 text-muted mb-0">
+                                Bag Population
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <!-- See More Button -->
-
-                      <div class="row text-start text-center">
-                        <p
-                          class="fs-1 fw-bolder text-success"
-                          id="TotalBags"
-                        ></p>
+                    </div>
+                    <div class="container mt-5">
+                      <div id="garbageBinData"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card shadow-none border-0 text-start bg-transparent">
+                      <div class="card-body">
+                        <p class="fs-4 fw-bold">Activities</p>
+                      </div>
+                    </div>
+                    <div class="card p-2 card-activity shadow-none border-0">
+                      <div class="card-body" style="height: 250px; overflow-y: auto">
+                        <!-- Content dynamically generated by JavaScript will be inserted here -->
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <div class="container">
             <div class="row">
               <div class="col">
-                <div class="container mt-5">
-                  <div class="row justify-content-end">
-                    <div class="col-md-6">
-                      <div
-                        class="card shadow-none border-0 text-start bg-transparent"
-                      >
-                        <div class="card-body">
-                          <p class="fs-4 fw-bold">Bags Population</p>
-                        </div>
-                      </div>
-                      <div class="card p-2 shadow-none border-0">
-                        <div
-                          class="card rounded-5 border-0 p-3 shadow-none bg-transparent"
-                        >
-                          <div class="text-center">
-                            <div class="row">
-                              <div class="col">
-                                <p class="fs-6 text-muted mb-0">Barangay</p>
-                              </div>
-                              <div class="col">
-                                <p class="fs-6 text-muted mb-0">District</p>
-                              </div>
-                              <div class="col">
-                                <p class="fs-6 text-muted mb-0">
-                                  Bag Population
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card p-2 shadow-none border-0">
-                        <div
-                          class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark"
-                        >
-                          <div class="text-center">
-                            <div class="row">
-                              <div class="col">
-                                <p class="fw-bold fs-6 mb-0 text-light">
-                                  Barangay 188
-                                </p>
-                              </div>
-                              <div class="col">
-                                <p class="fw-bold fs-6 mb-0 text-light">
-                                  District 3
-                                </p>
-                              </div>
-                              <div class="col">
-                                <p class="fw-bold fs-6 mb-0 text-light">96</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card p-2 shadow-none border-0">
-                        <div
-                          class="card rounded-5 border-0 p-3 shadow-none position-relative bg-dark"
-                        >
-                          <div class="text-center">
-                            <div class="row">
-                              <div class="col">
-                                <p class="fw-bold fs-6 mb-0 text-light">
-                                  Barangay 176
-                                </p>
-                              </div>
-                              <div class="col">
-                                <p class="fw-bold fs-6 mb-0 text-light">
-                                  District 1
-                                </p>
-                              </div>
-                              <div class="col">
-                                <p class="fw-bold fs-6 mb-0 text-light">96</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <!-- The container for the map -->
+                <div class="card shadow-none">
+                  <div id="map" style="height: 300px; width: 100%"></div>
+                  <!--<div id="map" style="height: 280px"></div> -->
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card p-4 shadow-none border-0">
+                  <div class="container">
+                    <div class="md-form">
+                      <label class="form-label" for="districtSelect">District</label>
+                      <select class="form-select" id="district">
+                        <option value="" disabled selected>
+                          Select District
+                        </option>
+                        <option value="1">District 1</option>
+                        <option value="2">District 2</option>
+                        <option value="3">District 3</option>
+                      </select>
                     </div>
-                    <div class="col-md-6">
-                      <div
-                        class="card shadow-none border-0 text-start bg-transparent"
-                      >
-                        <div class="card-body">
-                          <p class="fs-4 fw-bold">Activities</p>
-                        </div>
-                      </div>
-                      <div class="card p-2 card-activity shadow-none border-0">
-                        <div
-                          class="card-body"
-                          style="height: 250px; overflow-y: auto"
-                        >
-                          <!-- Content dynamically generated by JavaScript will be inserted here -->
-                        </div>
-                      </div>
+                    <div class="md-form mt-2">
+                      <label class="form-label" for="barangaySelect">Barangay</label>
+                      <select class="form-select" id="barangay" disabled>
+                        <option value="" disabled selected>
+                          Select Barangay
+                        </option>
+                      </select>
+                    </div>
+                    <div class="md-form mt-4 text-center">
+                      <button class="btn btn-primary shadow-none" id="selectButton" disabled>
+                        Select
+                      </button>
+                      <button class="btn btn-danger shadow-none" id="cancelButton" disabled>
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="pills-profile"
-            role="tabpanel"
-            aria-labelledby="pills-profile-tab"
-          >
-            <div class="container">
-              <div class="row">
-                <div class="col">
-                  <!-- The container for the map -->
-                  <div class="card shadow-none">
-                    <div id="map" style="height: 300px; width: 100%"></div>
-                    <!--<div id="map" style="height: 280px"></div> -->
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="card p-4 shadow-none border-0">
-                    <div class="container">
-                      <div class="md-form">
-                        <label class="form-label" for="districtSelect"
-                          >District</label
-                        >
-                        <select class="form-select" id="district">
-                          <option value="" disabled selected>
-                            Select District
-                          </option>
-                          <option value="1">District 1</option>
-                          <option value="2">District 2</option>
-                          <option value="3">District 3</option>
-                        </select>
-                      </div>
-                      <div class="md-form mt-2">
-                        <label class="form-label" for="barangaySelect"
-                          >Barangay</label
-                        >
-                        <select class="form-select" id="barangay" disabled>
-                          <option value="" disabled selected>
-                            Select Barangay
-                          </option>
-                        </select>
-                      </div>
-                      <div class="md-form mt-4 text-center">
-                        <button
-                          class="btn btn-primary shadow-none"
-                          id="selectButton"
-                          disabled
-                        >
-                          Select
-                        </button>
-                        <button
-                          class="btn btn-danger shadow-none"
-                          id="cancelButton"
-                          disabled
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div class="row mt-5">
-                <div class="col">
-                  <p class="fs-3 fw-bold text-muted">Collection Details</p>
-                </div>
+            <div class="row mt-5">
+              <div class="col">
+                <p class="fs-3 fw-bold text-muted">Collection Details</p>
               </div>
-              <div class="row mt-3">
-                <div class="col">
-                  <div class="card rounded-4 border-0 p-5 shadow-none">
-                    <div class="container">
-                      <div id="selectedMarkers"></div>
+            </div>
+            <div class="row mt-3">
+              <div class="col">
+                <div class="card rounded-4 border-0 p-5 shadow-none">
+                  <div class="container">
+                    <div id="selectedMarkers"></div>
+                  </div>
+                  <div class="container" id="additionalFields" style="display: none">
+                    <div class="row">
+                      <div class="col">
+                        <label for="dropdown" class="form-label">Available Collector:</label>
+                        <select id="dropdownCollector" name="dropdown" class="form-select">
+                          <option value="" selected disabled>
+                            Select Collector
+                          </option>
+                          <!-- Add options for available collectors here -->
+                        </select>
+                      </div>
                     </div>
-                    <div
-                      class="container"
-                      id="additionalFields"
-                      style="display: none"
-                    >
-                      <div class="row">
-                        <div class="col">
-                          <label for="dropdown" class="form-label"
-                            >Available Collector:</label
-                          >
-                          <select
-                            id="dropdownCollector"
-                            name="dropdown"
-                            class="form-select"
-                          >
-                            <option value="" selected disabled>
-                              Select Collector
+                    <div class="row">
+                      <div class="col">
+                        <label for="date" class="form-label">Select Date:</label>
+                        <input type="date" id="dateInputField" name="date" class="form-control" required />
+                      </div>
+                      <div class="col">
+                        <label for="time" class="form-label">Select Time:</label>
+                        <div class="position-relative">
+                          <select id="timeInputField" class="mdb-select form-control">
+                            <option value="" disabled selected>
+                              Select Time
                             </option>
-                            <!-- Add options for available collectors here -->
                           </select>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col">
-                          <label for="date" class="form-label"
-                            >Select Date:</label
-                          >
-                          <input
-                            type="date"
-                            id="dateInputField"
-                            name="date"
-                            class="form-control"
-                            required
-                          />
-                        </div>
-                        <div class="col">
-                          <label for="time" class="form-label"
-                            >Select Time:</label
-                          >
-                          <div class="position-relative">
-                            <select
-                              id="timeInputField"
-                              class="mdb-select form-control"
-                            >
-                              <option value="" disabled selected>
-                                Select Time
-                              </option>
-                            </select>
 
-                            <i
-                              class="fa-regular fa-clock icon-select position-absolute"
-                              style="top: 10px; right: 10px"
-                            ></i>
-                          </div>
+                          <i class="fa-regular fa-clock icon-select position-absolute"
+                            style="top: 10px; right: 10px"></i>
                         </div>
                       </div>
-                      <div class="row text-center">
-                        <div class="col-12">
-                          <button
-                            id="deployBtn"
-                            class="btn btn-primary shadow-none mt-3"
-                            disabled
-                          >
-                            <i class="fas fa-calendar-plus"></i> Set Schedule
-                          </button>
-                        </div>
+                    </div>
+                    <div class="row text-center">
+                      <div class="col-12">
+                        <button id="deployBtn" class="btn btn-primary shadow-none mt-3" disabled>
+                          <i class="fas fa-calendar-plus"></i> Set Schedule
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -598,194 +453,145 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <div
-            class="tab-pane fade"
-            id="pills-contact"
-            role="tabpanel"
-            aria-labelledby="pills-contact-tab"
-          >
-            <div class="container mb-5">
-              <div class="row justify-content-end">
-                <div class="col-md-3">
-                  <div class="input-group">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input
-                        type="search"
-                        id="searchHistory"
-                        class="form-control"
-                      />
-                      <label class="form-label" for="searchHistory"
-                        >Search</label
-                      >
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 d-flex">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="FilterHistory"
-                        >Filter By:
-                      </label>
-                    </div>
-                    <select
-                      class="custom-select form-control form-outline"
-                      id="FilterHistory"
-                    >
-                      <option selected disabled>Select an option</option>
-                      <option value="GCL">GCL Number</option>
-                      <option value="DateInput">Date</option>
-                    </select>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+          <div class="container mb-5">
+            <div class="row justify-content-end">
+              <div class="col-md-3">
+                <div class="input-group">
+                  <div class="form-outline" data-mdb-input-init>
+                    <input type="search" id="searchHistory" class="form-control" />
+                    <label class="form-label" for="searchHistory">Search</label>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <!-- SCHEDULES -->
-            <div class="container mt-3 table-container">
-              <table id="schedulesTable" class="table table-striped">
-                <thead class="table-dark">
-                  <tr>
-                    <th>Schedule ID</th>
-                    <th>GCL Number</th>
-                    <th>District</th>
-                    <th>Barangay</th>
-                    <th>Time Sent</th>
-                    <th>Date Input</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body will be populated dynamically -->
-                </tbody>
-              </table>
-              <div
-                class="modal"
-                id="detailsModal"
-                tabindex="-1"
-                aria-labelledby="detailsModalLabel"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="detailsModalLabel">
-                        Collection Details
-                      </h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
-                      <div id="modalScheduleContent">
-                        <!-- Details will be dynamically populated here -->
-                      </div>
-                    </div>
+              <div class="col-md-3 d-flex">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="FilterHistory">Filter By:
+                    </label>
                   </div>
+                  <select class="custom-select form-control form-outline" id="FilterHistory">
+                    <option selected disabled>Select an option</option>
+                    <option value="GCL">GCL Number</option>
+                    <option value="DateInput">Date</option>
+                  </select>
                 </div>
               </div>
             </div>
-            <!-- END OF SCHEDULES -->
           </div>
+
+          <!-- SCHEDULES -->
+          <div class="container mt-3 table-container">
+            <table id="schedulesTable" class="table table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th>Schedule ID</th>
+                  <th>GCL Number</th>
+                  <th>District</th>
+                  <th>Barangay</th>
+                  <th>Time Sent</th>
+                  <th>Date Input</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Table body will be populated dynamically -->
+              </tbody>
+            </table>
+            <div class="modal" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">
+                      Collection Details
+                    </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div id="modalScheduleContent">
+                      <!-- Details will be dynamically populated here -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END OF SCHEDULES -->
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="content" id="map-content">
-      <!-- The container for the map -->
-      <div class="container mt-5">
-        <p class="fs-2 fw-bold header-color">Monitoring Map</p>
-      </div>
+  <div class="content" id="map-content">
+    <!-- The container for the map -->
+    <div class="container mt-5">
+      <p class="fs-2 fw-bold header-color">Monitoring Map</p>
+    </div>
 
-      <div class="container mt-5">
-        <!-- Geospatial Visualization-->
-        <div class="row">
-          <div class="col-md-9">
-            <div class="card shadow-none border-0">
-              <div id="roadmap" style="height: 430px"></div>
-            </div>
+    <div class="container mt-5">
+      <!-- Geospatial Visualization-->
+      <div class="row">
+        <div class="col-md-9">
+          <div class="card shadow-none border-0">
+            <div id="roadmap" style="height: 430px"></div>
           </div>
-          <div class="col-md-3">
-            <div class="card shadow-none border-0" style="height: 430px">
-              <div class="card-body">
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <p class="fs-5 fw-bolder text-muted">
-                      High - Traffic Collection Zones
-                    </p>
-                  </div>
-                  <div class="col-md-6 justify-content-end text-end">
-                    <a
-                      type="button"
-                      class="bg-transparent shadow-none btn-sm fw-bold text-muted"
-                      data-mdb-toggle="modal"
-                      data-mdb-target="#reportModal"
-                    >
-                      <span>See More</span>
-                      <span class="icon"
-                        ><i class="fas fa-chevron-right"></i
-                      ></span>
-                    </a>
+        </div>
+        <div class="col-md-3">
+          <div class="card shadow-none border-0" style="height: 430px">
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <p class="fs-5 fw-bolder text-muted">
+                    High - Traffic Collection Zones
+                  </p>
+                </div>
+                <div class="col-md-6 justify-content-end text-end">
+                  <a type="button" class="bg-transparent shadow-none btn-sm fw-bold text-muted" data-mdb-toggle="modal"
+                    data-mdb-target="#reportModal">
+                    <span>See More</span>
+                    <span class="icon"><i class="fas fa-chevron-right"></i></span>
+                  </a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <p class="fw-bold">Brgy. 176</p>
+                </div>
+                <div class="col-md-6">
+                  <div class="progress">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="10"
+                      aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <p class="fw-bold">Brgy. 176</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="progress">
-                      <div
-                        class="progress-bar bg-danger"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="10"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <p class="fw-bold">Brgy. 1</p>
+                </div>
+                <div class="col-md-6">
+                  <div class="progress">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="10"
+                      aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <p class="fw-bold">Brgy. 1</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="progress">
-                      <div
-                        class="progress-bar bg-danger"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="10"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <p class="fw-bold">Brgy. 175</p>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <p class="fw-bold">Brgy. 175</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="progress">
-                      <div
-                        class="progress-bar bg-danger"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="10"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
+                <div class="col-md-6">
+                  <div class="progress">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="10"
+                      aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- 
+          </div>
+          <!-- 
               <div class="row">
                 <div class="col">
                   <p class="fs-5 text-muted fw-bold">Marker Legends</p>
@@ -826,94 +632,157 @@
                 </div>
               </div>
               -->
-          </div>
         </div>
       </div>
-      <div class="container mt-4">
-        <div class="row">
-          <div class="col-4"></div>
-          <div class="col-4"></div>
-        </div>
+    </div>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4"></div>
       </div>
-      <div class="container">
-        <div class="row">
-          <div class="col"></div>
-        </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col"></div>
       </div>
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card shadow-none bg-transparent border-0">
-              <div class="card-body">
-                <h1 class="text-muted fw-bold p-1">
-                  Waste Composition Summary
-                </h1>
-              </div>
+    </div>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow-none bg-transparent border-0">
+            <div class="card-body">
+              <h1 class="text-muted fw-bold p-1">
+                Waste Composition Summary
+              </h1>
             </div>
           </div>
         </div>
       </div>
-      <div class="container mt-4">
-        <div class="row">
-          <div class="col-md-12">
-            <p class="fw-bolder fs-4 text-muted">Total Garbage Collected</p>
-          </div>
+    </div>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-12">
+          <p class="fw-bolder fs-4 text-muted">Total Garbage Collected</p>
         </div>
-        <div class="row">
-          <div class="col-md-3">
-            <div class="dropdown">
-              <select
-                class="form-select"
-                id="timePeriodDropdown"
-                onchange="updateLineChart(this.value)"
-              >
-                <option value="today">Today</option>
-                <option value="last_week">Last Week</option>
-                <option value="last_month">Last Month</option>
-                <!-- Add more time period options as needed -->
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="row mt-4">
-          <div class="col-md-12">
-            <canvas id="lineChart"></canvas>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="dropdown">
+            <select class="form-select" id="timePeriodDropdown" onchange="updateLineChart(this.value)">
+              <option value="today">Today</option>
+              <option value="last_week">Last Week</option>
+              <option value="last_month">Last Month</option>
+              <!-- Add more time period options as needed -->
+            </select>
           </div>
         </div>
       </div>
-
-      <div class="container mt-5">
-        <div class="row"></div>
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <canvas id="lineChart"></canvas>
+        </div>
       </div>
-      <div class="container mt-5"></div>
     </div>
 
-    <!-- TICKETS -->
-    <div class="content" id="reports-content">
+    <div class="container mt-5">
+      <div class="row"></div>
+    </div>
+    <div class="container mt-5"></div>
+  </div>
+
+  <!-- TICKETS -->
+  <div class="content" id="reports-content">
+    <div class="container mt-5">
+      <p class="fs-2 fw-bold">Tickets</p>
+    </div>
+    <div class="container mb-5">
+      <div class="row justify-content-end">
+        <div class="col-md-3">
+          <div class="input-group">
+            <div class="form-outline" data-mdb-input-init>
+              <input type="search" id="searchInput" class="form-control" />
+              <label class="form-label" for="searchInput">Search</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 d-flex">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="sortDropdown">Filter By:
+              </label>
+            </div>
+            <select class="custom-select form-control form-outline" id="sortDropdown">
+              <option selected disabled>Select an option</option>
+              <option value="ticketNumber">Ticket #</option>
+              <option value="GCN">GCN</option>
+              <option value="Issue">Issue</option>
+              <option value="district">District</option>
+              <option value="barangay">Barangay</option>
+              <option value="TimeSent">Time Sent</option>
+              <option value="DateSent">Date Sent</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Container with Fixed Height and Scroll -->
+    <div class="container mt-3 table-container">
+      <table id="reportsTable" class="table table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Ticket #</th>
+            <th>GCN</th>
+            <th>Issue</th>
+            <th>District</th>
+            <th>Barangay</th>
+            <th>Time Sent</th>
+            <th>Date Sent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table body will be populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Report Details</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modalContent">
+            <!-- Modal content will be dynamically generated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- END OF TICKETS -->
+
+    <!-- TICKETS RESPONDED -->
+    <div id="tickets-responded">
       <div class="container mt-5">
-        <p class="fs-2 fw-bold">Tickets</p>
+        <p class="fs-2 fw-bold">Tickets Responded</p>
       </div>
       <div class="container mb-5">
         <div class="row justify-content-end">
           <div class="col-md-3">
             <div class="input-group">
               <div class="form-outline" data-mdb-input-init>
-                <input type="search" id="searchInput" class="form-control" />
-                <label class="form-label" for="searchInput">Search</label>
+                <input type="search" id="searchInputResponded" class="form-control border border-2 rounded p-1" />
+                <label class="form-label" for="searchInputResponded">Search</label>
               </div>
             </div>
           </div>
           <div class="col-md-3 d-flex">
             <div class="input-group">
               <div class="input-group-prepend">
-                <label class="input-group-text" for="sortDropdown"
-                  >Filter By:
-                </label>
+                <label class="input-group-text" for="sortDropdownResponded">Filter By:</label>
               </div>
-              <select
-                class="custom-select form-control form-outline"
-                id="sortDropdown"
-              >
+              <select class="custom-select form-control form-outline" id="sortDropdownResponded">
                 <option selected disabled>Select an option</option>
                 <option value="ticketNumber">Ticket #</option>
                 <option value="GCN">GCN</option>
@@ -930,7 +799,7 @@
 
       <!-- Table Container with Fixed Height and Scroll -->
       <div class="container mt-3 table-container">
-        <table id="reportsTable" class="table table-striped">
+        <table id="reportstableresponded" class="table table-striped">
           <thead class="table-dark">
             <tr>
               <th>Ticket #</th>
@@ -940,238 +809,6 @@
               <th>Barangay</th>
               <th>Time Sent</th>
               <th>Date Sent</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Table body will be populated dynamically -->
-          </tbody>
-        </table>
-      </div>
-
-      <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Report Details</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body" id="modalContent">
-              <!-- Modal content will be dynamically generated here -->
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- END OF TICKETS -->
-
-      <!-- TICKETS RESPONDED -->
-      <div id="tickets-responded">
-        <div class="container mt-5">
-          <p class="fs-2 fw-bold">Tickets Responded</p>
-        </div>
-        <div class="container mb-5">
-          <div class="row justify-content-end">
-            <div class="col-md-3">
-              <div class="input-group">
-                <div class="form-outline" data-mdb-input-init>
-                  <input
-                    type="search"
-                    id="searchInputResponded"
-                    class="form-control border border-2 rounded p-1"
-                  />
-                  <label class="form-label" for="searchInputResponded"
-                    >Search</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 d-flex">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="sortDropdownResponded"
-                    >Filter By:</label
-                  >
-                </div>
-                <select
-                  class="custom-select form-control form-outline"
-                  id="sortDropdownResponded"
-                >
-                  <option selected disabled>Select an option</option>
-                  <option value="ticketNumber">Ticket #</option>
-                  <option value="GCN">GCN</option>
-                  <option value="Issue">Issue</option>
-                  <option value="district">District</option>
-                  <option value="barangay">Barangay</option>
-                  <option value="TimeSent">Time Sent</option>
-                  <option value="DateSent">Date Sent</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Table Container with Fixed Height and Scroll -->
-        <div class="container mt-3 table-container">
-          <table id="reportstableresponded" class="table table-striped">
-            <thead class="table-dark">
-              <tr>
-                <th>Ticket #</th>
-                <th>GCN</th>
-                <th>Issue</th>
-                <th>District</th>
-                <th>Barangay</th>
-                <th>Time Sent</th>
-                <th>Date Sent</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Table body will be populated dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!-- END OF TICKETS RESPONDED -->
-
-      <!-- TICKETS ARCHIVE -->
-      <div id="tickets-archive">
-        <div class="container mt-5">
-          <p class="fs-2 fw-bold">Tickets Archive</p>
-        </div>
-        <div class="container mb-5">
-          <div class="row justify-content-end">
-            <div class="col-md-3">
-              <div class="input-group">
-                <div class="form-outline" data-mdb-input-init>
-                  <input
-                    type="search"
-                    id="searchInputArchive"
-                    class="form-control border border-2 rounded p-1"
-                  />
-                  <label class="form-label" for="searchInputArchive"
-                    >Search</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 d-flex">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="sortDropdownArchive"
-                    >Filter By:</label
-                  >
-                </div>
-                <select
-                  class="custom-select form-control form-outline"
-                  id="sortDropdownArchive"
-                >
-                  <option selected disabled>Select an option</option>
-                  <option value="ticketNumber">Ticket #</option>
-                  <option value="GCN">GCN</option>
-                  <option value="Issue">Issue</option>
-                  <option value="district">District</option>
-                  <option value="barangay">Barangay</option>
-                  <option value="TimeSent">Time Sent</option>
-                  <option value="DateSent">Date Sent</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Table Container with Fixed Height and Scroll -->
-        <div class="container mt-3 table-container">
-          <table id="reportstablearchive" class="table table-striped">
-            <thead class="table-dark">
-              <tr>
-                <th>Ticket #</th>
-                <th>GCN</th>
-                <th>Issue</th>
-                <th>District</th>
-                <th>Barangay</th>
-                <th>Time Sent</th>
-                <th>Date Sent</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Table body will be populated dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!-- END OF TICKETS ARCHIVE -->
-    </div>
-
-    <div class="content" id="collector-content">
-      <div class="container mb-5 mt-5">
-        <div class="row">
-          <div class="col-md-6">
-            <h2>Collectors</h2>
-          </div>
-          <div class="col-md-6 d-flex justify-content-end">
-            <button
-              class="btn btn-primary shadow-none"
-              id="AddUserButton"
-              data-mdb-toggle="modal"
-              data-mdb-target="#addCollectorModal"
-            >
-              Add Collector
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="container">
-        <div class="row justify-content-end">
-          <div class="col-md-3">
-            <!-- Search bar -->
-            <div class="input-group mb-3">
-              <input
-                type="text"
-                id="searchCollector"
-                class="form-control"
-                placeholder="Search..."
-                aria-label="Search"
-                aria-describedby="searchCollector"
-              />
-            </div>
-          </div>
-          <div class="col-md-3">
-            <!-- Dropdown for search category -->
-            <div class="input-group mb-3">
-              <select
-                class="form-select"
-                id="searchCategory"
-                aria-label="Search Category"
-              >
-                <option selected disabled>Select category...</option>
-                <option value="firstName">GCL Number</option>
-                <option value="lastName">Name</option>
-                <option value="email">Email</option>
-                <option value="mobileNumber">Mobile Number</option>
-                <option value="district">District</option>
-                <option value="barangay">Area</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container mt-3">
-        <table id="collectorsTable" class="table table-striped">
-          <thead class="table-dark">
-            <tr>
-              <th>GCL Number</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Mobile Number</th>
-              <th>District</th>
-              <th>Area</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -1181,242 +818,285 @@
         </table>
       </div>
     </div>
+    <!-- END OF TICKETS RESPONDED -->
 
-    <div
-      class="modal fade"
-      id="addCollectorModal"
-      tabindex="-1"
-      aria-labelledby="addCollectorModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="addCollectorModalLabel">
-              <i class="fas fa-user-plus"></i> ADD COLLECTOR
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-mdb-dismiss="modal"
-              aria-label="Close"
-            ></button>
+    <!-- TICKETS ARCHIVE -->
+    <div id="tickets-archive">
+      <div class="container mt-5">
+        <p class="fs-2 fw-bold">Tickets Archive</p>
+      </div>
+      <div class="container mb-5">
+        <div class="row justify-content-end">
+          <div class="col-md-3">
+            <div class="input-group">
+              <div class="form-outline" data-mdb-input-init>
+                <input type="search" id="searchInputArchive" class="form-control border border-2 rounded p-1" />
+                <label class="form-label" for="searchInputArchive">Search</label>
+              </div>
+            </div>
           </div>
-          <div class="modal-body">
-            <div class="container">
-              <form id="viewForm" class="needs-validation">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input
-                        type="text"
-                        id="fName"
-                        class="form-control"
-                        required
-                      />
-                      <label class="form-label" for="fName">First Name</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input type="text" id="mName" class="form-control" />
-                      <label class="form-label" for="mName">Middle Name</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input
-                        type="text"
-                        id="lName"
-                        class="form-control"
-                        required
-                      />
-                      <label class="form-label" for="lName">Last Name</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <input type="text" id="sFix" class="form-control" />
-                      <label class="form-label" for="sFix">Suffix</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-outline mb-3" data-mdb-input-init>
-                  <input
-                    type="email"
-                    id="eMail"
-                    class="form-control"
-                    required
-                  />
-                  <label class="form-label" for="eMail">Email Address</label>
-                </div>
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon1">+63</span>
-                  <input
-                    type="text"
-                    id="mobileNumberModal"
-                    class="form-control"
-                    placeholder="Mobile Number"
-                    aria-label="Mobile Number"
-                    aria-describedby="basic-addon1"
-                  />
-                </div>
-                <div class="row mb-5">
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <label for="districtDropdownModal"></label>
-                      <select
-                        class="form-select"
-                        id="districtDropdownModal"
-                        required
-                      >
-                        <option selected disabled>Select District</option>
-                        <option value="1">District 1</option>
-                        <option value="2">District 2</option>
-                        <option value="3">District 3</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <div class="form-outline" data-mdb-input-init>
-                      <label for="barangayDropdownModal"></label>
-                      <select
-                        class="form-select"
-                        id="barangayDropdownModal"
-                        required
-                      >
-                        <option selected disabled>Select Barangay</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 d-flex">
-                  <input
-                    type="submit"
-                    id="AddCollectorBtn"
-                    class="btn btn-primary shadow-none"
-                    value="Submit"
-                    data-mdb-ripple-init
-                  />
-                </div>
-              </form>
+          <div class="col-md-3 d-flex">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="sortDropdownArchive">Filter By:</label>
+              </div>
+              <select class="custom-select form-control form-outline" id="sortDropdownArchive">
+                <option selected disabled>Select an option</option>
+                <option value="ticketNumber">Ticket #</option>
+                <option value="GCN">GCN</option>
+                <option value="Issue">Issue</option>
+                <option value="district">District</option>
+                <option value="barangay">Barangay</option>
+                <option value="TimeSent">Time Sent</option>
+                <option value="DateSent">Date Sent</option>
+              </select>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- HTML for modal using MDBootstrap -->
-    <div
-      class="modal fade"
-      id="viewCollectorModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="viewCollectorModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="viewCollectorModalLabel">
-              Collector Details
-            </h5>
-            <button
-              type="button"
-              class="btn close shadow-none"
-              data-mdb-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body" id="viewCollectorDetails"></div>
+      <!-- Table Container with Fixed Height and Scroll -->
+      <div class="container mt-3 table-container">
+        <table id="reportstablearchive" class="table table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th>Ticket #</th>
+              <th>GCN</th>
+              <th>Issue</th>
+              <th>District</th>
+              <th>Barangay</th>
+              <th>Time Sent</th>
+              <th>Date Sent</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table body will be populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- END OF TICKETS ARCHIVE -->
+  </div>
+
+  <div class="content" id="collector-content">
+    <div class="container mb-5 mt-5">
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Collectors</h2>
+        </div>
+        <div class="col-md-6 d-flex justify-content-end">
+          <button class="btn btn-primary shadow-none" id="AddUserButton" data-mdb-toggle="modal"
+            data-mdb-target="#addCollectorModal">
+            Add Collector
+          </button>
         </div>
       </div>
     </div>
-    <div
-      class="modal fade"
-      id="reportModal"
-      tabindex="-1"
-      aria-labelledby="reportModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="reportModalLabel">
-              High Traffic Collection Zones
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+    <div class="container">
+      <div class="row justify-content-end">
+        <div class="col-md-3">
+          <!-- Search bar -->
+          <div class="input-group mb-3">
+            <input type="text" id="searchCollector" class="form-control" placeholder="Search..." aria-label="Search"
+              aria-describedby="searchCollector" />
           </div>
-          <div class="modal-body">
-            <!-- Insert your report content here -->
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-mdb-dismiss="modal"
-            >
-              Close
-            </button>
+        </div>
+        <div class="col-md-3">
+          <!-- Dropdown for search category -->
+          <div class="input-group mb-3">
+            <select class="form-select" id="searchCategory" aria-label="Search Category">
+              <option selected disabled>Select category...</option>
+              <option value="firstName">GCL Number</option>
+              <option value="lastName">Name</option>
+              <option value="email">Email</option>
+              <option value="mobileNumber">Mobile Number</option>
+              <option value="district">District</option>
+              <option value="barangay">Area</option>
+            </select>
           </div>
         </div>
       </div>
     </div>
 
-    <script
-      type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
-    ></script>
-    <script>
-      function toggleAdditionalGCNs() {
-        var additionalGCNs = document.getElementById("additionalGCNs");
-        if (additionalGCNs.style.display === "none") {
-          additionalGCNs.style.display = "block";
-        } else {
-          additionalGCNs.style.display = "none";
-        }
+    <div class="container mt-3">
+      <table id="collectorsTable" class="table table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>GCL Number</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile Number</th>
+            <th>District</th>
+            <th>Area</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table body will be populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addCollectorModal" tabindex="-1" aria-labelledby="addCollectorModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCollectorModalLabel">
+            <i class="fas fa-user-plus"></i> ADD COLLECTOR
+          </h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <form id="viewForm" class="needs-validation">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline" data-mdb-input-init>
+                    <input type="text" id="fName" class="form-control" required />
+                    <label class="form-label" for="fName">First Name</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline" data-mdb-input-init>
+                    <input type="text" id="mName" class="form-control" />
+                    <label class="form-label" for="mName">Middle Name</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline" data-mdb-input-init>
+                    <input type="text" id="lName" class="form-control" required />
+                    <label class="form-label" for="lName">Last Name</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline" data-mdb-input-init>
+                    <input type="text" id="sFix" class="form-control" />
+                    <label class="form-label" for="sFix">Suffix</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-outline mb-3" data-mdb-input-init>
+                <input type="email" id="eMail" class="form-control" required />
+                <label class="form-label" for="eMail">Email Address</label>
+              </div>
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">+63</span>
+                <input type="text" id="mobileNumberModal" class="form-control" placeholder="Mobile Number"
+                  aria-label="Mobile Number" aria-describedby="basic-addon1" />
+              </div>
+              <div class="row mb-5">
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline" data-mdb-input-init>
+                    <label for="districtDropdownModal"></label>
+                    <select class="form-select" id="districtDropdownModal" required>
+                      <option selected disabled>Select District</option>
+                      <option value="1">District 1</option>
+                      <option value="2">District 2</option>
+                      <option value="3">District 3</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline" data-mdb-input-init>
+                    <label for="barangayDropdownModal"></label>
+                    <select class="form-select" id="barangayDropdownModal" required>
+                      <option selected disabled>Select Barangay</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 d-flex">
+                <input type="submit" id="AddCollectorBtn" class="btn btn-primary shadow-none" value="Submit"
+                  data-mdb-ripple-init />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTML for modal using MDBootstrap -->
+  <div class="modal fade" id="viewCollectorModal" tabindex="-1" role="dialog" aria-labelledby="viewCollectorModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewCollectorModalLabel">
+            Collector Details
+          </h5>
+          <button type="button" class="btn close shadow-none" data-mdb-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="viewCollectorDetails"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reportModalLabel">
+            High Traffic Collection Zones
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Insert your report content here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+  <script>
+    function toggleAdditionalGCNs() {
+      var additionalGCNs = document.getElementById("additionalGCNs");
+      if (additionalGCNs.style.display === "none") {
+        additionalGCNs.style.display = "block";
+      } else {
+        additionalGCNs.style.display = "none";
       }
-    </script>
-    <script type="module" src="monitor-index-function.js"></script>
-    <script type="module" src="monitor-index-reports.js"></script>
-    <script type="module" src="monitoring-gb-account-count.js"></script>
+    }
+  </script>
+  <script type="module" src="monitor-index-function.js"></script>
+  <script type="module" src="monitor-index-reports.js"></script>
+  <script type="module" src="monitoring-gb-account-count.js"></script>
 
-    <script type="text/javascript" src="../src/jquery.min.js"></script>
-    <script type="text/javascript" src="../src/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../src/popper.min.js"></script>
-    <script src="map.js" type="module" defer></script>
+  <script type="text/javascript" src="../src/jquery.min.js"></script>
+  <script type="text/javascript" src="../src/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../src/popper.min.js"></script>
+  <script src="map.js" type="module" defer></script>
 
-    <script type="text/javascript" src="mapIndex.js"></script>
-    <script type="text/javascript" src="components/lineChart.js"></script>
-    <script type="text/javascript" src="components/session.js"></script>
-    <script type="text/javascript" src="components/dropDown.js"></script>
-    <script type="text/javascript" src="monitoring.js"></script>
+  <script type="text/javascript" src="mapIndex.js"></script>
+  <script type="text/javascript" src="components/lineChart.js"></script>
+  <script type="text/javascript" src="components/session.js"></script>
+  <script type="text/javascript" src="components/dropDown.js"></script>
+  <script type="text/javascript" src="monitoring.js"></script>
 
-    <!-- <script
+  <!-- <script
       defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMap"
     ></script> -->
-    <script
-      defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMaps"
-    ></script>
-    <script></script>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script
-      type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
-    ></script>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script></script>
-    <script></script>
-  </body>
+  <script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_60Vbd3sqYKIErZ_PoxTZEsPNU_v0lY&callback=initMaps"></script>
+  <script></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script></script>
+  <script></script>
+</body>
+
 </html>
