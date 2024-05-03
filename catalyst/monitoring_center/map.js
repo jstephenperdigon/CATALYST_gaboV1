@@ -833,6 +833,10 @@ export function initMap() {
     <div class="container mt-2">
     <div class="row">
         <div class="col-md-6">
+         <div class="form-outline mb-4">
+                <label class="form-label" for="garbageBags">Garbage Bags:</label>
+                <p id="garbageBags" class="form-control total-quota fs-1 fw-bolder text-success">${totalQuotaSum}</p>
+            </div>
             <div class="form-outline mb-4">
                 <label class="form-label" for="controlNumbers">Control Numbers:</label>
                 <p id="controlNumbers" class="form-control selected-gcn">${selectedGCNs.join(
@@ -847,10 +851,7 @@ export function initMap() {
                 <label class="form-label" for="barangay">Barangay:</label>
                 <p id="barangay" class="form-control barangay">${selectedBarangay}</p>
             </div>
-            <div class="form-outline mb-4">
-                <label class="form-label" for="garbageBags">Garbage Bags:</label>
-                <p id="garbageBags" class="form-control total-quota">${totalQuotaSum}</p>
-            </div>
+           
         </div>
         <div class="col-md-6">
         <p class="fs-4 fw-bold text-muted"> Waste Composition </p>
