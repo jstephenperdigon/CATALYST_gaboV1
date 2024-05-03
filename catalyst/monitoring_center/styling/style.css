@@ -163,6 +163,12 @@ a {
   color: #fff;
 }
 
+.content {
+  margin-left: 70px;
+  /* Same as the width of the sidebar */
+  padding: 16px;
+}
+
 .nav1 {
   height: 100%;
   display: flex;
@@ -212,6 +218,7 @@ a {
 .active1 {
   color: var(--white-color);
 }
+
 .active1::before {
   content: "";
   position: absolute;
@@ -223,10 +230,125 @@ a {
 .height-100 {
   height: 100vh;
 }
-@media screen and (min-width: 768px) {
+
+@media screen and (min-width: 1920px) {
   .l-navbar {
     left: 0;
+    width: 210px;
     padding: 1rem 1rem 0 0;
+  }
+
+  .content {
+    margin-left: 70px;
+  }
+  .card-text {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  .garbage-text {
+    font-size: 2.25rem;
+  }
+  .card-number {
+    font-size: 2.25rem;
+  }
+}
+
+@media screen and (min-width: 1439px) and (max-width: 1919px) {
+  .l-navbar {
+    left: 0;
+    width: 200px;
+    padding: 1rem 1rem 0 0;
+  }
+
+  .content {
+    margin-left: 200px;
+    /* Same as the width of the sidebar */
+    padding: 16px;
+  }
+  .card-text {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  .garbage-text {
+    font-size: 2rem;
+  }
+  .card-number {
+    font-size: 1.75rem;
+  }
+}
+
+@media screen and (min-width: 960px) and (max-width: 1439px) {
+  .l-navbar {
+    left: 0;
+    width: 75px;
+    padding: 1rem 1rem 0 0;
+  }
+
+  .content {
+    margin-left: 110px; /* Same as the width of the sidebar */
+    padding: 16px;
+  }
+
+  .nav_logo-name {
+    display: none; /* Hide the text */
+  }
+
+  .nav_logo::before {
+    content: "";
+    background-image: url("GaboV1_LOGO.png");
+    width: 25px; /* Adjust width as needed */
+    height: 25px; /* Adjust height as needed */
+    background-size: cover; /* Adjust how the background image is sized */
+    background-position: center; /* Align the background image center */
+  }
+  .card-text {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  .garbage-text {
+    font-size: 2rem;
+  }
+  .card-number {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 720px) and (max-width: 959px) {
+  .l-navbar {
+    left: 0;
+    width: 75px;
+    padding: 1rem 1rem 0 0;
+  }
+  .nav_logo-name {
+    display: none; /* Hide the text */
+  }
+  .nav_name {
+    display: none;
+  }
+  .nav_logo::before {
+    content: "";
+    background-image: url("GaboV1_LOGO.png");
+    width: 25px; /* Adjust width as needed */
+    height: 25px; /* Adjust height as needed */
+    background-size: cover; /* Adjust how the background image is sized */
+    background-position: center; /* Adjust the position of the background image */
+  }
+  .card-text {
+    font-size: 0.6rem;
+    font-weight: bold;
+  }
+  .card-title {
+    font-size: 0.9rem;
+  }
+  .garbage-text {
+    font-size: 1.3rem;
+  }
+  .card-number {
+    font-size: 1.25rem;
+  }
+  .nav-pills .nav-link {
+    padding: 0.8rem 1rem; /* Adjust padding for tablet screens */
+    font-size: 0.6rem; /* Adjust font size for tablet screens */
   }
 }
 
