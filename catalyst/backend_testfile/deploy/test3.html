@@ -32,35 +32,46 @@
 
         const deploymentHistoryRef = ref(db, 'DeploymentHistory');
 
-        // Function to fetch and display data with status "complete"
+        // Function to fetch and display barangay names with total quota for "complete" schedules
         function fetchDataAndDisplay() {
             onValue(deploymentHistoryRef, (snapshot) => {
                 const dataContainer = document.getElementById('dataContainer');
                 dataContainer.innerHTML = ''; // Clear previous content
 
+                const barangayData = {}; // Object to store barangay names and total quota
+
                 snapshot.forEach((childSnapshot) => {
                     const scheduleData = childSnapshot.val();
-                    const scheduleID = childSnapshot.key;
 
-                    // Filter entries by status "complete"
+                    // Process only entries with status "complete"
                     if (scheduleData.status === "complete") {
-                        const scheduleHTML = `
-                            <div>
-                                <h2>Schedule ID: ${scheduleID}</h2>
-                                <p>Barangay: ${scheduleData.Barangay}</p>
-                                <p>Biodegradable: ${scheduleData.Biodegradable}</p>
-                                <p>Date Input: ${scheduleData.DateInput}</p>
-                                <p>District: ${scheduleData.District}</p>
-                                <p>Non-Biodegradable: ${scheduleData.NonBiodegradable}</p>
-                                <p>Recyclables: ${scheduleData.Recyclables}</p>
-                                <p>Special: ${scheduleData.Special}</p>
-                                <p>Total Quota: ${scheduleData.TotalQuota}</p>
-                                <p>Status: ${scheduleData.status}</p>
-                            </div>
-                        `;
+                        const barangayName = scheduleData.Barangay;
+                        const totalQuota = parseInt(scheduleData.TotalQuota) || 0;
 
-                        dataContainer.innerHTML += scheduleHTML;
+                        // Aggregate total quota by barangay
+                        if (barangayData[barangayName]) {
+                            barangayData[barangayName] += totalQuota;
+                        } else {
+                            barangayData[barangayName] = totalQuota;
+                        }
                     }
+                });
+
+                // Convert barangayData object into an array of objects
+                const sortedBarangayData = Object.entries(barangayData).map(([name, total]) => ({ name, total }));
+
+                // Sort the array by total quota (from highest to lowest)
+                sortedBarangayData.sort((a, b) => b.total - a.total);
+
+                // Display sorted barangay names and total quota in the data container
+                sortedBarangayData.forEach(({ name, total }) => {
+                    const barangayHTML = `
+                        <div>
+                            <h2>Barangay: ${name}</h2>
+                            <p>Total Quota: ${total}</p>
+                        </div>
+                    `;
+                    dataContainer.innerHTML += barangayHTML;
                 });
             });
         }

@@ -9,6 +9,7 @@
 
 <body>
     <h1>Database Items for Barangay 188 with Status Complete</h1>
+    <div>Total schedules displayed: <span id="schedule-count">0</span></div>
     <div id="data-container"></div>
 
     <script type="module">
@@ -26,6 +27,7 @@
             messagingSenderId: "1062286948871",
             appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
         };
+
         // Initialize Firebase app
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
@@ -37,6 +39,7 @@
         onValue(deploymentHistoryRef, (snapshot) => {
             const data = snapshot.val();
             const dataContainer = document.getElementById('data-container');
+            const scheduleCountElement = document.getElementById('schedule-count');
 
             // Check if there's data
             if (data) {
@@ -44,6 +47,9 @@
                 const filteredData = Object.entries(data).filter(([_, item]) => {
                     return item.Barangay === "188" && item.status === "complete";
                 });
+
+                // Update schedule count
+                scheduleCountElement.textContent = filteredData.length;
 
                 // Render filtered items
                 if (filteredData.length > 0) {
