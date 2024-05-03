@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site":"gabophv1",
+    "site":"garbagebinoptimizedv5",
     "public": "catalyst",
     "ignore": [
       "firebase.json",

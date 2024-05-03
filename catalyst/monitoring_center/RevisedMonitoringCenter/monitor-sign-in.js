@@ -69,13 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const adminData = adminSnapshot.val();
         const uid = adminData.uid;
 
-        if (adminData.username === username && adminData.password === password) {
+        if (
+          adminData.username === username &&
+          adminData.password === password
+        ) {
           sessionStorage.setItem("uid", uid);
 
           if (adminData.usertype === "Admin") {
             window.location.href = "../admin/adminIndex.html";
           } else if (adminData.usertype === "Monitoring") {
-            window.location.href = "../index.html";
+            window.location.href = "index.html";
           } else {
             showAlert("warning", "Invalid user type");
           }
@@ -88,13 +91,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const monitoringData = monitoringSnapshot.val();
         const uid = monitoringData.uid;
 
-        if (monitoringData.username === username && monitoringData.password === password) {
+        if (
+          monitoringData.username === username &&
+          monitoringData.password === password
+        ) {
           sessionStorage.setItem("uid", uid);
 
           if (monitoringData.usertype === "Admin") {
             window.location.href = "../admin/adminIndex.html";
           } else if (monitoringData.usertype === "Monitoring") {
-            window.location.href = "../index.html";
+            window.location.href = "index.html";
           } else {
             showAlert("warning", "Invalid user type");
           }
