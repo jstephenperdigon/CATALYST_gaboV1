@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Items for Barangay 188 with Status Complete</title>
+</head>
+
+<body>
+    <h1>Database Items for Barangay 188 with Status Complete</h1>
+    <div id="data-container"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAsGSaps-o0KwXTF-5q3Z99knmyXPmSfU",
+            authDomain: "smartgarbagebin-8c3ec.firebaseapp.com",
+            databaseURL:
+                "https://smartgarbagebin-8c3ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "smartgarbagebin-8c3ec",
+            storageBucket: "smartgarbagebin-8c3ec.appspot.com",
+            messagingSenderId: "1062286948871",
+            appId: "1:1062286948871:web:d62f6f620e010f8f22c8a2",
+        };
+        // Initialize Firebase app
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Reference to your DeploymentHistory collection
+        const deploymentHistoryRef = ref(db, 'DeploymentHistory');
+
+        // Get the data from Firebase Realtime Database, filter by Barangay 188 and Status Complete, and display
+        onValue(deploymentHistoryRef, (snapshot) => {
+            const data = snapshot.val();
+            const dataContainer = document.getElementById('data-container');
+
+            // Check if there's data
+            if (data) {
+                // Filter data for entries where Barangay is 188 and status is complete
+                const filteredData = Object.entries(data).filter(([_, item]) => {
+                    return item.Barangay === "188" && item.status === "complete";
+                });
+
+                // Render filtered items
+                if (filteredData.length > 0) {
+                    filteredData.forEach(([scheduleId, item]) => {
+                        const itemElement = document.createElement('div');
+                        itemElement.innerHTML = `
+                            <p><strong>Schedule ID:</strong> ${scheduleId}</p>
+                            <p><strong>Selected GCL:</strong> ${item.SelectedGCL || 'Not specified'}</p>
+                            <p><strong>Date Input:</strong> ${item.DateInput}</p>
+                            <p><strong>Status:</strong> ${item.status}</p>
+                            <p><strong>District:</strong> ${item.District}</p>
+                            <p><strong>Barangay:</strong> ${item.Barangay}</p>
+                            <p><strong>Recyclables:</strong> ${item.Recyclables}</p>
+                            <p><strong>Special:</strong> ${item.Special}</p>
+                            <p><strong>Biodegradable:</strong> ${item.Biodegradable}</p>
+                            <p><strong>Non-Biodegradable:</strong> ${item.NonBiodegradable}</p>
+                            <p><strong>Total Quota:</strong> ${item.TotalQuota}</p>
+                            <hr>
+                        `;
+                        dataContainer.appendChild(itemElement);
+                    });
+                } else {
+                    dataContainer.innerHTML = '<p>No complete data available for Barangay 188.</p>';
+                }
+            } else {
+                dataContainer.innerHTML = '<p>No data available.</p>';
+            }
+        });
+    </script>
+</body>
+
+</html>
