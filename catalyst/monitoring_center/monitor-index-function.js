@@ -430,3 +430,59 @@ function calculateTotalQuota(fillLevelData) {
 
   return totalQuota;
 }
+
+const trafficCounter = ref(db, "DeploymentHistory");
+
+// Function to fetch and display barangay names with total quota for "complete" schedules
+function fetchDataAndDisplay() {
+  onValue(trafficCounter, (snapshot) => {
+    const dataContainer = document.getElementById("dataContainer");
+    dataContainer.innerHTML = ""; // Clear previous content
+
+    const barangayData = {}; // Object to store barangay names and total quota
+
+    snapshot.forEach((childSnapshot) => {
+      const scheduleData = childSnapshot.val();
+
+      // Process only entries with status "complete"
+      if (scheduleData.status === "complete") {
+        const barangayName = scheduleData.Barangay;
+        const totalQuota = parseInt(scheduleData.TotalQuota) || 0;
+
+        // Aggregate total quota by barangay
+        if (barangayData[barangayName]) {
+          barangayData[barangayName] += totalQuota;
+        } else {
+          barangayData[barangayName] = totalQuota;
+        }
+      }
+    });
+
+    // Convert barangayData object into an array of objects
+    const sortedBarangayData = Object.entries(barangayData).map(
+      ([name, total]) => ({ name, total })
+    );
+
+    // Sort the array by total quota (from highest to lowest)
+    sortedBarangayData.sort((a, b) => b.total - a.total);
+
+    // Display sorted barangay names and total quota in the data container
+    sortedBarangayData.forEach(({ name, total }) => {
+      const barangayHTML = `
+      
+                        <div class="row">
+                        <div class="col-6">
+                            <p class="fs-6 fw-bolder">Barangay ${name}</p>
+                           
+                            </div>
+                            <div class="col-6 text-start">
+                             <p class="fw-bold text-danger fs-6">${total} </p></div>
+                        </div>
+                    `;
+      dataContainer.innerHTML += barangayHTML;
+    });
+  });
+}
+
+// Execute fetchDataAndDisplay function after DOM content is fully loaded
+document.addEventListener("DOMContentLoaded", fetchDataAndDisplay);
