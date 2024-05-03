@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const accountId = sessionStorage.getItem("uid");
   if (!accountId) {
     // If accountId doesn't exist, redirect to index.html
-    window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
+    window.location.href = "monitor-indexSI.html";
   }
 });
 
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
       sessionStorage.removeItem("uid");
 
       // Redirect to index page
-      window.location.href = "RevisedMonitoringCenter/monitor-indexSI.html";
+      window.location.href = "monitor-indexSI.html";
     });
   }
 });
