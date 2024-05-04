@@ -223,6 +223,14 @@ function displayDeploymentHistory() {
         </tr>
       `;
           }
+          // Initialize DataTable after data has been populated
+          $("#schedulesTable").DataTable({
+            paging: true,
+            searching: true,
+            ordering: false,
+            info: true,
+            pageLength: 10, // Show 10 entries per page
+          });
         }
         // Function to convert date format "mm-dd-yyyy" to "Month Day, Year"
         function convertToDateText(dateString) {
