@@ -275,6 +275,9 @@ a {
   .card-number {
     font-size: 1.75rem;
   }
+  .monitoring-title {
+      font-size: 1.45rem;
+  }
 }
 
 @media screen and (min-width: 960px) and (max-width: 1439px) {
@@ -311,6 +314,13 @@ a {
   .card-number {
     font-size: 1.5rem;
   }
+    .monitoring-title {
+      font-size: 1.25rem;
+    }
+            .selection-schedule {
+              width: 190px;
+              height: auto;
+            }
 }
 
 @media screen and (min-width: 720px) and (max-width: 959px) {
@@ -350,6 +360,15 @@ a {
     padding: 0.8rem 1rem; /* Adjust padding for tablet screens */
     font-size: 0.6rem; /* Adjust font size for tablet screens */
   }
+  .monitoring-title{
+    font-size: 1.0rem;
+  }
+  .selection-schedule{
+    width: 400px;
+    height: auto;
+
+  }
+
 }
 
 /* Custom styles for navigation pills */

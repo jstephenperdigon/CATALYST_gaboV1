@@ -487,7 +487,7 @@ function renderTableResponded(reports) {
   Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${ticketNumber}</td>
+      <td>${ticketNumber}</td>m
       <td>${reportResponded.GCN}</td>
       <td>${reportResponded.Issue}</td>
       <td>${reportResponded.district}</td>

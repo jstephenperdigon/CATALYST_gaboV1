@@ -84,3 +84,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById(contentId + "-content").style.display = "block";
   }
 });
+
+
+    function toggleAdditionalGCNs() {
+        var additionalGCNs = document.getElementById("additionalGCNs");
+        if (additionalGCNs.style.display === "none") {
+          additionalGCNs.style.display = "block";
+        } else {
+          additionalGCNs.style.display = "none";
+        }
+      }

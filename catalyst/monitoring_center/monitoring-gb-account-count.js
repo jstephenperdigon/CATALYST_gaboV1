@@ -31,7 +31,7 @@ const uidCountContainer = document.getElementById("uidCount");
 // Listen for changes in the database and update the UID count
 onValue(uidRef, (snapshot) => {
   const data = snapshot.val();
-  console.log("Received data:", data);
+  //console.log("Received data:", data);
 
   if (data) {
     const uidCount = Object.keys(data).length;
@@ -142,7 +142,7 @@ function calculateAndDisplayTotalQuota(snapshot) {
   });
 
   // Log the total sum of TotalQuota to the console
-  console.log("Total sum of TotalQuota:", totalQuotaSum);
+ // console.log("Total sum of TotalQuota:", totalQuotaSum);
 
   // Format the total bags display string
   const totalBagsDisplay = `${totalQuotaSum} Bags`;

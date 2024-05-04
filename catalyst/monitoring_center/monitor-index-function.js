@@ -285,7 +285,7 @@ function displayActivities() {
               </div>
               <div>
                 <p class="fw-bold fs-6 mb-0">Scheduled for collection</p>
-              <p class="fw-light text-muted mb-0">
+              <p class="fw-light text-muted mb-0 activities-text">
   ${scheduleInfo.SelectedGCL} is set to collect in Barangay ${scheduleInfo.Barangay}.
 </p>
 
