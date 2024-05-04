@@ -39,7 +39,7 @@ body {
   font-family: "Product Sans", sans-serif;
   font-weight: 400; /* Regular */
   position: relative;
-  background-color: #f1f1f1;
+  background-color: #ffffff;
 }
 a {
   text-decoration: none;
@@ -276,7 +276,7 @@ a {
     font-size: 1.75rem;
   }
   .monitoring-title {
-      font-size: 1.45rem;
+    font-size: 1.45rem;
   }
 }
 
@@ -314,13 +314,13 @@ a {
   .card-number {
     font-size: 1.5rem;
   }
-    .monitoring-title {
-      font-size: 1.25rem;
-    }
-            .selection-schedule {
-              width: 190px;
-              height: auto;
-            }
+  .monitoring-title {
+    font-size: 1.25rem;
+  }
+  .selection-schedule {
+    width: 190px;
+    height: auto;
+  }
 }
 
 @media screen and (min-width: 720px) and (max-width: 959px) {
@@ -360,15 +360,13 @@ a {
     padding: 0.8rem 1rem; /* Adjust padding for tablet screens */
     font-size: 0.6rem; /* Adjust font size for tablet screens */
   }
-  .monitoring-title{
-    font-size: 1.0rem;
+  .monitoring-title {
+    font-size: 1rem;
   }
-  .selection-schedule{
+  .selection-schedule {
     width: 400px;
     height: auto;
-
   }
-
 }
 
 /* Custom styles for navigation pills */

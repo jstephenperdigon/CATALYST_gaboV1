@@ -35,6 +35,35 @@ function generateReportHTML(report) {
   const timeSent = new Date(report.DateSent + " " + report.TimeSent);
   const currentTime = new Date();
   const timeDifference = Math.abs(currentTime - timeSent); // Difference in milliseconds
+  // Split the date string into month, day, and year parts
+  var parts = report.DateSent.split("-");
+
+  // Create a new Date object by specifying the year, month (0-indexed), and day
+  var date = new Date(parts[2], parseInt(parts[0]) - 1, parts[1]);
+
+  // Define an array of month names
+  var monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  // Construct the text date in the format: Month Day, Year
+  var textDate =
+    monthNames[date.getMonth()] +
+    " " +
+    date.getDate() +
+    ", " +
+    date.getFullYear();
 
   let timeAgo;
   // Convert milliseconds to appropriate time units
@@ -60,7 +89,7 @@ function generateReportHTML(report) {
                   <td>${report.district.split(" ")[1]}</td>
                   <td>${report.barangay.split(" ")[1]}</td>
                   <td>${timeAgo}</td>
-                  <td>${report.DateSent}</td>
+                  <td>${textDate}</td>
                   <td class="viewButtonContainer">
                       <button class="viewButton btn btn-primary shadow-none ">Respond</button>
                       <button class="deleteButton btn btn-warning shadow-none " data-ticket="${
@@ -487,7 +516,7 @@ function renderTableResponded(reports) {
   Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${ticketNumber}</td>m
+      <td>${ticketNumber}</td>
       <td>${reportResponded.GCN}</td>
       <td>${reportResponded.Issue}</td>
       <td>${reportResponded.district}</td>
@@ -963,6 +992,36 @@ function displayModal(ticketNumber) {
         const districtNumber = report.district.split(" ")[1];
         const barangayNumber = report.barangay.split(" ")[1];
 
+        // Split the date string into month, day, and year parts
+        var parts = report.DateSent.split("-");
+
+        // Create a new Date object by specifying the year, month (0-indexed), and day
+        var date = new Date(parts[2], parseInt(parts[0]) - 1, parts[1]);
+
+        // Define an array of month names
+        var monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        // Construct the text date in the format: Month Day, Year
+        var textDate =
+          monthNames[date.getMonth()] +
+          " " +
+          date.getDate() +
+          ", " +
+          date.getFullYear();
+
         // Populate modal content with report details
         const modalContent = document.getElementById("modalContent");
         modalContent.innerHTML = `
@@ -989,9 +1048,7 @@ function displayModal(ticketNumber) {
             </div>
             <div class="row">
                 <div class="col-md-6">
-                  <p><span class="fw-bold">Date Sent:</span> ${
-                    report.DateSent
-                  }</p>
+                  <p><span class="fw-bold">Date Sent:</span> ${textDate}</p>
                 </div>
             </div>
             <div class="container">

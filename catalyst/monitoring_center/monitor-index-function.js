@@ -126,6 +126,9 @@ function displayDeploymentHistory() {
                 timeSent,
                 DateInput,
               }) => {
+                // Convert DateInput to a more readable format
+                const formattedDateInput = convertToDateText(DateInput);
+
                 // Create table row for each schedule
                 const row = document.createElement("tr");
                 const statusClass =
@@ -138,7 +141,7 @@ function displayDeploymentHistory() {
                 <td>${District}</td>
                 <td>${Barangay}</td>
                 <td>${timeSent}</td>
-                <td>${DateInput}</td>
+                <td>${formattedDateInput}</td>
                 <td class="${statusClass}">${
                   status !== undefined && status.toLowerCase() === "complete"
                     ? status
@@ -212,6 +215,15 @@ function displayDeploymentHistory() {
                 });
               }
             );
+
+            // Initialize DataTables after populating the table with data
+            $("#schedulesTable").DataTable({
+              paging: true,
+              searching: true,
+              ordering: true,
+              info: true,
+              pageLength: 10, // Show 10 entries per page
+            });
           } else {
             // Handle case where there's no deployment history
             schedulesTableBody.innerHTML = `
@@ -221,6 +233,40 @@ function displayDeploymentHistory() {
       `;
           }
         }
+        // Function to convert date format "mm-dd-yyyy" to "Month Day, Year"
+        function convertToDateText(dateString) {
+          // Split the date string into month, day, and year parts
+          const parts = dateString.split("-");
+
+          // Create a new Date object by specifying the year, month (0-indexed), and day
+          const date = new Date(parts[2], parseInt(parts[0]) - 1, parts[1]);
+
+          // Define an array of month names
+          const monthNames = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ];
+
+          // Construct the text date in the format: Month Day, Year
+          return (
+            monthNames[date.getMonth()] +
+            " " +
+            date.getDate() +
+            ", " +
+            date.getFullYear()
+          );
+        }
+
         // Call the updateDeploymentHistoryTable function initially with all data
         updateDeploymentHistoryTable(historyArray);
 
