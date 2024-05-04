@@ -215,15 +215,6 @@ function displayDeploymentHistory() {
                 });
               }
             );
-
-            // Initialize DataTables after populating the table with data
-            $("#schedulesTable").DataTable({
-              paging: true,
-              searching: true,
-              ordering: true,
-              info: true,
-              pageLength: 10, // Show 10 entries per page
-            });
           } else {
             // Handle case where there's no deployment history
             schedulesTableBody.innerHTML = `
