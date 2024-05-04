@@ -64,16 +64,13 @@ function displayMarkersOnMap(map) {
               <p>District: ${districtNumeric}</p>
               <p>Barangay: ${barangayNumeric}</p>
               <p>Total Quota: ${totalQuota}</p>
-              <p>Recyclables: ${
-                gb1QuotaCount !== 0 ? gb1QuotaCount : "none"
-              }</p>
-              <p>Biodegradable: ${
-                gb2QuotaCount !== 0 ? gb2QuotaCount : "none"
-              }</p>
+              <p>Recyclables: ${gb1QuotaCount !== 0 ? gb1QuotaCount : "none"
+            }</p>
+              <p>Biodegradable: ${gb2QuotaCount !== 0 ? gb2QuotaCount : "none"
+            }</p>
               <p>Special: ${gb3QuotaCount !== 0 ? gb3QuotaCount : "none"}</p>
-              <p>Non-Biodegradable: ${
-                gb4QuotaCount !== 0 ? gb4QuotaCount : "none"
-              }</p>
+              <p>Non-Biodegradable: ${gb4QuotaCount !== 0 ? gb4QuotaCount : "none"
+            }</p>
             </div>`
           );
         } else {
@@ -92,18 +89,14 @@ function displayMarkersOnMap(map) {
                         <p>District: ${districtNumeric}</p>
                         <p>Barangay: ${barangayNumeric}</p>
                         <p>Total Quota: ${totalQuota}</p>
-                        <p>Recyclables: ${
-                          gb1QuotaCount !== 0 ? gb1QuotaCount : "none"
-                        }</p>
-                        <p>Biodegradable: ${
-                          gb2QuotaCount !== 0 ? gb2QuotaCount : "none"
-                        }</p>
-                        <p>Special: ${
-                          gb3QuotaCount !== 0 ? gb3QuotaCount : "none"
-                        }</p>
-                        <p>Non-Biodegradable: ${
-                          gb4QuotaCount !== 0 ? gb4QuotaCount : "none"
-                        }</p>
+                        <p>Recyclables: ${gb1QuotaCount !== 0 ? gb1QuotaCount : "none"
+              }</p>
+                        <p>Biodegradable: ${gb2QuotaCount !== 0 ? gb2QuotaCount : "none"
+              }</p>
+                        <p>Special: ${gb3QuotaCount !== 0 ? gb3QuotaCount : "none"
+              }</p>
+                        <p>Non-Biodegradable: ${gb4QuotaCount !== 0 ? gb4QuotaCount : "none"
+              }</p>
                       </div>`,
           });
 
@@ -840,8 +833,8 @@ export function initMap() {
             <div class="form-outline mb-4">
                 <label class="form-label" for="controlNumbers">Control Numbers:</label>
                 <p id="controlNumbers" class="form-control selected-gcn">${selectedGCNs.join(
-                  ", "
-                )}</p>
+      ", "
+    )}</p>
             </div>
             <div class="form-outline mb-4">
                 <label class="form-label" for="district">District:</label>
@@ -871,12 +864,12 @@ export function initMap() {
             <div class="container top-0">
                 <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
                     <div class="d-flex align-items-center">
-                        <div class="bg-success rounded-4 p-3 me-3">
-                            <i class="fas fa-seedling fa-1x text-light"></i>
+                       <div class="bg-warning rounded-4 p-3 me-3">
+                            <i class="fas fa-flask fa-1x text-light"></i>
                         </div>
                         <div>
-                            <p class="fw-bold fs-6 mb-0">Biodegradable</p>
-                            <p class="fw-light text-muted mb-0 biodegradable">${gb2QuotaSum}</p>
+                            <p class="fw-bold fs-6 mb-0">Special</p>
+                            <p class="fw-light text-muted mb-0 special">${gb2QuotaSum}</p>
                         </div>
                     </div>
                 </div>
@@ -884,12 +877,13 @@ export function initMap() {
             <div class="container top-0">
                 <div class="card rounded-5 border-0 p-3 shadow-none position-relative">
                     <div class="d-flex align-items-center">
-                        <div class="bg-warning rounded-4 p-3 me-3">
-                            <i class="fas fa-flask fa-1x text-light"></i>
+ 
+                        <div class="bg-success rounded-4 p-3 me-3">
+                            <i class="fas fa-seedling fa-1x text-light"></i>
                         </div>
                         <div>
-                            <p class="fw-bold fs-6 mb-0">Special</p>
-                            <p class="fw-light text-muted mb-0 special">${gb3QuotaSum}</p>
+                        <p class="fw-bold fs-6 mb-0">Biodegradable</p>
+                        <p class="fw-light text-muted mb-0 biodegradable">${gb3QuotaSum}</p>
                         </div>
                     </div>
                 </div>
@@ -968,7 +962,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-              0
+            0
           );
 
           const totalQuota =
@@ -1015,7 +1009,7 @@ export function initMap() {
           );
           const gb4QuotaCount = parseInt(
             marker.infoWindow.content.match(/Non-Biodegradable: (\d+)/)?.[1] ||
-              0
+            0
           );
 
           // Check if adding this marker will exceed the limit
