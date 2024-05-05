@@ -155,8 +155,8 @@ function displayDeploymentHistory() {
                   }
                 </span>
                 </td>
-                <td><button class="btn btn-primary shadow-none viewDetails" data-schedule-uid="${scheduleUID}"><i class="fas fa-eye"></i></button></td>
-`;
+                <td><button class="btn btn-info shadow-none viewDetails" data-schedule-uid="${scheduleUID}"><i class="fas fa-eye text-light"></i></button></td>
+                `;
 
                 schedulesTableBody.appendChild(row);
 
@@ -528,8 +528,8 @@ function fetchDataAndDisplay() {
                             <p class="fs-6 fw-bolder">Barangay ${name}</p>
                            
                             </div>
-                            <div class="col-6 text-start">
-                             <p class="fw-bold text-danger fs-6">${total} </p></div>
+                            <div class="col-6 text-center">
+                             <p class="fw-bold text-info fs-6">${total} </p></div>
                         </div>
                     `;
       dataContainer.innerHTML += barangayHTML;

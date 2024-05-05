@@ -949,40 +949,7 @@
       <div class="container mt-5">
         <p class="fs-2 fw-bold">Tickets</p>
       </div>
-      <div class="container mb-5">
-        <div class="row justify-content-end">
-          <div class="col-md-6 col-lg-3">
-            <div class="input-group">
-              <div class="form-outline" data-mdb-input-init>
-                <input type="search" id="searchInput" class="form-control" />
-                <label class="form-label" for="searchInput">Search</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 d-flex">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="sortDropdown"
-                  >Filter By:
-                </label>
-              </div>
-              <select
-                class="custom-select form-control form-outline"
-                id="sortDropdown"
-              >
-                <option selected disabled>Select an option</option>
-                <option value="ticketNumber">Ticket #</option>
-                <option value="GCN">GCN</option>
-                <option value="Issue">Issue</option>
-                <option value="district">District</option>
-                <option value="barangay">Barangay</option>
-                <option value="TimeSent">Time Sent</option>
-                <option value="DateSent">Date Sent</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
+ 
 
       <!-- Table Container with Fixed Height and Scroll -->
       <div class="container mt-3 table-container">
@@ -994,8 +961,8 @@
               <th>Issue</th>
               <th>District</th>
               <th>Barangay</th>
-              <th>Time Sent</th>
-              <th>Date Sent</th>
+              <th>Sent</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
@@ -1063,8 +1030,8 @@
                   <option value="Issue">Issue</option>
                   <option value="district">District</option>
                   <option value="barangay">Barangay</option>
-                  <option value="TimeSent">Time Sent</option>
-                  <option value="DateSent">Date Sent</option>
+                  <option value="TimeSent">Sent</option>
+                  <option value="DateSent">Date</option>
                 </select>
               </div>
             </div>
@@ -1081,8 +1048,8 @@
                 <th>Issue</th>
                 <th>District</th>
                 <th>Barangay</th>
-                <th>Time Sent</th>
-                <th>Date Sent</th>
+                <th>Sent</th>
+                <th>Date</th>
                 <th>Action</th>
               </tr>
             </thead>

@@ -82,7 +82,7 @@ function generateReportHTML(report) {
   }
 
   return `
-              <tr>
+              <tr class="text-center">
                   <td>${report.ticketNumber}</td>
                   <td>${report.GCN}</td>
                   <td>${report.Issue}</td>
@@ -91,10 +91,8 @@ function generateReportHTML(report) {
                   <td>${timeAgo}</td>
                   <td>${textDate}</td>
                   <td class="viewButtonContainer">
-                      <button class="viewButton btn btn-primary shadow-none ">Respond</button>
-                      <button class="deleteButton btn btn-warning shadow-none " data-ticket="${
-                        report.ticketNumber
-                      }">Archive</button>
+                   <button class="deleteButton btn btn-sm btn-warning shadow-none " data-ticket="${report.ticketNumber}"><i class='bx bx-archive-in fs-5' ></i></button>
+              <button class="viewButton btn btn-sm btn-primary shadow-none "><i class='bx bx-message-square-dots fs-5'></i></button>
               </tr>
           `;
 }
@@ -383,20 +381,7 @@ function filterReports(searchInput, sortKey) {
   });
 }
 
-// Modify the searchReports function to use the filterReports function
-window.searchReports = function () {
-  const searchInput = document
-    .getElementById("searchInput")
-    .value.toLowerCase();
-  const sortKey = document.getElementById("sortDropdown").value;
 
-  filterReports(searchInput, sortKey);
-};
-
-// Function to handle live search while typing
-document.getElementById("searchInput").addEventListener("input", function () {
-  window.searchReports();
-});
 
 // Function to get the index of the selected column
 function getIndex(key) {
@@ -406,8 +391,8 @@ function getIndex(key) {
     "Issue",
     "district",
     "barangay",
-    "TimeSent",
-    "DateSent",
+    "Time",
+    "Date",
     "Action",
   ];
   return headers.indexOf(key) + 1;
@@ -700,8 +685,8 @@ function getIndexResponded(key) {
     "Issue",
     "district",
     "barangay",
-    "TimeSent",
-    "DateSent",
+    "Sent",
+    "Date",
     "Action",
   ];
   return headers.indexOf(key) + 1;
@@ -901,8 +886,8 @@ function getIndexArchive(key) {
     "Issue",
     "district",
     "barangay",
-    "TimeSent",
-    "DateSent",
+    "Time",
+    "Date",
     "Action",
   ];
   return headers.indexOf(key) + 1;
@@ -920,15 +905,15 @@ function displayReportsTable(reportsArray) {
   const reportsTable = document.getElementById("reportsTable");
   const tableHTML = `
     <table class="table">
-        <thead class="table-dark">
+        <thead class="table-dark text-center">
             <tr>
                 <th scope="col">Ticket #</th>
                 <th scope="col">GCN</th>
                 <th scope="col">Issue</th>
                 <th scope="col">District</th>
                 <th scope="col">Barangay</th>
-                <th scope="col">Time Sent</th>
-                <th scope="col">Date Sent</th>
+                <th scope="col">Time</th>
+                <th scope="col">Date</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -969,6 +954,15 @@ function updateTable() {
     } else {
       displayReportsTable([]);
     }
+      // Initialize DataTable after data has been populated
+          $("#reportsTable").DataTable({
+            paging: true,
+            searching: true,
+            ordering: false,
+            info: true,
+            pageLength: 10, // Show 10 entries per page
+          });
+      
   });
 }
 

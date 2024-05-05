@@ -288,8 +288,14 @@ a {
     padding: 1rem 1rem 0 0;
   }
 
+  .l-navbar:hover {
+      left: 0;
+      width: 160px;
+      padding: 1rem 1rem 0 0;
+    }
+
   .content {
-    margin-left: 110px; /* Same as the width of the sidebar */
+    margin-left: 150px; /* Same as the width of the sidebar */
     padding: 16px;
   }
 
