@@ -35,6 +35,7 @@ h3 {
 ::after {
   box-sizing: border-box;
 }
+
 body {
   font-family: "Product Sans", sans-serif;
   font-weight: 400; /* Regular */

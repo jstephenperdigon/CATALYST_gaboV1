@@ -142,12 +142,20 @@ function displayDeploymentHistory() {
                 <td>${Barangay}</td>
                 <td>${timeSent}</td>
                 <td>${formattedDateInput}</td>
-                <td class="${statusClass}">${
+                <td class="${statusClass}">
+                <span class="badge rounded-pill ${
                   status !== undefined && status.toLowerCase() === "complete"
-                    ? status
-                    : "Pending"
-                }</td>
-                <td><button class="btn btn-primary shadow-none viewDetails" data-schedule-uid="${scheduleUID}">View</button></td>
+                    ? "bg-success"
+                    : "bg-warning"
+                }">
+                  ${
+                    status !== undefined && status.toLowerCase() === "complete"
+                      ? status
+                      : "Pending"
+                  }
+                </span>
+                </td>
+                <td><button class="btn btn-primary shadow-none viewDetails" data-schedule-uid="${scheduleUID}"><i class="fas fa-eye"></i></button></td>
 `;
 
                 schedulesTableBody.appendChild(row);

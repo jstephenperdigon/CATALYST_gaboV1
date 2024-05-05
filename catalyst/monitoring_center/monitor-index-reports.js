@@ -458,13 +458,6 @@ function getIndexA(keyA) {
   return headers.indexOf(keyA) + 1; // Use indexOf to find the index of keyA in headers array
 }
 
-// Add event listener to handle live search while typing
-document
-  .getElementById("searchCollector")
-  .addEventListener("input", performSearch);
-document
-  .getElementById("searchCategory")
-  .addEventListener("change", performSearch);
 
 // Function to extract numeric part of GCL number
 function extractNumericGCL(gcl) {
@@ -499,7 +492,18 @@ function displayCollectors() {
     } else {
       console.log("No collectors found.");
     }
-  });
+      // Initialize DataTable after data has been populated
+          $("#collectorsTable").DataTable({
+            paging: true,
+            searching: true,
+            ordering: false,
+            info: true,
+            pageLength: 10, // Show 10 entries per page
+          });
+      
+  }
+  
+);
 }
 
 // TICKET RESPONDED
