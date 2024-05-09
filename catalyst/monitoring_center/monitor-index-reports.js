@@ -91,7 +91,9 @@ function generateReportHTML(report) {
                   <td>${timeAgo}</td>
                   <td>${textDate}</td>
                   <td class="viewButtonContainer">
-                   <button class="deleteButton btn btn-sm btn-warning shadow-none " data-ticket="${report.ticketNumber}"><i class='bx bx-archive-in fs-5' ></i></button>
+                   <button class="deleteButton btn btn-sm btn-warning shadow-none " data-ticket="${
+                     report.ticketNumber
+                   }"><i class='bx bx-archive-in fs-5' ></i></button>
               <button class="viewButton btn btn-sm btn-primary shadow-none "><i class='bx bx-message-square-dots fs-5'></i></button>
               </tr>
           `;
@@ -381,8 +383,6 @@ function filterReports(searchInput, sortKey) {
   });
 }
 
-
-
 // Function to get the index of the selected column
 function getIndex(key) {
   const headers = [
@@ -443,7 +443,6 @@ function getIndexA(keyA) {
   return headers.indexOf(keyA) + 1; // Use indexOf to find the index of keyA in headers array
 }
 
-
 // Function to extract numeric part of GCL number
 function extractNumericGCL(gcl) {
   // Use regular expression to extract numeric part of GCL
@@ -477,420 +476,15 @@ function displayCollectors() {
     } else {
       console.log("No collectors found.");
     }
-      // Initialize DataTable after data has been populated
-          $("#collectorsTable").DataTable({
-            paging: true,
-            searching: true,
-            ordering: false,
-            info: true,
-            pageLength: 10, // Show 10 entries per page
-          });
-      
-  }
-  
-);
-}
-
-// TICKET RESPONDED
-// Reference to the 'reports-responded' table body
-const tableBodyResponded = document.querySelector(
-  "#reportstableresponded tbody"
-);
-
-function renderTableResponded(reports) {
-  // Clear existing table rows
-  tableBodyResponded.innerHTML = "";
-
-  // Loop through each report key (ticketNumber) and value (report object)
-  Object.entries(reports).forEach(([ticketNumber, reportResponded]) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${ticketNumber}</td>
-      <td>${reportResponded.GCN}</td>
-      <td>${reportResponded.Issue}</td>
-      <td>${reportResponded.district}</td>
-      <td>${reportResponded.barangay}</td>
-      <td>${reportResponded.TimeSent}</td>
-      <td>${reportResponded.DateSent}</td>
-      <td><button class="btn btn-primary viewTicketResponded" data-ticketresponded="${ticketNumber}">View</button></td>
-    `;
-    tableBodyResponded.appendChild(row);
+    // Initialize DataTable after data has been populated
+    $("#collectorsTable").DataTable({
+      paging: true,
+      searching: true,
+      ordering: false,
+      info: true,
+      pageLength: 10, // Show 10 entries per page
+    });
   });
-}
-
-// Function to open modal and populate content with ticket details
-function openModalWithTicketDetails(ticketNumber, reportsData) {
-  // Retrieve the details of the selected ticket based on its ticket number
-  const selectedTicket = reportsData[ticketNumber];
-
-  // Open the modal
-  $("#modal").modal("show");
-
-  // Populate the modal content with the details of the selected ticket
-  document.getElementById("modalContent").innerHTML = `
-    <div class="row">
-            <div class="col-md-6">
-              <p><span class="fw-bold">Ticket Number:</span> ${ticketNumber}</p>
-            </div>
-            <div class="col-md-6">
-              <p><span class="fw-bold">GCN:</span> ${selectedTicket.GCN}</p>
-            </div>
-          </div>
-
-            <div class="row">
-             <div class="col-md-6">
-                  <p><span class="fw-bold">Issue:</span> ${
-                    selectedTicket.Issue
-                  }</p>
-              </div>
-              <div class="col-md-6">
-                 <p><span class="fw-bold">Description:</span> ${
-                   selectedTicket.Description || "N/A"
-                 }</p>
-              </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                  <p><span class="fw-bold">Date Sent:</span> ${
-                    selectedTicket.DateSent
-                  }</p>
-                </div>
-                <div class="col-md-6">
-                 <p><span class="fw-bold">Status:</span> ${
-                   selectedTicket.ReportStatus
-                 }</p>
-                </div>
-            </div>
-            <div class="container">
-            <p class="fs-5"> USER DETAILS</p>
-            </div>
-          <div class="row">
-              <div class="col-md-6">
-                  <p><span class="fw-bold">Name:</span> ${
-                    selectedTicket.firstName
-                  } ${selectedTicket.lastName}</p>
-                  <p><span class="fw-bold">Email:</span> ${
-                    selectedTicket.email
-                  }</p>
-                  <p><span class="fw-bold">Mobile Number:</span> ${
-                    selectedTicket.mobileNumber
-                  }</p>
-          </div>
-          <div class="row">
-              <div class="col-md-6">
-                <p><span class="fw-bold">District:</span> ${
-                  selectedTicket.district
-                }</p>
-                <p><span class="fw-bold">Barangay:</span> ${
-                  selectedTicket.barangay
-                }</p>
-                <p><span class="fw-bold">City:</span> ${selectedTicket.city}</p>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-md-12">
-              
-                <p><span class="fw-bold">Address Line 1:</span> ${
-                  selectedTicket.addressLine1
-                }</p>
-              </div>
-          </div>
-  `;
-
-  // Add event listener to the close button inside the modal header
-  const closeButton = document.querySelector("#modal .modal-header .btn-close");
-  closeButton.addEventListener("click", function () {
-    // Close the modal
-    $("#modal").modal("hide");
-  });
-}
-
-// Function to fetch and display reports from Firebase
-function displayReportsResponded() {
-  const reportsRef = ref(db, "ReportsResponded");
-
-  // Listen for changes in the reports data
-  onValue(
-    reportsRef,
-    (snapshot) => {
-      const reportsData = snapshot.val();
-
-      if (reportsData) {
-        // Render the reports into the table
-        renderTableResponded(reportsData);
-
-        // Attach event listener to the document that listens for clicks on elements with class '.viewTicketResponded'
-        document.addEventListener("click", function (event) {
-          // Check if the clicked element has class '.viewTicketResponded'
-          if (event.target.classList.contains("viewTicketResponded")) {
-            // Retrieve the ticket number associated with the clicked button
-            const ticketNumber = event.target.dataset.ticketresponded;
-            // Open modal and populate content with ticket details
-            openModalWithTicketDetails(ticketNumber, reportsData);
-          }
-        });
-      } else {
-        // No reports found, display a message or handle accordingly
-        tableBody.innerHTML = '<tr><td colspan="7">No reports found.</td></tr>';
-      }
-    },
-    (error) => {
-      console.error("Error fetching reports:", error.message);
-      tableBody.innerHTML =
-        '<tr><td colspan="7">Error fetching reports.</td></tr>';
-    }
-  );
-}
-
-// Call the displayReports function to initially populate the table
-displayReportsResponded();
-
-// SEARCH FOR TICKET RESPONDED
-// Function to filter responded tickets based on search input and selected sorting column
-function filterTicketsResponded(searchInput, sortKey) {
-  const ticketsArray = document.querySelectorAll(
-    "#reportstableresponded tbody tr"
-  );
-  ticketsArray.forEach((ticket) => {
-    const columnValue = ticket
-      .querySelector(`td:nth-child(${getIndexResponded(sortKey)})`)
-      .textContent.toLowerCase();
-    const displayStyle = columnValue.includes(searchInput) ? "" : "none";
-    ticket.style.display = displayStyle;
-  });
-}
-
-// Modify the searchTicketsResponded function to use the filterTicketsResponded function
-window.searchTicketsResponded = function () {
-  const searchInput = document
-    .getElementById("searchInputResponded")
-    .value.toLowerCase();
-  const sortKey = document.getElementById("sortDropdownResponded").value;
-
-  filterTicketsResponded(searchInput, sortKey);
-};
-
-// Function to handle live search while typing for responded tickets
-document
-  .getElementById("searchInputResponded")
-  .addEventListener("input", function () {
-    window.searchTicketsResponded();
-  });
-
-// Function to get the index of the selected column for responded tickets
-function getIndexResponded(key) {
-  const headers = [
-    "ticketNumber",
-    "GCN",
-    "Issue",
-    "district",
-    "barangay",
-    "Sent",
-    "Date",
-    "Action",
-  ];
-  return headers.indexOf(key) + 1;
-}
-
-// TICKET ARCHIVES
-// Reference to the 'reports-responded' table body
-const tableBodyArchive = document.querySelector("#reportstablearchive tbody");
-
-// Function to render data into the table
-function renderTableArchive(reports) {
-  // Clear existing table rows
-  tableBodyArchive.innerHTML = "";
-
-  // Loop through each report key (ticketNumber) and value (report object)
-  Object.entries(reports).forEach(([ticketNumber, reportArchive]) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${ticketNumber}</td>
-      <td>${reportArchive.GCN}</td>
-      <td>${reportArchive.Issue}</td>
-      <td>${reportArchive.district}</td>
-      <td>${reportArchive.barangay}</td>
-      <td>${reportArchive.TimeSent}</td>
-      <td>${reportArchive.DateSent}</td>
-      <td><button class="btn btn-primary viewTicketArchive" data-ticketarchive="${ticketNumber}">View</button></td>
-    `;
-    tableBodyArchive.appendChild(row);
-  });
-}
-
-// Function to open modal and populate content with ticket details
-function openModalWithTicketDetailsArchive(ticketNumber, reportsData) {
-  // Retrieve the details of the selected ticket based on its ticket number
-  const selectedTicket = reportsData[ticketNumber];
-
-  // Open the modal
-  $("#modal").modal("show");
-
-  // Populate the modal content with the details of the selected ticket
-  document.getElementById("modalContent").innerHTML = `
-    <div class="row">
-            <div class="col-md-6">
-              <p><span class="fw-bold">Ticket Number:</span> ${ticketNumber}</p>
-            </div>
-            <div class="col-md-6">
-              <p><span class="fw-bold">GCN:</span> ${selectedTicket.GCN}</p>
-            </div>
-          </div>
-
-            <div class="row">
-             <div class="col-md-6">
-                  <p><span class="fw-bold">Issue:</span> ${
-                    selectedTicket.Issue
-                  }</p>
-              </div>
-              <div class="col-md-6">
-                 <p><span class="fw-bold">Description:</span> ${
-                   selectedTicket.Description || "N/A"
-                 }</p>
-              </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                  <p><span class="fw-bold">Date Sent:</span> ${
-                    selectedTicket.DateSent
-                  }</p>
-                </div>
-                <div class="col-md-6">
-                 <p><span class="fw-bold">Status:</span> ${
-                   selectedTicket.ReportStatus
-                 }</p>
-                </div>
-            </div>
-            <div class="container">
-            <p class="fs-5"> USER DETAILS</p>
-            </div>
-          <div class="row">
-              <div class="col-md-6">
-                  <p><span class="fw-bold">Name:</span> ${
-                    selectedTicket.firstName
-                  } ${selectedTicket.lastName}</p>
-                  <p><span class="fw-bold">Email:</span> ${
-                    selectedTicket.email
-                  }</p>
-                  <p><span class="fw-bold">Mobile Number:</span> ${
-                    selectedTicket.mobileNumber
-                  }</p>
-          </div>
-          <div class="row">
-              <div class="col-md-6">
-                <p><span class="fw-bold">District:</span> ${
-                  selectedTicket.district
-                }</p>
-                <p><span class="fw-bold">Barangay:</span> ${
-                  selectedTicket.barangay
-                }</p>
-                <p><span class="fw-bold">City:</span> ${selectedTicket.city}</p>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-md-12">
-              
-                <p><span class="fw-bold">Address Line 1:</span> ${
-                  selectedTicket.addressLine1
-                }</p>
-              </div>
-          </div>
-  `;
-
-  // Add event listener to the close button inside the modal header
-  const closeButton = document.querySelector("#modal .modal-header .btn-close");
-  closeButton.addEventListener("click", function () {
-    // Close the modal
-    $("#modal").modal("hide");
-  });
-}
-
-// Function to fetch and display reports from Firebase for the archive
-function displayReportsArchive() {
-  const reportsRef = ref(db, "ReportsArchive");
-
-  // Listen for changes in the reports data
-  onValue(
-    reportsRef,
-    (snapshot) => {
-      const reportsData = snapshot.val();
-
-      if (reportsData) {
-        // Render the reports into the table
-        renderTableArchive(reportsData);
-
-        // Attach event listener to the document that listens for clicks on elements with class '.viewTicketArchive'
-        document.addEventListener("click", function (event) {
-          // Check if the clicked element has class '.viewTicketArchive'
-          if (event.target.classList.contains("viewTicketArchive")) {
-            // Retrieve the ticket number associated with the clicked button
-            const ticketNumber = event.target.dataset.ticketarchive;
-            // Open modal and populate content with ticket details
-            openModalWithTicketDetailsArchive(ticketNumber, reportsData);
-          }
-        });
-      } else {
-        // No reports found, display a message or handle accordingly
-        tableBodyArchive.innerHTML =
-          '<tr><td colspan="7">No reports found.</td></tr>';
-      }
-    },
-    (error) => {
-      console.error("Error fetching reports:", error.message);
-      tableBodyArchive.innerHTML =
-        '<tr><td colspan="7">Error fetching reports.</td></tr>';
-    }
-  );
-}
-
-// Call the displayReports function to initially populate the table
-displayReportsArchive();
-
-//SEARCH FOR TICKETS ARCHIVE
-// Function to filter archived tickets based on search input and selected sorting column
-function filterTicketsArchive(searchInput, sortKey) {
-  const ticketsArray = document.querySelectorAll(
-    "#reportstablearchive tbody tr"
-  );
-  ticketsArray.forEach((ticket) => {
-    const columnValue = ticket
-      .querySelector(`td:nth-child(${getIndexArchive(sortKey)})`)
-      .textContent.toLowerCase();
-    const displayStyle = columnValue.includes(searchInput) ? "" : "none";
-    ticket.style.display = displayStyle;
-  });
-}
-
-// Modify the searchTicketsArchive function to use the filterTicketsArchive function
-window.searchTicketsArchive = function () {
-  const searchInput = document
-    .getElementById("searchInputArchive")
-    .value.toLowerCase();
-  const sortKey = document.getElementById("sortDropdownArchive").value;
-
-  filterTicketsArchive(searchInput, sortKey);
-};
-
-// Function to handle live search while typing for archived tickets
-document
-  .getElementById("searchInputArchive")
-  .addEventListener("input", function () {
-    window.searchTicketsArchive();
-  });
-
-// Function to get the index of the selected column for archived tickets
-function getIndexArchive(key) {
-  const headers = [
-    "ticketNumber",
-    "GCN",
-    "Issue",
-    "district",
-    "barangay",
-    "Time",
-    "Date",
-    "Action",
-  ];
-  return headers.indexOf(key) + 1;
 }
 
 // Function to display the reports tables
@@ -954,15 +548,14 @@ function updateTable() {
     } else {
       displayReportsTable([]);
     }
-      // Initialize DataTable after data has been populated
-          $("#reportsTable").DataTable({
-            paging: true,
-            searching: true,
-            ordering: false,
-            info: true,
-            pageLength: 10, // Show 10 entries per page
-          });
-      
+    // Initialize DataTable after data has been populated
+    $("#reportsTable").DataTable({
+      paging: true,
+      searching: true,
+      ordering: false,
+      info: true,
+      pageLength: 10, // Show 10 entries per page
+    });
   });
 }
 

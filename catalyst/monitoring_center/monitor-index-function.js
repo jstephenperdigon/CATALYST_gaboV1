@@ -276,14 +276,6 @@ function displayDeploymentHistory() {
 
         // Call the updateDeploymentHistoryTable function initially with all data
         updateDeploymentHistoryTable(historyArray);
-
-        // Add event listener for the search input field
-        const searchInput = document.querySelector("#searchHistory");
-        searchInput.addEventListener("input", () => {
-          const searchQuery = searchInput.value.toLowerCase();
-          const filteredData = filterDeploymentHistory(searchQuery);
-          updateDeploymentHistoryTable(filteredData);
-        });
       } else {
         // Handle case where there's no deployment history
         schedulesTableBody.innerHTML = `
